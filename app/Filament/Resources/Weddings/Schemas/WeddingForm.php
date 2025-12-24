@@ -40,7 +40,7 @@ class WeddingForm
                                             ->required()
                                             ->maxLength(255)
                                             ->live(debounce: 500)
-                                            ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
+                                            ->afterStateUpdated(function ($get, $set, ?string $old, ?string $state) {
                                                 $brideName = $get('bride_name');
                                                 if (($state || $brideName) && !$get('slug')) {
                                                     $set('slug', Str::slug(($state ?? 'chu-re') . '-va-' . ($brideName ?? 'co-dau') . '-' . now()->year));
@@ -52,7 +52,7 @@ class WeddingForm
                                             ->required()
                                             ->maxLength(255)
                                             ->live(debounce: 500)
-                                            ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
+                                            ->afterStateUpdated(function ($get, $set, ?string $old, ?string $state) {
                                                 $groomName = $get('groom_name');
                                                 if (($state || $groomName) && !$get('slug')) {
                                                     $set('slug', Str::slug(($groomName ?? 'chu-re') . '-va-' . ($state ?? 'co-dau') . '-' . now()->year));
