@@ -4,12 +4,7 @@
 @section('title', 'The Union | ' . $wedding->groom_name . ' & ' . $wedding->bride_name)
 
 @section('content')
-@php
-    $coverUrl = $wedding->getFirstMediaUrl('cover') ?: 'https://images.unsplash.com/photo-1511285560982-1351cdeb9821?w=1920&q=80';
-    $groomPhoto = $wedding->getFirstMediaUrl('groom_photo') ?: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&fit=crop';
-    $bridePhoto = $wedding->getFirstMediaUrl('bride_photo') ?: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&fit=crop';
-    $musicUrl = $wedding->background_music ? asset('storage/' . $wedding->background_music) : null;
-@endphp
+@section('og_image', $shareUrl)
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Italiana&family=Jost:wght@300;400;500&display=swap');
@@ -67,7 +62,7 @@
         </div>
 
         <div class="absolute inset-0 top-32 bottom-24 mx-6 z-0">
-             <img src="{{ $coverUrl }}" class="w-full h-full object-cover">
+             <img src="{{ $heroUrl }}" class="w-full h-full object-cover">
         </div>
 
         <div class="relative z-10 text-center mt-auto mb-12 bg-white/95 backdrop-blur-sm p-8 mx-4 shadow-sm border border-black/5">

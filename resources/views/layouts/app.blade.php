@@ -7,6 +7,13 @@
     
     {{-- SEO Meta --}}
     <meta name="description" content="@yield('description', 'Thiệp cưới online đẹp và hiện đại')">
+
+    {{-- Open Graph / Facebook --}}
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('title', 'Thiệp Cưới Online')">
+    <meta property="og:description" content="@yield('description', 'Thiệp cưới online đẹp và hiện đại')">
+    <meta property="og:image" content="@yield('og_image', asset('images/default-og.jpg'))">
     
     {{-- Prevent indexing edit pages --}}
     @if(request()->has('key'))

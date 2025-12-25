@@ -33,10 +33,10 @@ class LunarHelper
         try {
             $date = $solarDate instanceof Carbon ? $solarDate : Carbon::parse($solarDate);
             
-            // Create LunarDateTime from solar date string
-            $lunar = new LunarDateTime($date->format('Y-m-d'));
+            // Create LunarDateTime from solar date string using explicit conversion
+            $lunar = LunarDateTime::fromGregorian($date->format('Y-m-d'));
             
-            // Properties: day, month, year (không phải d, m, y)
+            // Properties: day, month, year (converted lunar values)
             $lunarDay = $lunar->day;
             $lunarMonth = $lunar->month;
             $lunarYear = $lunar->year;

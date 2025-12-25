@@ -4,12 +4,7 @@
 @section('title', 'The Wedding of ' . $wedding->groom_name . ' & ' . $wedding->bride_name)
 
 @section('content')
-@php
-    $coverUrl = $wedding->getFirstMediaUrl('cover') ?: 'https://images.unsplash.com/photo-1511285560982-1351cdeb9821?w=1920&q=80';
-    $groomPhoto = $wedding->getFirstMediaUrl('groom_photo') ?: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&fit=crop';
-    $bridePhoto = $wedding->getFirstMediaUrl('bride_photo') ?: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&fit=crop';
-    $musicUrl = $wedding->background_music ? asset('storage/' . $wedding->background_music) : null;
-@endphp
+@section('og_image', $shareUrl)
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400&display=swap');
@@ -60,7 +55,7 @@
     {{-- HERO --}}
     <section class="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden">
         <div class="absolute inset-0 z-0 opacity-40">
-             <img src="{{ $coverUrl }}" class="w-full h-full object-cover">
+             <img src="{{ $heroUrl }}" class="w-full h-full object-cover">
              <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/80 to-transparent"></div>
         </div>
 

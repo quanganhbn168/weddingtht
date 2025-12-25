@@ -4,12 +4,8 @@
 @section('title', 'The Wedding of ' . $wedding->groom_name . ' & ' . $wedding->bride_name)
 
 @section('content')
-@php
-    $coverUrl = $wedding->getFirstMediaUrl('cover') ?: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80';
-    $groomPhoto = $wedding->getFirstMediaUrl('groom_photo') ?: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&fit=crop';
-    $bridePhoto = $wedding->getFirstMediaUrl('bride_photo') ?: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&fit=crop';
-    $musicUrl = $wedding->background_music ? asset('storage/' . $wedding->background_music) : null;
-@endphp
+
+@section('og_image', $shareUrl)
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&display=swap');
@@ -78,7 +74,7 @@
     {{-- HERO --}}
     <section class="min-h-screen flex flex-col justify-center items-center p-8 text-center relative">
         <div class="absolute inset-0 top-0 h-2/3 z-0">
-             <img src="{{ $coverUrl }}" class="w-full h-full object-cover opacity-100 mask-image-gradient-b">
+             <img src="{{ $heroUrl }}" class="w-full h-full object-cover opacity-100 mask-image-gradient-b">
              <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f9f7f2]"></div>
         </div>
 

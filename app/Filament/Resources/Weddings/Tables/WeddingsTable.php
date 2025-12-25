@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\Weddings\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -96,7 +96,7 @@ class WeddingsTable
                         'templates.minimal_03' => 'Minimal',
                     ]),
             ])
-            ->recordActions([
+            ->actions([
                 ViewAction::make()
                     ->label('Xem')
                     ->url(fn (Wedding $record): string => url($record->slug))
@@ -105,7 +105,7 @@ class WeddingsTable
                 EditAction::make()
                     ->label('Sửa'),
             ])
-            ->toolbarActions([
+            ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

@@ -1,66 +1,107 @@
-# WeddingTHT - Nền tảng Thiệp Cưới Online
+# E-Wedding SaaS - Thiệp Cưới Online & Name Card Số
 
-WeddingTHT là một nền tảng SaaS (Software as a Service) mạnh mẽ và hiện đại, cho phép người dùng tạo và quản lý thiệp cưới kỹ thuật số một cách dễ dàng và chuyên nghiệp.
+Hệ thống SaaS hoàn chỉnh cho dịch vụ thiệp cưới online và danh thiếp số (Digital Business Card), được xây dựng trên Laravel 11 + Filament 3.
 
-## 🚀 Tính năng nổi bật
+## ✨ Tính năng chính
 
--   **Kho giao diện đa dạng:** Cung cấp nhiều mẫu thiệp cưới đẹp mắt, từ phong cách tối giản (Minimal) đến hiện đại (Modern).
--   **Quản lý khách mời:** Dễ dàng thêm, sửa, xóa và phân nhóm khách mời.
--   **RSVP Online:** Cho phép khách mời xác nhận tham dự trực tuyến, giúp cô dâu chú rể quản lý số lượng khách chính xác.
--   **Tùy chỉnh linh hoạt:** Người dùng có thể tùy chỉnh nội dung, hình ảnh, âm nhạc và bản đồ cho thiệp cưới.
--   **Giao diện Admin mạnh mẽ:** Sử dụng FilamentPHP để quản lý toàn bộ hệ thống, từ người dùng, đơn hàng đến các thiết lập giao diện.
--   **Responsive:** Hiển thị hoàn hảo trên mọi thiết bị (Mobile, Tablet, Desktop).
+### 🎊 Thiệp cưới Online
+- Nhiều mẫu thiệp cưới đẹp mắt, responsive
+- Hiển thị ngày cưới âm lịch/dương lịch
+- Quản lý danh sách khách mời
+- Chia sẻ qua link/QR Code
 
-## 🛠 Công nghệ sử dụng
+### 💼 Digital Business Card
+- 7 mẫu giao diện Landing Page cao cấp:
+  - **CEO Profile**: Phong cách đẳng cấp, landing page đầy đủ
+  - **Luxury Gold**: Tông đen vàng quyền lực
+  - **Minimal White**: Tối giản tinh tế kiểu Apple
+  - **Corporate Blue**: Chuyên nghiệp doanh nghiệp
+  - **Creative Dark**: Phá cách, neon, dành cho dân sáng tạo
+  - **Tech Gradient**: Công nghệ, gradient tương lai
+  - **Simple Card**: Card đơn giản, tập trung thông tin
+- Ảnh bán thân "floating" không khung
+- Hỗ trợ Stats, Services, Experience, Quote
+- Responsive hoàn hảo trên mọi thiết bị
+- Tạo QR Code tự động
 
-Dự án được xây dựng dựa trên các công nghệ hiện đại:
+### 🔧 Admin Panel (Filament 3)
+- Quản lý Templates (tự động scan từ thư mục)
+- Quản lý Wedding (thiệp cưới)
+- Quản lý Business Cards
+- Upload media với Spatie Media Library
 
--   **Backend:** [Laravel](https://laravel.com/) (Framework PHP hàng đầu)
--   **Admin Panel:** [FilamentPHP](https://filamentphp.com/) (TALL Stack admin panel)
--   **Frontend:** Blade Templates, [Livewire](https://livewire.laravel.com/), [Alpine.js](https://alpinejs.dev/), [Tailwind CSS](https://tailwindcss.com/)
--   **Database:** MySQL
+## 🛠️ Tech Stack
 
-## 📦 Cài đặt và Triển khai
+- **Backend**: Laravel 11
+- **Admin Panel**: Filament 3
+- **CSS Framework**: Tailwind CSS 3 (via Vite)
+- **Media Management**: Spatie Media Library
+- **Animation**: AOS (Animate On Scroll)
+- **Icons**: Font Awesome 6
 
-Để cài đặt dự án trên máy cục bộ, làm theo các bước sau:
+## 📦 Cài đặt
 
-1.  **Clone repository:**
-    ```bash
-    git clone https://github.com/quanganhbn168/weddingtht.git
-    cd weddingtht
-    ```
+```bash
+# Clone repository
+git clone https://github.com/quanganhbn168/weddingtht.git
+cd weddingtht
 
-2.  **Cài đặt dependencies:**
-    ```bash
-    composer install
-    npm install
-    ```
+# Cài đặt dependencies
+composer install
+npm install
 
-3.  **Cấu hình môi trường:**
-    -   Copy file `.env.example` thành `.env`
-    -   Cấu hình thông tin database và các keys cần thiết.
+# Cấu hình môi trường
+cp .env.example .env
+php artisan key:generate
 
-4.  **Tạo key và migrate database:**
-    ```bash
-    php artisan key:generate
-    php artisan migrate
-    php artisan db:seed --class=AdminUserSeeder # (Tùy chọn: tạo tài khoản admin mẫu)
-    ```
+# Chạy migration và seeder
+php artisan migrate --seed
 
-5.  **Build assets:**
-    ```bash
-    npm run build
-    ```
+# Build assets
+npm run build
 
-6.  **Chạy server:**
-    ```bash
-    php artisan serve
-    ```
+# Khởi chạy
+php artisan serve
+```
 
-## 📝 Đóng góp
+## 🚀 Development
 
-Mọi đóng góp đều được hoan nghênh. Vui lòng tạo Pull Request hoặc gửi Issue nếu bạn tìm thấy lỗi hoặc muốn đề xuất tính năng mới.
+```bash
+# Chạy Vite dev server (hot reload)
+npm run dev
 
-## 📄 License
+# Trong terminal khác, chạy Laravel
+php artisan serve
+```
 
-Dự án này là software proprietary. Vui lòng liên hệ tác giả để biết thêm chi tiết về quyền sử dụng.
+## 📁 Cấu trúc thư mục chính
+
+```
+├── app/
+│   ├── Filament/           # Filament Resources (Admin Panel)
+│   ├── Http/Controllers/   # Controllers
+│   └── Models/             # Eloquent Models
+├── resources/
+│   ├── views/
+│   │   ├── layouts/        # Layout files
+│   │   └── templates/
+│   │       ├── business/   # Business Card templates
+│   │       └── *.blade.php # Wedding templates
+│   ├── css/app.css         # Tailwind CSS
+│   └── js/app.js           # JavaScript
+└── public/build/           # Compiled Vite assets
+```
+
+## 🔑 Truy cập Admin
+
+```
+URL: /admin
+```
+
+## 📝 License
+
+MIT License
+
+## 👨‍💻 Author
+
+**Quang Anh** - [GitHub](https://github.com/quanganhbn168)

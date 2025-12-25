@@ -4,12 +4,7 @@
 @section('title', 'Lễ Cưới ' . $wedding->groom_name . ' & ' . $wedding->bride_name)
 
 @section('content')
-@php
-    $coverUrl = $wedding->getFirstMediaUrl('cover') ?: 'https://images.unsplash.com/photo-1545652034-7870e28f244b?w=1920&q=80';
-    $groomPhoto = $wedding->getFirstMediaUrl('groom_photo') ?: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&fit=crop';
-    $bridePhoto = $wedding->getFirstMediaUrl('bride_photo') ?: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&fit=crop';
-    $musicUrl = $wedding->background_music ? asset('storage/' . $wedding->background_music) : null;
-@endphp
+@section('og_image', $shareUrl)
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Be+Vietnam+Pro:wght@300;400;600&family=Pinyon+Script&display=swap');
@@ -89,7 +84,7 @@
 
     {{-- HERO IMAGE --}}
     <div class="relative h-[50vh] overflow-hidden">
-        <img src="{{ $coverUrl }}" class="w-full h-full object-cover">
+        <img src="{{ $heroUrl }}" class="w-full h-full object-cover">
         <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#8a1c1c] to-transparent"></div>
         <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#8a1c1c] to-transparent"></div>
     </div>

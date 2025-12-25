@@ -40,7 +40,19 @@ class WeddingController extends Controller
             }
         }
 
+        // Prepare Media Data
+        $mediaData = [
+            'heroUrl' => $wedding->getFirstMediaUrl('hero', 'optimized') ?: ($wedding->getFirstMediaUrl('cover') ?: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80'),
+            'shareUrl' => $wedding->getFirstMediaUrl('cover', 'share') ?: ($wedding->getFirstMediaUrl('hero', 'share') ?: ($wedding->getFirstMediaUrl('hero', 'optimized') ?: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80')),
+            'groomPhoto' => $wedding->getFirstMediaUrl('groom_photo') ?: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop',
+            'bridePhoto' => $wedding->getFirstMediaUrl('bride_photo') ?: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=600&fit=crop',
+            'musicUrl' => $wedding->background_music ? asset('storage/' . $wedding->background_music) : null,
+        ];
+
+        // Determine View Path
+        $viewPath = $wedding->template?->view_path ?? $wedding->template_view;
+
         // Return the template view
-        return view($wedding->template_view, compact('wedding', 'isEditable'));
+        return view($viewPath, array_merge(compact('wedding', 'isEditable'), $mediaData));
     }
 }

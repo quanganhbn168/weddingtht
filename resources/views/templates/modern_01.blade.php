@@ -5,12 +5,7 @@
 @section('description', 'Wedding Invitation - Thiệp cưới của ' . $wedding->groom_name . ' và ' . $wedding->bride_name)
 
 @section('content')
-@php
-    $coverUrl = $wedding->getFirstMediaUrl('cover') ?: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80';
-    $groomPhoto = $wedding->getFirstMediaUrl('groom_photo') ?: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop';
-    $bridePhoto = $wedding->getFirstMediaUrl('bride_photo') ?: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=600&fit=crop';
-    $musicUrl = $wedding->background_music ? asset('storage/' . $wedding->background_music) : null;
-@endphp
+@section('og_image', $shareUrl)
 
 {{-- Animations Styles --}}
 <style>
@@ -41,7 +36,7 @@
     {{-- HERO SECTION --}}
     <section class="relative h-screen flex flex-col justify-end pb-16 overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img src="{{ $coverUrl }}" class="w-full h-full object-cover">
+            <img src="{{ $heroUrl }}" class="w-full h-full object-cover">
             {{-- Gradient đáy ảnh để làm nổi chữ --}}
             <div class="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
         </div>
