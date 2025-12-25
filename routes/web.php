@@ -57,3 +57,30 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+// ====================================
+// PUBLIC ROUTES (No Auth Required)
+// ====================================
+use App\Http\Controllers\WeddingController;
+use App\Http\Controllers\BusinessCardController;
+
+// Wedding invitation pages
+Route::get('/w/{slug}', [WeddingController::class, 'show'])->name('wedding.show');
+Route::post('/w/{slug}', [WeddingController::class, 'show']); // For password form
+
+// Business card / landing pages  
+Route::get('/p/{slug}', [BusinessCardController::class, 'show'])->name('business.show');
+
+// Fallback: /{slug} can be wedding OR card (check wedding first)
+Route::get('/{slug}', function ($slug) {
+    $wedding = \App\Models\Wedding::where('slug', $slug)->first();
+    if ($wedding) {
+        return app(WeddingController::class)->show($slug, request());
+    }
+    
+    $card = \App\Models\BusinessCard::where('slug', $slug)->first();
+    if ($card) {
+        return app(BusinessCardController::class)->show($slug);
+    }
+    
+    abort(404);
+})->where('slug', '^(?!admin|dashboard|login|register|profile|payment|api).*$');
