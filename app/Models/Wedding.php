@@ -37,6 +37,21 @@ class Wedding extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
+    public function rsvps(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(WeddingRsvp::class);
+    }
+
+    public function wishes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(WeddingWish::class);
+    }
+
+    public function approvedWishes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(WeddingWish::class)->where('is_approved', true);
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('cover')->singleFile();

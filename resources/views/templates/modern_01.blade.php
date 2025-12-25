@@ -367,6 +367,12 @@
         document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
     });
 </script>
+{{-- RSVP Section --}}
+@include('components.wedding.rsvp-form', ['wedding' => $wedding])
+
+{{-- Guestbook Section --}}
+@include('components.wedding.guestbook', ['wedding' => $wedding])
+
 @endsection
 
 @push('scripts')

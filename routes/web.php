@@ -62,10 +62,17 @@ require __DIR__.'/auth.php';
 // ====================================
 use App\Http\Controllers\WeddingController;
 use App\Http\Controllers\BusinessCardController;
+use App\Http\Controllers\RsvpController;
+use App\Http\Controllers\WishController;
 
 // Wedding invitation pages
 Route::get('/w/{slug}', [WeddingController::class, 'show'])->name('wedding.show');
 Route::post('/w/{slug}', [WeddingController::class, 'show']); // For password form
+
+// RSVP & Guestbook routes
+Route::post('/w/{wedding:slug}/rsvp', [RsvpController::class, 'store'])->name('wedding.rsvp.store');
+Route::post('/w/{wedding:slug}/wish', [WishController::class, 'store'])->name('wedding.wish.store');
+Route::get('/api/w/{wedding:slug}/wishes', [WishController::class, 'index'])->name('wedding.wishes.api');
 
 // Business card / landing pages  
 Route::get('/p/{slug}', [BusinessCardController::class, 'show'])->name('business.show');
