@@ -162,4 +162,67 @@ class UserWeddingController extends Controller
         
         return redirect()->route('wedding.show', $wedding->slug);
     }
+
+    /**
+     * Manage RSVPs for the wedding.
+     */
+    public function rsvps(Request $request, Wedding $wedding)
+    {
+        if ($wedding->user_id !== $request->user()->id) {
+            abort(403);
+        }
+        
+        // Export to CSV
+        if ($request->has('export') && $request->export === 'csv') {
+            $rsvps = $wedding->rsvps()->latest()->get();
+            $filename = 'danh-sach-khach-moi-' . $wedding->slug . '.csv';
+            
+            $headers = [
+                "Content-type" => "text/csv; charset=UTF-8",
+                "Content-Disposition" => "attachment; filename=$filename",
+                "Pragma" => "no-cache",
+                "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+                "Expires" => "0"
+            ];
+            
+            $callback = function() use ($rsvps) {
+                $file = fopen('php://output', 'w');
+                
+                // Add BOM for Excel UTF-8 support
+                fputs($file, "\xEF\xBB\xBF");
+                
+                fputcsv($file, ['Họ tên', 'Số điện thoại', 'Tham dự', 'Số khách', 'Nhà', 'Ghi chú', 'Thời gian']);
+                
+                foreach ($rsvps as $rsvp) {
+                    fputcsv($file, [
+                        $rsvp->name,
+                        $rsvp->phone,
+                        $rsvp->attendance_text,
+                        $rsvp->guests,
+                        $rsvp->side_text,
+                        $rsvp->note,
+                        $rsvp->created_at->format('d/m/Y H:i'),
+                    ]);
+                }
+                
+                fclose($file);
+            };
+            
+            return response()->stream($callback, 200, $headers);
+        }
+        
+        // Stats
+        $stats = [
+            'total_guests' => $wedding->rsvps()->sum('guests'),
+            'attending' => $wedding->rsvps()->attending()->count(),
+            'not_attending' => $wedding->rsvps()->where('attendance', 'no')->count(),
+            'maybe' => $wedding->rsvps()->where('attendance', 'maybe')->count(),
+            'groom_side' => $wedding->rsvps()->groomSide()->sum('guests'),
+            'bride_side' => $wedding->rsvps()->brideSide()->sum('guests'),
+        ];
+        
+        $rsvps = $wedding->rsvps()->latest()->paginate(20);
+        
+        return view('dashboard.weddings.rsvps', compact('wedding', 'rsvps', 'stats'));
+    }
 }

@@ -49,6 +49,7 @@
                                 {{ $wedding->status === 'published' ? 'Đã đăng' : ($wedding->status === 'preview' ? 'Xem trước' : 'Nháp') }}
                             </span>
                             <a href="/w/{{ $wedding->slug }}" target="_blank" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm">Xem</a>
+                            <a href="{{ route('dashboard.weddings.rsvps', $wedding) }}" class="text-blue-600 hover:text-blue-800 px-3 py-2 text-sm font-medium">Khách mời</a>
                             <a href="{{ route('dashboard.weddings.edit', $wedding) }}" class="text-indigo-600 hover:text-indigo-800 px-3 py-2 text-sm font-medium">Sửa</a>
                             <form method="POST" action="{{ route('dashboard.weddings.destroy', $wedding) }}" class="inline" onsubmit="return confirm('Bạn có chắc muốn xóa thiệp này?')">
                                 @csrf

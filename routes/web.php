@@ -26,6 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/{wedding}', [UserWeddingController::class, 'update'])->name('update');
         Route::delete('/{wedding}', [UserWeddingController::class, 'destroy'])->name('destroy');
         Route::get('/{wedding}/preview', [UserWeddingController::class, 'preview'])->name('preview');
+        Route::get('/{wedding}/rsvps', [UserWeddingController::class, 'rsvps'])->name('rsvps');
     });
     
     // Business card management
