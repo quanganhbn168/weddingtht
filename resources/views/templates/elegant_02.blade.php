@@ -268,19 +268,25 @@
     </section>
 
     {{-- GALLERY --}}
-    @if($wedding->getMedia('gallery')->isNotEmpty())
     <section class="py-24 px-4 bg-white">
         <h2 class="text-center text-4xl font-script mb-12 text-[#c0a062]">Những Khoảnh Khắc Đẹp</h2>
         <div class="columns-2 gap-4 space-y-4">
-             @foreach($wedding->getMedia('gallery') as $media)
-            {{-- Remove Sepia, Full Color --}}
-            <div class="break-inside-avoid p-2 bg-white border border-[#eae4dc] shadow-md">
-                <img src="{{ $media->getUrl() }}" class="w-full h-auto">
-            </div>
-            @endforeach
+            @if($wedding->getMedia('gallery')->isNotEmpty())
+                @foreach($wedding->getMedia('gallery') as $media)
+                <div class="break-inside-avoid p-2 bg-white border border-[#eae4dc] shadow-md">
+                    <img src="{{ $media->getUrl() }}" class="w-full h-auto">
+                </div>
+                @endforeach
+            @else
+                {{-- Placeholder gallery for demo --}}
+                @foreach(['https://images.unsplash.com/photo-1519741497674-611481863552?w=600', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600', 'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=600', 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600', 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600', 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600'] as $placeholder)
+                <div class="break-inside-avoid p-2 bg-white border border-[#eae4dc] shadow-md">
+                    <img src="{{ $placeholder }}" class="w-full h-auto">
+                </div>
+                @endforeach
+            @endif
         </div>
     </section>
-    @endif
 
     <footer class="py-16 text-center bg-[#f9f7f2] border-t border-[#eae4dc]">
         <h2 class="font-script text-5xl mb-4 text-[#c0a062]">Thank You</h2>

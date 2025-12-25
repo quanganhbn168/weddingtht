@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('view_path');
-            $table->string('type')->default('wedding'); // wedding, business, event
+            $table->string('type')->default('wedding'); // wedding, business
             $table->string('thumbnail_url')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();

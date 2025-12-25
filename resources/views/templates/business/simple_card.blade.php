@@ -39,7 +39,7 @@ Type: business
             <p class="text-gray-400 text-sm uppercase tracking-wide mb-6">{{ $card->company }}</p>
 
             <!-- Actions -->
-            <div class="grid grid-cols-2 gap-3 mb-8">
+            <div class="grid grid-cols-2 gap-3 mb-4">
                 @if($card->phone)
                 <a href="tel:{{ $card->phone }}" class="flex items-center justify-center gap-2 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
                     <i class="fas fa-phone"></i> Gọi điện
@@ -50,7 +50,20 @@ Type: business
                     <i class="fas fa-envelope"></i> Email
                 </a>
                 @endif
+                @if($card->website)
+                <a href="{{ $card->website }}" target="_blank" class="flex items-center justify-center gap-2 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">
+                    <i class="fas fa-globe"></i> Website
+                </a>
+                @endif
             </div>
+            
+            <!-- Address -->
+            @if($card->address)
+            <div class="flex items-center justify-center gap-2 text-gray-500 text-sm mb-6">
+                <i class="fas fa-map-marker-alt text-red-400"></i>
+                <span>{{ $card->address }}</span>
+            </div>
+            @endif
 
             <!-- About -->
             @if($card->about)

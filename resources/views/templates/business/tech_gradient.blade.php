@@ -97,7 +97,19 @@ Description: Giao diện hiện đại, gradient chuyển màu, ảnh lớn khô
                                 <i class="fas fa-envelope"></i> GỬI EMAIL
                             </a>
                             @endif
+                            @if($card->website)
+                            <a href="{{ $card->website }}" target="_blank" class="px-8 py-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition font-bold tracking-wide flex items-center justify-center gap-3">
+                                <i class="fas fa-globe"></i> WEBSITE
+                            </a>
+                            @endif
                         </div>
+                        
+                        @if($card->address)
+                        <div class="mt-6 flex items-center justify-center md:justify-start gap-2 text-slate-400 text-sm">
+                            <i class="fas fa-map-marker-alt text-cyan-400"></i>
+                            <span>{{ $card->address }}</span>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -32,6 +32,11 @@ class Wedding extends Model implements HasMedia
         return $this->belongsTo(Template::class);
     }
 
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('cover')->singleFile();

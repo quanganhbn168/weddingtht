@@ -278,18 +278,25 @@
     </section>
 
     {{-- GALLERY EDITORIAL --}}
-    @if($wedding->getMedia('gallery')->isNotEmpty())
     <section class="py-24 px-4 bg-white">
         <h2 class="text-[10vw] font-display text-center leading-none opacity-5 mb-[-5vw] relative z-0 text-black">Memories</h2>
         <div class="columns-1 md:columns-2 gap-8 space-y-8 relative z-10 px-4">
-             @foreach($wedding->getMedia('gallery') as $media)
-            <div class="break-inside-avoid">
-                <img src="{{ $media->getUrl() }}" class="w-full h-auto">
-            </div>
-            @endforeach
+            @if($wedding->getMedia('gallery')->isNotEmpty())
+                @foreach($wedding->getMedia('gallery') as $media)
+                <div class="break-inside-avoid">
+                    <img src="{{ $media->getUrl() }}" class="w-full h-auto">
+                </div>
+                @endforeach
+            @else
+                {{-- Placeholder gallery for demo --}}
+                @foreach(['https://images.unsplash.com/photo-1519741497674-611481863552?w=600', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600', 'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=600', 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600', 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600', 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600'] as $placeholder)
+                <div class="break-inside-avoid">
+                    <img src="{{ $placeholder }}" class="w-full h-auto">
+                </div>
+                @endforeach
+            @endif
         </div>
     </section>
-    @endif
 
     <footer class="py-12 bg-[#f4f4f0] text-center border-t border-black/5">
         <p class="font-display text-2xl mb-4">{{ $wedding->groom_name }} & {{ $wedding->bride_name }}</p>

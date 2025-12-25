@@ -316,7 +316,6 @@
     </section>
 
     {{-- ALBUM --}}
-    @if($wedding->getMedia('gallery')->isNotEmpty())
     <section class="py-24 px-4 bg-stone-100">
         <div class="text-center mb-16">
             <h2 class="text-4xl font-serif text-gray-900">Gallery</h2>
@@ -324,15 +323,22 @@
         </div>
         {{-- Masonry layout for mixed aspect ratios --}}
         <div class="columns-2 md:columns-3 gap-4 space-y-4 px-4 max-w-7xl mx-auto">
-            @foreach($wedding->getMedia('gallery') as $media)
-            <div class="break-inside-avoid overflow-hidden shadow-sm hover:shadow-2xl transition duration-500 cursor-pointer group bg-white p-1">
-                {{-- Removed object-cover/h-full to allow natural aspect ratio --}}
-                <img src="{{ $media->getUrl() }}" class="w-full h-auto transition duration-1000 group-hover:scale-[1.02] filter grayscale-[10%] group-hover:grayscale-0">
-            </div>
-            @endforeach
+            @if($wedding->getMedia('gallery')->isNotEmpty())
+                @foreach($wedding->getMedia('gallery') as $media)
+                <div class="break-inside-avoid overflow-hidden shadow-sm hover:shadow-2xl transition duration-500 cursor-pointer group bg-white p-1">
+                    <img src="{{ $media->getUrl() }}" class="w-full h-auto transition duration-1000 group-hover:scale-[1.02] filter grayscale-[10%] group-hover:grayscale-0">
+                </div>
+                @endforeach
+            @else
+                {{-- Placeholder gallery for demo --}}
+                @foreach(['https://images.unsplash.com/photo-1519741497674-611481863552?w=600', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600', 'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=600', 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600', 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600', 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600'] as $placeholder)
+                <div class="break-inside-avoid overflow-hidden shadow-sm hover:shadow-2xl transition duration-500 cursor-pointer group bg-white p-1">
+                    <img src="{{ $placeholder }}" class="w-full h-auto transition duration-1000 group-hover:scale-[1.02] filter grayscale-[10%] group-hover:grayscale-0">
+                </div>
+                @endforeach
+            @endif
         </div>
     </section>
-    @endif
 
     {{-- THANK YOU --}}
     <footer class="py-32 bg-stone-900 text-white text-center px-6 relative">

@@ -160,6 +160,17 @@ Description: Chuyên nghiệp, tin cậy, ảnh lớn không khung.
         <footer class="bg-white border-t border-gray-200 py-12 text-center">
              <div class="max-w-4xl mx-auto px-6">
                 <div class="mb-4 font-bold text-gray-900 text-xl">{{ $card->company }}</div>
+                @if($card->address)
+                <div class="flex items-center justify-center gap-2 text-gray-500 mb-4">
+                    <i class="fas fa-map-marker-alt text-corporate"></i>
+                    <span>{{ $card->address }}</span>
+                </div>
+                @endif
+                <div class="flex justify-center gap-6 mb-4">
+                    @if($card->phone)<a href="tel:{{ $card->phone }}" class="text-gray-500 hover:text-corporate transition"><i class="fas fa-phone mr-1"></i> {{ $card->phone }}</a>@endif
+                    @if($card->email)<a href="mailto:{{ $card->email }}" class="text-gray-500 hover:text-corporate transition"><i class="fas fa-envelope mr-1"></i> {{ $card->email }}</a>@endif
+                    @if($card->website)<a href="{{ $card->website }}" target="_blank" class="text-gray-500 hover:text-corporate transition"><i class="fas fa-globe mr-1"></i> Website</a>@endif
+                </div>
                 <div class="text-sm text-gray-500">
                     &copy; {{ date('Y') }}. All professional rights reserved.
                 </div>

@@ -165,19 +165,103 @@
         </div>
     </section>
 
-    {{-- GALLERY --}}
-    @if($wedding->getMedia('gallery')->isNotEmpty())
-    <section class="py-16 px-4">
-        <h2 class="text-center font-script text-4xl text-gradient-gold mb-10">Khoảnh Khắc Hạnh Phúc</h2>
-        <div class="columns-2 gap-3 space-y-3">
-             @foreach($wedding->getMedia('gallery') as $media)
-            <div class="break-inside-avoid border border-[#dfb968]/30 p-1 bg-[#5c0f0f]/30">
-                <img src="{{ $media->getUrl() }}" class="w-full shadow-lg">
+    {{-- COUNTDOWN --}}
+    @if($wedding->event_date && $wedding->event_date->isFuture())
+    <section class="py-20 px-6 bg-[#5c0f0f] border-y border-[#dfb968]/30">
+        <div class="text-center">
+            <p class="text-xs uppercase tracking-[0.3em] text-[#dfb968]/70 mb-8">Đếm Ngược Ngày Trọng Đại</p>
+            <div x-data="countdown('{{ $wedding->event_date->format('Y-m-d') }}')" class="grid grid-cols-4 gap-4">
+                <div class="text-center">
+                    <div class="border border-[#dfb968]/40 p-4 bg-[#8a1c1c]/50">
+                        <span x-text="days" class="block text-3xl font-playfair text-[#f6e3ba]">00</span>
+                        <span class="text-[10px] uppercase text-[#dfb968]/60 tracking-widest">Ngày</span>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="border border-[#dfb968]/40 p-4 bg-[#8a1c1c]/50">
+                        <span x-text="hours" class="block text-3xl font-playfair text-[#f6e3ba]">00</span>
+                        <span class="text-[10px] uppercase text-[#dfb968]/60 tracking-widest">Giờ</span>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="border border-[#dfb968]/40 p-4 bg-[#8a1c1c]/50">
+                        <span x-text="minutes" class="block text-3xl font-playfair text-[#f6e3ba]">00</span>
+                        <span class="text-[10px] uppercase text-[#dfb968]/60 tracking-widest">Phút</span>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="border border-[#dfb968]/40 p-4 bg-[#8a1c1c]/50">
+                        <span x-text="seconds" class="block text-3xl font-playfair text-[#f6e3ba]">00</span>
+                        <span class="text-[10px] uppercase text-[#dfb968]/60 tracking-widest">Giây</span>
+                    </div>
+                </div>
             </div>
-            @endforeach
         </div>
     </section>
     @endif
+
+    {{-- GALLERY --}}
+    <section class="py-16 px-4">
+        <h2 class="text-center font-script text-4xl text-gradient-gold mb-10">Khoảnh Khắc Hạnh Phúc</h2>
+        <div class="columns-2 gap-3 space-y-3">
+            @if($wedding->getMedia('gallery')->isNotEmpty())
+                @foreach($wedding->getMedia('gallery') as $media)
+                <div class="break-inside-avoid border border-[#dfb968]/30 p-1 bg-[#5c0f0f]/30">
+                    <img src="{{ $media->getUrl() }}" class="w-full shadow-lg">
+                </div>
+                @endforeach
+            @else
+                {{-- Placeholder gallery for demo --}}
+                @foreach(['https://images.unsplash.com/photo-1519741497674-611481863552?w=600', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600', 'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=600', 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600', 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600', 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600'] as $placeholder)
+                <div class="break-inside-avoid border border-[#dfb968]/30 p-1 bg-[#5c0f0f]/30">
+                    <img src="{{ $placeholder }}" class="w-full shadow-lg">
+                </div>
+                @endforeach
+            @endif
+        </div>
+    </section>
+
+    {{-- RSVP & QR --}}
+    <section class="py-16 px-4" x-data="{ showQr: null }">
+        <div class="bg-[#5c0f0f]/50 border border-[#dfb968]/30 p-8 text-center">
+            <h2 class="font-playfair text-2xl text-[#f6e3ba] mb-6">Mừng Cưới</h2>
+            <p class="text-[#dfb968]/70 text-sm mb-8 italic">Sự hiện diện của quý khách là món quà trân quý nhất</p>
+            <div class="flex gap-4 justify-center">
+                <button @click="showQr = 'groom'" class="px-6 py-3 border border-[#dfb968] text-[#dfb968] text-xs uppercase tracking-widest hover:bg-[#dfb968] hover:text-[#5c0f0f] transition">Nhà Trai</button>
+                <button @click="showQr = 'bride'" class="px-6 py-3 border border-[#dfb968] text-[#dfb968] text-xs uppercase tracking-widest hover:bg-[#dfb968] hover:text-[#5c0f0f] transition">Nhà Gái</button>
+            </div>
+        </div>
+
+        {{-- QR Modal --}}
+        <div x-show="showQr" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90" style="display: none;" x-transition.opacity>
+            <div class="bg-[#8a1c1c] border border-[#dfb968] p-8 w-full max-w-sm relative" @click.outside="showQr = null">
+                <button @click="showQr = null" class="absolute top-4 right-4 text-[#dfb968] hover:text-white">✕</button>
+                <h3 class="text-center text-lg font-playfair mb-6 text-[#f6e3ba]" x-text="showQr === 'groom' ? 'Nhà Trai' : 'Nhà Gái'"></h3>
+                
+                <template x-if="showQr === 'groom'">
+                    <div class="text-center">
+                        @if($wedding->getFirstMediaUrl('groom_qr'))
+                            <img src="{{ $wedding->getFirstMediaUrl('groom_qr') }}" class="w-40 h-40 mx-auto border-2 border-[#dfb968] mb-4">
+                        @else
+                            <p class="text-[#dfb968]/60 italic py-8">Chưa cập nhật mã QR</p>
+                        @endif
+                        <p class="text-xs text-[#dfb968]/70 whitespace-pre-line">{{ $wedding->groom_qr_info }}</p>
+                    </div>
+                </template>
+                
+                <template x-if="showQr === 'bride'">
+                    <div class="text-center">
+                        @if($wedding->getFirstMediaUrl('bride_qr'))
+                            <img src="{{ $wedding->getFirstMediaUrl('bride_qr') }}" class="w-40 h-40 mx-auto border-2 border-[#dfb968] mb-4">
+                        @else
+                            <p class="text-[#dfb968]/60 italic py-8">Chưa cập nhật mã QR</p>
+                        @endif
+                        <p class="text-xs text-[#dfb968]/70 whitespace-pre-line">{{ $wedding->bride_qr_info }}</p>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
 
     {{-- FOOTER --}}
     <footer class="py-12 bg-[#5c0f0f] text-center border-t border-[#dfb968]/20 relative">
@@ -189,4 +273,24 @@
         </div>
     </footer>
 </div>
+
+@push('scripts')
+<script>
+function countdown(targetDate) {
+    return {
+        days: '00', hours: '00', minutes: '00', seconds: '00',
+        init() { this.updateCountdown(); setInterval(() => this.updateCountdown(), 1000); },
+        updateCountdown() {
+            const diff = new Date(targetDate + 'T00:00:00').getTime() - new Date().getTime();
+            if (diff > 0) {
+                this.days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                this.hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                this.minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                this.seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+            }
+        }
+    }
+}
+</script>
+@endpush
 @endsection

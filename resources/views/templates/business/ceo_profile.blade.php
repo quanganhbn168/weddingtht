@@ -100,6 +100,11 @@ Description: Giao diện Landing Page cao cấp cho doanh nhân.
                         <i class="fas fa-envelope"></i> Gửi Email
                     </a>
                 @endif
+                @if($card->website)
+                    <a href="{{ $card->website }}" target="_blank" class="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-full hover:bg-white/10 hover:border-white/30 transition-all backdrop-blur-sm flex items-center gap-2">
+                        <i class="fas fa-globe"></i> Website
+                    </a>
+                @endif
             </div>
 
             <!-- Socials -->
@@ -266,6 +271,13 @@ Description: Giao diện Landing Page cao cấp cho doanh nhân.
             <h2 class="font-serif text-4xl md:text-5xl mb-8 text-white font-bold" data-aos="fade-up">Sẵn sàng hợp tác?</h2>
             <p class="text-slate-400 mb-12 text-lg" data-aos="fade-up" data-aos-delay="100">Liên hệ với tôi ngay hôm nay để thảo luận về dự án của bạn.</p>
             
+            @if($card->address)
+            <div class="mb-8 text-slate-400 flex items-center justify-center gap-2" data-aos="fade-up" data-aos-delay="150">
+                <i class="fas fa-map-marker-alt text-gold-500"></i>
+                <span>{{ $card->address }}</span>
+            </div>
+            @endif
+            
             <div class="flex flex-col md:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="200">
                  @if($card->phone)
                 <a href="tel:{{ $card->phone }}" class="flex-1 bg-white text-slate-900 py-4 px-8 rounded-xl font-bold hover:bg-gold-400 hover:shadow-lg transition text-lg">
@@ -275,6 +287,11 @@ Description: Giao diện Landing Page cao cấp cho doanh nhân.
                 @if($card->email)
                 <a href="mailto:{{ $card->email }}" class="flex-1 bg-slate-800 border border-slate-700 py-4 px-8 rounded-xl font-bold hover:bg-slate-700 hover:border-white/20 transition text-lg">
                     <i class="fas fa-envelope mr-2"></i> Gửi Email
+                </a>
+                @endif
+                @if($card->website)
+                <a href="{{ $card->website }}" target="_blank" class="flex-1 bg-slate-800 border border-slate-700 py-4 px-8 rounded-xl font-bold hover:bg-slate-700 hover:border-white/20 transition text-lg">
+                    <i class="fas fa-globe mr-2"></i> Website
                 </a>
                 @endif
             </div>

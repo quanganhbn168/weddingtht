@@ -176,9 +176,16 @@ Description: Giao diện tối, màu sắc nổi bật, ảnh lớn không khung
             <h2 class="text-[8vw] md:text-[6vw] font-black text-gray-900 leading-none select-none hover:text-gray-800 transition duration-500 cursor-default">
                 {{ $card->company }}
             </h2>
+            @if($card->address)
+            <div class="mt-6 text-gray-500 flex items-center justify-center gap-2">
+                <i class="fas fa-map-marker-alt text-pink-500"></i>
+                <span>{{ $card->address }}</span>
+            </div>
+            @endif
             <div class="mt-8 flex justify-center gap-8 text-sm font-bold uppercase tracking-widest text-gray-500">
                 @if($card->email) <a href="mailto:{{ $card->email }}" class="hover:text-white transition">Email</a> @endif
                 @if($card->phone) <a href="tel:{{ $card->phone }}" class="hover:text-white transition">Phone</a> @endif
+                @if($card->website) <a href="{{ $card->website }}" target="_blank" class="hover:text-white transition">Website</a> @endif
             </div>
         </footer>
     </div>

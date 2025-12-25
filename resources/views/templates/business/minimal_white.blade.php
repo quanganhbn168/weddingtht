@@ -82,6 +82,11 @@ Description: Giao diện Landing Page phong cách tối giản, ảnh lớn khô
                                 <i class="fas fa-phone mr-2"></i> {{ $card->phone }}
                             </a>
                             @endif
+                            @if($card->website)
+                            <a href="{{ $card->website }}" target="_blank" class="px-8 py-4 bg-gray-100 text-black rounded-full font-bold hover:bg-gray-200 transition">
+                                <i class="fas fa-globe mr-2"></i> Website
+                            </a>
+                            @endif
                         </div>
 
                         <!-- Simple Socials -->
@@ -92,6 +97,14 @@ Description: Giao diện Landing Page phong cách tối giản, ảnh lớn khô
                             </a>
                             @endforeach
                         </div>
+                        
+                        <!-- Address -->
+                        @if($card->address)
+                        <div class="mt-6 flex items-center justify-center md:justify-start gap-2 text-gray-400 text-sm" data-aos="fade-up" data-aos-delay="450">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>{{ $card->address }}</span>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

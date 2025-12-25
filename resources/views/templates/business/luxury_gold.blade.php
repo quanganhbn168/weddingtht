@@ -198,9 +198,16 @@ Description: Giao diện Landing Page tông đen vàng quyền lực, ảnh lớ
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-[2px] bg-[#d4af37]"></div>
             
             <h2 class="text-3xl font-serif text-white mb-6">{{ $card->company }}</h2>
+            @if($card->address)
+            <div class="flex items-center justify-center gap-2 text-[#888] mb-6">
+                <i class="fas fa-map-marker-alt text-[#d4af37]"></i>
+                <span>{{ $card->address }}</span>
+            </div>
+            @endif
             <div class="flex flex-col md:flex-row justify-center gap-6 md:gap-12 text-[#666] text-sm font-light uppercase tracking-widest mb-10">
                 @if($card->phone) <a href="tel:{{ $card->phone }}" class="hover:text-[#d4af37] transition">{{ $card->phone }}</a> @endif
                 @if($card->email) <a href="mailto:{{ $card->email }}" class="hover:text-[#d4af37] transition">{{ $card->email }}</a> @endif
+                @if($card->website) <a href="{{ $card->website }}" target="_blank" class="hover:text-[#d4af37] transition"><i class="fas fa-globe mr-1"></i>Website</a> @endif
             </div>
             <p class="text-[#333] text-xs uppercase tracking-widest">
                 &copy; {{ date('Y') }} {{ $card->name }}. All Rights Reserved.

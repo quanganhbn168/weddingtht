@@ -122,6 +122,41 @@
         </div>
     </section>
 
+    {{-- COUNTDOWN --}}
+    @if($wedding->event_date && $wedding->event_date->isFuture())
+    <section class="py-20 px-6 bg-slate-950 border-y border-[#d4af37]/20">
+        <div class="text-center">
+            <p class="text-xs uppercase tracking-[0.3em] text-[#d4af37]/70 mb-8">Countdown to the Big Day</p>
+            <div x-data="countdown('{{ $wedding->event_date->format('Y-m-d') }}')" class="grid grid-cols-4 gap-4">
+                <div class="text-center">
+                    <div class="border border-[#d4af37]/30 p-4 bg-black/30">
+                        <span x-text="days" class="block text-4xl gold-gradient font-cinzel">00</span>
+                        <span class="text-[10px] uppercase text-slate-400 tracking-widest">Days</span>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="border border-[#d4af37]/30 p-4 bg-black/30">
+                        <span x-text="hours" class="block text-4xl gold-gradient font-cinzel">00</span>
+                        <span class="text-[10px] uppercase text-slate-400 tracking-widest">Hours</span>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="border border-[#d4af37]/30 p-4 bg-black/30">
+                        <span x-text="minutes" class="block text-4xl gold-gradient font-cinzel">00</span>
+                        <span class="text-[10px] uppercase text-slate-400 tracking-widest">Minutes</span>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="border border-[#d4af37]/30 p-4 bg-black/30">
+                        <span x-text="seconds" class="block text-4xl gold-gradient font-cinzel">00</span>
+                        <span class="text-[10px] uppercase text-slate-400 tracking-widest">Seconds</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    @endif
+
     {{-- EVENTS --}}
     <section class="py-20 px-6 bg-slate-900 border-y border-[#d4af37]/20">
         <h2 class="text-center font-cinzel text-3xl text-[#d4af37] mb-12">Sự Kiện</h2>
@@ -163,13 +198,18 @@
     {{-- GALLERY & RSVP (Combined for simplicity in execution) --}}
     <section class="py-20 px-6 text-center">
         <h2 class="font-cinzel text-3xl text-[#d4af37] mb-8">Album Ảnh</h2>
-        @if($wedding->getMedia('gallery')->isNotEmpty())
         <div class="columns-2 gap-2 space-y-2 mb-12">
-            @foreach($wedding->getMedia('gallery') as $media)
-            <img src="{{ $media->getUrl() }}" class="w-full border border-[#d4af37]/20 rounded-sm">
-            @endforeach
+            @if($wedding->getMedia('gallery')->isNotEmpty())
+                @foreach($wedding->getMedia('gallery') as $media)
+                <img src="{{ $media->getUrl() }}" class="w-full border border-[#d4af37]/20 rounded-sm">
+                @endforeach
+            @else
+                {{-- Placeholder gallery for demo --}}
+                @foreach(['https://images.unsplash.com/photo-1519741497674-611481863552?w=600', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600', 'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=600', 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600', 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600', 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600'] as $placeholder)
+                <img src="{{ $placeholder }}" class="w-full border border-[#d4af37]/20 rounded-sm">
+                @endforeach
+            @endif
         </div>
-        @endif
 
         <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-[#d4af37] p-8 mt-12">
             <h3 class="text-2xl font-cinzel text-white mb-8">Gửi Lời Chúc</h3>
@@ -195,4 +235,24 @@
         <h2 class="gold-gradient font-cinzel text-2xl">{{ $wedding->groom_name }} & {{ $wedding->bride_name }}</h2>
     </footer>
 </div>
+
+@push('scripts')
+<script>
+function countdown(targetDate) {
+    return {
+        days: '00', hours: '00', minutes: '00', seconds: '00',
+        init() { this.updateCountdown(); setInterval(() => this.updateCountdown(), 1000); },
+        updateCountdown() {
+            const diff = new Date(targetDate + 'T00:00:00').getTime() - new Date().getTime();
+            if (diff > 0) {
+                this.days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                this.hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                this.minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                this.seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+            }
+        }
+    }
+}
+</script>
+@endpush
 @endsection

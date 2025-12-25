@@ -35,4 +35,20 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | MoMo Payment Gateway
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for MoMo Vietnam payment integration.
+    | Get credentials from: https://business.momo.vn
+    |
+    */
+    'momo' => [
+        'partner_code' => env('MOMO_PARTNER_CODE', ''),
+        'access_key' => env('MOMO_ACCESS_KEY', ''),
+        'secret_key' => env('MOMO_SECRET_KEY', ''),
+        'sandbox' => env('MOMO_SANDBOX', true),
+    ],
+
 ];

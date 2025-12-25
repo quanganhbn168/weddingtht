@@ -37,6 +37,11 @@ class WeddingResource extends Resource
     {
         return 'heroicon-o-heart';
     }
+    
+    public static function getNavigationSort(): ?int
+    {
+        return 1;
+    }
 
     public static function getEloquentQuery(): Builder
     {

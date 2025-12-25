@@ -7,15 +7,16 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Consolidated Business Cards Table Migration
      */
     public function up(): void
     {
         Schema::create('business_cards', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->string('slug')->unique(); // e.g. /p/quang-anh
             $table->string('name');
-            $table->string('title')->nullable(); // Chuc vu
+            $table->string('title')->nullable(); // Chức vụ
             $table->string('company')->nullable();
             
             // Contact
@@ -26,16 +27,17 @@ return new class extends Migration
             
             // Bio & Socials
             $table->text('about')->nullable();
+            $table->json('content')->nullable(); // Flexible data for landing page sections
             $table->json('social_links')->nullable(); // { facebook: url, tiktok: url, bank: { ... } }
             
             // Appearance
             $table->foreignId('template_id')->nullable()->constrained('templates')->nullOnDelete();
-            $table->string('theme_color')->nullable(); // Custom hex color
-            $table->string('avatar_url')->nullable(); // Cache for performance? Or just rely on media library
+            $table->string('theme_color')->nullable();
+            $table->string('avatar_url')->nullable();
             
             // Settings
             $table->boolean('is_active')->default(true);
-            $table->string('password')->nullable(); // Optional password protection
+            $table->string('password')->nullable();
             
             $table->timestamps();
         });

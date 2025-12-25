@@ -17,7 +17,13 @@ class BusinessCardResource extends Resource
 {
     protected static ?string $model = BusinessCard::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-identification';
+    
+    protected static ?string $navigationLabel = 'Name Card';
+    
+    protected static ?string $navigationGroup = 'Quản lý';
+    
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
