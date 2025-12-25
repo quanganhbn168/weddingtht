@@ -437,7 +437,7 @@
                     <img src="https://thtmedia.com.vn/wp-content/uploads/2023/01/THT-media-logo-2023-261x300.png" alt="THT Media" class="h-10 w-auto">
                 </a>
                 <div class="text-gray-500 text-sm text-center">
-                    © {{ date('Y') }} THT Media. Thiết kế với <i class="fas fa-heart text-rose-500"></i> tại Việt Nam.
+                    © {{ date('Y') }} <a href="https://thtmedia.com.vn" target="_blank" class="hover:text-rose-500">THT Media</a>. Tất cả bản quyền được bảo lưu.
                 </div>
             </div>
         </div>
