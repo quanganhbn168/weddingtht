@@ -1,25 +1,17 @@
 {{-- 
-Premium Falling Effects - Visual Teaser for All + Full for Pro
-Standard: Shows preview with upgrade prompt
-Pro: Full effects without restrictions
+Premium Falling Effects - Multiple Variations
+Variety of shapes, sizes, colors for each effect type
 --}}
 
 @php
     $effectRaw = $wedding->falling_effect ?? 'hearts';
     $effect = is_object($effectRaw) ? $effectRaw->value : (string)$effectRaw;
     $isPro = ($wedding->tier ?? 'standard') === 'pro';
-    
-    // Show effects for everyone (teaser for Standard, full for Pro)
     $showEffect = $effect !== 'none';
 @endphp
 
 @if($showEffect)
 <style>
-/* ================================================
-   PREMIUM FALLING EFFECTS
-   Clean SVG-based particles with smooth animations
-   ================================================ */
-
 .falling-canvas {
     position: fixed;
     top: 0;
@@ -33,115 +25,97 @@ Pro: Full effects without restrictions
 
 .fall-item {
     position: absolute;
-    top: -60px;
+    top: -80px;
     opacity: 0;
-    animation: fallAnimation linear infinite;
+    animation: fallDown linear infinite, swaySmooth ease-in-out infinite alternate;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
-/* Main falling animation - continuous from top to bottom */
-@keyframes fallAnimation {
-    0% {
-        transform: translateY(0) rotate(0deg) scale(1);
-        opacity: 0;
-    }
-    5% {
-        opacity: 1;
-    }
-    95% {
-        opacity: 0.8;
-    }
-    100% {
-        transform: translateY(calc(100vh + 100px)) rotate(360deg) scale(0.8);
-        opacity: 0;
-    }
+@keyframes fallDown {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    5% { opacity: 1; }
+    95% { opacity: 0.7; }
+    100% { transform: translateY(calc(100vh + 100px)) rotate(360deg); opacity: 0; }
 }
 
-/* Gentle horizontal sway */
-.fall-item.sway {
-    animation: fallAnimation linear infinite, sideToSide ease-in-out infinite alternate;
+@keyframes swaySmooth {
+    0% { margin-left: -25px; }
+    100% { margin-left: 25px; }
 }
 
-@keyframes sideToSide {
-    0% { margin-left: -20px; }
-    100% { margin-left: 20px; }
-}
+/* Size variations */
+.size-xs { transform: scale(0.5); }
+.size-sm { transform: scale(0.7); }
+.size-md { transform: scale(1); }
+.size-lg { transform: scale(1.3); }
+.size-xl { transform: scale(1.6); }
 
-/* ===== SVG HEART ===== */
-.svg-heart {
-    fill: url(#heartGradient);
-    filter: drop-shadow(0 2px 4px rgba(255, 100, 130, 0.4));
-}
-
-/* ===== SVG PETAL ===== */
-.svg-petal {
-    fill: url(#petalGradient);
-    filter: drop-shadow(0 2px 3px rgba(255, 180, 200, 0.3));
-}
-
-/* ===== SVG SNOWFLAKE ===== */
-.svg-snow {
-    fill: #fff;
-    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
-}
-
-/* ===== SVG LEAF ===== */
-.svg-leaf {
-    fill: url(#leafGradient);
-    filter: drop-shadow(0 2px 3px rgba(139, 90, 43, 0.3));
-}
-
-/* ===== SVG STAR ===== */
-.svg-star {
-    fill: url(#starGradient);
-    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
-}
-
-/* Standard tier overlay - subtle blur suggestion */
-@if(!$isPro)
-.falling-canvas::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 150px;
-    background: linear-gradient(to top, rgba(255,255,255,0.9), transparent);
-    pointer-events: none;
-}
-@endif
-
-/* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
     .fall-item { display: none; }
 }
 </style>
 
-<!-- SVG Definitions -->
+<!-- SVG Definitions with Multiple Gradients -->
 <svg style="position:absolute;width:0;height:0;">
     <defs>
-        <!-- Heart Gradient -->
-        <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <!-- Heart Gradients -->
+        <linearGradient id="heart1" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style="stop-color:#ff6b8a"/>
-            <stop offset="50%" style="stop-color:#ff4d6d"/>
             <stop offset="100%" style="stop-color:#e91e63"/>
         </linearGradient>
+        <linearGradient id="heart2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#ff8a9b"/>
+            <stop offset="100%" style="stop-color:#ff4d6d"/>
+        </linearGradient>
+        <linearGradient id="heart3" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#ffb6c1"/>
+            <stop offset="100%" style="stop-color:#ff69b4"/>
+        </linearGradient>
+        <linearGradient id="heart4" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#dc143c"/>
+            <stop offset="100%" style="stop-color:#b22222"/>
+        </linearGradient>
         
-        <!-- Petal Gradient -->
-        <linearGradient id="petalGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <!-- Petal Gradients -->
+        <linearGradient id="petal1" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" style="stop-color:#ffc0cb"/>
             <stop offset="100%" style="stop-color:#ff91a4"/>
         </linearGradient>
+        <linearGradient id="petal2" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#fff0f5"/>
+            <stop offset="100%" style="stop-color:#ffb6c1"/>
+        </linearGradient>
+        <linearGradient id="petal3" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#ffe4e9"/>
+            <stop offset="100%" style="stop-color:#ffa6c1"/>
+        </linearGradient>
         
-        <!-- Leaf Gradient -->
-        <linearGradient id="leafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <!-- Leaf Gradients -->
+        <linearGradient id="leaf1" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style="stop-color:#d4a574"/>
             <stop offset="100%" style="stop-color:#a67c52"/>
         </linearGradient>
+        <linearGradient id="leaf2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#c9956c"/>
+            <stop offset="100%" style="stop-color:#8b6914"/>
+        </linearGradient>
+        <linearGradient id="leaf3" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#e8c170"/>
+            <stop offset="100%" style="stop-color:#b8860b"/>
+        </linearGradient>
+        <linearGradient id="leaf4" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#cd853f"/>
+            <stop offset="100%" style="stop-color:#8b4513"/>
+        </linearGradient>
         
-        <!-- Star Gradient -->
-        <linearGradient id="starGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <!-- Star Gradients -->
+        <linearGradient id="star1" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style="stop-color:#ffd700"/>
             <stop offset="100%" style="stop-color:#ffb700"/>
+        </linearGradient>
+        <linearGradient id="star2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#fff8dc"/>
+            <stop offset="100%" style="stop-color:#ffd700"/>
         </linearGradient>
     </defs>
 </svg>
@@ -157,40 +131,83 @@ Pro: Full effects without restrictions
     const canvas = document.getElementById('fallingCanvas');
     if (!canvas) return;
     
-    // Particle count - less for Standard (teaser), more for Pro
-    const count = isPro ? 25 : 8;
+    const count = isPro ? 30 : 10;
+    const sizes = ['size-xs', 'size-sm', 'size-md', 'size-lg', 'size-xl'];
     
-    // SVG templates for each effect
-    const svgTemplates = {
-        hearts: `<svg viewBox="0 0 32 32" class="svg-heart"><path d="M16 28s-11-7.5-11-14c0-4 3-7 7-7 2.5 0 4.5 1.5 4.5 1.5S18.5 7 21 7c4 0 7 3 7 7 0 6.5-11 14-11 14z"/></svg>`,
+    // Multiple SVG variations for each effect
+    const svgVariations = {
+        hearts: [
+            // Classic heart
+            '<svg viewBox="0 0 32 32" width="24" height="24"><path fill="url(#heart1)" d="M16 28s-11-7.5-11-14c0-4 3-7 7-7 2.5 0 4.5 1.5 4.5 1.5S18.5 7 21 7c4 0 7 3 7 7 0 6.5-11 14-11 14z"/></svg>',
+            // Rounded heart
+            '<svg viewBox="0 0 32 32" width="22" height="22"><path fill="url(#heart2)" d="M16 28C9 22 5 17 5 12c0-3.5 2.5-6 6-6 2 0 3.5 1 5 2.5C17.5 7 19 6 21 6c3.5 0 6 2.5 6 6 0 5-4 10-11 16z"/></svg>',
+            // Small double heart
+            '<svg viewBox="0 0 32 32" width="20" height="20"><path fill="url(#heart3)" d="M10 20s-6-4-6-9c0-2.5 2-4.5 4.5-4.5 1.5 0 2.5 1 3 1.5.5-.5 1.5-1.5 3-1.5 2.5 0 4.5 2 4.5 4.5 0 5-6 9-9 9zm12-2s-4-3-4-6c0-1.8 1.4-3.2 3.2-3.2 1 0 2 .7 2.3 1 .3-.3 1.3-1 2.3-1 1.8 0 3.2 1.4 3.2 3.2 0 3-4 6-7 6z"/></svg>',
+            // Bold heart
+            '<svg viewBox="0 0 32 32" width="26" height="26"><path fill="url(#heart4)" d="M16 29L14 27C6 20 2 15 2 10c0-4 3-7 7-7 2.5 0 5 1.5 7 4 2-2.5 4.5-4 7-4 4 0 7 3 7 7 0 5-4 10-12 17l-2 2z"/></svg>',
+        ],
         
-        petals: `<svg viewBox="0 0 24 32" class="svg-petal"><ellipse cx="12" cy="16" rx="8" ry="14"/></svg>`,
+        petals: [
+            // Sakura petal
+            '<svg viewBox="0 0 24 32" width="18" height="24"><ellipse fill="url(#petal1)" cx="12" cy="16" rx="10" ry="14" transform="rotate(-15 12 16)"/></svg>',
+            // Round petal
+            '<svg viewBox="0 0 24 32" width="16" height="22"><ellipse fill="url(#petal2)" cx="12" cy="16" rx="8" ry="12"/></svg>',
+            // Pointed petal
+            '<svg viewBox="0 0 20 30" width="14" height="20"><path fill="url(#petal3)" d="M10 2c-6 8-8 16-8 22 0 3 8 4 8 4s8-1 8-4c0-6-2-14-8-22z"/></svg>',
+            // Curled petal
+            '<svg viewBox="0 0 24 32" width="20" height="26"><ellipse fill="url(#petal1)" cx="12" cy="16" rx="9" ry="13" transform="rotate(20 12 16)"/></svg>',
+        ],
         
-        snow: `<svg viewBox="0 0 24 24" class="svg-snow"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6" stroke="#fff" stroke-width="2"/><line x1="12" y1="18" x2="12" y2="22" stroke="#fff" stroke-width="2"/><line x1="2" y1="12" x2="6" y2="12" stroke="#fff" stroke-width="2"/><line x1="18" y1="12" x2="22" y2="12" stroke="#fff" stroke-width="2"/></svg>`,
+        snow: [
+            // Simple snowflake
+            '<svg viewBox="0 0 24 24" width="16" height="16"><circle fill="#fff" cx="12" cy="12" r="5" style="filter:drop-shadow(0 0 4px rgba(255,255,255,0.8))"/></svg>',
+            // Crystal snowflake
+            '<svg viewBox="0 0 24 24" width="20" height="20"><g fill="#fff" style="filter:drop-shadow(0 0 6px rgba(200,230,255,0.9))"><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="8" stroke="#fff" stroke-width="2"/><line x1="12" y1="16" x2="12" y2="22" stroke="#fff" stroke-width="2"/><line x1="2" y1="12" x2="8" y2="12" stroke="#fff" stroke-width="2"/><line x1="16" y1="12" x2="22" y2="12" stroke="#fff" stroke-width="2"/></g></svg>',
+            // Tiny dot
+            '<svg viewBox="0 0 16 16" width="10" height="10"><circle fill="#fff" cx="8" cy="8" r="4" style="filter:drop-shadow(0 0 3px #fff)"/></svg>',
+            // Star snowflake
+            '<svg viewBox="0 0 24 24" width="18" height="18"><g fill="#e8f4ff" style="filter:drop-shadow(0 0 5px rgba(255,255,255,0.9))"><circle cx="12" cy="12" r="4"/><line x1="12" y1="0" x2="12" y2="6" stroke="#fff" stroke-width="1.5"/><line x1="12" y1="18" x2="12" y2="24" stroke="#fff" stroke-width="1.5"/><line x1="0" y1="12" x2="6" y2="12" stroke="#fff" stroke-width="1.5"/><line x1="18" y1="12" x2="24" y2="12" stroke="#fff" stroke-width="1.5"/><line x1="3" y1="3" x2="7" y2="7" stroke="#fff" stroke-width="1"/><line x1="17" y1="17" x2="21" y2="21" stroke="#fff" stroke-width="1"/><line x1="21" y1="3" x2="17" y2="7" stroke="#fff" stroke-width="1"/><line x1="7" y1="17" x2="3" y2="21" stroke="#fff" stroke-width="1"/></g></svg>',
+        ],
         
-        leaves: `<svg viewBox="0 0 24 32" class="svg-leaf"><path d="M12 2C6 8 4 16 4 24c0 2 8 6 8 6s8-4 8-6c0-8-2-16-8-22z"/><line x1="12" y1="8" x2="12" y2="28" stroke="#8b5a2b" stroke-width="1.5"/></svg>`,
+        leaves: [
+            // Maple leaf
+            '<svg viewBox="0 0 28 32" width="22" height="26"><path fill="url(#leaf1)" d="M14 2l3 6 5-2-2 6 6 2-4 4 2 6-5-2-5 8-5-8-5 2 2-6-4-4 6-2-2-6 5 2z"/></svg>',
+            // Oak leaf
+            '<svg viewBox="0 0 24 32" width="20" height="28"><path fill="url(#leaf2)" d="M12 2c-8 8-10 16-10 24 0 2 10 4 10 4s10-2 10-4c0-8-2-16-10-24z"/><line x1="12" y1="8" x2="12" y2="28" stroke="#8b5a2b" stroke-width="1.5"/></svg>',
+            // Ginkgo leaf  
+            '<svg viewBox="0 0 28 28" width="24" height="24"><path fill="url(#leaf3)" d="M14 26c-8 0-12-8-12-14C2 6 8 2 14 2s12 4 12 10c0 6-4 14-12 14z"/><line x1="14" y1="26" x2="14" y2="12" stroke="#8b6914" stroke-width="1.5"/></svg>',
+            // Simple leaf
+            '<svg viewBox="0 0 20 28" width="16" height="22"><ellipse fill="url(#leaf4)" cx="10" cy="12" rx="8" ry="10" transform="rotate(-30 10 12)"/><line x1="10" y1="22" x2="10" y2="8" stroke="#8b4513" stroke-width="1"/></svg>',
+        ],
         
-        stars: `<svg viewBox="0 0 24 24" class="svg-star"><polygon points="12,2 15,9 22,9 16,14 18,22 12,17 6,22 8,14 2,9 9,9"/></svg>`
+        stars: [
+            // 5-point star
+            '<svg viewBox="0 0 24 24" width="20" height="20"><polygon fill="url(#star1)" points="12,2 15,9 22,9 16,14 18,22 12,17 6,22 8,14 2,9 9,9" style="filter:drop-shadow(0 0 6px rgba(255,215,0,0.7))"/></svg>',
+            // 4-point star
+            '<svg viewBox="0 0 24 24" width="16" height="16"><polygon fill="url(#star2)" points="12,0 14,10 24,12 14,14 12,24 10,14 0,12 10,10" style="filter:drop-shadow(0 0 5px rgba(255,215,0,0.6))"/></svg>',
+            // Sparkle
+            '<svg viewBox="0 0 20 20" width="14" height="14"><circle fill="#ffd700" cx="10" cy="10" r="3" style="filter:drop-shadow(0 0 8px rgba(255,215,0,0.9))"/></svg>',
+            // 6-point star
+            '<svg viewBox="0 0 24 24" width="22" height="22"><polygon fill="url(#star1)" points="12,0 14,8 22,8 16,12 18,20 12,15 6,20 8,12 2,8 10,8" style="filter:drop-shadow(0 0 8px rgba(255,215,0,0.8))"/></svg>',
+        ]
     };
     
-    const template = svgTemplates[effect] || svgTemplates.hearts;
+    const variations = svgVariations[effect] || svgVariations.hearts;
     
     function createParticle() {
         const item = document.createElement('div');
-        item.className = 'fall-item sway';
-        item.innerHTML = template;
+        item.className = 'fall-item ' + sizes[Math.floor(Math.random() * sizes.length)];
         
-        // Random positioning and timing
-        const left = Math.random() * 95 + 2.5; // 2.5% - 97.5%
-        const size = 16 + Math.random() * 16; // 16px - 32px
-        const duration = 8 + Math.random() * 6; // 8s - 14s
-        const delay = Math.random() * 12;
-        const swayDuration = 2 + Math.random() * 2;
+        // Pick random variation
+        item.innerHTML = variations[Math.floor(Math.random() * variations.length)];
+        
+        const left = Math.random() * 95 + 2.5;
+        const duration = 10 + Math.random() * 8;
+        const delay = Math.random() * 15;
+        const swayDuration = 2 + Math.random() * 3;
         
         item.style.cssText = `
             left: ${left}%;
-            width: ${size}px;
-            height: ${size}px;
             animation-duration: ${duration}s, ${swayDuration}s;
             animation-delay: ${delay}s, 0s;
         `;
@@ -198,12 +215,10 @@ Pro: Full effects without restrictions
         canvas.appendChild(item);
     }
     
-    // Create particles
     for (let i = 0; i < count; i++) {
-        createParticle();
+        setTimeout(() => createParticle(), i * 150);
     }
     
-    // Pause when tab not visible
     document.addEventListener('visibilitychange', function() {
         canvas.style.animationPlayState = document.hidden ? 'paused' : 'running';
     });
@@ -211,7 +226,6 @@ Pro: Full effects without restrictions
 </script>
 
 @if(!$isPro)
-<!-- Upgrade prompt for Standard users -->
 <div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:101;background:linear-gradient(135deg,#ff6b8a,#e91e63);color:#fff;padding:10px 24px;border-radius:30px;font-size:14px;box-shadow:0 4px 20px rgba(233,30,99,0.4);cursor:pointer;" 
      onclick="window.location.href='{{ route('dashboard.pricing') }}'">
     ⭐ Nâng cấp Pro để có hiệu ứng đầy đủ
@@ -219,7 +233,6 @@ Pro: Full effects without restrictions
 @endif
 @endif
 
-{{-- Demo Watermark --}}
 @if($wedding->is_demo ?? false)
-<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:80px;font-weight:bold;color:rgba(255,0,0,0.12);pointer-events:none;z-index:1000;white-space:nowrap;letter-spacing:20px;">DEMO</div>
+<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:80px;font-weight:bold;color:rgba(255,0,0,0.12);pointer-events:none;z-index:1000;">DEMO</div>
 @endif
