@@ -9,19 +9,64 @@
 
 {{-- Animations Styles --}}
 <style>
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    /* Base Animations */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+    @keyframes floatHeart { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-15px) rotate(5deg); } }
+    @keyframes sparkle { 0%, 100% { opacity: 0; transform: scale(0); } 50% { opacity: 1; transform: scale(1); } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes gentleBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes rotateIn { from { opacity: 0; transform: rotate(-10deg) scale(0.9); } to { opacity: 1; transform: rotate(0) scale(1); } }
     
     .animate-fade-up { animation: fadeInUp 1s ease-out forwards; }
     .animate-fade-down { animation: fadeInDown 1s ease-out forwards; }
     .animate-zoom-in { animation: zoomIn 1s ease-out forwards; }
+    .animate-float-heart { animation: floatHeart 4s ease-in-out infinite; }
+    .animate-sparkle { animation: sparkle 2s ease-in-out infinite; }
+    .animate-pulse { animation: pulse 2s ease-in-out infinite; }
+    .animate-shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); background-size: 200% 100%; animation: shimmer 3s infinite; }
+    .animate-gentle-bounce { animation: gentleBounce 3s ease-in-out infinite; }
+    .animate-rotate-in { animation: rotateIn 0.8s ease-out forwards; }
+    
     .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
     .delay-500 { animation-delay: 0.5s; }
     .delay-700 { animation-delay: 0.7s; }
+    .delay-1000 { animation-delay: 1s; }
+    
+    /* Floating Hearts Decoration */
+    .floating-heart { position: absolute; font-size: 20px; opacity: 0.4; animation: floatHeart 6s ease-in-out infinite; pointer-events: none; z-index: 5; }
+    
+    /* Sparkle Stars */
+    .sparkle-star { position: absolute; width: 6px; height: 6px; background: gold; border-radius: 50%; animation: sparkle 2s ease-in-out infinite; pointer-events: none; }
+    
+    /* Glassmorphism Cards */
+    .glass-card { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+    
+    /* Premium Hover Effects */
+    .hover-lift { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .hover-lift:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+    
+    /* Scroll Reveal Enhancement */
+    .reveal-on-scroll { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+    .reveal-on-scroll.revealed { opacity: 1; transform: translateY(0); }
+    
+    /* Music Player Spin */
+    .animate-spin-slow { animation: spin 3s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    
+    /* Image Parallax Effect */
+    .parallax-bg { background-attachment: fixed; background-size: cover; background-position: center; }
 </style>
 
 <div class="min-h-screen bg-rose-50 font-serif overflow-x-hidden max-w-[480px] mx-auto shadow-2xl relative">
+    
+    {{-- Pro Features: Preload Animation & Falling Effects --}}
+    @include('components.wedding.preload', ['wedding' => $wedding])
+    @include('components.wedding.falling-effects', ['wedding' => $wedding])
+    @include('components.wedding.upgrade-banner', ['wedding' => $wedding, 'showUpgradeBanner' => $showUpgradeBanner ?? false])
     
     {{-- Music Player --}}
     @if($musicUrl)
@@ -40,6 +85,18 @@
             {{-- Gradient đáy ảnh để làm nổi chữ --}}
             <div class="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
         </div>
+        
+        {{-- Floating Hearts Decorations --}}
+        <div class="floating-heart" style="top:10%; left:8%; animation-delay:0s;">💕</div>
+        <div class="floating-heart" style="top:20%; right:12%; animation-delay:1s;">💗</div>
+        <div class="floating-heart" style="top:35%; left:15%; animation-delay:2s;">💖</div>
+        <div class="floating-heart" style="bottom:40%; right:8%; animation-delay:3s;">💕</div>
+        
+        {{-- Sparkle Stars --}}
+        <div class="sparkle-star" style="top:15%; left:20%; animation-delay:0.5s;"></div>
+        <div class="sparkle-star" style="top:25%; right:18%; animation-delay:1.2s;"></div>
+        <div class="sparkle-star" style="top:45%; left:10%; animation-delay:2s;"></div>
+        <div class="sparkle-star" style="bottom:50%; right:15%; animation-delay:0.8s;"></div>
         
         <div class="relative z-10 text-center text-white px-6 w-full max-w-4xl mx-auto">
             <div class="animate-fade-down mb-6">

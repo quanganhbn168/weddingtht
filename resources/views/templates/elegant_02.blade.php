@@ -57,10 +57,38 @@
         opacity: 0.5;
     }
     .divider-h span {  font-size: 1.5rem; }
+    
+    /* Premium Animations */
+    @keyframes floatOrnament { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-10px) rotate(3deg); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes shimmerGold { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+    
+    .animate-float { animation: floatOrnament 5s ease-in-out infinite; }
+    .animate-fade-up { animation: fadeUp 0.8s ease-out forwards; opacity: 0; }
+    .animate-shimmer { background: linear-gradient(90deg, var(--gold-accent), #e8d9a0, var(--gold-accent)); background-size: 200% 100%; animation: shimmerGold 3s infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .animate-pulse { animation: pulse 2s ease-in-out infinite; }
+    
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .delay-500 { animation-delay: 0.5s; }
+    
+    /* Floating Ornaments */
+    .floating-ornament { position: absolute; opacity: 0.3; animation: floatOrnament 6s ease-in-out infinite; pointer-events: none; z-index: 5; font-size: 18px; }
+    
+    /* Hover Effects */
+    .hover-lift { transition: all 0.4s ease; }
+    .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(192,160,98,0.2); }
 
 </style>
 
 <div class="max-w-[480px] mx-auto bg-texture min-h-screen shadow-2xl relative border-x-[12px] border-[#f2ece4] text-[#4a403a]">
+    
+    {{-- Pro Features: Preload Animation & Falling Effects --}}
+    @include('components.wedding.preload', ['wedding' => $wedding])
+    @include('components.wedding.falling-effects', ['wedding' => $wedding])
+    @include('components.wedding.upgrade-banner', ['wedding' => $wedding, 'showUpgradeBanner' => $showUpgradeBanner ?? false])
     
     @if($musicUrl)
     <div x-data="{ playing: false, audio: null }" x-init="audio = new Audio('{{ $musicUrl }}'); audio.loop = true;" class="fixed top-6 right-6 z-50">

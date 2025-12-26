@@ -90,6 +90,14 @@ class TemplateResource extends Resource
                         'business' => 'info',
                         default => 'gray',
                     }),
+                Tables\Columns\TextColumn::make('tier')
+                    ->label('Gói')
+                    ->badge()
+                    ->color(fn (?string $state): string => match ($state) {
+                        'pro' => 'warning',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (?string $state): string => strtoupper($state ?? 'basic')),
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->label('Bật/Tắt'),
                 Tables\Columns\TextColumn::make('created_at')
@@ -103,6 +111,12 @@ class TemplateResource extends Resource
                         'wedding' => 'Wedding',
                         'business' => 'Business',
                     ]),
+                Tables\Filters\SelectFilter::make('tier')
+                    ->label('Gói dịch vụ')
+                    ->options([
+                        'basic' => '📦 Basic',
+                        'pro' => '⭐ Pro',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -111,6 +125,21 @@ class TemplateResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                Tables\Actions\Action::make('sync')
+                    ->label('🔄 Sync Templates')
+                    ->action(function () {
+                        \Artisan::call('templates:sync');
+                        \Filament\Notifications\Notification::make()
+                            ->title('Templates synced!')
+                            ->success()
+                            ->send();
+                    })
+                    ->requiresConfirmation()
+                    ->modalHeading('Sync Templates')
+                    ->modalDescription('Scan template files and sync to database?')
+                    ->color('success'),
             ]);
     }
 

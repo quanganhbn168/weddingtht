@@ -8,7 +8,9 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use App\Models\Wedding;
 
@@ -34,6 +36,25 @@ class WeddingsTable
                 TextColumn::make('bride_name')
                     ->label('Cô dâu')
                     ->searchable(),
+                
+                // Tier badge (PRO/STANDARD)
+                TextColumn::make('tier')
+                    ->label('Gói')
+                    ->badge()
+                    ->colors([
+                        'primary' => 'standard',
+                        'success' => 'pro',
+                    ])
+                    ->formatStateUsing(fn (string $state): string => strtoupper($state)),
+                
+                // Demo badge
+                IconColumn::make('is_demo')
+                    ->label('Demo')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-beaker')
+                    ->falseIcon('heroicon-o-user-group')
+                    ->trueColor('warning')
+                    ->falseColor('success'),
                 
                 // Ngày cưới + âm lịch
                 TextColumn::make('event_date')
@@ -67,6 +88,11 @@ class WeddingsTable
                         'templates.modern_01' => 'Modern',
                         'templates.elegant_02' => 'Elegant',
                         'templates.minimal_03' => 'Minimal',
+                        'templates.luxury_gold' => 'Luxury Gold',
+                        'templates.traditional_red' => 'Traditional',
+                        'templates.cherry_blossom' => '🌸 Cherry',
+                        'templates.cinematic_story' => '🎬 Cinema',
+                        'templates.galaxy_dreams' => '✨ Galaxy',
                         default => $state,
                     })
                     ->badge()
@@ -80,6 +106,21 @@ class WeddingsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                // Filter: Demo vs Khách hàng
+                TernaryFilter::make('is_demo')
+                    ->label('Loại')
+                    ->placeholder('Tất cả')
+                    ->trueLabel('🧪 Demo')
+                    ->falseLabel('👥 Khách hàng'),
+                
+                // Filter: Tier
+                SelectFilter::make('tier')
+                    ->label('Gói dịch vụ')
+                    ->options([
+                        'standard' => '📦 Standard',
+                        'pro' => '⭐ Pro',
+                    ]),
+                
                 SelectFilter::make('status')
                     ->label('Trạng thái')
                     ->options([
@@ -94,6 +135,11 @@ class WeddingsTable
                         'templates.modern_01' => 'Modern',
                         'templates.elegant_02' => 'Elegant',
                         'templates.minimal_03' => 'Minimal',
+                        'templates.luxury_gold' => 'Luxury Gold',
+                        'templates.traditional_red' => 'Traditional',
+                        'templates.cherry_blossom' => '🌸 Cherry Blossom',
+                        'templates.cinematic_story' => '🎬 Cinematic Story',
+                        'templates.galaxy_dreams' => '✨ Galaxy Dreams',
                     ]),
             ])
             ->actions([
@@ -115,3 +161,4 @@ class WeddingsTable
             ->paginated([10, 25, 50]);
     }
 }
+

@@ -20,12 +20,17 @@ class WeddingResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return 'Đám Cưới';
+        return 'Khách Hàng';
     }
 
     public static function getModelLabel(): string
     {
-        return 'Đám Cưới';
+        return 'Khách Hàng';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Khách Hàng';
     }
 
     public static function getNavigationGroup(): ?string
@@ -45,7 +50,9 @@ class WeddingResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('type', 'wedding');
+        return parent::getEloquentQuery()
+            ->where('type', 'wedding')
+            ->where('is_demo', false);
     }
 
     protected static ?string $recordTitleAttribute = 'groom_name';

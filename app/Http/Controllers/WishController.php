@@ -52,7 +52,7 @@ class WishController extends Controller
         $wedding->wishes()->create([
             'name' => $validated['name'],
             'message' => $validated['message'],
-            'is_approved' => false, // Requires approval
+            'is_approved' => $wedding->is_auto_approve_wishes, // Auto-approve if enabled
             'ip_address' => $request->ip(),
         ]);
         

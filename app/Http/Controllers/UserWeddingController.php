@@ -70,8 +70,8 @@ class UserWeddingController extends Controller
         $template = Template::find($validated['template_id']);
         $validated['template_view'] = $template->view_path;
         
-        // Set defaults
-        $validated['status'] = 'draft';
+        // Set defaults - preview để user có thể xem ngay
+        $validated['status'] = 'preview';
         $validated['is_active'] = true;
         
         $wedding = $user->weddings()->create($validated);
@@ -105,32 +105,97 @@ class UserWeddingController extends Controller
         }
         
         $validated = $request->validate([
+            // Basic info
             'groom_name' => 'required|string|max:255',
             'bride_name' => 'required|string|max:255',
             'event_date' => 'required|date',
             'template_id' => 'required|exists:templates,id',
+            'status' => 'nullable|in:draft,preview,published',
+            
+            // Nhà trai
             'groom_father' => 'nullable|string|max:255',
             'groom_mother' => 'nullable|string|max:255',
+            'groom_ceremony_time' => 'nullable',
+            'groom_ceremony_date' => 'nullable|date',
+            'groom_address' => 'nullable|string|max:1000',
+            'groom_map_url' => 'nullable|url|max:500',
+            'groom_reception_time' => 'nullable',
+            'groom_reception_venue' => 'nullable|string|max:255',
+            'groom_reception_address' => 'nullable|string|max:1000',
+            'groom_qr_info' => 'nullable|string|max:1000',
+            
+            // Nhà gái  
             'bride_father' => 'nullable|string|max:255',
             'bride_mother' => 'nullable|string|max:255',
-            'groom_address' => 'nullable|string|max:500',
-            'bride_address' => 'nullable|string|max:500',
-            'groom_ceremony_time' => 'nullable',
             'bride_ceremony_time' => 'nullable',
-            'groom_reception_time' => 'nullable',
+            'bride_ceremony_date' => 'nullable|date',
+            'bride_address' => 'nullable|string|max:1000',
+            'bride_map_url' => 'nullable|url|max:500',
             'bride_reception_time' => 'nullable',
-            'groom_reception_venue' => 'nullable|string|max:255',
             'bride_reception_venue' => 'nullable|string|max:255',
-            'groom_reception_address' => 'nullable|string|max:500',
-            'bride_reception_address' => 'nullable|string|max:500',
-            'status' => 'nullable|in:draft,preview,published',
+            'bride_reception_address' => 'nullable|string|max:1000',
+            'bride_qr_info' => 'nullable|string|max:1000',
+            
+            // Settings
+            'slug' => 'nullable|string|max:255|unique:weddings,slug,' . $wedding->id,
+            'password' => 'nullable|string|max:255',
+            'is_auto_approve_wishes' => 'boolean',
+            'show_preload' => 'boolean',
+            'falling_effect' => 'nullable|in:hearts,petals,snow,leaves,stars,none',
+            
+            // Media uploads
+            'background_music' => 'nullable|file|mimes:mp3|max:10240',
+            'cover' => 'nullable|image|max:5120',
+            'hero' => 'nullable|image|max:5120',
+            'groom_photo' => 'nullable|image|max:5120',
+            'bride_photo' => 'nullable|image|max:5120',
+            'groom_qr' => 'nullable|image|max:2048',
+            'bride_qr' => 'nullable|image|max:2048',
+            'gallery' => 'nullable|array',
+            'gallery.*' => 'image|max:5120',
         ]);
         
         // Update template view path
         $template = Template::find($validated['template_id']);
+        if (!$template) {
+            return back()->with('error', 'Template không tồn tại!');
+        }
         $validated['template_view'] = $template->view_path;
         
+        // Handle boolean checkboxes
+        $validated['is_auto_approve_wishes'] = $request->has('is_auto_approve_wishes');
+        $validated['show_preload'] = $request->has('show_preload');
+        
+        // Remove file fields from validated data (handled separately)
+        $fileFields = ['background_music', 'cover', 'hero', 'groom_photo', 'bride_photo', 'groom_qr', 'bride_qr', 'gallery'];
+        foreach ($fileFields as $field) {
+            unset($validated[$field]);
+        }
+        
+        // Update wedding
         $wedding->update($validated);
+        
+        // Handle media uploads
+        if ($request->hasFile('background_music')) {
+            $path = $request->file('background_music')->store('music', 'public');
+            $wedding->update(['background_music' => $path]);
+        }
+        
+        // Spatie Media Library uploads
+        $mediaCollections = ['cover', 'hero', 'groom_photo', 'bride_photo', 'groom_qr', 'bride_qr'];
+        foreach ($mediaCollections as $collection) {
+            if ($request->hasFile($collection)) {
+                $wedding->clearMediaCollection($collection);
+                $wedding->addMediaFromRequest($collection)->toMediaCollection($collection);
+            }
+        }
+        
+        // Gallery (multiple files)
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $file) {
+                $wedding->addMedia($file)->toMediaCollection('gallery');
+            }
+        }
         
         return redirect()->route('dashboard.weddings.edit', $wedding)
             ->with('success', 'Thiệp cưới đã được cập nhật!');
@@ -224,5 +289,65 @@ class UserWeddingController extends Controller
         $rsvps = $wedding->rsvps()->latest()->paginate(20);
         
         return view('dashboard.weddings.rsvps', compact('wedding', 'rsvps', 'stats'));
+    }
+
+    /**
+     * Manage wishes for the wedding.
+     */
+    public function wishes(Request $request, Wedding $wedding)
+    {
+        if ($wedding->user_id !== $request->user()->id) {
+            abort(403);
+        }
+        
+        $filter = $request->get('filter', 'all');
+        
+        $query = $wedding->wishes()->latest();
+        
+        if ($filter === 'pending') {
+            $query->where('is_approved', false);
+        } elseif ($filter === 'approved') {
+            $query->where('is_approved', true);
+        }
+        
+        $wishes = $query->paginate(20);
+        
+        $stats = [
+            'total' => $wedding->wishes()->count(),
+            'pending' => $wedding->wishes()->where('is_approved', false)->count(),
+            'approved' => $wedding->wishes()->where('is_approved', true)->count(),
+        ];
+        
+        return view('dashboard.weddings.wishes', compact('wedding', 'wishes', 'stats', 'filter'));
+    }
+
+    /**
+     * Approve a wish
+     */
+    public function approveWish(Request $request, Wedding $wedding, $wishId)
+    {
+        if ($wedding->user_id !== $request->user()->id) {
+            abort(403);
+        }
+        
+        $wish = $wedding->wishes()->findOrFail($wishId);
+        $wish->update(['is_approved' => true]);
+        
+        return back()->with('success', 'Đã duyệt lời chúc!');
+    }
+
+    /**
+     * Delete a wish
+     */
+    public function deleteWish(Request $request, Wedding $wedding, $wishId)
+    {
+        if ($wedding->user_id !== $request->user()->id) {
+            abort(403);
+        }
+        
+        $wish = $wedding->wishes()->findOrFail($wishId);
+        $wish->delete();
+        
+        return back()->with('success', 'Đã xóa lời chúc!');
     }
 }

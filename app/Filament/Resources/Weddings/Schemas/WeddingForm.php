@@ -16,6 +16,9 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Support\Str;
+use App\Enums\WeddingStatus;
+use App\Enums\WeddingTier;
+use App\Enums\FallingEffect;
 
 class WeddingForm
 {
@@ -190,13 +193,8 @@ class WeddingForm
 
                                         Select::make('status')
                                             ->label('Trạng thái')
-                                            ->options([
-                                                'draft' => 'Bản nháp',
-                                                'preview' => 'Xem trước',
-                                                'published' => 'Đã xuất bản',
-                                                'archived' => 'Lưu trữ',
-                                            ])
-                                            ->default('draft')
+                                            ->options(WeddingStatus::options())
+                                            ->default(WeddingStatus::DRAFT->value)
                                             ->required(),
                                         
 
@@ -205,6 +203,11 @@ class WeddingForm
                                         // keeping it for now but hidden might be better, or just rely on controller fallback
                                         // Select::make('template_view') ...
                                         
+                                        \Filament\Forms\Components\Toggle::make('is_auto_approve_wishes')
+                                            ->label('Tự động duyệt lời chúc')
+                                            ->default(false)
+                                            ->helperText('Nếu bật, lời chúc sẽ hiện ngay lập tức không cần duyệt'),
+
                                         TextInput::make('password')
                                             ->label('Mật khẩu xem thiệp')
                                             ->password()
@@ -450,6 +453,75 @@ class WeddingForm
                                             ->multiple()
                                             ->reorderable()
                                             ->maxFiles(20),
+                                    ]),
+                            ]),
+                        
+                        // === TAB 5: PRO FEATURES ===
+                        Tab::make('Pro Features')
+                            ->icon('heroicon-o-sparkles')
+                            ->badge('PRO')
+                            ->schema([
+                                Section::make('⚙️ Cài đặt gói dịch vụ')
+                                    ->columns(2)
+                                    ->schema([
+                                        Select::make('tier')
+                                            ->label('Gói dịch vụ')
+                                            ->options(WeddingTier::options())
+                                            ->default(WeddingTier::STANDARD->value)
+                                            ->required()
+                                            ->live(),
+                                        
+                                        \Filament\Forms\Components\Toggle::make('is_demo')
+                                            ->label('Đây là Demo')
+                                            ->helperText('Thiệp demo sẽ có watermark "DEMO"')
+                                            ->default(false),
+                                        
+                                        \Filament\Forms\Components\Toggle::make('can_share')
+                                            ->label('Cho phép Share Public')
+                                            ->helperText('Bật = ai có link xem được. Tắt = chỉ chủ sở hữu xem')
+                                            ->default(false)
+                                            ->visible(fn (Get $get) => $get('tier') === 'pro'),
+                                        
+                                        Select::make('agent_id')
+                                            ->label('Đại lý tạo')
+                                            ->options(function () {
+                                                return \App\Models\Agent::with('user')
+                                                    ->where('is_active', true)
+                                                    ->get()
+                                                    ->pluck('business_name', 'id');
+                                            })
+                                            ->searchable()
+                                            ->placeholder('Chọn đại lý (nếu có)'),
+                                        
+                                        DatePicker::make('expires_at')
+                                            ->label('Ngày hết hạn')
+                                            ->helperText('Standard: 1 năm, Pro: để trống (vĩnh viễn)')
+                                            ->visible(fn (Get $get) => $get('tier') === 'standard'),
+                                    ]),
+                                
+                                Section::make('✨ Hiệu ứng Premium')
+                                    ->columns(2)
+                                    ->description('Chỉ áp dụng cho gói Pro')
+                                    ->schema([
+                                        \Filament\Forms\Components\Toggle::make('show_preload')
+                                            ->label('Animation mở cửa "囍"')
+                                            ->helperText('Hiển thị cửa Song Hỷ trượt mở khi vào thiệp')
+                                            ->default(false),
+                                        
+                                        Select::make('falling_effect')
+                                            ->label('Hiệu ứng rơi')
+                                            ->options(FallingEffect::options())
+                                            ->default(FallingEffect::HEARTS->value),
+                                    ]),
+                                
+                                Section::make('🌐 Custom Domain')
+                                    ->description('Gói Pro hỗ trợ domain riêng')
+                                    ->schema([
+                                        TextInput::make('custom_domain')
+                                            ->label('Domain tuỳ chỉnh')
+                                            ->placeholder('cuoi.ten.vn')
+                                            ->helperText('Liên hệ admin để thiết lập domain')
+                                            ->url(false),
                                     ]),
                             ]),
                     ]),

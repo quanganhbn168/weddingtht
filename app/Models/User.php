@@ -8,11 +8,21 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
+
+    // Role constants
+    const ROLE_SUPER_ADMIN = 'super_admin';
+    const ROLE_ADMIN = 'admin';
+    const ROLE_AGENT = 'agent';
+    const ROLE_CUSTOMER = 'customer';
+    
+    // Super admin email (hidden everywhere)
+    const SUPER_ADMIN_EMAIL = 'quanganhadmin@thtmedia.com.vn';
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +33,9 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'role',
+        'agent_id',
+        'created_by',
     ];
 
     /**
@@ -53,8 +66,44 @@ class User extends Authenticatable implements FilamentUser
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        // Only allow certain admin emails to access Filament admin
-        return str_ends_with($this->email, '@thtmedia.com.vn');
+        // Allow admin role OR legacy email check
+        return $this->isSuperAdmin() || $this->isAdmin() || str_ends_with($this->email, '@thtmedia.com.vn');
+    }
+
+    // ==========================================
+    // ROLE CHECKS
+    // ==========================================
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->email === self::SUPER_ADMIN_EMAIL || $this->hasRole(self::ROLE_SUPER_ADMIN);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN || $this->hasRole(self::ROLE_ADMIN);
+    }
+
+    public function isAgent(): bool
+    {
+        return $this->role === self::ROLE_AGENT || $this->hasRole(self::ROLE_AGENT);
+    }
+
+    public function isCustomer(): bool
+    {
+        return $this->role === self::ROLE_CUSTOMER || $this->hasRole(self::ROLE_CUSTOMER);
+    }
+
+    public function getRoleLabel(): string
+    {
+        if ($this->isSuperAdmin()) return 'Super Admin';
+        
+        return match($this->role) {
+            self::ROLE_ADMIN => 'Quản trị viên',
+            self::ROLE_AGENT => 'Đại lý',
+            self::ROLE_CUSTOMER => 'Khách hàng',
+            default => 'Không xác định',
+        };
     }
 
     // ==========================================
@@ -79,6 +128,38 @@ class User extends Authenticatable implements FilamentUser
     public function paymentTransactions()
     {
         return $this->hasMany(PaymentTransaction::class);
+    }
+
+    /**
+     * Agent profile (if user is an agent)
+     */
+    public function agentProfile()
+    {
+        return $this->hasOne(Agent::class);
+    }
+
+    /**
+     * Agent who created this customer account
+     */
+    public function managingAgent()
+    {
+        return $this->belongsTo(User::class, 'agent_id');
+    }
+
+    /**
+     * Customers managed by this agent
+     */
+    public function managedCustomers()
+    {
+        return $this->hasMany(User::class, 'agent_id');
+    }
+
+    /**
+     * User who created this account
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     // ==========================================

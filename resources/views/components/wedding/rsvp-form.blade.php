@@ -26,13 +26,15 @@
             @csrf
             
             {{-- Name --}}
+            @php $guestName = $wedding->getGuestName(); @endphp
             <div>
                 <label for="rsvp_name" class="block text-sm font-medium text-gray-700 mb-2">
                     Họ và Tên <span class="text-red-500">*</span>
                 </label>
                 <input type="text" id="rsvp_name" name="name" required
                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition"
-                    placeholder="Nguyễn Văn A">
+                    placeholder="Nguyễn Văn A"
+                    value="{{ $guestName ? urldecode($guestName) : '' }}">
                 @error('name') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
             </div>
             

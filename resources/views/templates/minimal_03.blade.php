@@ -39,9 +39,32 @@
         display: flex;
         align-items: center;
     }
+    
+    /* Premium Subtle Animations */
+    @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes lineReveal { from { width: 0; } to { width: 100%; } }
+    
+    .animate-fade-slide { animation: fadeSlideUp 0.8s ease-out forwards; opacity: 0; }
+    .animate-gentle-float { animation: gentleFloat 4s ease-in-out infinite; }
+    .animate-line-reveal { animation: lineReveal 1s ease-out forwards; }
+    
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .delay-500 { animation-delay: 0.5s; }
+    
+    /* Clean Hover Effects */
+    .hover-subtle { transition: all 0.3s ease; }
+    .hover-subtle:hover { transform: translateY(-3px); }
 </style>
 
 <div class="max-w-[480px] mx-auto bg-[#fdfdfd] min-h-screen shadow-xl relative text-[#1a1a1a]">
+
+    {{-- Pro Features: Preload Animation & Falling Effects --}}
+    @include('components.wedding.preload', ['wedding' => $wedding])
+    @include('components.wedding.falling-effects', ['wedding' => $wedding])
+    @include('components.wedding.upgrade-banner', ['wedding' => $wedding, 'showUpgradeBanner' => $showUpgradeBanner ?? false])
 
     {{-- Music --}}
     @if($musicUrl)

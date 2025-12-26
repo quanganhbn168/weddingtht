@@ -22,11 +22,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [UserWeddingController::class, 'index'])->name('index');
         Route::get('/create', [UserWeddingController::class, 'create'])->name('create');
         Route::post('/', [UserWeddingController::class, 'store'])->name('store');
-        Route::get('/{wedding}/edit', [UserWeddingController::class, 'edit'])->name('edit');
+        
+        // Livewire edit route
+        Route::get('/{wedding}/edit', \App\Livewire\Wedding\EditWedding::class)->name('edit');
+        
+        // Keep legacy PUT for non-livewire fallback
         Route::put('/{wedding}', [UserWeddingController::class, 'update'])->name('update');
         Route::delete('/{wedding}', [UserWeddingController::class, 'destroy'])->name('destroy');
         Route::get('/{wedding}/preview', [UserWeddingController::class, 'preview'])->name('preview');
         Route::get('/{wedding}/rsvps', [UserWeddingController::class, 'rsvps'])->name('rsvps');
+        Route::get('/{wedding}/wishes', [UserWeddingController::class, 'wishes'])->name('wishes');
+        Route::patch('/{wedding}/wishes/{wish}/approve', [UserWeddingController::class, 'approveWish'])->name('wishes.approve');
+        Route::delete('/{wedding}/wishes/{wish}', [UserWeddingController::class, 'deleteWish'])->name('wishes.delete');
     });
     
     // Business card management
@@ -44,6 +51,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/payment/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
     Route::get('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
     Route::get('/dashboard/payments', [PaymentController::class, 'history'])->name('dashboard.payments');
+    
+    // Agent Dashboard routes
+    Route::prefix('agent')->name('agent.')->middleware('auth')->group(function () {
+        Route::get('/', [\App\Http\Controllers\AgentController::class, 'dashboard'])->name('dashboard');
+        Route::get('/customers', [\App\Http\Controllers\AgentController::class, 'customers'])->name('customers');
+        Route::post('/customers', [\App\Http\Controllers\AgentController::class, 'createCustomer'])->name('customers.store');
+        Route::get('/weddings', [\App\Http\Controllers\AgentController::class, 'weddings'])->name('weddings');
+        Route::get('/settings', [\App\Http\Controllers\AgentController::class, 'settings'])->name('settings');
+        Route::post('/settings', [\App\Http\Controllers\AgentController::class, 'updateSettings'])->name('settings.update');
+    });
 });
 
 // MoMo IPN callback (no auth required - called by MoMo server)

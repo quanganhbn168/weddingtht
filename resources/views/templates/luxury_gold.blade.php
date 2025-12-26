@@ -39,9 +39,40 @@
     .top-right { top: 20px; right: 20px; border-left: none; border-bottom: none; }
     .bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
     .bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; }
+    
+    /* Premium Animations */
+    @keyframes floatStar { 0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; } 50% { transform: translateY(-12px) scale(1.1); opacity: 1; } }
+    @keyframes shimmerGold { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 10px rgba(212,175,55,0.3); } 50% { box-shadow: 0 0 25px rgba(212,175,55,0.6); } }
+    @keyframes sparkle { 0%, 100% { opacity: 0; transform: scale(0); } 50% { opacity: 1; transform: scale(1); } }
+    
+    .animate-float-star { animation: floatStar 4s ease-in-out infinite; }
+    .animate-shimmer-gold { background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728); background-size: 200% 100%; animation: shimmerGold 3s infinite; }
+    .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
+    .animate-pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
+    
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-400 { animation-delay: 0.4s; }
+    .delay-600 { animation-delay: 0.6s; }
+    
+    /* Floating Stars */
+    .floating-star { position: absolute; color: var(--lux-gold); opacity: 0.5; animation: floatStar 5s ease-in-out infinite; pointer-events: none; z-index: 5; }
+    
+    /* Sparkle Effect */
+    .sparkle { position: absolute; width: 4px; height: 4px; background: var(--lux-gold); border-radius: 50%; animation: sparkle 2s ease-in-out infinite; }
+    
+    /* Hover Effects */
+    .hover-glow { transition: all 0.4s ease; }
+    .hover-glow:hover { box-shadow: 0 0 30px rgba(212,175,55,0.4); }
 </style>
 
 <div class="max-w-[480px] mx-auto bg-[#0f172a] min-h-screen shadow-2xl relative text-slate-200">
+    
+    {{-- Pro Features: Preload Animation & Falling Effects --}}
+    @include('components.wedding.preload', ['wedding' => $wedding])
+    @include('components.wedding.falling-effects', ['wedding' => $wedding])
+    @include('components.wedding.upgrade-banner', ['wedding' => $wedding, 'showUpgradeBanner' => $showUpgradeBanner ?? false])
     
     @if($musicUrl)
     <div x-data="{ playing: false, audio: null }" x-init="audio = new Audio('{{ $musicUrl }}'); audio.loop = true;" class="fixed top-6 right-6 z-50">
