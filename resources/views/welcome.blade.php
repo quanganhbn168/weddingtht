@@ -29,29 +29,12 @@
         @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
         @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         
         .animate-float { animation: float 6s ease-in-out infinite; }
         .animate-float-delay { animation: float 6s ease-in-out infinite 2s; }
         .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
         .animate-shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); background-size: 200% 100%; animation: shimmer 2s infinite; }
         .animate-heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
-        .animate-slide-up { animation: slideUp 0.8s ease-out forwards; }
-        .animate-fade-scale { animation: fadeInScale 0.6s ease-out forwards; }
-        
-        /* Glassmorphism */
-        .glass { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
-        .glass-dark { background: rgba(0,0,0,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
-        
-        /* Gradient Text */
-        .text-gradient { background: linear-gradient(135deg, #D4AF37 0%, #f59e0b 50%, #D4AF37 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        
-        /* Floating Hearts */
-        .floating-heart { position: absolute; color: rgba(236,72,153,0.3); font-size: 24px; animation: float 8s ease-in-out infinite; }
-        
-        /* Badge Shine */
-        .badge-shine { position: relative; overflow: hidden; }
-        .badge-shine::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 3s infinite; }
         
         /* Card Hover Effect */
         .card-hover { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -60,6 +43,8 @@
         /* Sticky Mobile CTA */
         .sticky-cta { position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; transform: translateY(100%); transition: transform 0.3s ease; }
         .sticky-cta.visible { transform: translateY(0); }
+        
+        .text-gradient { background: linear-gradient(135deg, #D4AF37 0%, #f59e0b 50%, #D4AF37 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     </style>
 </head>
 <body class="bg-white text-gray-900 antialiased">
@@ -76,9 +61,9 @@
                 <a href="#about" class="hover:text-gray-900 transition">Về chúng tôi</a>
                 <a href="#contact" class="hover:text-gray-900 transition">Liên hệ</a>
             </div>
-            <a href="tel:0965625210" class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-full gradient-gold text-white font-semibold text-sm hover:opacity-90 transition shadow-lg shadow-amber-200">
+            <a href="tel:0375433678" class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-full gradient-gold text-white font-semibold text-sm hover:opacity-90 transition shadow-lg shadow-amber-200">
                 <i class="fas fa-phone"></i>
-                <span>Gọi ngay</span>
+                <span>0375 433 678</span>
             </a>
         </div>
     </nav>
@@ -88,22 +73,13 @@
         <!-- Floating Elements -->
         <div class="absolute top-20 right-10 w-72 h-72 bg-amber-100 rounded-full blur-3xl opacity-50 animate-float"></div>
         <div class="absolute bottom-20 left-10 w-96 h-96 bg-rose-100 rounded-full blur-3xl opacity-50 animate-float-delay"></div>
-        <div class="floating-heart" style="top:15%; left:10%;">💕</div>
-        <div class="floating-heart" style="top:25%; right:15%; animation-delay:1s;">💗</div>
-        <div class="floating-heart" style="bottom:30%; left:20%; animation-delay:2s;">💖</div>
-        <div class="floating-heart" style="bottom:20%; right:25%; animation-delay:3s;">💕</div>
         
         <div class="max-w-6xl mx-auto px-6 relative z-10 w-full">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
-                    <!-- Limited Time Offer Banner -->
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white font-semibold text-sm mb-4 animate-pulse-glow badge-shine" data-aos="fade-up">
+                     <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white font-semibold text-sm mb-4 animate-pulse-glow" data-aos="fade-up">
                         🔥 Ưu đãi Tết 2025 - Giảm 30%
                     </div>
-                    
-                    <span class="inline-block px-4 py-2 rounded-full bg-amber-100 text-amber-800 font-semibold text-sm mb-6" data-aos="fade-up" data-aos-delay="50">
-                        ✨ Được tin tưởng bởi 500+ cặp đôi
-                    </span>
                     
                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-6" data-aos="fade-up" data-aos-delay="100">
                         Thiệp Cưới Online<br>
@@ -125,163 +101,135 @@
                             <span>Xem mẫu thiết kế</span>
                         </a>
                     </div>
-                    
-                    <div class="flex gap-8 pt-8 border-t border-gray-200" data-aos="fade-up" data-aos-delay="400">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-gradient">500+</div>
-                            <div class="text-sm text-gray-500 mt-1">Thiệp đã tạo</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-gradient">⭐ 5.0</div>
-                            <div class="text-sm text-gray-500 mt-1">Đánh giá</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-gradient">24h</div>
-                            <div class="text-sm text-gray-500 mt-1">Hoàn thành</div>
-                        </div>
-                    </div>
                 </div>
                 
                 <div class="relative" data-aos="fade-left" data-aos-duration="1000">
-                    <!-- Phone Mockup with Template Preview -->
                     <div class="absolute inset-0 gradient-gold rounded-3xl blur-3xl opacity-20 animate-float"></div>
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" 
-                             alt="Mẫu thiệp cưới online đẹp" 
-                             class="relative rounded-3xl shadow-2xl w-full object-cover aspect-[4/5] card-hover">
-                        <!-- Floating Badge -->
-                        <div class="absolute -bottom-4 -right-4 bg-white rounded-2xl shadow-xl p-4 animate-float-delay">
-                            <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-full gradient-gold flex items-center justify-center text-white text-xl">💒</div>
-                                <div>
-                                    <div class="font-bold text-gray-900">Mẫu HOT 2025</div>
-                                    <div class="text-sm text-gray-500">Modern Style</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" 
+                         alt="Mẫu thiệp cưới online đẹp" 
+                         class="relative rounded-3xl shadow-2xl w-full object-cover aspect-[4/5] card-hover">
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Services Section -->
-    <section id="services" class="py-24 bg-white">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-gold font-semibold uppercase tracking-widest text-sm" data-aos="fade-up">Dịch vụ của chúng tôi</span>
-                <h2 class="text-3xl md:text-4xl font-serif font-bold mt-4" data-aos="fade-up" data-aos-delay="100">Giải Pháp Thiết Kế Toàn Diện</h2>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-gradient-to-br from-rose-50 to-amber-50 rounded-3xl p-10 hover:shadow-xl transition duration-500" data-aos="fade-up">
-                    <div class="w-16 h-16 rounded-2xl gradient-gold flex items-center justify-center text-3xl mb-6">💒</div>
-                    <h3 class="text-2xl font-bold mb-4">Thiệp Cưới Online</h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        Thiệp cưới điện tử đẹp mắt, hiển thị thông tin đầy đủ, hỗ trợ ngày âm lịch/dương lịch, quản lý khách mời, chia sẻ dễ dàng qua link hoặc QR Code.
-                    </p>
-                    <ul class="space-y-3 text-sm text-gray-600">
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i><span>Nhiều mẫu thiết kế độc quyền</span></li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i><span>Responsive trên mọi thiết bị</span></li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i><span>Tích hợp QR Code & bản đồ</span></li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i><span>Hỗ trợ chỉnh sửa không giới hạn</span></li>
-                    </ul>
-                </div>
-
-                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-10 hover:shadow-xl transition duration-500" data-aos="fade-up" data-aos-delay="100">
-                    <div class="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center text-3xl mb-6">💼</div>
-                    <h3 class="text-2xl font-bold mb-4">Danh Thiếp Số (Digital Business Card)</h3>
-                    <p class="text-gray-300 leading-relaxed mb-6">
-                        Landing page cá nhân chuyên nghiệp thay thế name card truyền thống. Nhiều giao diện cao cấp, thể hiện đẳng cấp và chuyên môn của bạn.
-                    </p>
-                    <ul class="space-y-3 text-sm text-gray-300">
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i><span>7+ mẫu giao diện Landing Page</span></li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i><span>Hiển thị dịch vụ, kinh nghiệm</span></li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i><span>Tích hợp liên kết mạng xã hội</span></li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i><span>Chia sẻ bằng link/QR Code</span></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
+    
+    @php
+        $standardWeddings = $demoWeddings->filter(fn($w) => $w->tier === 'standard' || $w->tier === \App\Enums\WeddingTier::STANDARD);
+        $proWeddings = $demoWeddings->filter(fn($w) => $w->tier === 'pro' || $w->tier === \App\Enums\WeddingTier::PRO);
+    @endphp
 
     <!-- Portfolio Section - Templates Preview -->
     <section id="portfolio" class="py-24 bg-gray-50">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-16">
                 <span class="text-gold font-semibold uppercase tracking-widest text-sm" data-aos="fade-up">Portfolio</span>
-                <h2 class="text-3xl md:text-4xl font-serif font-bold mt-4" data-aos="fade-up" data-aos-delay="100">Tất Cả Mẫu Thiết Kế</h2>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold mt-4" data-aos="fade-up" data-aos-delay="100">Bộ Sưu Tập Thiệp Cưới</h2>
             </div>
 
-            <!-- Wedding Templates -->
+            <!-- PRO Collection -->
+            <div class="mb-20">
+                 <div class="flex items-center justify-between mb-8" data-aos="fade-up">
+                    <h3 class="text-2xl font-bold flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-full gradient-gold flex items-center justify-center text-white text-lg"><i class="fas fa-crown"></i></span>
+                        <span class="text-gradient">BST Premium (PRO)</span>
+                    </h3>
+                    <div class="h-px flex-1 bg-gradient-to-r from-amber-200 to-transparent ml-6"></div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    @forelse($proWeddings as $index => $wedding)
+                    <a href="{{ url($wedding->slug) }}" class="group relative bg-slate-900 rounded-3xl overflow-hidden shadow-2xl hover:shadow-gold/50 transition duration-500 border border-amber-500/30" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
+                        <!-- Badge -->
+                        <div class="absolute top-4 right-4 z-20 px-3 py-1 rounded-full gradient-gold text-white text-xs font-bold shadow-lg">PREMIUM</div>
+                        
+                        <div class="aspect-[3/4] relative overflow-hidden">
+                            @if($wedding->template && $wedding->template->thumbnail_url)
+                                <img src="{{ $wedding->template->thumbnail_url }}" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition duration-1000" alt="{{ $wedding->template->name }}">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center bg-slate-800">
+                                    <span class="text-gray-500">PRO Template</span>
+                                </div>
+                            @endif
+                            <!-- Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                            
+                            <!-- Content overlay -->
+                            <div class="absolute bottom-0 left-0 right-0 p-6 translate-y-2 group-hover:translate-y-0 transition duration-500">
+                                <h4 class="font-serif text-2xl font-bold text-white mb-1">{{ $wedding->template->name ?? 'Mẫu Luxury' }}</h4>
+                                <div class="text-amber-400 text-sm font-medium mb-3 uppercase tracking-wider">Gói PRO</div>
+                                <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition duration-500 delay-100">
+                                    <span class="text-white text-sm font-bold border-b border-amber-400 pb-0.5">Xem chi tiết</span>
+                                    <i class="fas fa-arrow-right text-amber-400 text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    @empty
+                    <div class="col-span-full text-center text-gray-400 italic">Đang cập nhật các mẫu Premium...</div>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Standard Collection -->
             <div class="mb-16">
-                <h3 class="text-2xl font-bold mb-8 flex items-center gap-3" data-aos="fade-up">
-                    <span class="w-10 h-10 rounded-full gradient-gold flex items-center justify-center text-white text-lg">💒</span>
-                    <span>Thiệp Cưới Online</span>
-                </h3>
+                 <div class="flex items-center justify-between mb-8" data-aos="fade-up">
+                    <h3 class="text-2xl font-bold flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-lg"><i class="fas fa-heart"></i></span>
+                        <span>BST Tiêu Chuẩn (Standard)</span>
+                    </h3>
+                    <div class="h-px flex-1 bg-gray-200 ml-6"></div>
+                </div>
+
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    @forelse($demoWeddings as $index => $wedding)
-                    <a href="{{ url($wedding->slug) }}" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="{{ $index * 50 }}">
+                    @forelse($standardWeddings as $index => $wedding)
+                    <a href="{{ url($wedding->slug) }}" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition duration-500" data-aos="fade-up" data-aos-delay="{{ $index * 50 }}">
                         <div class="aspect-[3/4] relative overflow-hidden bg-gray-100">
                             @if($wedding->template && $wedding->template->thumbnail_url)
                                 <img src="{{ $wedding->template->thumbnail_url }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="{{ $wedding->template->name }}">
                             @else
                                 <div class="w-full h-full flex items-center justify-center bg-gray-200">
-                                    <span class="text-gray-400">No Image</span>
+                                    <span class="text-gray-400">Standard</span>
                                 </div>
                             @endif
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-60"></div>
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition duration-500"></div>
+                            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
+                                <span class="bg-white text-gray-900 px-6 py-2 rounded-full font-bold text-sm shadow-lg transform translate-y-4 group-hover:translate-y-0 transition duration-500">Xem Demo</span>
                             </div>
                         </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg truncate">{{ $wedding->template->name ?? 'Mẫu thiệp cưới' }}</h4>
-                            <p class="text-sm text-gray-500 truncate">{{ $wedding->groom_name }} & {{ $wedding->bride_name }}</p>
+                        <div class="p-5 border-t border-gray-50">
+                            <h4 class="font-bold text-gray-900 truncate">{{ $wedding->template->name ?? 'Mẫu Tiêu Chuẩn' }}</h4>
+                            <p class="text-sm text-gray-500 truncate mt-1">Gói Standard</p>
                         </div>
                     </a>
                     @empty
-                    <div class="col-span-full text-center py-10">
-                        <p class="text-gray-500">Đang cập nhật các mẫu demo...</p>
-                    </div>
+                     <div class="col-span-full text-center text-gray-400 italic">Đang cập nhật các mẫu Standard...</div>
                     @endforelse
                 </div>
             </div>
-
-            <!-- Business Card Templates -->
-            <div>
-                <h3 class="text-2xl font-bold mb-8 flex items-center gap-3" data-aos="fade-up">
-                    <span class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-white text-lg">💼</span>
-                    <span>Danh Thiếp Số (Business Card)</span>
-                </h3>
+            
+            <!-- Business Cards (Kept simple below) -->
+             <div class="mt-20 pt-16 border-t border-gray-200">
+                <div class="text-center mb-12">
+                     <span class="bg-slate-100 text-slate-600 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest">Dành cho doanh nhân</span>
+                    <h3 class="text-2xl font-bold mt-4">Danh Thiếp Số (Business Card)</h3>
+                </div>
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    @forelse($demoBusinessCards as $index => $card)
-                    <a href="{{ url('p/' . $card->slug) }}" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="{{ $index * 50 }}">
-                        <div class="aspect-[3/4] relative overflow-hidden bg-slate-900">
-                            @if($card->template && $card->template->thumbnail_url)
-                                <img src="{{ $card->template->thumbnail_url }}" class="w-full h-full object-cover opacity-80 group-hover:scale-110 transition duration-700" alt="{{ $card->template->name }}">
+                    @foreach($demoBusinessCards as $card)
+                    <a href="{{ url('p/' . $card->slug) }}" class="group relative bg-slate-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500 block">
+                        <div class="aspect-[16/10] relative overflow-hidden opacity-90 group-hover:opacity-100 transition">
+                            <!-- Placeholder specific for business cards if no image -->
+                             @if($card->template && $card->template->thumbnail_url)
+                                <img src="{{ $card->template->thumbnail_url }}" class="w-full h-full object-cover" alt="{{ $card->name }}">
                             @else
-                                <div class="w-full h-full flex items-center justify-center bg-gray-800">
-                                    <span class="text-gray-400">No Image</span>
-                                </div>
-                            @endif
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
-                            </div>
-                            @if($index < 2)
-                            <div class="absolute top-4 right-4 px-3 py-1 bg-amber-500 text-black text-xs font-bold rounded-full">HOT</div>
+                                <div class="w-full h-full bg-slate-800 flex items-center justify-center text-slate-500 text-xs">Business Card</div>
                             @endif
                         </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg truncate">{{ $card->template->name ?? 'Mẫu danh thiếp' }}</h4>
-                            <p class="text-sm text-gray-500 truncate">{{ $card->name }}</p>
+                        <div class="p-4 bg-white">
+                            <h4 class="font-bold text-sm text-gray-900">{{ $card->name }}</h4>
+                            <p class="text-xs text-gray-500">{{ $card->title }}</p>
                         </div>
                     </a>
-                    @empty
-                    <div class="col-span-full text-center py-10">
-                        <p class="text-gray-500">Đang cập nhật các mẫu demo...</p>
-                    </div>
-                    @endforelse
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -298,35 +246,25 @@
                 <h2 class="text-3xl md:text-4xl font-serif font-bold mt-4" data-aos="fade-up" data-aos-delay="100">
                     Gói Dịch Vụ <span class="text-gold">Thiệp Cưới Online</span>
                 </h2>
-                <p class="text-gray-400 mt-4 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="150">
-                    Chọn gói phù hợp với nhu cầu của bạn. Hỗ trợ chỉnh sửa miễn phí không giới hạn.
-                </p>
             </div>
             
             <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 <!-- STANDARD -->
                 <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 card-hover" data-aos="fade-up">
                     <div class="text-center mb-8">
-                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center text-3xl mx-auto mb-4">�</div>
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center text-white text-3xl mx-auto mb-4"><i class="fas fa-heart"></i></div>
                         <h3 class="text-xl font-bold mb-2">STANDARD</h3>
                         <div class="text-4xl font-bold text-white mb-1">299K</div>
-                        <div class="text-gray-400 text-sm">VNĐ / thiệp</div>
+                        <div class="text-gray-400 text-sm">VNĐ / trọn gói</div>
                     </div>
                     <ul class="space-y-4 mb-8 text-gray-300 text-sm">
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>3 mẫu thiệp đẹp</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>Thông tin cô dâu chú rể</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>QR Code mừng cưới</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>RSVP xác nhận tham dự</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>Nhạc nền tùy chọn</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>Hiệu ứng Tim/Hoa đẹp</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>Countdown đếm ngược</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>Google Maps chỉ đường</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>Gallery tối đa 20 ảnh</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>Sử dụng trong 1 năm</li>
-                        <li class="flex items-center gap-3 text-gray-500"><i class="fas fa-times"></i>Tên khách mời riêng</li>
-                        <li class="flex items-center gap-3 text-gray-500"><i class="fas fa-times"></i>Custom domain</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>Các mẫu thiệp Standard đẹp</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>Đầy đủ tính năng cơ bản</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>RSVP & Guestbook</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>Bản đồ & QR Code</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-green-400"></i>Lưu trữ 1 năm</li>
                     </ul>
-                    <a href="#contact" class="block w-full py-4 text-center rounded-full border border-white/30 font-bold hover:bg-white/10 transition">Chọn gói này</a>
+                    <a href="#contact" class="block w-full py-4 text-center rounded-full border border-white/30 font-bold hover:bg-white/10 transition">Liên hệ đăng ký</a>
                 </div>
                 
                 <!-- PRO -->
@@ -335,194 +273,74 @@
                         🔥 Phổ biến nhất
                     </div>
                     <div class="text-center mb-8">
-                        <div class="w-16 h-16 rounded-2xl gradient-gold flex items-center justify-center text-3xl mx-auto mb-4">�</div>
-                        <h3 class="text-xl font-bold mb-2">PRO</h3>
-                        <div class="text-4xl font-bold text-gold mb-1">499K</div>
+                        <div class="w-16 h-16 rounded-2xl gradient-gold flex items-center justify-center text-white text-3xl mx-auto mb-4"><i class="fas fa-crown"></i></div>
+                        <h3 class="text-xl font-bold mb-2">PRO / PREMIUM</h3>
+                         <div class="text-4xl font-bold text-gold mb-1">499K</div>
                         <div class="text-gray-400 text-sm line-through">799K</div>
                     </div>
                     <ul class="space-y-4 mb-8 text-gray-300 text-sm">
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i><strong>6+ mẫu thiệp Premium</strong></li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i>Tất cả tính năng Standard</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i>Gallery <strong>không giới hạn</strong> ảnh</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i>Sử dụng <strong>vĩnh viễn</strong></li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i><strong>Animation "囍" mở cửa</strong></li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i><strong>Hiệu ứng tùy chọn</strong> (Tim/Hoa/Tuyết/Lá)</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i><strong>Tên khách mời riêng</strong> (URL riêng)</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i><strong>Custom domain</strong> (vd: cuoi.ten.vn)</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i>Hỗ trợ ưu tiên 24/7</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i><strong>Truy cập kho mẫu Premium (Luxury, Galaxy...)</strong></li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i><strong>Hiệu ứng rơi (Hoa/Tim/Sao)</strong></li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i><strong>Màn hình mời mở phong bì 3D</strong></li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i>Gallery ảnh không giới hạn</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i><strong>Lưu trữ vĩnh viễn</strong></li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check text-gold"></i>Hỗ trợ ưu tiên 1-1</li>
                     </ul>
-                    <a href="#contact" class="block w-full py-4 text-center rounded-full gradient-gold text-white font-bold hover:opacity-90 transition animate-pulse-glow">Chọn gói này</a>
-                </div>
-            </div>
-            
-            <!-- Trust badges -->
-            <div class="mt-16 text-center" data-aos="fade-up">
-                <p class="text-gray-400 text-sm mb-4">Thanh toán an toàn & bảo mật</p>
-                <div class="flex justify-center gap-6 items-center opacity-60">
-                    <span class="text-2xl">💳</span>
-                    <span class="font-bold">MoMo</span>
-                    <span class="font-bold">Chuyển khoản</span>
-                    <span class="font-bold">Tiền mặt</span>
+                    <a href="#contact" class="block w-full py-4 text-center rounded-full gradient-gold text-white font-bold hover:opacity-90 transition animate-pulse-glow">Đăng ký ngay</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="py-24 bg-gradient-to-br from-rose-50 to-amber-50">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="text-gold font-semibold uppercase tracking-widest text-sm" data-aos="fade-up">Đánh giá</span>
-                <h2 class="text-3xl md:text-4xl font-serif font-bold mt-4" data-aos="fade-up" data-aos-delay="100">
-                    Khách Hàng <span class="text-gold">Nói Gì?</span>
-                </h2>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white rounded-3xl p-8 shadow-lg card-hover" data-aos="fade-up">
-                    <div class="flex gap-1 text-amber-400 mb-4">⭐⭐⭐⭐⭐</div>
-                    <p class="text-gray-600 mb-6 italic">"Thiệp đẹp xuất sắc, bạn bè khen nhiều lắm! Team làm nhanh, support nhiệt tình. Recommend 100%!"</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center text-white font-bold">TL</div>
-                        <div><div class="font-bold">Thuỳ Linh</div><div class="text-sm text-gray-500">Cưới 12/2024</div></div>
-                    </div>
-                </div>
-                
-                <div class="bg-white rounded-3xl p-8 shadow-lg card-hover" data-aos="fade-up" data-aos-delay="100">
-                    <div class="flex gap-1 text-amber-400 mb-4">⭐⭐⭐⭐⭐</div>
-                    <p class="text-gray-600 mb-6 italic">"Thiệp cưới rất sang trọng và tiện lợi. Khách chỉ cần scan QR là thấy tất cả thông tin. Chức năng RSVP cũng rất hay!"</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold">MH</div>
-                        <div><div class="font-bold">Minh Hùng</div><div class="text-sm text-gray-500">Cưới 01/2025</div></div>
-                    </div>
-                </div>
-                
-                <div class="bg-white rounded-3xl p-8 shadow-lg card-hover" data-aos="fade-up" data-aos-delay="200">
-                    <div class="flex gap-1 text-amber-400 mb-4">⭐⭐⭐⭐⭐</div>
-                    <p class="text-gray-600 mb-6 italic">"Ban đầu định làm thiệp giấy nhưng thấy thiệp online đẹp và tiện hơn. Giá cũng hợp lý, tiết kiệm được nhiều!"</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white font-bold">NA</div>
-                        <div><div class="font-bold">Ngọc Ánh</div><div class="text-sm text-gray-500">Cưới 11/2024</div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="py-24 bg-white">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div data-aos="fade-right">
-                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop" 
-                         alt="Our Team" 
-                         class="rounded-3xl shadow-xl w-full">
-                </div>
-                <div data-aos="fade-left">
-                    <span class="text-gold font-semibold uppercase tracking-widest text-sm">Về chúng tôi</span>
-                    <h2 class="text-3xl md:text-4xl font-serif font-bold mt-4 mb-6">
-                        Đội Ngũ Thiết Kế <span class="text-gold">Tâm Huyết</span>
-                    </h2>
-                    <p class="text-gray-600 leading-relaxed mb-8">
-                        THT Media là đơn vị chuyên cung cấp giải pháp thiết kế thiệp cưới online và danh thiếp số chuyên nghiệp. Với hơn 5 năm kinh nghiệm, chúng tôi cam kết mang đến sản phẩm chất lượng cao với giá cả hợp lý.
-                    </p>
-                    
-                    <div class="space-y-6">
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 rounded-full gradient-gold flex items-center justify-center text-white flex-shrink-0">
-                                <i class="fas fa-medal"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold mb-1">Thiết kế độc quyền</h4>
-                                <p class="text-sm text-gray-500">Mỗi mẫu được thiết kế riêng, không trùng lặp</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 rounded-full gradient-gold flex items-center justify-center text-white flex-shrink-0">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold mb-1">Hoàn thành nhanh chóng</h4>
-                                <p class="text-sm text-gray-500">Nhận bản thiết kế trong 24-48 giờ</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-12 h-12 rounded-full gradient-gold flex items-center justify-center text-white flex-shrink-0">
-                                <i class="fas fa-headset"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold mb-1">Hỗ trợ tận tâm</h4>
-                                <p class="text-sm text-gray-500">Chỉnh sửa miễn phí đến khi hài lòng</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA / Contact Section -->
-    <section id="contact" class="py-24 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 left-0 w-96 h-96 bg-rose-500/10 rounded-full blur-3xl"></div>
-        
-        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-            <span class="text-gold font-semibold uppercase tracking-widest text-sm" data-aos="fade-up">Liên hệ ngay</span>
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-white">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <span class="text-gold font-semibold uppercase tracking-widest text-sm" data-aos="fade-up">Liên hệ tư vấn</span>
             <h2 class="text-3xl md:text-5xl font-serif font-bold mt-4 mb-8" data-aos="fade-up" data-aos-delay="100">
-                Sẵn Sàng Tạo Thiệp Cưới <span class="text-gold">Độc Đáo</span>?
+                THT Media
             </h2>
-            <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="200">
-                Liên hệ ngay để được tư vấn miễn phí và nhận báo giá chi tiết cho dự án của bạn.
-            </p>
             
-            <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12" data-aos="fade-up" data-aos-delay="300">
-                <a href="tel:0965625210" class="inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full gradient-gold text-white font-bold text-lg hover:opacity-90 transition shadow-xl">
-                    <i class="fas fa-phone"></i>
-                    <span>0965 625 210</span>
-                </a>
-                <a href="https://zalo.me/0965625210" target="_blank" class="inline-flex items-center justify-center gap-3 px-10 py-5 rounded-full bg-white/10 border border-white/20 font-bold text-lg hover:bg-white/20 transition">
-                    <i class="fas fa-comment-dots"></i>
-                    <span>Chat Zalo</span>
-                </a>
-            </div>
-            
-            <div class="flex flex-wrap justify-center gap-8 text-gray-400" data-aos="fade-up" data-aos-delay="400">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-envelope text-gold"></i>
-                    <span>contact@thtmedia.com.vn</span>
+            <div class="grid md:grid-cols-3 gap-8 mt-12 text-left">
+                <div class="p-6 rounded-2xl bg-gray-50 text-center" data-aos="fade-up">
+                    <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-4 text-xl"><i class="fas fa-phone"></i></div>
+                    <div class="font-bold text-gray-900 mb-1">Hotline / Zalo</div>
+                    <a href="tel:0375433678" class="text-lg font-bold text-gold hover:text-amber-600 transition">0375 433 678</a>
                 </div>
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-globe text-gold"></i>
-                    <span>thtmedia.com.vn</span>
+                
+                 <div class="p-6 rounded-2xl bg-gray-50 text-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-4 text-xl"><i class="fas fa-envelope"></i></div>
+                    <div class="font-bold text-gray-900 mb-1">Email</div>
+                    <a href="mailto:thtmediaqvm@gmail.com" class="text-gray-600 hover:text-rose-600 transition">thtmediaqvm@gmail.com</a>
+                </div>
+                
+                 <div class="p-6 rounded-2xl bg-gray-50 text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-4 text-xl"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="font-bold text-gray-900 mb-1">Trụ sở chính</div>
+                    <p class="text-gray-600 text-sm">Số 263 đường Bình Than, phường Đại Phúc, thành phố Bắc Ninh</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-8 bg-slate-950 border-t border-white/5">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                <a href="https://thtmedia.com.vn" target="_blank" class="flex items-center gap-3">
-                    <img src="https://thtmedia.com.vn/wp-content/uploads/2023/01/THT-media-logo-2023-261x300.png" alt="THT Media" class="h-10 w-auto">
-                    <span class="text-gray-500 text-sm italic">một dịch vụ thuộc hệ sinh thái THT Media</span>
-                </a>
-                <div class="text-gray-500 text-sm text-center">
-                    © {{ date('Y') }} <a href="https://thtmedia.com.vn" target="_blank" class="hover:text-rose-500">THT Media</a>. Tất cả bản quyền được bảo lưu.
-                </div>
-            </div>
+    <footer class="py-8 bg-slate-950 border-t border-white/5 text-gray-500">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <p class="text-sm">
+                © {{ date('Y') }} <strong>THT Media</strong>. Số 263 đường Bình Than, phường Đại Phúc, TP. Bắc Ninh.
+            </p>
         </div>
     </footer>
 
-    <!-- Zalo Chat Widget -->
-    <a href="https://zalo.me/0965625210" target="_blank" 
-       class="fixed bottom-24 right-6 md:bottom-8 w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-xl hover:scale-110 transition z-50 animate-float">
-        <svg class="w-7 h-7" viewBox="0 0 48 48" fill="currentColor"><path d="M24 4C12.954 4 4 12.954 4 24s8.954 20 20 20 20-8.954 20-20S35.046 4 24 4zm-4 31h-4v-4h4v4zm0-6h-4V15h4v14zm8 6h-4v-6h4v6zm0-8h-4V15h4v12z"/></svg>
+    <!-- Zalo Widget -->
+    <a href="https://zalo.me/0375433678" target="_blank" 
+       class="fixed bottom-24 right-6 md:bottom-8 w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center shadow-xl hover:scale-110 transition z-50 animate-float border-2 border-white">
+        <span class="font-bold text-xs">Zalo</span>
     </a>
     
     <!-- Sticky Mobile CTA -->
     <div id="stickyCta" class="sticky-cta md:hidden bg-white border-t border-gray-100 shadow-2xl px-4 py-3 safe-area-bottom">
         <div class="flex gap-3">
-            <a href="tel:0965625210" class="flex-1 py-3 text-center rounded-full bg-gray-100 font-bold text-gray-700">
+            <a href="tel:0375433678" class="flex-1 py-3 text-center rounded-full bg-gray-100 font-bold text-gray-700">
                 <i class="fas fa-phone mr-2"></i>Gọi ngay
             </a>
             <a href="#pricing" class="flex-1 py-3 text-center rounded-full gradient-gold text-white font-bold animate-pulse-glow">
@@ -535,17 +353,14 @@
     <script>
         AOS.init({ duration: 800, once: true, offset: 50 });
         
-        // Sticky CTA visibility on scroll
+        // Sticky CTA visibility
         const stickyCta = document.getElementById('stickyCta');
-        let lastScroll = 0;
         window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            if (currentScroll > 500) {
+            if (window.pageYOffset > 500) {
                 stickyCta.classList.add('visible');
             } else {
                 stickyCta.classList.remove('visible');
             }
-            lastScroll = currentScroll;
         });
     </script>
 </body>

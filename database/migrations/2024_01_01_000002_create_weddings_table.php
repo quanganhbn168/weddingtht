@@ -67,7 +67,9 @@ return new class extends Migration
             // Pro Features
             $table->enum('tier', ['standard', 'pro'])->default('standard');
             $table->boolean('is_demo')->default(false);
-            $table->enum('falling_effect', ['hearts', 'petals', 'snow', 'leaves', 'stars', 'none'])->default('hearts');
+            $table->string('falling_effect')->default('hearts');
+            $table->string('preload_variant')->nullable()->default('heartbeat');
+            $table->boolean('show_invitation_wrapper')->default(true);
             $table->boolean('show_preload')->default(false);
             $table->string('custom_domain')->nullable();
             $table->date('expires_at')->nullable();
