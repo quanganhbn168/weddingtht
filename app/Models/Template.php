@@ -24,7 +24,7 @@ class Template extends Model
      */
     public function isPro(): bool
     {
-        return $this->tier === 'pro';
+        return $this->tier === \App\Enums\WeddingTier::PRO->value;
     }
 
     /**
@@ -40,7 +40,7 @@ class Template extends Model
      */
     public function scopeBasic($query)
     {
-        return $query->where('tier', 'basic');
+        return $query->where('tier', \App\Enums\WeddingTier::STANDARD->value);
     }
 
     /**
@@ -48,6 +48,6 @@ class Template extends Model
      */
     public function scopePro($query)
     {
-        return $query->where('tier', 'pro');
+        return $query->where('tier', \App\Enums\WeddingTier::PRO->value);
     }
 }

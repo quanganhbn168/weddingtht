@@ -7,9 +7,7 @@ use App\Http\Controllers\UserBusinessCardController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // Dashboard routes (authenticated users)
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -96,16 +94,6 @@ Route::get('/api/w/{wedding:slug}/wishes', [WishController::class, 'index'])->na
 Route::get('/p/{slug}', [BusinessCardController::class, 'show'])->name('business.show');
 
 // Fallback: /{slug} can be wedding OR card (check wedding first)
-Route::get('/{slug}', function ($slug) {
-    $wedding = \App\Models\Wedding::where('slug', $slug)->first();
-    if ($wedding) {
-        return app(WeddingController::class)->show($slug, request());
-    }
-    
-    $card = \App\Models\BusinessCard::where('slug', $slug)->first();
-    if ($card) {
-        return app(BusinessCardController::class)->show($slug);
-    }
-    
-    abort(404);
-})->where('slug', '^(?!admin|dashboard|login|register|profile|payment|api).*$');
+Route::get('/{slug}', [\App\Http\Controllers\HomeController::class, 'resolveSlug'])
+    ->where('slug', '^(?!admin|dashboard|login|register|profile|payment|api).*$')
+    ->name('resolve.slug');

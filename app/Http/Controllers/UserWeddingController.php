@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Wedding;
 use App\Models\Template;
+use App\Services\WeddingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -14,7 +15,7 @@ class UserWeddingController extends Controller
      */
     public function index(Request $request)
     {
-        $weddings = $request->user()->weddings()->with('template')->latest()->paginate(10);
+        $weddings = WeddingService::getUserWeddings($request->user());
         
         return view('dashboard.weddings.index', compact('weddings'));
     }
@@ -26,7 +27,6 @@ class UserWeddingController extends Controller
     {
         $user = $request->user();
         
-        // Check if user can create more weddings
         if (!$user->canCreateWedding()) {
             return redirect()->route('dashboard.pricing')
                 ->with('error', 'Bạn đã đạt giới hạn số thiệp cưới. Vui lòng nâng cấp gói để tạo thêm.');
@@ -62,19 +62,14 @@ class UserWeddingController extends Controller
             'bride_address' => 'nullable|string|max:500',
         ]);
         
-        // Generate unique slug
-        $baseSlug = Str::slug($validated['groom_name'] . '-va-' . $validated['bride_name'] . '-' . now()->year);
-        $validated['slug'] = $baseSlug . '-' . rand(1000, 9999);
+        $wedding = WeddingService::createWedding($user, $validated);
         
-        // Get template view path
-        $template = Template::find($validated['template_id']);
-        $validated['template_view'] = $template->view_path;
-        
-        // Set defaults - preview để user có thể xem ngay
-        $validated['status'] = 'preview';
-        $validated['is_active'] = true;
-        
-        $wedding = $user->weddings()->create($validated);
+        // Update basic info that wasn't covered in initial create if needed, 
+        // but WeddingService::createWedding handles normalization and slug generation.
+        // The service might need to accept extra fields or we rely on edit to add details.
+        // Actually, createWedding accepts an array, so we can pass all validated data.
+        // We set status to preview by default here as per original controller logic
+        $wedding->update(['status' => 'preview', 'is_active' => true]);
         
         return redirect()->route('dashboard.weddings.edit', $wedding)
             ->with('success', 'Thiệp cưới đã được tạo thành công!');
@@ -85,8 +80,7 @@ class UserWeddingController extends Controller
      */
     public function edit(Request $request, Wedding $wedding)
     {
-        // Ensure user owns this wedding
-        if ($wedding->user_id !== $request->user()->id) {
+        if (!WeddingService::canAccess($request->user(), $wedding)) {
             abort(403);
         }
         
@@ -100,82 +94,32 @@ class UserWeddingController extends Controller
      */
     public function update(Request $request, Wedding $wedding)
     {
-        if ($wedding->user_id !== $request->user()->id) {
+        if (!WeddingService::canUpdate($request->user(), $wedding)) {
             abort(403);
         }
         
-        $validated = $request->validate([
-            // Basic info
-            'groom_name' => 'required|string|max:255',
-            'bride_name' => 'required|string|max:255',
-            'event_date' => 'required|date',
-            'template_id' => 'required|exists:templates,id',
-            'status' => 'nullable|in:draft,preview,published',
-            
-            // Nhà trai
-            'groom_father' => 'nullable|string|max:255',
-            'groom_mother' => 'nullable|string|max:255',
-            'groom_ceremony_time' => 'nullable',
-            'groom_ceremony_date' => 'nullable|date',
-            'groom_address' => 'nullable|string|max:1000',
-            'groom_map_url' => 'nullable|url|max:500',
-            'groom_reception_time' => 'nullable',
-            'groom_reception_venue' => 'nullable|string|max:255',
-            'groom_reception_address' => 'nullable|string|max:1000',
-            'groom_qr_info' => 'nullable|string|max:1000',
-            
-            // Nhà gái  
-            'bride_father' => 'nullable|string|max:255',
-            'bride_mother' => 'nullable|string|max:255',
-            'bride_ceremony_time' => 'nullable',
-            'bride_ceremony_date' => 'nullable|date',
-            'bride_address' => 'nullable|string|max:1000',
-            'bride_map_url' => 'nullable|url|max:500',
-            'bride_reception_time' => 'nullable',
-            'bride_reception_venue' => 'nullable|string|max:255',
-            'bride_reception_address' => 'nullable|string|max:1000',
-            'bride_qr_info' => 'nullable|string|max:1000',
-            
-            // Settings
-            'slug' => 'nullable|string|max:255|unique:weddings,slug,' . $wedding->id,
-            'password' => 'nullable|string|max:255',
-            'is_auto_approve_wishes' => 'boolean',
-            'show_preload' => 'boolean',
-            'falling_effect' => 'nullable|in:hearts,petals,snow,leaves,stars,none',
-            
-            // Media uploads
-            'background_music' => 'nullable|file|mimes:mp3|max:10240',
-            'cover' => 'nullable|image|max:5120',
-            'hero' => 'nullable|image|max:5120',
-            'groom_photo' => 'nullable|image|max:5120',
-            'bride_photo' => 'nullable|image|max:5120',
-            'groom_qr' => 'nullable|image|max:2048',
-            'bride_qr' => 'nullable|image|max:2048',
-            'gallery' => 'nullable|array',
-            'gallery.*' => 'image|max:5120',
-        ]);
-        
-        // Update template view path
-        $template = Template::find($validated['template_id']);
-        if (!$template) {
-            return back()->with('error', 'Template không tồn tại!');
-        }
-        $validated['template_view'] = $template->view_path;
+        $data = $request->all();
         
         // Handle boolean checkboxes
-        $validated['is_auto_approve_wishes'] = $request->has('is_auto_approve_wishes');
-        $validated['show_preload'] = $request->has('show_preload');
+        $data['is_auto_approve_wishes'] = $request->has('is_auto_approve_wishes');
+        $data['show_preload'] = $request->has('show_preload');
         
-        // Remove file fields from validated data (handled separately)
-        $fileFields = ['background_music', 'cover', 'hero', 'groom_photo', 'bride_photo', 'groom_qr', 'bride_qr', 'gallery'];
-        foreach ($fileFields as $field) {
-            unset($validated[$field]);
-        }
+        // Validate
+        $validator = \Illuminate\Support\Facades\Validator::make($data, WeddingService::getValidationRules($wedding));
+        $validated = $validator->validate();
         
-        // Update wedding
-        $wedding->update($validated);
+        // Update basic info via Service
+        // Note: WeddingService::updateWedding handles normalization and template view update
+        WeddingService::updateWedding($wedding, $validated);
         
-        // Handle media uploads
+        // Handle media uploads directly here or move to Service
+        // Ideally should be in Service but Spatie Media Library is easy enough here
+        // For strict SOC, moving to Service is better.
+        // I will implement a handleMediaUploads method in Service later if requested,
+        // but current instruction is just "centralize logic", updating the wedding basics is done.
+        // The original controller handled media uploads manually.
+        
+        // Handle file field (background_music)
         if ($request->hasFile('background_music')) {
             $path = $request->file('background_music')->store('music', 'public');
             $wedding->update(['background_music' => $path]);
@@ -190,7 +134,7 @@ class UserWeddingController extends Controller
             }
         }
         
-        // Gallery (multiple files)
+        // Gallery
         if ($request->hasFile('gallery')) {
             foreach ($request->file('gallery') as $file) {
                 $wedding->addMedia($file)->toMediaCollection('gallery');
@@ -206,7 +150,7 @@ class UserWeddingController extends Controller
      */
     public function destroy(Request $request, Wedding $wedding)
     {
-        if ($wedding->user_id !== $request->user()->id) {
+        if (!WeddingService::canUpdate($request->user(), $wedding)) {
             abort(403);
         }
         
@@ -221,7 +165,7 @@ class UserWeddingController extends Controller
      */
     public function preview(Request $request, Wedding $wedding)
     {
-        if ($wedding->user_id !== $request->user()->id) {
+        if (!WeddingService::canAccess($request->user(), $wedding)) {
             abort(403);
         }
         
@@ -233,13 +177,13 @@ class UserWeddingController extends Controller
      */
     public function rsvps(Request $request, Wedding $wedding)
     {
-        if ($wedding->user_id !== $request->user()->id) {
+        if (!WeddingService::canAccess($request->user(), $wedding)) {
             abort(403);
         }
         
         // Export to CSV
         if ($request->has('export') && $request->export === 'csv') {
-            $rsvps = $wedding->rsvps()->latest()->get();
+            $callback = WeddingService::getRsvpCsvCallback($wedding);
             $filename = 'danh-sach-khach-moi-' . $wedding->slug . '.csv';
             
             $headers = [
@@ -250,42 +194,10 @@ class UserWeddingController extends Controller
                 "Expires" => "0"
             ];
             
-            $callback = function() use ($rsvps) {
-                $file = fopen('php://output', 'w');
-                
-                // Add BOM for Excel UTF-8 support
-                fputs($file, "\xEF\xBB\xBF");
-                
-                fputcsv($file, ['Họ tên', 'Số điện thoại', 'Tham dự', 'Số khách', 'Nhà', 'Ghi chú', 'Thời gian']);
-                
-                foreach ($rsvps as $rsvp) {
-                    fputcsv($file, [
-                        $rsvp->name,
-                        $rsvp->phone,
-                        $rsvp->attendance_text,
-                        $rsvp->guests,
-                        $rsvp->side_text,
-                        $rsvp->note,
-                        $rsvp->created_at->format('d/m/Y H:i'),
-                    ]);
-                }
-                
-                fclose($file);
-            };
-            
             return response()->stream($callback, 200, $headers);
         }
         
-        // Stats
-        $stats = [
-            'total_guests' => $wedding->rsvps()->sum('guests'),
-            'attending' => $wedding->rsvps()->attending()->count(),
-            'not_attending' => $wedding->rsvps()->where('attendance', 'no')->count(),
-            'maybe' => $wedding->rsvps()->where('attendance', 'maybe')->count(),
-            'groom_side' => $wedding->rsvps()->groomSide()->sum('guests'),
-            'bride_side' => $wedding->rsvps()->brideSide()->sum('guests'),
-        ];
-        
+        $stats = WeddingService::getRsvpStats($wedding);
         $rsvps = $wedding->rsvps()->latest()->paginate(20);
         
         return view('dashboard.weddings.rsvps', compact('wedding', 'rsvps', 'stats'));
@@ -296,7 +208,7 @@ class UserWeddingController extends Controller
      */
     public function wishes(Request $request, Wedding $wedding)
     {
-        if ($wedding->user_id !== $request->user()->id) {
+        if (!WeddingService::canAccess($request->user(), $wedding)) {
             abort(403);
         }
         
@@ -311,12 +223,7 @@ class UserWeddingController extends Controller
         }
         
         $wishes = $query->paginate(20);
-        
-        $stats = [
-            'total' => $wedding->wishes()->count(),
-            'pending' => $wedding->wishes()->where('is_approved', false)->count(),
-            'approved' => $wedding->wishes()->where('is_approved', true)->count(),
-        ];
+        $stats = WeddingService::getWishStats($wedding);
         
         return view('dashboard.weddings.wishes', compact('wedding', 'wishes', 'stats', 'filter'));
     }
@@ -326,12 +233,11 @@ class UserWeddingController extends Controller
      */
     public function approveWish(Request $request, Wedding $wedding, $wishId)
     {
-        if ($wedding->user_id !== $request->user()->id) {
+        if (!WeddingService::canUpdate($request->user(), $wedding)) {
             abort(403);
         }
         
-        $wish = $wedding->wishes()->findOrFail($wishId);
-        $wish->update(['is_approved' => true]);
+        WeddingService::approveWish($wedding, $wishId);
         
         return back()->with('success', 'Đã duyệt lời chúc!');
     }
@@ -341,12 +247,11 @@ class UserWeddingController extends Controller
      */
     public function deleteWish(Request $request, Wedding $wedding, $wishId)
     {
-        if ($wedding->user_id !== $request->user()->id) {
+        if (!WeddingService::canUpdate($request->user(), $wedding)) {
             abort(403);
         }
         
-        $wish = $wedding->wishes()->findOrFail($wishId);
-        $wish->delete();
+        WeddingService::deleteWish($wedding, $wishId);
         
         return back()->with('success', 'Đã xóa lời chúc!');
     }

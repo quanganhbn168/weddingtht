@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Wedding;
-use App\Models\WeddingRsvp;
+use App\Services\WeddingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -16,8 +16,14 @@ class RsvpController extends Controller
     {
         // Rate limiting: 10 submissions per hour per IP
         $key = 'rsvp:' . $request->ip();
-        if (RateLimiter::tooManyAttempts($key, 10)) {
-            return back()->with('error', 'Bạn đã gửi quá nhiều lần. Vui lòng thử lại sau.');
+        if ($request->wantsJson()) {
+            if (RateLimiter::tooManyAttempts($key, 10)) {
+                return response()->json(['message' => 'Bạn đã gửi quá nhiều lần. Vui lòng thử lại sau.'], 429);
+            }
+        } else {
+            if (RateLimiter::tooManyAttempts($key, 10)) {
+                return back()->with('error', 'Bạn đã gửi quá nhiều lần. Vui lòng thử lại sau.');
+            }
         }
         RateLimiter::hit($key, 3600); // 1 hour window
         
@@ -30,34 +36,10 @@ class RsvpController extends Controller
             'note' => 'nullable|string|max:500',
         ]);
         
-        // Check for existing RSVP by phone (update if exists)
-        $existingRsvp = null;
-        if (!empty($validated['phone'])) {
-            $existingRsvp = $wedding->rsvps()
-                ->where('phone', $validated['phone'])
-                ->first();
-        }
+        $message = WeddingService::createRsvp($wedding, $validated, $request->ip());
         
-        if ($existingRsvp) {
-            $existingRsvp->update([
-                'name' => $validated['name'],
-                'attendance' => $validated['attendance'],
-                'guests' => $validated['guests'] ?? 1,
-                'side' => $validated['side'] ?? 'both',
-                'note' => $validated['note'] ?? null,
-            ]);
-            $message = 'Đã cập nhật thông tin xác nhận tham dự!';
-        } else {
-            $wedding->rsvps()->create([
-                'name' => $validated['name'],
-                'phone' => $validated['phone'] ?? null,
-                'attendance' => $validated['attendance'],
-                'guests' => $validated['guests'] ?? 1,
-                'side' => $validated['side'] ?? 'both',
-                'note' => $validated['note'] ?? null,
-                'ip_address' => $request->ip(),
-            ]);
-            $message = 'Cảm ơn bạn đã xác nhận tham dự!';
+        if ($request->wantsJson()) {
+            return response()->json(['message' => $message]);
         }
         
         return back()->with('success', $message);

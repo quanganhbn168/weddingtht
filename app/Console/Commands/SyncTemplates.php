@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Template;
 use Illuminate\Support\Facades\File;
+use App\Enums\WeddingTier;
 
 class SyncTemplates extends Command
 {
@@ -30,81 +31,81 @@ class SyncTemplates extends Command
         'templates.modern_01' => [
             'name' => 'Modern Style (Hồng Phấn Hiện Đại)',
             'type' => 'wedding',
-            'tier' => 'basic',
+            'tier' => WeddingTier::STANDARD->value,
         ],
         'templates.elegant_02' => [
             'name' => 'Elegant Classic (Thanh Lịch Cổ Điển)',
             'type' => 'wedding',
-            'tier' => 'basic',
+            'tier' => WeddingTier::STANDARD->value,
         ],
         'templates.minimal_03' => [
             'name' => 'Minimal Editorial (Tối Giản Tạp Chí)',
             'type' => 'wedding',
-            'tier' => 'basic',
+            'tier' => WeddingTier::STANDARD->value,
         ],
         'templates.luxury_gold' => [
             'name' => 'Luxury Gold (Vàng Sang Trọng)',
             'type' => 'wedding',
-            'tier' => 'basic',
+            'tier' => WeddingTier::STANDARD->value,
         ],
         'templates.traditional_red' => [
             'name' => 'Traditional Red (Đỏ Truyền Thống)',
             'type' => 'wedding',
-            'tier' => 'basic',
+            'tier' => WeddingTier::STANDARD->value,
         ],
         
         // Wedding templates - Premium (Pro)
         'templates.cherry_blossom' => [
             'name' => '🌸 Cherry Blossom (Hoa Anh Đào)',
             'type' => 'wedding',
-            'tier' => 'pro',
+            'tier' => WeddingTier::PRO->value,
         ],
         'templates.cinematic_story' => [
             'name' => '🎬 Cinematic Story (Phim Điện Ảnh)',
             'type' => 'wedding',
-            'tier' => 'pro',
+            'tier' => WeddingTier::PRO->value,
         ],
         'templates.galaxy_dreams' => [
             'name' => '✨ Galaxy Dreams (Ngân Hà Lung Linh)',
             'type' => 'wedding',
-            'tier' => 'pro',
+            'tier' => WeddingTier::PRO->value,
         ],
         
         // Business templates
         'templates.business.minimal_white' => [
             'name' => 'Minimal White',
             'type' => 'business',
-            'tier' => 'basic',
+            'tier' => WeddingTier::STANDARD->value,
         ],
         'templates.business.tech_gradient' => [
             'name' => 'Tech Gradient',
             'type' => 'business',
-            'tier' => 'basic',
+            'tier' => WeddingTier::STANDARD->value,
         ],
         'templates.business.creative_dark' => [
             'name' => 'Creative Dark',
             'type' => 'business',
-            'tier' => 'basic',
+            'tier' => WeddingTier::STANDARD->value,
         ],
         'templates.business.corporate_blue' => [
             'name' => 'Corporate Blue',
             'type' => 'business',
-            'tier' => 'basic',
+            'tier' => WeddingTier::STANDARD->value,
         ],
         'templates.business.luxury_gold' => [
             'name' => 'Luxury Gold',
             'type' => 'business',
-            'tier' => 'basic',
+            'tier' => WeddingTier::STANDARD->value,
         ],
         'templates.business.simple_card' => [
             'name' => 'Simple Card',
             'type' => 'business',
-            'tier' => 'basic',
+            'tier' => WeddingTier::STANDARD->value,
         ],
         'templates.business.ceo_profile' => [
             'name' => 'CEO Profile',
             'type' => 'business',
-            'tier' => 'basic',
+            'tier' => WeddingTier::STANDARD->value,
         ],
     ];
 

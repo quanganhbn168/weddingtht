@@ -4,17 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\BusinessCard;
 use App\Models\Template;
+use App\Services\BusinessCardService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class UserBusinessCardController extends Controller
 {
+    protected $cardService;
+
+    public function __construct(BusinessCardService $cardService)
+    {
+        $this->cardService = $cardService;
+    }
+
     /**
      * Display a listing of user's business cards.
      */
     public function index(Request $request)
     {
-        $cards = $request->user()->businessCards()->with('template')->latest()->paginate(10);
+        $cards = $this->cardService->getUserCards($request->user());
         
         return view('dashboard.cards.index', compact('cards'));
     }
@@ -24,9 +31,7 @@ class UserBusinessCardController extends Controller
      */
     public function create(Request $request)
     {
-        $user = $request->user();
-        
-        if (!$user->canCreateBusinessCard()) {
+        if (!$request->user()->canCreateBusinessCard()) {
             return redirect()->route('dashboard.pricing')
                 ->with('error', 'Bạn đã đạt giới hạn số Name Card. Vui lòng nâng cấp gói để tạo thêm.');
         }
@@ -48,23 +53,9 @@ class UserBusinessCardController extends Controller
                 ->with('error', 'Bạn đã đạt giới hạn số Name Card.');
         }
         
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'title' => 'nullable|string|max:255',
-            'company' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:50',
-            'email' => 'nullable|email|max:255',
-            'website' => 'nullable|url|max:255',
-            'address' => 'nullable|string|max:500',
-            'about' => 'nullable|string',
-            'template_id' => 'required|exists:templates,id',
-        ]);
+        $validated = $request->validate($this->cardService->getValidationRules());
         
-        // Generate unique slug
-        $validated['slug'] = Str::slug($validated['name']) . '-' . rand(1000, 9999);
-        $validated['is_active'] = true;
-        
-        $card = $user->businessCards()->create($validated);
+        $card = $this->cardService->createCard($user, $validated);
         
         return redirect()->route('dashboard.cards.edit', $card)
             ->with('success', 'Name Card đã được tạo thành công!');
@@ -75,7 +66,7 @@ class UserBusinessCardController extends Controller
      */
     public function edit(Request $request, BusinessCard $card)
     {
-        if ($card->user_id !== $request->user()->id) {
+        if (!$this->cardService->checkOwnership($request->user(), $card)) {
             abort(403);
         }
         
@@ -89,23 +80,13 @@ class UserBusinessCardController extends Controller
      */
     public function update(Request $request, BusinessCard $card)
     {
-        if ($card->user_id !== $request->user()->id) {
+        if (!$this->cardService->checkOwnership($request->user(), $card)) {
             abort(403);
         }
         
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'title' => 'nullable|string|max:255',
-            'company' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:50',
-            'email' => 'nullable|email|max:255',
-            'website' => 'nullable|url|max:255',
-            'address' => 'nullable|string|max:500',
-            'about' => 'nullable|string',
-            'template_id' => 'required|exists:templates,id',
-        ]);
+        $validated = $request->validate($this->cardService->getValidationRules(true));
         
-        $card->update($validated);
+        $this->cardService->updateCard($card, $validated);
         
         return redirect()->route('dashboard.cards.edit', $card)
             ->with('success', 'Name Card đã được cập nhật!');
@@ -116,11 +97,11 @@ class UserBusinessCardController extends Controller
      */
     public function destroy(Request $request, BusinessCard $card)
     {
-        if ($card->user_id !== $request->user()->id) {
+        if (!$this->cardService->checkOwnership($request->user(), $card)) {
             abort(403);
         }
         
-        $card->delete();
+        $this->cardService->deleteCard($card);
         
         return redirect()->route('dashboard.cards.index')
             ->with('success', 'Name Card đã được xóa!');
@@ -131,7 +112,7 @@ class UserBusinessCardController extends Controller
      */
     public function preview(Request $request, BusinessCard $card)
     {
-        if ($card->user_id !== $request->user()->id) {
+        if (!$this->cardService->checkOwnership($request->user(), $card)) {
             abort(403);
         }
         

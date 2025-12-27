@@ -1,341 +1,358 @@
 @extends('layouts.app')
-{{-- Template Name: Cherry Blossom (Hoa Anh Đào Lãng Mạn) - PREMIUM --}}
+{{-- Template Name: Cherry Blossom (Mùa Valentine) - PREMIUM --}}
 
-@section('title', 'Wedding | ' . $wedding->groom_name . ' & ' . $wedding->bride_name)
+@section('title', 'Lễ Cưới ' . $wedding->groom_name . ' & ' . $wedding->bride_name)
 @section('og_image', $shareUrl)
 
 @section('content')
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Zen+Antique&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Nunito:wght@300;400;600;700&display=swap');
     
     :root {
-        --sakura-pink: #ffd9e8;
-        --sakura-deep: #ff85a2;
-        --sakura-brown: #5c4033;
-        --sakura-cream: #fff8f3;
+        /* Standardized Theme Variables */
+        --color-primary: #f43f5e; /* Rose 500 */
+        --color-primary-dark: #be123c; /* Rose 700 */
+        --color-primary-light: #ffe4e6; /* Rose 100 */
+        --color-bg-secondary: #fff1f2; /* Rose 50 */
+        --color-text-body: #881337; /* Rose 900 */
+        --bg-paper: #ffffff;
+        --bg-input: #fff1f2;
+        
+        --font-heading: 'Dancing Script', cursive;
+        --font-body: 'Nunito', sans-serif;
+        --radius-box: 24px; /* Soft rounded corners */
+        --shadow-box: 0 15px 35px -5px rgba(244, 63, 94, 0.15);
+
+        /* Custom Theme Colors */
+        --pink-soft: #ffe4e6;
+        --pink-accent: #f43f5e;
+        --pink-deep: #881337;
     }
 
-    body { font-family: 'Noto Serif JP', serif; background: var(--sakura-cream); }
-    .font-zen { font-family: 'Zen Antique', serif; }
+    body { font-family: var(--font-body); background-color: #fff0f5; color: var(--color-text-body); overflow-x: hidden; }
+    h1, h2, h3, h4, .font-heading { font-family: var(--font-heading); }
     
-    /* Falling Petals Animation */
-    @keyframes fall {
-        0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(100vh) rotate(360deg); opacity: 0.3; }
+    /* Soft Gradient Text */
+    .text-gradient-pink {
+        background: linear-gradient(135deg, #f43f5e, #be123c);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
-    @keyframes sway {
-        0%, 100% { transform: translateX(0); }
-        50% { transform: translateX(30px); }
+
+    /* Floating Petals Pattern */
+    .bg-petals {
+        background-color: #fff0f5;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f43f5e' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    @keyframes shimmerPink { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+    /* Animations */
+    @keyframes sway { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+    @keyframes float-soft { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+    @keyframes heartbeat-soft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
     
-    .petal {
-        position: fixed;
-        width: 15px;
-        height: 15px;
-        background: var(--sakura-pink);
-        border-radius: 150% 0 150% 0;
-        animation: fall linear infinite, sway ease-in-out infinite;
-        pointer-events: none;
-        z-index: 100;
-        opacity: 0.8;
-    }
-    
-    .animate-fade-up { animation: fadeUp 0.8s ease-out forwards; opacity: 0; }
-    .animate-float { animation: gentleFloat 4s ease-in-out infinite; }
-    .animate-shimmer { background: linear-gradient(90deg, var(--sakura-deep), var(--sakura-pink), var(--sakura-deep)); background-size: 200% 100%; animation: shimmerPink 3s infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    
-    .delay-200 { animation-delay: 0.2s; }
-    .delay-400 { animation-delay: 0.4s; }
-    .delay-600 { animation-delay: 0.6s; }
-    
-    /* Watercolor Effect */
-    .watercolor-bg {
-        background: linear-gradient(135deg, #fff8f3 0%, #ffeef5 50%, #fff8f3 100%);
+    .animate-sway { animation: sway 4s ease-in-out infinite; }
+    .animate-float-soft { animation: float-soft 6s ease-in-out infinite; }
+    .animate-heartbeat { animation: heartbeat-soft 3s ease-in-out infinite; }
+
+    /* Scroll Reveal */
+    .reveal-on-scroll { opacity: 0; transform: translateY(30px) scale(0.95); transition: all 1s cubic-bezier(0.4, 0, 0.2, 1); }
+    .reveal-on-scroll.revealed { opacity: 1; transform: translateY(0) scale(1); }
+
+    /* Glass Effect (Light Pink) */
+    .glass-pink {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 8px 32px 0 rgba(244, 63, 94, 0.1);
     }
     
-    /* Elegant Card */
-    .sakura-card {
-        background: rgba(255,255,255,0.9);
-        backdrop-filter: blur(10px);
-        border: 1px solid var(--sakura-pink);
-        border-radius: 20px;
+    /* Image Frame */
+    .blob-frame {
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        overflow: hidden;
+        transition: border-radius 8s ease-in-out;
+        animation: morph 8s ease-in-out infinite;
+    }
+    @keyframes morph {
+        0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+        100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
     }
 </style>
 
-<!-- Falling Petals -->
-<div id="petals-container"></div>
-
-<div class="max-w-[480px] mx-auto watercolor-bg min-h-screen shadow-2xl relative overflow-hidden">
+<div class="max-w-[480px] mx-auto bg-petals min-h-screen shadow-2xl relative overflow-hidden text-[#881337]">
     
-    {{-- Pro Features: Preload Animation & Demo Watermark --}}
-    @include('components.wedding.preload', ['wedding' => $wedding])
+    {{-- Pro Features --}}
+    @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'heartbeat'])
+    
+    @if($wedding->show_invitation_wrapper)
+        <x-wedding.invitation-wrapper :wedding="$wedding" />
+    @endif
+    
     @include('components.wedding.falling-effects', ['wedding' => $wedding])
     @include('components.wedding.upgrade-banner', ['wedding' => $wedding, 'showUpgradeBanner' => $showUpgradeBanner ?? false])
     
-    {{-- Music Player --}}
-    @if($musicUrl)
-    <div x-data="{ playing: false, audio: null }" x-init="audio = new Audio('{{ $musicUrl }}'); audio.loop = true;" class="fixed top-6 right-6 z-50">
-        <button @click="playing ? audio.pause() : audio.play(); playing = !playing" 
-                class="w-12 h-12 rounded-full bg-white/80 backdrop-blur shadow-lg flex items-center justify-center text-[#ff85a2] border border-[#ffd9e8] animate-float">
-            <template x-if="!playing"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></template>
-            <template x-if="playing"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></template>
-        </button>
-    </div>
-    @endif
+    <x-wedding.music-player :wedding="$wedding" />
 
     {{-- HERO SECTION --}}
-    <section class="min-h-screen flex flex-col justify-center items-center relative px-6 py-20">
-        <!-- Decorative Branch -->
-        <div class="absolute top-0 right-0 w-48 h-48 opacity-30">
-            <svg viewBox="0 0 200 200" fill="none" class="w-full h-full">
-                <path d="M180 20 Q150 80, 100 100 T50 180" stroke="#ff85a2" stroke-width="2" fill="none"/>
-                <circle cx="160" cy="40" r="8" fill="#ffd9e8"/>
-                <circle cx="140" cy="60" r="6" fill="#ffb6c1"/>
-                <circle cx="120" cy="80" r="7" fill="#ffd9e8"/>
-            </svg>
-        </div>
-        
-        <div class="text-center relative z-10 animate-fade-up">
-            <p class="text-xs uppercase tracking-[0.4em] text-[#ff85a2] mb-8 font-light">Save The Date</p>
+    <section class="min-h-screen relative flex flex-col justify-between pt-12 pb-8 overflow-hidden">
+        {{-- Floating Background Blobs --}}
+        <div class="absolute -top-20 -left-20 w-64 h-64 bg-pink-200 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-float-soft"></div>
+        <div class="absolute top-40 -right-20 w-72 h-72 bg-red-100 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-float-soft" style="animation-delay: -2s"></div>
+
+        {{-- Main Image Frame --}}
+        <div class="relative z-10 mx-6 mb-8 mt-4">
+            <div class="blob-frame shadow-xl border-4 border-white aspect-[3/4] relative">
+                <img src="{{ $heroUrl }}" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#f43f5e]/30 to-transparent"></div>
+            </div>
             
-            <div class="mb-8">
-                <h1 class="text-5xl font-zen text-[#5c4033] mb-4 animate-shimmer">{{ $wedding->groom_name }}</h1>
-                <div class="flex items-center justify-center gap-4 my-4">
-                    <div class="w-16 h-[1px] bg-gradient-to-r from-transparent to-[#ff85a2]"></div>
-                    <span class="text-3xl text-[#ff85a2]">❀</span>
-                    <div class="w-16 h-[1px] bg-gradient-to-l from-transparent to-[#ff85a2]"></div>
+            {{-- Floating Badge --}}
+            <div class="absolute -bottom-6 -right-2 glass-pink p-4 rounded-full shadow-lg animate-sway origin-top-left">
+                <div class="flex flex-col items-center">
+                    <span class="text-3xl font-heading text-[#f43f5e]">{{ $wedding->event_date?->format('d') }}</span>
+                    <span class="text-xs uppercase font-bold text-[#881337]">{{ $wedding->event_date?->format('M') }}</span>
                 </div>
-                <h1 class="text-5xl font-zen text-[#5c4033] animate-shimmer delay-200">{{ $wedding->bride_name }}</h1>
-            </div>
-            
-            <div class="sakura-card p-6 inline-block mt-8 animate-fade-up delay-400">
-                <p class="text-2xl font-zen text-[#5c4033]">{{ $wedding->event_date?->format('d . m . Y') }}</p>
-                @if($wedding->event_date_lunar)
-                <p class="text-sm text-[#ff85a2] mt-2 italic">({{ $wedding->event_date_lunar }})</p>
-                @endif
             </div>
         </div>
-        
-        <!-- Hero Image with Sakura Frame -->
-        <div class="relative mt-12 animate-fade-up delay-600">
-            <div class="absolute -inset-4 border-2 border-[#ffd9e8] rounded-[30px] rotate-3"></div>
-            <img src="{{ $heroUrl }}" class="w-72 h-96 object-cover rounded-[25px] shadow-xl" alt="Couple Photo">
-            <div class="absolute -top-6 -left-6 text-4xl animate-float">🌸</div>
-            <div class="absolute -bottom-6 -right-6 text-4xl animate-float delay-200">🌸</div>
+
+        {{-- Text Content --}}
+        <div class="relative z-10 text-center px-6">
+            <p class="text-sm uppercase tracking-[0.3em] text-[#f43f5e] mb-4 font-bold bg-white/50 inline-block px-4 py-1 rounded-full backdrop-blur-sm">Save The Date</p>
+            
+            <h1 class="text-5xl font-heading text-gradient-pink mb-2 drop-shadow-sm leading-tight">
+                {{ $wedding->groom_name }}
+            </h1>
+            <div class="text-3xl font-heading text-[#f43f5e]/60 my-[-5px]">&</div>
+            <h1 class="text-5xl font-heading text-gradient-pink mb-6 drop-shadow-sm leading-tight">
+                {{ $wedding->bride_name }}
+            </h1>
+
+            <p class="text-[#881337] opacity-80 italic font-medium">
+                "Hạnh phúc là khi được cùng người mình yêu đi đến cuối con đường."
+            </p>
+            
+            <div class="mt-8 animate-bounce text-[#f43f5e]">
+                <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </div>
         </div>
     </section>
 
     {{-- COUPLE SECTION --}}
-    <section class="py-20 px-6">
-        <div class="text-center mb-16">
-            <span class="text-3xl">🌸</span>
-            <h2 class="font-zen text-3xl text-[#5c4033] mt-4">Cô Dâu & Chú Rể</h2>
+    <section class="py-20 px-6 relative bg-white/50 backdrop-blur-sm">
+        <div class="text-center mb-16 reveal-on-scroll">
+            <span class="text-4xl text-[#f43f5e] block mb-2">❤</span>
+            <h2 class="font-heading text-4xl text-[#881337] mb-4">Cô Dâu & Chú Rể</h2>
         </div>
-        
-        <div class="space-y-16">
-            <!-- Groom -->
-            <div class="sakura-card p-8 text-center animate-fade-up">
-                <div class="w-40 h-52 mx-auto mb-6 overflow-hidden rounded-[20px] border-2 border-[#ffd9e8]">
-                    <img src="{{ $groomPhoto }}" class="w-full h-full object-cover">
+
+        <div class="space-y-20">
+            {{-- Groom --}}
+            <div class="reveal-on-scroll group">
+                <div class="bg-white p-4 rounded-[2rem] shadow-lg transform group-hover:-rotate-2 transition duration-500 border border-pink-100">
+                    <div class="aspect-square rounded-[1.5rem] overflow-hidden mb-6 relative">
+                        <img src="{{ $groomPhoto }}" class="w-full h-full object-cover">
+                        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-4 py-2 rounded-lg shadow-sm">
+                            <span class="text-xs font-bold uppercase text-[#f43f5e] tracking-widest">Chú Rể</span>
+                        </div>
+                    </div>
+                    <div class="text-center px-4 pb-4">
+                        <h3 class="font-heading text-3xl text-[#881337] mb-2">{{ $wedding->groom_name }}</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            Con ông: <strong class="text-[#f43f5e]">{{ $wedding->groom_father }}</strong><br>
+                            Con bà: <strong class="text-[#f43f5e]">{{ $wedding->groom_mother }}</strong>
+                        </p>
+                    </div>
                 </div>
-                <h3 class="font-zen text-2xl text-[#5c4033] mb-2">{{ $wedding->groom_name }}</h3>
-                <p class="text-xs uppercase tracking-widest text-[#ff85a2] mb-4">Chú Rể</p>
-                <p class="text-sm text-gray-600">Con ông {{ $wedding->groom_father }}<br>và bà {{ $wedding->groom_mother }}</p>
             </div>
-            
-            <!-- Bride -->
-            <div class="sakura-card p-8 text-center animate-fade-up delay-200">
-                <div class="w-40 h-52 mx-auto mb-6 overflow-hidden rounded-[20px] border-2 border-[#ffd9e8]">
-                    <img src="{{ $bridePhoto }}" class="w-full h-full object-cover">
+
+            {{-- Bride --}}
+             <div class="reveal-on-scroll group">
+                <div class="bg-white p-4 rounded-[2rem] shadow-lg transform group-hover:rotate-2 transition duration-500 border border-pink-100">
+                    <div class="aspect-square rounded-[1.5rem] overflow-hidden mb-6 relative">
+                        <img src="{{ $bridePhoto }}" class="w-full h-full object-cover">
+                        <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur px-4 py-2 rounded-lg shadow-sm">
+                            <span class="text-xs font-bold uppercase text-[#f43f5e] tracking-widest">Cô Dâu</span>
+                        </div>
+                    </div>
+                    <div class="text-center px-4 pb-4">
+                        <h3 class="font-heading text-3xl text-[#881337] mb-2">{{ $wedding->bride_name }}</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            Con ông: <strong class="text-[#f43f5e]">{{ $wedding->bride_father }}</strong><br>
+                            Con bà: <strong class="text-[#f43f5e]">{{ $wedding->bride_mother }}</strong>
+                        </p>
+                    </div>
                 </div>
-                <h3 class="font-zen text-2xl text-[#5c4033] mb-2">{{ $wedding->bride_name }}</h3>
-                <p class="text-xs uppercase tracking-widest text-[#ff85a2] mb-4">Cô Dâu</p>
-                <p class="text-sm text-gray-600">Con ông {{ $wedding->bride_father }}<br>và bà {{ $wedding->bride_mother }}</p>
+            </div>
+        </div>
+    </section>
+
+    {{-- EVENTS --}}
+    <section class="py-20 px-4 bg-[#fff1f2] relative overflow-hidden">
+        {{-- Background Decoration --}}
+         <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-50"></div>
+         
+        <h2 class="text-center font-heading text-4xl text-[#f43f5e] mb-12 reveal-on-scroll">Sự Kiện Trọng Đại</h2>
+
+        <div class="space-y-8 max-w-sm mx-auto z-10 relative">
+            {{-- Groom Event --}}
+            <div class="bg-white p-6 rounded-3xl shadow-md reveal-on-scroll border-l-8 border-[#f43f5e]">
+                <h3 class="font-heading text-2xl text-[#881337] mb-4">Tiệc Nhà Trai</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-[#f43f5e]">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase text-gray-400 font-bold">Thời gian</p>
+                            <p class="font-bold text-lg">{{ \Carbon\Carbon::parse($wedding->groom_reception_time)->format('H:i') }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-[#f43f5e] shrink-0">
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase text-gray-400 font-bold">Địa điểm</p>
+                            <p class="font-medium text-gray-700 text-sm">{{ $wedding->groom_reception_venue }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ $wedding->groom_address }}</p>
+                        </div>
+                    </div>
+                </div>
+                 @if($wedding->groom_map_url)
+                <a href="{{ $wedding->groom_map_url }}" target="_blank" class="block w-full text-center mt-6 py-3 bg-[#f43f5e] text-white rounded-xl font-bold text-sm hover:bg-[#be123c] transition shadow-lg shadow-pink-300/50">
+                    Xem Bản Đồ
+                </a>
+                @endif
+            </div>
+
+            {{-- Bride Event --}}
+            <div class="bg-white p-6 rounded-3xl shadow-md reveal-on-scroll border-r-8 border-[#f43f5e]">
+                <h3 class="font-heading text-2xl text-[#881337] mb-4 text-right">Tiệc Nhà Gái</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 flex-row-reverse text-right">
+                        <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-[#f43f5e]">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase text-gray-400 font-bold">Thời gian</p>
+                            <p class="font-bold text-lg">{{ \Carbon\Carbon::parse($wedding->bride_reception_time)->format('H:i') }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 flex-row-reverse text-right">
+                        <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-[#f43f5e] shrink-0">
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase text-gray-400 font-bold">Địa điểm</p>
+                            <p class="font-medium text-gray-700 text-sm">{{ $wedding->bride_reception_venue }}</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ $wedding->bride_address }}</p>
+                        </div>
+                    </div>
+                </div>
+                 @if($wedding->bride_map_url)
+                <a href="{{ $wedding->bride_map_url }}" target="_blank" class="block w-full text-center mt-6 py-3 bg-[#f43f5e] text-white rounded-xl font-bold text-sm hover:bg-[#be123c] transition shadow-lg shadow-pink-300/50">
+                    Xem Bản Đồ
+                </a>
+                @endif
             </div>
         </div>
     </section>
 
     {{-- COUNTDOWN --}}
     @if($wedding->event_date && $wedding->event_date->isFuture())
-    <section class="py-20 px-6 bg-gradient-to-b from-[#ffeef5] to-[#fff8f3]">
-        <div class="text-center">
-            <span class="text-3xl">⏰</span>
-            <h2 class="font-zen text-2xl text-[#5c4033] mt-4 mb-12">Đếm Ngược</h2>
-            
-            <div x-data="countdown('{{ $wedding->event_date->format('Y-m-d') }}')" class="grid grid-cols-4 gap-4">
-                <div class="sakura-card p-4">
-                    <span x-text="days" class="block text-3xl font-zen text-[#ff85a2]">00</span>
-                    <span class="text-xs text-gray-500">Ngày</span>
-                </div>
-                <div class="sakura-card p-4">
-                    <span x-text="hours" class="block text-3xl font-zen text-[#ff85a2]">00</span>
-                    <span class="text-xs text-gray-500">Giờ</span>
-                </div>
-                <div class="sakura-card p-4">
-                    <span x-text="minutes" class="block text-3xl font-zen text-[#ff85a2]">00</span>
-                    <span class="text-xs text-gray-500">Phút</span>
-                </div>
-                <div class="sakura-card p-4">
-                    <span x-text="seconds" class="block text-3xl font-zen text-[#ff85a2]">00</span>
-                    <span class="text-xs text-gray-500">Giây</span>
-                </div>
+    <section class="py-20 px-6 text-center bg-white">
+        <h2 class="font-heading text-3xl text-[#f43f5e] mb-8">Cùng Đếm Ngược Nhé!</h2>
+        <div x-data="countdown('{{ $wedding->event_date->format('Y-m-d') }}')" class="flex justify-center flex-wrap gap-4">
+            <div class="bg-[#fff1f2] w-20 h-24 flex flex-col justify-center items-center rounded-2xl shadow-sm border border-pink-100 animate-heartbeat">
+                <div class="text-3xl font-heading font-bold text-[#f43f5e] mb-1" x-text="days">00</div>
+                <div class="text-[10px] uppercase text-gray-500 font-bold">Ngày</div>
+            </div>
+            <div class="bg-[#fff1f2] w-20 h-24 flex flex-col justify-center items-center rounded-2xl shadow-sm border border-pink-100">
+                <div class="text-3xl font-heading font-bold text-[#f43f5e] mb-1" x-text="hours">00</div>
+                <div class="text-[10px] uppercase text-gray-500 font-bold">Giờ</div>
+            </div>
+            <div class="bg-[#fff1f2] w-20 h-24 flex flex-col justify-center items-center rounded-2xl shadow-sm border border-pink-100">
+                <div class="text-3xl font-heading font-bold text-[#f43f5e] mb-1" x-text="minutes">00</div>
+                <div class="text-[10px] uppercase text-gray-500 font-bold">Phút</div>
+            </div>
+            <div class="bg-[#fff1f2] w-20 h-24 flex flex-col justify-center items-center rounded-2xl shadow-sm border border-pink-100">
+                <div class="text-3xl font-heading font-bold text-[#f43f5e] mb-1" x-text="seconds">00</div>
+                <div class="text-[10px] uppercase text-gray-500 font-bold">Giây</div>
             </div>
         </div>
     </section>
     @endif
 
-    {{-- EVENTS --}}
-    <section class="py-20 px-6">
-        <div class="text-center mb-12">
-            <span class="text-3xl">💒</span>
-            <h2 class="font-zen text-2xl text-[#5c4033] mt-4">Sự Kiện Cưới</h2>
-        </div>
-        
-        <div class="space-y-8">
-            <!-- Nhà Gái -->
-            <div class="sakura-card p-8">
-                <h3 class="font-zen text-xl text-[#ff85a2] mb-6 text-center border-b border-[#ffd9e8] pb-4">Nhà Gái</h3>
-                <div class="text-center space-y-4">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">Lễ Vu Quy</p>
-                        <p class="text-2xl font-zen text-[#5c4033]">{{ $wedding->bride_ceremony_time ? \Carbon\Carbon::parse($wedding->bride_ceremony_time)->format('H:i') : '--' }}</p>
-                        <p class="text-sm text-gray-600 mt-2">{{ $wedding->bride_address }}</p>
-                    </div>
-                    @if($wedding->bride_map_url)
-                    <a href="{{ $wedding->bride_map_url }}" target="_blank" class="inline-block px-6 py-2 bg-[#ff85a2] text-white rounded-full text-sm hover:bg-[#ff6b8a] transition">📍 Xem bản đồ</a>
-                    @endif
-                </div>
-            </div>
-            
-            <!-- Nhà Trai -->
-            <div class="sakura-card p-8">
-                <h3 class="font-zen text-xl text-[#ff85a2] mb-6 text-center border-b border-[#ffd9e8] pb-4">Nhà Trai</h3>
-                <div class="text-center space-y-4">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">Lễ Thành Hôn</p>
-                        <p class="text-2xl font-zen text-[#5c4033]">{{ $wedding->groom_ceremony_time ? \Carbon\Carbon::parse($wedding->groom_ceremony_time)->format('H:i') : '--' }}</p>
-                        <p class="text-sm text-gray-600 mt-2">{{ $wedding->groom_address }}</p>
-                    </div>
-                    @if($wedding->groom_map_url)
-                    <a href="{{ $wedding->groom_map_url }}" target="_blank" class="inline-block px-6 py-2 bg-[#ff85a2] text-white rounded-full text-sm hover:bg-[#ff6b8a] transition">📍 Xem bản đồ</a>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </section>
-
     {{-- GALLERY --}}
-    <section class="py-20 px-4 bg-gradient-to-b from-[#fff8f3] to-[#ffeef5]">
-        <div class="text-center mb-12">
-            <span class="text-3xl">📸</span>
-            <h2 class="font-zen text-2xl text-[#5c4033] mt-4">Khoảnh Khắc Đẹp</h2>
-        </div>
-        
+    <section class="py-16 px-4 bg-[#fff1f2]">
+        <h2 class="text-center font-heading text-4xl text-[#f43f5e] mb-10">Khoảnh Khắc Ngọt Ngào</h2>
         <div class="columns-2 gap-3 space-y-3">
-            @if($wedding->getMedia('gallery')->isNotEmpty())
-                @foreach($wedding->getMedia('gallery') as $media)
-                <div class="break-inside-avoid sakura-card p-2">
-                    <img src="{{ $media->getUrl() }}" class="w-full rounded-lg">
+            @if($wedding->gallery_images->isNotEmpty())
+                @foreach($wedding->gallery_images as $media)
+                <div class="break-inside-avoid relative rounded-xl overflow-hidden shadow-md group">
+                    <img src="{{ $media->getUrl() }}" class="w-full transition duration-700 group-hover:scale-105">
+                     <div class="absolute inset-0 bg-[#f43f5e]/20 opacity-0 group-hover:opacity-100 transition duration-300"></div>
                 </div>
                 @endforeach
             @else
-                @foreach(['https://images.unsplash.com/photo-1519741497674-611481863552?w=400', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400', 'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=400', 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=400'] as $placeholder)
-                <div class="break-inside-avoid sakura-card p-2">
-                    <img src="{{ $placeholder }}" class="w-full rounded-lg">
+                @foreach(['https://images.unsplash.com/photo-1519741497674-611481863552?w=600', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600', 'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=600', 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600'] as $placeholder)
+               <div class="break-inside-avoid relative rounded-xl overflow-hidden shadow-md group">
+                    <img src="{{ $placeholder }}" class="w-full transition duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-[#f43f5e]/20 opacity-0 group-hover:opacity-100 transition duration-300"></div>
                 </div>
                 @endforeach
             @endif
         </div>
     </section>
 
-    {{-- RSVP & QR --}}
-    <section class="py-20 px-6" x-data="{ showQr: null }">
-        <div class="text-center mb-12">
-            <span class="text-3xl">💝</span>
-            <h2 class="font-zen text-2xl text-[#5c4033] mt-4">Hộp Mừng Cưới</h2>
-        </div>
+    {{-- GIFT BOX & RSVP & GUESTBOOK --}}
+    <div class="py-20 bg-white space-y-16">
         
-        <div class="grid grid-cols-2 gap-4">
-            <button @click="showQr = 'groom'" class="sakura-card p-6 text-center hover:border-[#ff85a2] transition">
-                <span class="text-2xl mb-2 block">🤵</span>
-                <span class="text-sm text-[#5c4033]">Nhà Trai</span>
-            </button>
-            <button @click="showQr = 'bride'" class="sakura-card p-6 text-center hover:border-[#ff85a2] transition">
-                <span class="text-2xl mb-2 block">👰</span>
-                <span class="text-sm text-[#5c4033]">Nhà Gái</span>
-            </button>
-        </div>
-        
-        <!-- QR Modal -->
-        <div x-show="showQr" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80" style="display: none;">
-            <div class="sakura-card p-8 w-full max-w-sm text-center" @click.outside="showQr = null">
-                <button @click="showQr = null" class="absolute top-4 right-4 text-gray-400">✕</button>
-                <h3 class="font-zen text-xl text-[#5c4033] mb-6" x-text="showQr === 'groom' ? 'Nhà Trai' : 'Nhà Gái'"></h3>
-                <template x-if="showQr === 'groom'">
-                    <div>
-                        @if($wedding->getFirstMediaUrl('groom_qr'))
-                        <img src="{{ $wedding->getFirstMediaUrl('groom_qr') }}" class="w-48 h-48 mx-auto mb-4 rounded-lg">
-                        @endif
-                        <p class="text-sm text-gray-600">{{ $wedding->groom_qr_info }}</p>
+        {{-- Gift Box --}}
+        <div class="px-6">
+            <x-wedding.gift-box :wedding="$wedding">
+                <div class="text-center py-8 px-4 bg-[#fff1f2] rounded-2xl border border-pink-200">
+                    <h2 class="font-heading text-3xl text-[#f43f5e] mb-6">Hộp Mừng Cưới</h2>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button @click="showQr = 'groom'" class="bg-white text-[#f43f5e] font-bold px-8 py-3 rounded-full text-xs uppercase tracking-widest hover:bg-pink-50 transition shadow-md border border-pink-100">Nhà Trai</button>
+                        <button @click="showQr = 'bride'" class="bg-white text-[#f43f5e] font-bold px-8 py-3 rounded-full text-xs uppercase tracking-widest hover:bg-pink-50 transition shadow-md border border-pink-100">Nhà Gái</button>
                     </div>
-                </template>
-                <template x-if="showQr === 'bride'">
-                    <div>
-                        @if($wedding->getFirstMediaUrl('bride_qr'))
-                        <img src="{{ $wedding->getFirstMediaUrl('bride_qr') }}" class="w-48 h-48 mx-auto mb-4 rounded-lg">
-                        @endif
-                        <p class="text-sm text-gray-600">{{ $wedding->bride_qr_info }}</p>
-                    </div>
-                </template>
-            </div>
+                </div>
+            </x-wedding.gift-box>
         </div>
-    </section>
+
+        <div class="px-4">
+             @include('components.wedding.rsvp-form', ['wedding' => $wedding])
+        </div>
+
+        <div class="px-4">
+             @include('components.wedding.guestbook', ['wedding' => $wedding])
+        </div>
+    </div>
 
     {{-- FOOTER --}}
-    <footer class="py-16 text-center bg-gradient-to-b from-[#ffeef5] to-[#ffd9e8]">
-        <div class="text-4xl mb-4">🌸</div>
-        <h2 class="font-zen text-3xl text-[#5c4033] mb-2">Thank You</h2>
-        <p class="text-sm text-[#ff85a2]">{{ $wedding->groom_name }} & {{ $wedding->bride_name }}</p>
+    <footer class="py-16 bg-[#fff1f2] text-center border-t border-pink-200">
+        <h2 class="font-heading text-4xl text-[#f43f5e] mb-4">{{ $wedding->groom_name }} & {{ $wedding->bride_name }}</h2>
+        <div class="animate-heartbeat text-2xl">❤</div>
     </footer>
 </div>
 
-{{-- RSVP & Guestbook Components --}}
-@include('components.wedding.rsvp-form', ['wedding' => $wedding])
-@include('components.wedding.guestbook', ['wedding' => $wedding])
-
 <script>
-// Create falling petals
-function createPetals() {
-    const container = document.getElementById('petals-container');
-    for (let i = 0; i < 15; i++) {
-        const petal = document.createElement('div');
-        petal.className = 'petal';
-        petal.style.left = Math.random() * 100 + 'vw';
-        petal.style.animationDuration = (Math.random() * 5 + 8) + 's, ' + (Math.random() * 2 + 2) + 's';
-        petal.style.animationDelay = Math.random() * 5 + 's';
-        container.appendChild(petal);
-    }
-}
-createPetals();
-
-function countdown(targetDate) {
-    return {
-        days: '00', hours: '00', minutes: '00', seconds: '00',
-        init() { this.updateCountdown(); setInterval(() => this.updateCountdown(), 1000); },
-        updateCountdown() {
-            const diff = new Date(targetDate + 'T00:00:00').getTime() - new Date().getTime();
-            if (diff > 0) {
-                this.days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                this.hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                this.minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                this.seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
-            }
-        }
-    }
-}
+    document.addEventListener('DOMContentLoaded', () => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+    });
 </script>
+
+@push('scripts')
+    <x-wedding.countdown-script />
+@endpush
 @endsection

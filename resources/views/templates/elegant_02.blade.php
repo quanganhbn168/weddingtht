@@ -2,10 +2,9 @@
 {{-- Template Name: Royal Fine Art (Sang Trọng Cổ Điển) --}}
 
 @section('title', 'The Wedding of ' . $wedding->groom_name . ' & ' . $wedding->bride_name)
+@section('og_image', $shareUrl)
 
 @section('content')
-
-@section('og_image', $shareUrl)
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&display=swap');
@@ -14,7 +13,19 @@
         --paper-bg: #f9f7f2;
         --ink-color: #4a403a;
         --gold-accent: #c0a062;
-    }
+
+        /* Theming for Shared Components */
+        --color-primary: #c0a062;
+        --color-primary-dark: #8c7355;
+        --color-primary-light: #f9f7f2;
+        --color-bg-secondary: #f9f7f2;
+        --color-text-body: #4a403a;
+        --bg-paper: #ffffff;
+        --bg-input: #fdfdfc;
+        --font-heading: 'Cormorant Garamond', serif;
+        --font-body: 'Cormorant Garamond', serif; /* Elegant uses serif everywhere */
+        --radius-box: 0px; /* Sharp corners for elegant feel */
+        --shadow-box: 0 4px 6px -1px rgba(0, 0, 0, 0.05);    }
 
     body { font-family: 'Cormorant Garamond', serif; background-color: var(--paper-bg); color: var(--ink-color); }
     h1, h2, h3 { font-weight: 400; }
@@ -83,27 +94,27 @@
 
 </style>
 
-<div class="max-w-[480px] mx-auto bg-texture min-h-screen shadow-2xl relative border-x-[12px] border-[#f2ece4] text-[#4a403a]">
+<div class="max-w-[480px] mx-auto bg-white min-h-screen shadow-2xl relative text-gray-800">
     
     {{-- Pro Features: Preload Animation & Falling Effects --}}
-    @include('components.wedding.preload', ['wedding' => $wedding])
+    @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'traditional'])
+    
+    {{-- Invitation Wrapper (Envelope) --}}
+    @if($wedding->show_invitation_wrapper)
+        <x-wedding.invitation-wrapper :wedding="$wedding" />
+    @endif
+    
     @include('components.wedding.falling-effects', ['wedding' => $wedding])
     @include('components.wedding.upgrade-banner', ['wedding' => $wedding, 'showUpgradeBanner' => $showUpgradeBanner ?? false])
     
-    @if($musicUrl)
-    <div x-data="{ playing: false, audio: null }" x-init="audio = new Audio('{{ $musicUrl }}'); audio.loop = true;" class="fixed top-6 right-6 z-50">
-        <button @click="playing ? audio.pause() : audio.play(); playing = !playing" class="w-10 h-10 rounded-full border border-[#c0a062] bg-[#f9f7f2] text-[#c0a062] flex items-center justify-center hover:bg-[#c0a062] hover:text-white transition duration-500">
-            <template x-if="!playing"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></template>
-            <template x-if="playing"><svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></template>
-        </button>
-    </div>
-    @endif
+    {{-- Music Player --}}
+    <x-wedding.music-player :wedding="$wedding" />
 
-    {{-- HERO --}}
-    <section class="min-h-screen flex flex-col justify-center items-center p-8 text-center relative">
-        <div class="absolute inset-0 top-0 h-2/3 z-0">
-             <img src="{{ $heroUrl }}" class="w-full h-full object-cover opacity-100 mask-image-gradient-b">
-             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f9f7f2]"></div>
+    {{-- HERO SECTION --}}
+    <section class="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden bg-[#f0fdf4]">
+        <div class="absolute inset-0 z-0 opacity-50">
+             <img src="{{ $heroUrl }}" class="w-full h-full object-cover">
+             <div class="absolute inset-0 bg-white/60"></div>
         </div>
 
         <div class="relative z-10 w-full mt-auto bg-white/80 backdrop-blur-[2px] p-8 shadow-sm royal-border">
@@ -121,7 +132,7 @@
     </section>
 
     {{-- QUOTE --}}
-    <section class="py-20 px-8 text-center">
+    <section class="py-12 px-8 text-center">
         <span class="text-6xl text-[#c0a062] opacity-30 block font-serif">“</span>
         <p class="text-2xl font-script leading-relaxed text-[#5d544f] -mt-4">
              Yêu nhau không phải là nhìn nhau, mà là cùng nhau nhìn về một hướng.
@@ -131,7 +142,7 @@
 
     {{-- COUPLE --}}
     <section class="py-12 px-6">
-        <div class="space-y-16">
+        <div class="space-y-12">
             {{-- Groom --}}
             <div class="text-center">
                 <div class="w-48 h-64 mx-auto mb-6 p-2 border border-[#c0a062] bg-white shadow-lg rotate-1">
@@ -158,7 +169,7 @@
 
     {{-- COUNTDOWN --}}
     @if($wedding->event_date && $wedding->event_date->isFuture())
-    <section class="py-20 px-6 bg-[#f2ece4] text-center border-y border-[#e6dfd5]">
+    <section class="py-12 px-6 bg-[#f2ece4] text-center border-y border-[#e6dfd5]">
         <h2 class="text-3xl mb-8 italic">Save the Date</h2>
         <div x-data="countdown('{{ $wedding->event_date->format('Y-m-d') }}')" class="flex justify-center gap-8 font-serif">
             <div>
@@ -178,12 +189,12 @@
     @endif
 
     {{-- EVENTS --}}
-    <section class="py-24 px-6">
+    <section class="py-16 px-6">
         <h2 class="text-center text-4xl mb-12 font-script text-[#c0a062]">Trân trọng kính mời</h2>
 
         <div class="space-y-12">
             {{-- Card Nhà Gái --}}
-            <div class="bg-white p-8 shadow-lg border-t-4 border-[#c0a062] relative">
+            <div class="bg-white p-6 shadow-lg border-t-4 border-[#c0a062] relative">
                 <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4">
                      <span class="text-xs font-bold uppercase tracking-[0.2em] text-[#c0a062]">Nhà Gái</span>
                 </div>
@@ -211,7 +222,7 @@
             </div>
 
             {{-- Card Nhà Trai --}}
-            <div class="bg-white p-8 shadow-lg border-t-4 border-[#c0a062] relative">
+            <div class="bg-white p-6 shadow-lg border-t-4 border-[#c0a062] relative">
                 <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4">
                      <span class="text-xs font-bold uppercase tracking-[0.2em] text-[#c0a062]">Nhà Trai</span>
                 </div>
@@ -240,8 +251,13 @@
         </div>
     </section>
 
-    {{-- RSVP & WISHES --}}
-    <section class="py-24 px-6 bg-[#eae4dc]" x-data="{ showQr: null, showWishes: false }">
+    {{-- RSVP & WISHES (Clean standardized components) --}}
+    @include('components.wedding.rsvp-form', ['wedding' => $wedding])
+    
+    @include('components.wedding.guestbook', ['wedding' => $wedding])
+
+    {{-- GIFT BOX (QR Codes) --}}
+    <x-wedding.gift-box :wedding="$wedding" class="py-16 px-6 bg-[#eae4dc]">
         <div class="bg-[#f9f7f2] p-8 border border-[#d8d0c5] text-center shadow-2xl relative">
             <div class="absolute top-4 left-4 border-t border-l border-[#c0a062] w-8 h-8"></div>
             <div class="absolute top-4 right-4 border-t border-r border-[#c0a062] w-8 h-8"></div>
@@ -254,53 +270,15 @@
                 <button @click="showQr = 'groom'" class="bg-white border border-[#eae4dc] py-3 px-6 text-sm uppercase tracking-widest hover:bg-[#c0a062] hover:text-white transition">Nhà Trai</button>
                 <button @click="showQr = 'bride'" class="bg-white border border-[#eae4dc] py-3 px-6 text-sm uppercase tracking-widest hover:bg-[#c0a062] hover:text-white transition">Nhà Gái</button>
             </div>
-
-            <button @click="showWishes = true" class="w-full bg-[#4a403a] text-white py-4 uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">Gửi Lời Chúc</button>
         </div>
-
-        {{-- Modals clean --}}
-        <div x-show="showWishes" class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-[#4a403a]/90" style="display: none;">
-             <div class="bg-[#f9f7f2] w-full max-w-md p-8 shadow-2xl relative border-4 border-double border-[#d8d0c5]" @click.outside="showWishes = false">
-                 <button @click="showWishes = false" class="absolute top-2 right-4 text-2xl text-[#c0a062]">&times;</button>
-                <h3 class="text-center text-3xl font-script mb-8 text-[#4a403a]">Lời Chúc Phúc</h3>
-                <form class="space-y-6">
-                    <input type="text" placeholder="Tên của bạn" class="w-full bg-transparent border-b border-[#c0a062] py-3 text-lg outline-none placeholder:text-[#d8d0c5]">
-                    <textarea rows="4" placeholder="Lời nhắn gửi..." class="w-full bg-transparent border-b border-[#c0a062] py-3 text-lg outline-none placeholder:text-[#d8d0c5]"></textarea>
-                    <button type="submit" class="w-full bg-[#c0a062] text-white py-4 text-xs uppercase tracking-widest hover:bg-[#a68b55]">Gửi Lời Chúc</button>
-                </form>
-             </div>
-        </div>
-
-        <div x-show="showQr" class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-[#4a403a]/90" style="display: none;">
-            <div class="bg-[#f9f7f2] w-full max-w-sm p-8 text-center relative border-4 border-double border-[#d8d0c5]" @click.outside="showQr = null">
-                 <button @click="showQr = null" class="absolute top-2 right-4 text-2xl text-[#c0a062]">&times;</button>
-                <h3 class="text-xl font-bold uppercase tracking-widest mb-8 text-[#c0a062]" x-text="showQr === 'groom' ? 'Nhà Trai' : 'Nhà Gái'"></h3>
-                <template x-if="showQr === 'groom'">
-                    <div>
-                         @if($wedding->getFirstMediaUrl('groom_qr'))
-                            <img src="{{ $wedding->getFirstMediaUrl('groom_qr') }}" class="w-48 h-48 mx-auto mb-6 p-2 bg-white border border-[#eae4dc]">
-                        @endif
-                        <p class="font-serif italic text-gray-500">{{ $wedding->groom_qr_info }}</p>
-                    </div>
-                </template>
-                <template x-if="showQr === 'bride'">
-                    <div>
-                         @if($wedding->getFirstMediaUrl('bride_qr'))
-                            <img src="{{ $wedding->getFirstMediaUrl('bride_qr') }}" class="w-48 h-48 mx-auto mb-6 p-2 bg-white border border-[#eae4dc]">
-                        @endif
-                         <p class="font-serif italic text-gray-500">{{ $wedding->bride_qr_info }}</p>
-                    </div>
-                </template>
-            </div>
-        </div>
-    </section>
+    </x-wedding.gift-box>
 
     {{-- GALLERY --}}
-    <section class="py-24 px-4 bg-white">
+    <section class="py-16 px-4 bg-white">
         <h2 class="text-center text-4xl font-script mb-12 text-[#c0a062]">Những Khoảnh Khắc Đẹp</h2>
         <div class="columns-2 gap-4 space-y-4">
-            @if($wedding->getMedia('gallery')->isNotEmpty())
-                @foreach($wedding->getMedia('gallery') as $media)
+            @if($wedding->gallery_images->isNotEmpty())
+                @foreach($wedding->gallery_images as $media)
                 <div class="break-inside-avoid p-2 bg-white border border-[#eae4dc] shadow-md">
                     <img src="{{ $media->getUrl() }}" class="w-full h-auto">
                 </div>
@@ -322,21 +300,7 @@
     </footer>
 </div>
 
-<script>
-    function countdown(targetDate) {
-        return {
-            days: '00', hours: '00', minutes: '00', seconds: '00',
-            init() { this.updateCountdown(); setInterval(() => this.updateCountdown(), 1000); },
-            updateCountdown() {
-                const diff = new Date(targetDate + 'T00:00:00').getTime() - new Date().getTime();
-                if (diff > 0) {
-                    this.days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                    this.hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                    this.minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                    this.seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
-                }
-            }
-        }
-    }
-</script>
+@push('scripts')
+    <x-wedding.countdown-script />
+@endpush
 @endsection

@@ -21,6 +21,8 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
+        <!-- AOS Animation Library -->
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         @stack('styles')
     </head>
     <body class="font-sans antialiased">
@@ -47,6 +49,16 @@
                 </main>
             </div>
         @endif
+        
+        <!-- AOS Init -->
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script>
+            AOS.init({
+                duration: 1000,
+                once: true,
+                offset: 50,
+            });
+        </script>
         
         @stack('scripts')
     </body>

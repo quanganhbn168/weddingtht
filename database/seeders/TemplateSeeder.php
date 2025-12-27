@@ -44,8 +44,20 @@ class TemplateSeeder extends Seeder
                 'is_active' => true,
             ],
             [
+                'name' => 'Cherry Blossom (Mùa Valentine)',
+                'view_path' => 'templates.cherry_blossom',
+                'type' => 'wedding',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Galaxy Dreams (Ngân Hà Lung Linh)',
+                'view_path' => 'templates.galaxy_dreams',
+                'type' => 'wedding',
+                'is_active' => true,
+            ],
+            [
                 'name' => 'Simple Card (Danh Thiếp Đơn Giản)',
-                'view_path' => 'templates.business.simple_card',
+                'view_path' => 'templates.business.simple_modern',
                 'type' => 'business',
                 'is_active' => true,
             ],

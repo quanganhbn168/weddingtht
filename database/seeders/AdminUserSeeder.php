@@ -19,6 +19,7 @@ class AdminUserSeeder extends Seeder
                 'name' => 'Quang Anh Admin',
                 'email' => 'quanganhadmin@thtmedia.com.vn',
                 'password' => Hash::make('admin123@'),
+                'role' => 'admin',
             ]
         );
     }

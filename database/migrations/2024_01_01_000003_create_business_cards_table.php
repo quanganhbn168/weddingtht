@@ -37,6 +37,7 @@ return new class extends Migration
             
             // Settings
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_demo')->default(false);
             $table->string('password')->nullable();
             
             $table->timestamps();

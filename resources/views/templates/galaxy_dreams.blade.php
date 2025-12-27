@@ -7,357 +7,348 @@
 @section('content')
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Space+Grotesk:wght@300;400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:ital,wght@0,300;0,400;0,600;1,400&display=swap');
     
     :root {
-        --galaxy-dark: #0c0c1e;
-        --galaxy-purple: #4c1d95;
-        --galaxy-pink: #ec4899;
-        --galaxy-gold: #fbbf24;
-        --galaxy-cyan: #22d3ee;
+        /* Standardized Theme Variables */
+        --color-primary: #ec4899; /* Pink 500 */
+        --color-primary-dark: #be185d;
+        --color-primary-light: #fbcfe8;
+        --color-bg-secondary: #0f0f23;
+        --color-text-body: #e0e7ff; /* Indigo 100 */
+        --bg-paper: #0f0f23; 
+        --bg-input: #ffffff;
+        
+        --font-heading: 'Orbitron', sans-serif;
+        --font-body: 'Exo 2', sans-serif;
+        --radius-box: 16px; 
+        --shadow-box: 0 0 30px rgba(0, 243, 255, 0.2);
+
+        /* Custom Theme Colors */
+        --neon-cyan: #00f3ff;
+        --neon-pink: #ec4899;
+        --deep-space: #050510;
+        --space-blue: #0c0c1e;
     }
 
-    body { font-family: 'Space Grotesk', sans-serif; background: var(--galaxy-dark); color: white; }
-    .font-orbitron { font-family: 'Orbitron', monospace; }
-    
-    /* Starfield Background */
-    .starfield {
-        background: linear-gradient(to bottom, #0c0c1e 0%, #1a1a3e 50%, #0c0c1e 100%);
-        position: relative;
+    body { 
+        font-family: var(--font-body); 
+        background-color: var(--deep-space); 
+        color: var(--color-text-body); 
+        overflow-x: hidden; 
+        background: radial-gradient(circle at 50% 0%, #1a1a40 0%, #050510 60%);
     }
-    .starfield::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background-image: 
-            radial-gradient(2px 2px at 20px 30px, white, transparent),
-            radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-            radial-gradient(1px 1px at 90px 40px, white, transparent),
-            radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), transparent),
-            radial-gradient(1px 1px at 230px 80px, white, transparent),
-            radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.7), transparent),
-            radial-gradient(1px 1px at 350px 60px, white, transparent),
-            radial-gradient(2px 2px at 420px 200px, rgba(255,255,255,0.8), transparent);
-        background-size: 480px 300px;
-        animation: twinkle 4s ease-in-out infinite alternate;
+
+    h1, h2, h3, h4, .font-heading { font-family: var(--font-heading); letter-spacing: 1px; }
+
+    /* Neon Glow Text */
+    .text-glow-cyan { text-shadow: 0 0 10px rgba(0, 243, 255, 0.7), 0 0 20px rgba(0, 243, 255, 0.4); }
+    .text-glow-pink { text-shadow: 0 0 10px rgba(236, 72, 153, 0.7), 0 0 20px rgba(236, 72, 153, 0.4); }
+    
+    /* Neon Borders */
+    .border-glow-cyan { box-shadow: 0 0 15px rgba(0, 243, 255, 0.3); border: 1px solid rgba(0, 243, 255, 0.5); }
+    .border-glow-pink { box-shadow: 0 0 15px rgba(236, 72, 153, 0.3); border: 1px solid rgba(236, 72, 153, 0.5); }
+
+    /* Glass Neon Card */
+    .glass-neon {
+        background: rgba(15, 15, 35, 0.7);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(0, 243, 255, 0.1);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 243, 255, 0.05);
     }
+
+    /* Animations */
+    @keyframes float-space { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-20px) rotate(2deg); } }
+    @keyframes pulse-neon { 0%, 100% { opacity: 0.8; filter: brightness(100%); } 50% { opacity: 1; filter: brightness(130%); } }
     
-    @keyframes twinkle { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-    @keyframes glow { 0%, 100% { filter: drop-shadow(0 0 5px var(--galaxy-pink)); } 50% { filter: drop-shadow(0 0 20px var(--galaxy-cyan)); } }
-    @keyframes aurora { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes shootingStar { 0% { transform: translateX(-100px) translateY(-100px); opacity: 1; } 100% { transform: translateX(100vw) translateY(100vh); opacity: 0; } }
-    
-    .animate-float { animation: float 4s ease-in-out infinite; }
-    .animate-glow { animation: glow 3s ease-in-out infinite; }
-    .animate-fade-up { animation: fadeUp 0.8s ease-out forwards; opacity: 0; }
-    
-    .delay-200 { animation-delay: 0.2s; }
-    .delay-400 { animation-delay: 0.4s; }
-    .delay-600 { animation-delay: 0.6s; }
-    
-    /* Aurora Effect */
-    .aurora-bg {
-        background: linear-gradient(-45deg, #4c1d95, #ec4899, #22d3ee, #4c1d95);
-        background-size: 400% 400%;
-        animation: aurora 10s ease infinite;
-    }
-    
-    /* Galaxy Card */
-    .galaxy-card {
-        background: linear-gradient(135deg, rgba(76,29,149,0.3), rgba(12,12,30,0.95));
-        border: 1px solid rgba(236,72,153,0.3);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-    }
-    
-    /* Neon Text */
-    .neon-text {
-        text-shadow: 0 0 10px var(--galaxy-pink), 0 0 20px var(--galaxy-purple);
-    }
-    .neon-gold {
-        text-shadow: 0 0 10px var(--galaxy-gold), 0 0 20px var(--galaxy-gold);
-    }
-    
-    /* Shooting Star */
-    .shooting-star {
-        position: absolute;
-        width: 100px;
-        height: 2px;
-        background: linear-gradient(to right, transparent, white, transparent);
-        animation: shootingStar 3s linear infinite;
-    }
+    .animate-float-space { animation: float-space 8s ease-in-out infinite; }
+    .animate-pulse-neon { animation: pulse-neon 2s infinite; }
+
+    /* Stars */
+    .star-bg { position: absolute; background: white; border-radius: 50%; animation: twinkle linear infinite; }
+    @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 4px white; } }
+
+    /* Scroll Reveal */
+    .reveal-on-scroll { opacity: 0; transform: translateY(30px) scale(0.95); filter: blur(10px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+    .reveal-on-scroll.revealed { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 </style>
 
-<div class="max-w-[480px] mx-auto starfield min-h-screen shadow-2xl relative overflow-hidden">
+<div class="max-w-[480px] mx-auto bg-[#0c0c1e] min-h-screen shadow-2xl relative overflow-hidden text-[#e0e7ff]">
+
+    {{-- Background Stars --}}
+    <div id="stars-container" class="absolute inset-0 pointer-events-none z-0 h-full overflow-hidden"></div>
     
-    {{-- Pro Features: Preload Animation & Demo Watermark --}}
-    @include('components.wedding.preload', ['wedding' => $wedding])
+    {{-- Pro Features --}}
+    @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'heartbeat'])
+    
+    @if($wedding->show_invitation_wrapper)
+        <x-wedding.invitation-wrapper :wedding="$wedding" />
+    @endif
+    
     @include('components.wedding.falling-effects', ['wedding' => $wedding])
     @include('components.wedding.upgrade-banner', ['wedding' => $wedding, 'showUpgradeBanner' => $showUpgradeBanner ?? false])
     
-    <!-- Shooting Stars -->
-    <div class="shooting-star" style="top: 20%; left: 0; animation-delay: 0s;"></div>
-    <div class="shooting-star" style="top: 40%; left: 0; animation-delay: 2s;"></div>
-    <div class="shooting-star" style="top: 70%; left: 0; animation-delay: 4s;"></div>
-    
-    {{-- Music Player --}}
-    @if($musicUrl)
-    <div x-data="{ playing: false, audio: null }" x-init="audio = new Audio('{{ $musicUrl }}'); audio.loop = true;" class="fixed top-6 right-6 z-50">
-        <button @click="playing ? audio.pause() : audio.play(); playing = !playing" 
-                class="w-12 h-12 rounded-full bg-[#4c1d95]/80 backdrop-blur border border-[#ec4899] flex items-center justify-center text-[#22d3ee] animate-glow">
-            <template x-if="!playing"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></template>
-            <template x-if="playing"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></template>
-        </button>
-    </div>
-    @endif
+    <x-wedding.music-player :wedding="$wedding" />
 
-    {{-- HERO - GALAXY OPENING --}}
-    <section class="min-h-screen flex flex-col justify-center items-center relative px-6 py-20">
-        <!-- Constellation Lines -->
-        <svg class="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 480 800">
-            <path d="M100 200 L200 150 L250 250 L150 300 Z" stroke="#ec4899" fill="none" stroke-dasharray="5,5"/>
-            <path d="M300 100 L380 180 L350 280" stroke="#22d3ee" fill="none" stroke-dasharray="5,5"/>
-            <circle cx="100" cy="200" r="4" fill="#fbbf24"/>
-            <circle cx="200" cy="150" r="3" fill="#ec4899"/>
-            <circle cx="250" cy="250" r="5" fill="#22d3ee"/>
-            <circle cx="300" cy="100" r="4" fill="#fbbf24"/>
-            <circle cx="380" cy="180" r="3" fill="#ec4899"/>
-        </svg>
-        
-        <div class="text-center relative z-10">
-            <div class="text-6xl mb-6 animate-float">🌙</div>
-            
-            <p class="font-orbitron text-[#22d3ee] text-xs tracking-[0.4em] mb-6 animate-fade-up">WRITTEN IN THE STARS</p>
-            
-            <div class="space-y-4 animate-fade-up delay-200">
-                <h1 class="font-orbitron text-4xl md:text-5xl text-white neon-text">{{ $wedding->groom_name }}</h1>
-                <div class="flex items-center justify-center gap-4">
-                    <span class="text-2xl animate-glow">✦</span>
-                    <span class="font-orbitron text-[#fbbf24] text-xl">&</span>
-                    <span class="text-2xl animate-glow">✦</span>
-                </div>
-                <h1 class="font-orbitron text-4xl md:text-5xl text-white neon-text">{{ $wedding->bride_name }}</h1>
-            </div>
-            
-            <div class="mt-12 galaxy-card p-6 inline-block animate-fade-up delay-400">
-                <p class="font-orbitron text-2xl text-[#fbbf24] neon-gold">{{ $wedding->event_date?->format('d . m . Y') }}</p>
-                @if($wedding->event_date_lunar)
-                <p class="text-sm text-[#22d3ee] mt-2">({{ $wedding->event_date_lunar }})</p>
-                @endif
-            </div>
+    {{-- HERO SECTION --}}
+    <section class="min-h-screen relative flex flex-col justify-center items-center overflow-hidden py-12">
+        {{-- Background Gradients --}}
+        <div class="absolute inset-0 z-0">
+             <div class="absolute top-[10%] left-[20%] w-80 h-80 bg-purple-600/30 rounded-full blur-[100px] animate-pulse-neon"></div>
+             <div class="absolute bottom-[20%] right-[10%] w-64 h-64 bg-cyan-600/30 rounded-full blur-[100px] animate-pulse-neon" style="animation-delay: 1s"></div>
         </div>
-        
-        <!-- Hero Image with Galaxy Frame -->
-        <div class="relative mt-12 animate-fade-up delay-600">
-            <div class="absolute -inset-4 aurora-bg rounded-[30px] opacity-50"></div>
-            <img src="{{ $heroUrl }}" class="relative w-64 h-80 object-cover rounded-[25px] border-2 border-[#ec4899]" alt="Couple Photo">
-            <div class="absolute -top-4 -left-4 text-3xl animate-float">⭐</div>
-            <div class="absolute -bottom-4 -right-4 text-3xl animate-float delay-200">🌟</div>
-        </div>
-    </section>
 
-    {{-- COUPLE - COSMIC PAIR --}}
-    <section class="py-20 px-6 relative">
-        <div class="text-center mb-16">
-            <span class="text-3xl animate-glow">✨</span>
-            <h2 class="font-orbitron text-2xl text-white mt-4 neon-text">COSMIC PAIR</h2>
-        </div>
-        
-        <div class="space-y-12">
-            <!-- Groom -->
-            <div class="galaxy-card p-6 text-center animate-fade-up">
-                <div class="w-40 h-52 mx-auto mb-6 overflow-hidden rounded-[20px] border-2 border-[#22d3ee]">
-                    <img src="{{ $groomPhoto }}" class="w-full h-full object-cover">
+        {{-- Main Frame --}}
+        <div class="relative z-10 w-full px-8 mb-8">
+            <div class="relative aspect-[3/4] rounded-2xl p-1 bg-gradient-to-br from-[#00f3ff] to-[#ec4899] animate-float-space">
+                <div class="absolute -inset-4 bg-gradient-to-br from-[#00f3ff] to-[#ec4899] opacity-30 blur-xl rounded-[2rem]"></div>
+                <div class="w-full h-full rounded-xl overflow-hidden relative">
+                    <img src="{{ $heroUrl }}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-transparent"></div>
+                    
+                    {{-- Date Badge --}}
+                    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 glass-neon px-6 py-3 rounded-full flex gap-3 items-center whitespace-nowrap">
+                        <span class="text-[#00f3ff] font-bold font-heading text-lg drop-shadow-[0_0_5px_rgba(0,243,255,0.8)]">{{ $wedding->event_date?->format('d . m') }}</span>
+                        <span class="w-px h-4 bg-white/30"></span>
+                        <span class="text-[#ec4899] font-bold font-heading text-lg drop-shadow-[0_0_5px_rgba(236,72,153,0.8)]">{{ $wedding->event_date?->format('Y') }}</span>
+                    </div>
                 </div>
-                <h3 class="font-orbitron text-xl text-white mb-2">{{ $wedding->groom_name }}</h3>
-                <p class="text-xs uppercase tracking-widest text-[#ec4899] mb-4">The Groom</p>
-                <p class="text-sm text-gray-400">Con ông {{ $wedding->groom_father }}<br>và bà {{ $wedding->groom_mother }}</p>
             </div>
+        </div>
+
+        {{-- Text Content --}}
+        <div class="relative z-10 text-center px-4">
+            <h1 class="text-4xl md:text-5xl font-heading font-bold mb-2 leading-tight tracking-wider">
+                <span class="block text-transparent bg-clip-text bg-gradient-to-r from-white to-[#00f3ff] text-glow-cyan">{{ $wedding->groom_name }}</span>
+                <span class="text-2xl text-white/50 block my-1">&</span>
+                <span class="block text-transparent bg-clip-text bg-gradient-to-r from-[#ec4899] to-white text-glow-pink">{{ $wedding->bride_name }}</span>
+            </h1>
             
-            <div class="text-center text-4xl animate-float">🌌</div>
+            <p class="text-sm uppercase tracking-[0.4em] text-white/60 mt-6 font-bold">The Wedding</p>
             
-            <!-- Bride -->
-            <div class="galaxy-card p-6 text-center animate-fade-up delay-200">
-                <div class="w-40 h-52 mx-auto mb-6 overflow-hidden rounded-[20px] border-2 border-[#ec4899]">
-                    <img src="{{ $bridePhoto }}" class="w-full h-full object-cover">
-                </div>
-                <h3 class="font-orbitron text-xl text-white mb-2">{{ $wedding->bride_name }}</h3>
-                <p class="text-xs uppercase tracking-widest text-[#22d3ee] mb-4">The Bride</p>
-                <p class="text-sm text-gray-400">Con ông {{ $wedding->bride_father }}<br>và bà {{ $wedding->bride_mother }}</p>
+            <div class="mt-12 animate-bounce text-[#00f3ff]">
+                <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
             </div>
         </div>
     </section>
 
-    {{-- COUNTDOWN - LAUNCH SEQUENCE --}}
+    {{-- COUPLE SECTION --}}
+    <section class="py-20 px-6 relative bg-[#0f0f23]/50 backdrop-blur-sm">
+        <div class="text-center mb-16 reveal-on-scroll">
+            <h2 class="font-heading text-3xl text-white mb-2 text-glow-cyan">Star-Crossed Lovers</h2>
+            <div class="w-32 h-1 bg-gradient-to-r from-transparent via-[#ec4899] to-transparent mx-auto"></div>
+        </div>
+
+        <div class="space-y-16">
+            {{-- Groom --}}
+            <div class="reveal-on-scroll group relative">
+                <div class="absolute -left-4 -top-4 w-20 h-20 border-t-2 border-l-2 border-[#00f3ff] rounded-tl-3xl opacity-50 group-hover:opacity-100 transition duration-500"></div>
+                <div class="glass-neon p-4 rounded-2xl relative z-10">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-4 border border-white/10">
+                        <img src="{{ $groomPhoto }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000">
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-heading text-2xl text-[#00f3ff] mb-1 text-glow-cyan">{{ $wedding->groom_name }}</h3>
+                        <p class="text-[10px] uppercase font-bold tracking-widest text-[#ec4899] mb-3">The Groom</p>
+                        <p class="text-sm text-gray-400">
+                            Con ông <span class="text-white">{{ $wedding->groom_father }}</span><br>
+                            & bà <span class="text-white">{{ $wedding->groom_mother }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Bride --}}
+            <div class="reveal-on-scroll group relative">
+                <div class="absolute -right-4 -bottom-4 w-20 h-20 border-b-2 border-r-2 border-[#ec4899] rounded-br-3xl opacity-50 group-hover:opacity-100 transition duration-500"></div>
+                <div class="glass-neon p-4 rounded-2xl relative z-10">
+                    <div class="aspect-square rounded-xl overflow-hidden mb-4 border border-white/10">
+                        <img src="{{ $bridePhoto }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000">
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-heading text-2xl text-[#ec4899] mb-1 text-glow-pink">{{ $wedding->bride_name }}</h3>
+                        <p class="text-[10px] uppercase font-bold tracking-widest text-[#00f3ff] mb-3">The Bride</p>
+                        <p class="text-sm text-gray-400">
+                            Con ông <span class="text-white">{{ $wedding->bride_father }}</span><br>
+                            & bà <span class="text-white">{{ $wedding->bride_mother }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- EVENTS --}}
+    <section class="py-24 px-4 relative overflow-hidden">
+        {{-- Planet Decoration --}}
+        <div class="absolute top-[20%] right-[-100px] w-[300px] h-[300px] rounded-full bg-gradient-to-b from-[#ec4899]/10 to-transparent blur-[3px] border border-white/5 opacity-50"></div>
+
+        <h2 class="text-center font-heading text-3xl text-white mb-16 reveal-on-scroll text-glow-cyan">Mission Control</h2>
+
+        <div class="space-y-12 max-w-sm mx-auto z-10 relative">
+            {{-- Groom Event --}}
+            <div class="glass-neon p-6 rounded-3xl reveal-on-scroll hover:border-[#00f3ff]/50 transition duration-500">
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-12 h-12 rounded-full border border-[#00f3ff] flex items-center justify-center text-[#00f3ff] mb-4 shadow-[0_0_15px_rgba(0,243,255,0.3)] bg-[#00f3ff]/10">
+                        <span class="font-heading font-bold text-lg">G</span>
+                    </div>
+                    <h3 class="font-heading text-xl text-white mb-2 uppercase tracking-wider">Nhà Trai</h3>
+                    
+                    <div class="text-3xl font-heading font-bold text-[#00f3ff] mb-1 text-glow-cyan">
+                        {{ \Carbon\Carbon::parse($wedding->groom_reception_time)->format('H:i') }}
+                    </div>
+                    <p class="text-xs uppercase text-gray-500 font-bold mb-4 tracking-widest">Tiệc Cưới</p>
+                    
+                    <p class="text-gray-300 text-sm mb-2">{{ $wedding->groom_reception_venue }}</p>
+                    <div class="w-full h-px bg-white/10 my-4"></div>
+                    <p class="text-gray-400 text-xs">{{ $wedding->groom_address }}</p>
+
+                     @if($wedding->groom_map_url)
+                    <a href="{{ $wedding->groom_map_url }}" target="_blank" class="mt-6 px-6 py-2 border border-[#00f3ff] text-[#00f3ff] rounded-full text-xs font-bold uppercase hover:bg-[#00f3ff] hover:text-black transition shadow-[0_0_10px_rgba(0,243,255,0.2)]">
+                        Locate
+                    </a>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Bride Event --}}
+             <div class="glass-neon p-6 rounded-3xl reveal-on-scroll hover:border-[#ec4899]/50 transition duration-500">
+                <div class="flex flex-col items-center text-center">
+                    <div class="w-12 h-12 rounded-full border border-[#ec4899] flex items-center justify-center text-[#ec4899] mb-4 shadow-[0_0_15px_rgba(236,72,153,0.3)] bg-[#ec4899]/10">
+                        <span class="font-heading font-bold text-lg">B</span>
+                    </div>
+                    <h3 class="font-heading text-xl text-white mb-2 uppercase tracking-wider">Nhà Gái</h3>
+                     
+                    <div class="text-3xl font-heading font-bold text-[#ec4899] mb-1 text-glow-pink">
+                        {{ \Carbon\Carbon::parse($wedding->bride_reception_time)->format('H:i') }}
+                    </div>
+                    <p class="text-xs uppercase text-gray-500 font-bold mb-4 tracking-widest">Tiệc Cưới</p>
+                    
+                    <p class="text-gray-300 text-sm mb-2">{{ $wedding->bride_reception_venue }}</p>
+                     <div class="w-full h-px bg-white/10 my-4"></div>
+                    <p class="text-gray-400 text-xs">{{ $wedding->bride_address }}</p>
+
+                    @if($wedding->bride_map_url)
+                    <a href="{{ $wedding->bride_map_url }}" target="_blank" class="mt-6 px-6 py-2 border border-[#ec4899] text-[#ec4899] rounded-full text-xs font-bold uppercase hover:bg-[#ec4899] hover:text-black transition shadow-[0_0_10px_rgba(236,72,153,0.2)]">
+                        Locate
+                    </a>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- COUNTDOWN --}}
     @if($wedding->event_date && $wedding->event_date->isFuture())
-    <section class="py-20 px-6 aurora-bg">
-        <div class="text-center mb-12">
-            <p class="font-orbitron text-xs tracking-[0.3em] text-white/80">LAUNCH COUNTDOWN</p>
-            <h2 class="font-orbitron text-2xl text-white mt-2 neon-gold">T-MINUS</h2>
-        </div>
-        
-        <div x-data="countdown('{{ $wedding->event_date->format('Y-m-d') }}')" class="grid grid-cols-4 gap-3">
-            <div class="galaxy-card p-4 text-center">
-                <span x-text="days" class="font-orbitron text-3xl text-[#fbbf24] block">00</span>
-                <span class="text-xs text-gray-400">DAYS</span>
+    <section class="py-24 px-6 text-center bg-[#050510]">
+        <h2 class="font-heading text-3xl text-white mb-8 text-glow-cyan">Launch Sequence</h2>
+        <div x-data="countdown('{{ $wedding->event_date->format('Y-m-d') }}')" class="flex justify-center flex-wrap gap-4">
+            <div class="glass-neon w-20 h-24 flex flex-col justify-center items-center rounded-xl p-2 animate-pulse-neon">
+                <div class="text-3xl font-heading font-bold text-[#ec4899] mb-1" x-text="days">00</div>
+                <div class="text-[10px] uppercase text-white/50 font-bold">Days</div>
             </div>
-            <div class="galaxy-card p-4 text-center">
-                <span x-text="hours" class="font-orbitron text-3xl text-[#ec4899] block">00</span>
-                <span class="text-xs text-gray-400">HRS</span>
+            <div class="glass-neon w-20 h-24 flex flex-col justify-center items-center rounded-xl p-2">
+                <div class="text-3xl font-heading font-bold text-[#00f3ff] mb-1" x-text="hours">00</div>
+                <div class="text-[10px] uppercase text-white/50 font-bold">Hrs</div>
             </div>
-            <div class="galaxy-card p-4 text-center">
-                <span x-text="minutes" class="font-orbitron text-3xl text-[#22d3ee] block">00</span>
-                <span class="text-xs text-gray-400">MIN</span>
+            <div class="glass-neon w-20 h-24 flex flex-col justify-center items-center rounded-xl p-2">
+                <div class="text-3xl font-heading font-bold text-[#ec4899] mb-1" x-text="minutes">00</div>
+                <div class="text-[10px] uppercase text-white/50 font-bold">Mins</div>
             </div>
-            <div class="galaxy-card p-4 text-center">
-                <span x-text="seconds" class="font-orbitron text-3xl text-white block">00</span>
-                <span class="text-xs text-gray-400">SEC</span>
+            <div class="glass-neon w-20 h-24 flex flex-col justify-center items-center rounded-xl p-2">
+                <div class="text-3xl font-heading font-bold text-[#00f3ff] mb-1" x-text="seconds">00</div>
+                <div class="text-[10px] uppercase text-white/50 font-bold">Secs</div>
             </div>
         </div>
     </section>
     @endif
 
-    {{-- EVENTS - COORDINATES --}}
-    <section class="py-20 px-6">
-        <div class="text-center mb-12">
-            <span class="text-3xl">🚀</span>
-            <h2 class="font-orbitron text-2xl text-white mt-4">MISSION LOCATIONS</h2>
-        </div>
-        
-        <div class="space-y-8">
-            <!-- Nhà Gái -->
-            <div class="galaxy-card p-6">
-                <div class="flex items-center gap-3 mb-4 pb-4 border-b border-[#ec4899]/30">
-                    <span class="text-2xl animate-glow">📍</span>
-                    <h3 class="font-orbitron text-lg text-[#ec4899]">NHÀ GÁI - VU QUY</h3>
-                </div>
-                <div class="space-y-3 text-gray-300">
-                    <p class="flex justify-between"><span class="text-gray-500">Time:</span><span class="font-orbitron text-[#fbbf24]">{{ $wedding->bride_ceremony_time ? \Carbon\Carbon::parse($wedding->bride_ceremony_time)->format('H:i') : '--' }}</span></p>
-                    <p class="text-sm text-gray-400">{{ $wedding->bride_address }}</p>
-                </div>
-                @if($wedding->bride_map_url)
-                <a href="{{ $wedding->bride_map_url }}" target="_blank" class="mt-4 inline-flex items-center gap-2 font-orbitron text-sm text-[#22d3ee] border border-[#22d3ee] px-4 py-2 rounded-full hover:bg-[#22d3ee] hover:text-black transition">
-                    <span>🗺️</span> NAVIGATE
-                </a>
-                @endif
-            </div>
-            
-            <!-- Nhà Trai -->
-            <div class="galaxy-card p-6">
-                <div class="flex items-center gap-3 mb-4 pb-4 border-b border-[#22d3ee]/30">
-                    <span class="text-2xl animate-glow">📍</span>
-                    <h3 class="font-orbitron text-lg text-[#22d3ee]">NHÀ TRAI - THÀNH HÔN</h3>
-                </div>
-                <div class="space-y-3 text-gray-300">
-                    <p class="flex justify-between"><span class="text-gray-500">Time:</span><span class="font-orbitron text-[#fbbf24]">{{ $wedding->groom_ceremony_time ? \Carbon\Carbon::parse($wedding->groom_ceremony_time)->format('H:i') : '--' }}</span></p>
-                    <p class="text-sm text-gray-400">{{ $wedding->groom_address }}</p>
-                </div>
-                @if($wedding->groom_map_url)
-                <a href="{{ $wedding->groom_map_url }}" target="_blank" class="mt-4 inline-flex items-center gap-2 font-orbitron text-sm text-[#ec4899] border border-[#ec4899] px-4 py-2 rounded-full hover:bg-[#ec4899] hover:text-black transition">
-                    <span>🗺️</span> NAVIGATE
-                </a>
-                @endif
-            </div>
-        </div>
-    </section>
-
-    {{-- GALLERY - CAPTURED MEMORIES --}}
-    <section class="py-20 px-4 bg-gradient-to-b from-[#0c0c1e] to-[#1a1a3e]">
-        <div class="text-center mb-12 px-2">
-            <span class="text-3xl">📸</span>
-            <h2 class="font-orbitron text-2xl text-white mt-4">CAPTURED MOMENTS</h2>
-        </div>
-        
+    {{-- GALLERY --}}
+    <section class="py-20 px-4">
+        <h2 class="text-center font-heading text-4xl text-white mb-10 text-glow-pink">Nebula Memories</h2>
         <div class="columns-2 gap-3 space-y-3">
-            @if($wedding->getMedia('gallery')->isNotEmpty())
-                @foreach($wedding->getMedia('gallery') as $media)
-                <div class="break-inside-avoid galaxy-card p-2">
-                    <img src="{{ $media->getUrl() }}" class="w-full rounded-lg">
+            @if($wedding->gallery_images->isNotEmpty())
+                @foreach($wedding->gallery_images as $media)
+                <div class="break-inside-avoid relative rounded-xl overflow-hidden shadow-lg border border-white/10 group">
+                    <img src="{{ $media->getUrl() }}" class="w-full transition duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#ec4899]/30 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
                 </div>
                 @endforeach
             @else
-                @foreach(['https://images.unsplash.com/photo-1519741497674-611481863552?w=400', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400', 'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=400', 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=400'] as $placeholder)
-                <div class="break-inside-avoid galaxy-card p-2">
-                    <img src="{{ $placeholder }}" class="w-full rounded-lg">
+                @foreach(['https://images.unsplash.com/photo-1519741497674-611481863552?w=600', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600', 'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=600', 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600'] as $placeholder)
+                <div class="break-inside-avoid relative rounded-xl overflow-hidden shadow-lg border border-white/10 group">
+                    <img src="{{ $placeholder }}" class="w-full transition duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#ec4899]/30 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
                 </div>
                 @endforeach
             @endif
         </div>
     </section>
 
-    {{-- RSVP & QR --}}
-    <section class="py-20 px-6" x-data="{ showQr: null }">
-        <div class="text-center mb-12">
-            <span class="text-3xl">💫</span>
-            <h2 class="font-orbitron text-2xl text-white mt-4">GIFT PORTAL</h2>
-        </div>
-        
-        <div class="grid grid-cols-2 gap-4">
-            <button @click="showQr = 'groom'" class="galaxy-card p-6 text-center hover:border-[#22d3ee] transition animate-glow">
-                <span class="text-2xl block mb-2">🤵</span>
-                <span class="font-orbitron text-sm text-white">NHÀ TRAI</span>
-            </button>
-            <button @click="showQr = 'bride'" class="galaxy-card p-6 text-center hover:border-[#ec4899] transition animate-glow">
-                <span class="text-2xl block mb-2">👰</span>
-                <span class="font-orbitron text-sm text-white">NHÀ GÁI</span>
-            </button>
-        </div>
-        
-        <!-- QR Modal -->
-        <div x-show="showQr" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90" style="display: none;">
-            <div class="galaxy-card p-8 w-full max-w-sm text-center" @click.outside="showQr = null">
-                <button @click="showQr = null" class="absolute top-4 right-4 text-gray-400 hover:text-white">✕</button>
-                <h3 class="font-orbitron text-xl text-white mb-6 neon-text" x-text="showQr === 'groom' ? 'NHÀ TRAI' : 'NHÀ GÁI'"></h3>
-                <template x-if="showQr === 'groom'">
-                    <div>
-                        @if($wedding->getFirstMediaUrl('groom_qr'))
-                        <img src="{{ $wedding->getFirstMediaUrl('groom_qr') }}" class="w-48 h-48 mx-auto mb-4 rounded-lg border-2 border-[#22d3ee]">
-                        @endif
-                        <p class="text-sm text-gray-400">{{ $wedding->groom_qr_info }}</p>
+    {{-- GIFT BOX & RSVP & GUESTBOOK --}}
+    <div class="py-20 bg-[#0f0f23] space-y-16 relative">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#00f3ff]/30 to-transparent"></div>
+
+        {{-- Gift Box --}}
+        <div class="px-6">
+            <x-wedding.gift-box :wedding="$wedding">
+                <div class="text-center py-8 px-4 glass-neon rounded-2xl">
+                    <h2 class="font-heading text-3xl text-[#00f3ff] mb-6 text-glow-cyan">Sending Love</h2>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button @click="showQr = 'groom'" class="bg-[#00f3ff]/10 border border-[#00f3ff] text-[#00f3ff] font-bold px-8 py-3 rounded-xl text-xs uppercase tracking-widest hover:bg-[#00f3ff] hover:text-black transition shadow-[0_0_10px_rgba(0,243,255,0.2)]">Nhà Trai</button>
+                        <button @click="showQr = 'bride'" class="bg-[#ec4899]/10 border border-[#ec4899] text-[#ec4899] font-bold px-8 py-3 rounded-xl text-xs uppercase tracking-widest hover:bg-[#ec4899] hover:text-black transition shadow-[0_0_10px_rgba(236,72,153,0.2)]">Nhà Gái</button>
                     </div>
-                </template>
-                <template x-if="showQr === 'bride'">
-                    <div>
-                        @if($wedding->getFirstMediaUrl('bride_qr'))
-                        <img src="{{ $wedding->getFirstMediaUrl('bride_qr') }}" class="w-48 h-48 mx-auto mb-4 rounded-lg border-2 border-[#ec4899]">
-                        @endif
-                        <p class="text-sm text-gray-400">{{ $wedding->bride_qr_info }}</p>
-                    </div>
-                </template>
-            </div>
+                </div>
+            </x-wedding.gift-box>
         </div>
-    </section>
+
+        <div class="px-4">
+             @include('components.wedding.rsvp-form', ['wedding' => $wedding])
+        </div>
+
+        <div class="px-4">
+             @include('components.wedding.guestbook', ['wedding' => $wedding])
+        </div>
+    </div>
 
     {{-- FOOTER --}}
-    <footer class="py-20 text-center aurora-bg">
-        <div class="text-5xl mb-4 animate-float">🌠</div>
-        <h2 class="font-orbitron text-3xl text-white neon-text mb-2">Thank You</h2>
-        <p class="font-orbitron text-sm text-[#fbbf24]">{{ $wedding->groom_name }} ✦ {{ $wedding->bride_name }}</p>
-        <p class="text-xs text-gray-400 mt-4">To infinity and beyond...</p>
+    <footer class="py-20 bg-[#050510] text-center border-t border-white/10 relative">
+        <h2 class="font-heading text-3xl text-white mb-2">{{ $wedding->groom_name }} & {{ $wedding->bride_name }}</h2>
+        <p class="text-[10px] uppercase text-gray-600 tracking-[0.5em]">Infinite Love</p>
     </footer>
 </div>
 
-{{-- RSVP & Guestbook Components --}}
-@include('components.wedding.rsvp-form', ['wedding' => $wedding])
-@include('components.wedding.guestbook', ['wedding' => $wedding])
-
 <script>
-function countdown(targetDate) {
-    return {
-        days: '00', hours: '00', minutes: '00', seconds: '00',
-        init() { this.updateCountdown(); setInterval(() => this.updateCountdown(), 1000); },
-        updateCountdown() {
-            const diff = new Date(targetDate + 'T00:00:00').getTime() - new Date().getTime();
-            if (diff > 0) {
-                this.days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                this.hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                this.minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                this.seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+    document.addEventListener('DOMContentLoaded', () => {
+        // Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+
+        // Create Static Stars
+        const container = document.getElementById('stars-container');
+        if (container) {
+            for (let i = 0; i < 80; i++) {
+                const star = document.createElement('div');
+                star.className = 'star-bg';
+                star.style.width = Math.random() * 2 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's'; 
+                container.appendChild(star);
             }
         }
-    }
-}
+    });
 </script>
+
+@push('scripts')
+    <x-wedding.countdown-script />
+@endpush
 @endsection

@@ -94,10 +94,10 @@ class TemplateResource extends Resource
                     ->label('Gói')
                     ->badge()
                     ->color(fn (?string $state): string => match ($state) {
-                        'pro' => 'warning',
-                        default => 'gray',
+                        \App\Enums\WeddingTier::PRO->value => 'warning',
+                        default => 'gray', // Standard
                     })
-                    ->formatStateUsing(fn (?string $state): string => strtoupper($state ?? 'basic')),
+                    ->formatStateUsing(fn (?string $state): string => \App\Enums\WeddingTier::tryFrom($state)?->label() ?? strtoupper($state)),
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->label('Bật/Tắt'),
                 Tables\Columns\TextColumn::make('created_at')
@@ -113,10 +113,7 @@ class TemplateResource extends Resource
                     ]),
                 Tables\Filters\SelectFilter::make('tier')
                     ->label('Gói dịch vụ')
-                    ->options([
-                        'basic' => '📦 Basic',
-                        'pro' => '⭐ Pro',
-                    ]),
+                    ->options(\App\Enums\WeddingTier::options()),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

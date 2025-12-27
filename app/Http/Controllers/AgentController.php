@@ -2,21 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\AgentService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Agent;
-use App\Models\Wedding;
-use App\Models\User;
 
 class AgentController extends Controller
 {
-    /**
-     * Get the current agent for the authenticated user
-     */
-    protected function getAgent()
+    protected $agentService;
+
+    public function __construct(AgentService $agentService)
     {
-        $user = Auth::user();
-        return Agent::where('user_id', $user->id)->first();
+        $this->agentService = $agentService;
     }
 
     /**
@@ -24,36 +19,15 @@ class AgentController extends Controller
      */
     public function dashboard()
     {
-        $agent = $this->getAgent();
+        $agent = $this->agentService->getCurrentAgent();
         
         if (!$agent) {
             return redirect()->route('dashboard')->with('error', 'Bạn chưa được cấp quyền đại lý.');
         }
 
-        // Stats
-        $stats = [
-            'total_customers' => User::where('agent_id', $agent->id)->count(),
-            'total_weddings' => Wedding::where('agent_id', $agent->id)->count(),
-            'quota_used' => $agent->quota_used,
-            'quota_remaining' => $agent->getRemainingQuota(),
-            'subscription_plan' => $agent->getSubscriptionPlanLabel(),
-            'is_trial' => $agent->isOnTrial(),
-            'trial_ends_at' => $agent->trial_ends_at,
-            'subscription_ends_at' => $agent->subscription_ends_at,
-        ];
-
-        // Recent weddings
-        $recentWeddings = Wedding::where('agent_id', $agent->id)
-            ->with('user')
-            ->latest()
-            ->take(5)
-            ->get();
-
-        // Recent customers
-        $recentCustomers = User::where('agent_id', $agent->id)
-            ->latest()
-            ->take(5)
-            ->get();
+        $stats = $this->agentService->getDashboardStats($agent);
+        $recentWeddings = $this->agentService->getRecentWeddings($agent);
+        $recentCustomers = $this->agentService->getRecentCustomers($agent);
 
         return view('agent.dashboard', compact('agent', 'stats', 'recentWeddings', 'recentCustomers'));
     }
@@ -63,24 +37,13 @@ class AgentController extends Controller
      */
     public function customers(Request $request)
     {
-        $agent = $this->getAgent();
+        $agent = $this->agentService->getCurrentAgent();
         
         if (!$agent) {
             return redirect()->route('dashboard')->with('error', 'Bạn chưa được cấp quyền đại lý.');
         }
 
-        $query = User::where('agent_id', $agent->id)->with('weddings');
-
-        // Search
-        if ($request->search) {
-            $query->where(function($q) use ($request) {
-                $q->where('name', 'like', "%{$request->search}%")
-                  ->orWhere('email', 'like', "%{$request->search}%")
-                  ->orWhere('phone', 'like', "%{$request->search}%");
-            });
-        }
-
-        $customers = $query->latest()->paginate(15);
+        $customers = $this->agentService->getCustomers($agent, $request->all());
 
         return view('agent.customers', compact('agent', 'customers'));
     }
@@ -90,29 +53,13 @@ class AgentController extends Controller
      */
     public function weddings(Request $request)
     {
-        $agent = $this->getAgent();
+        $agent = $this->agentService->getCurrentAgent();
         
         if (!$agent) {
             return redirect()->route('dashboard')->with('error', 'Bạn chưa được cấp quyền đại lý.');
         }
 
-        $query = Wedding::where('agent_id', $agent->id)->with(['user', 'template']);
-
-        // Search
-        if ($request->search) {
-            $query->where(function($q) use ($request) {
-                $q->where('groom_name', 'like', "%{$request->search}%")
-                  ->orWhere('bride_name', 'like', "%{$request->search}%")
-                  ->orWhere('slug', 'like', "%{$request->search}%");
-            });
-        }
-
-        // Filter by status
-        if ($request->status) {
-            $query->where('status', $request->status);
-        }
-
-        $weddings = $query->latest()->paginate(15);
+        $weddings = $this->agentService->getWeddings($agent, $request->all());
 
         return view('agent.weddings', compact('agent', 'weddings'));
     }
@@ -122,7 +69,7 @@ class AgentController extends Controller
      */
     public function settings()
     {
-        $agent = $this->getAgent();
+        $agent = $this->agentService->getCurrentAgent();
         
         if (!$agent) {
             return redirect()->route('dashboard')->with('error', 'Bạn chưa được cấp quyền đại lý.');
@@ -136,7 +83,7 @@ class AgentController extends Controller
      */
     public function updateSettings(Request $request)
     {
-        $agent = $this->getAgent();
+        $agent = $this->agentService->getCurrentAgent();
         
         if (!$agent) {
             return redirect()->route('dashboard')->with('error', 'Bạn chưa được cấp quyền đại lý.');
@@ -148,7 +95,7 @@ class AgentController extends Controller
             'address' => 'nullable|string|max:500',
         ]);
 
-        $agent->update($validated);
+        $this->agentService->updateSettings($agent, $validated);
 
         return redirect()->route('agent.settings')->with('success', 'Cập nhật thành công!');
     }
@@ -158,7 +105,7 @@ class AgentController extends Controller
      */
     public function createCustomer(Request $request)
     {
-        $agent = $this->getAgent();
+        $agent = $this->agentService->getCurrentAgent();
         
         if (!$agent) {
             return back()->with('error', 'Bạn chưa được cấp quyền đại lý.');
@@ -171,14 +118,7 @@ class AgentController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-        $customer = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'] ?? null,
-            'password' => bcrypt($validated['password']),
-            'agent_id' => $agent->id,
-            'role' => 'customer',
-        ]);
+        $customer = $this->agentService->createCustomer($agent, $validated);
 
         return redirect()->route('agent.customers')->with('success', 'Đã tạo tài khoản khách hàng: ' . $customer->email);
     }

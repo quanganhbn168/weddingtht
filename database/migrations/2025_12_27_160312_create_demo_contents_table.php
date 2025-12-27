@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('templates', function (Blueprint $table) {
+        Schema::create('demo_contents', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('view_path');
-            $table->string('type')->default('wedding'); // wedding, business
-            $table->enum('tier', ['standard', 'pro'])->default('standard');
-            $table->string('thumbnail_url')->nullable();
+            $table->string('name')->default('Global Demo Content');
+            $table->string('background_music')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('templates');
+        Schema::dropIfExists('demo_contents');
     }
 };

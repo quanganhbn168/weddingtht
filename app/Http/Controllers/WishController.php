@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Wedding;
-use App\Models\WeddingWish;
+use App\Services\WeddingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -30,8 +30,15 @@ class WishController extends Controller
     {
         // Rate limiting: 5 submissions per hour per IP
         $key = 'wish:' . $request->ip();
-        if (RateLimiter::tooManyAttempts($key, 5)) {
-            return back()->with('error', 'Bạn đã gửi quá nhiều lời chúc. Vui lòng thử lại sau.');
+        // Rate limiting checks for JSON
+        if ($request->wantsJson()) {
+            if (RateLimiter::tooManyAttempts($key, 5)) {
+                return response()->json(['message' => 'Bạn đã gửi quá nhiều lời chúc. Vui lòng thử lại sau.'], 429);
+            }
+        } else {
+            if (RateLimiter::tooManyAttempts($key, 5)) {
+                return back()->with('error', 'Bạn đã gửi quá nhiều lời chúc. Vui lòng thử lại sau.');
+            }
         }
         RateLimiter::hit($key, 3600); // 1 hour window
         
@@ -45,17 +52,21 @@ class WishController extends Controller
         $messageCheck = strtolower($validated['message']);
         foreach ($badWords as $word) {
             if (str_contains($messageCheck, $word)) {
-                return back()->with('error', 'Lời chúc chứa nội dung không phù hợp.');
+                $errorMsg = 'Lời chúc chứa nội dung không phù hợp.';
+                if ($request->wantsJson()) {
+                    return response()->json(['message' => $errorMsg], 422);
+                }
+                return back()->with('error', $errorMsg);
             }
         }
         
-        $wedding->wishes()->create([
-            'name' => $validated['name'],
-            'message' => $validated['message'],
-            'is_approved' => $wedding->is_auto_approve_wishes, // Auto-approve if enabled
-            'ip_address' => $request->ip(),
-        ]);
+        WeddingService::createWish($wedding, $validated, $request->ip());
         
-        return back()->with('success', 'Cảm ơn lời chúc của bạn! Lời chúc sẽ hiển thị sau khi được duyệt.');
+        $successMsg = 'Cảm ơn lời chúc của bạn! Lời chúc sẽ hiển thị sau khi được duyệt.';
+        if ($request->wantsJson()) {
+            return response()->json(['message' => $successMsg]);
+        }
+        
+        return back()->with('success', $successMsg);
     }
 }

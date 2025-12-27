@@ -234,4 +234,143 @@ class WeddingService
     {
         return self::canAccess($user, $wedding);
     }
+
+    /**
+     * Create new RSVP
+     */
+    public static function createRsvp(Wedding $wedding, array $data, string $ip): string
+    {
+        $existingRsvp = null;
+        if (!empty($data['phone'])) {
+            $existingRsvp = $wedding->rsvps()
+                ->where('phone', $data['phone'])
+                ->first();
+        }
+        
+        $data['name'] = $data['name'];
+        $data['attendance'] = $data['attendance'];
+        $data['guests'] = $data['guests'] ?? 1;
+        $data['side'] = $data['side'] ?? 'both';
+        $data['note'] = $data['note'] ?? null;
+        
+        if ($existingRsvp) {
+            $existingRsvp->update($data);
+            return 'Đã cập nhật thông tin xác nhận tham dự!';
+        } else {
+            $data['phone'] = $data['phone'] ?? null;
+            $data['ip_address'] = $ip;
+            $wedding->rsvps()->create($data);
+            return 'Cảm ơn bạn đã xác nhận tham dự!';
+        }
+    }
+
+    /**
+     * Create new Wish
+     */
+    public static function createWish(Wedding $wedding, array $data, string $ip): void
+    {
+        $wedding->wishes()->create([
+            'name' => $data['name'],
+            'message' => $data['message'],
+            'is_approved' => $wedding->is_auto_approve_wishes,
+            'ip_address' => $ip,
+        ]);
+    }
+
+    /**
+     * Get public statistics for a wedding
+     */
+    public static function getStats(Wedding $wedding): array
+    {
+        return [
+            'views' => 0, // Implement view tracking later if needed
+            'rsvps' => $wedding->rsvps()->count(),
+            'wishes' => $wedding->wishes()->count(),
+            'days_left' => $wedding->event_date ? (int) $wedding->event_date->diffInDays(now(), false) * -1 : 0
+        ];
+    }
+
+    /**
+     * Get RSVP statistics for dashboard
+     */
+    public static function getRsvpStats(Wedding $wedding): array
+    {
+        return [
+            'total_guests' => $wedding->rsvps()->sum('guests'),
+            'attending' => $wedding->rsvps()->attending()->count(),
+            'not_attending' => $wedding->rsvps()->where('attendance', 'no')->count(),
+            'maybe' => $wedding->rsvps()->where('attendance', 'maybe')->count(),
+            'groom_side' => $wedding->rsvps()->groomSide()->sum('guests'),
+            'bride_side' => $wedding->rsvps()->brideSide()->sum('guests'),
+        ];
+    }
+
+    /**
+     * Get Wish statistics for dashboard
+     */
+    public static function getWishStats(Wedding $wedding): array
+    {
+        return [
+            'total' => $wedding->wishes()->count(),
+            'pending' => $wedding->wishes()->where('is_approved', false)->count(),
+            'approved' => $wedding->wishes()->where('is_approved', true)->count(),
+        ];
+    }
+
+    /**
+     * Approve a wish
+     */
+    public static function approveWish(Wedding $wedding, $wishId): void
+    {
+        $wish = $wedding->wishes()->findOrFail($wishId);
+        $wish->update(['is_approved' => true]);
+    }
+
+    /**
+     * Delete a wish
+     */
+    public static function deleteWish(Wedding $wedding, $wishId): void
+    {
+        $wish = $wedding->wishes()->findOrFail($wishId);
+        $wish->delete();
+    }
+
+    /**
+     * Get user's weddings (paginated)
+     */
+    public static function getUserWeddings(User $user, int $perPage = 10)
+    {
+        return $user->weddings()->with('template')->latest()->paginate($perPage);
+    }
+
+    /**
+     * Get RSVP CSV export callback
+     */
+    public static function getRsvpCsvCallback(Wedding $wedding): \Closure
+    {
+        $rsvps = $wedding->rsvps()->latest()->get();
+        
+        return function() use ($rsvps) {
+            $file = fopen('php://output', 'w');
+            
+            // Add BOM for Excel UTF-8 support
+            fputs($file, "\xEF\xBB\xBF");
+            
+            fputcsv($file, ['Họ tên', 'Số điện thoại', 'Tham dự', 'Số khách', 'Nhà', 'Ghi chú', 'Thời gian']);
+            
+            foreach ($rsvps as $rsvp) {
+                fputcsv($file, [
+                    $rsvp->name,
+                    $rsvp->phone,
+                    $rsvp->attendance_text,
+                    $rsvp->guests,
+                    $rsvp->side_text,
+                    $rsvp->note,
+                    $rsvp->created_at->format('d/m/Y H:i'),
+                ]);
+            }
+            
+            fclose($file);
+        };
+    }
 }

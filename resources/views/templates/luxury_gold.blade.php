@@ -2,288 +2,327 @@
 {{-- Template Name: Luxury Gold (Vàng Hoàng Gia) --}}
 
 @section('title', 'The Wedding of ' . $wedding->groom_name . ' & ' . $wedding->bride_name)
-
-@section('content')
 @section('og_image', $shareUrl)
 
+@section('content')
+
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
     
     :root {
-        --lux-bg: #0f172a; /* Midnight Blue/Black */
+        /* Standardized Theme Variables */
+        --color-primary: #d4af37; /* Metallic Gold */
+        --color-primary-dark: #b59024;
+        --color-primary-light: #fcf6ba;
+        --color-bg-secondary: #0f172a; /* Slate 900 */
+        --color-text-body: #e2e8f0; /* Slate 200 */
+        --bg-paper: #1e293b; /* Slate 800 */
+        --bg-input: #ffffff; /* Contrast input */
+        
+        --font-heading: 'Cinzel', serif;
+        --font-body: 'Montserrat', sans-serif;
+        --radius-box: 2px; /* Sharp luxury corners */
+        --shadow-box: 0 20px 50px -12px rgba(0, 0, 0, 0.7);
+
+        /* Custom Theme Colors */
         --lux-gold: #d4af37;
-        --lux-text: #e2e8f0;
+        --lux-bg: #0f172a;
     }
 
-    body { font-family: 'Montserrat', sans-serif; background-color: var(--lux-bg); color: var(--lux-text); }
-    h1, h2, h3, .font-cinzel { font-family: 'Cinzel', serif; }
-
-    .text-gold { color: var(--lux-gold); }
-    .border-gold { border-color: var(--lux-gold); }
-    .bg-gold { background-color: var(--lux-gold); }
+    body { font-family: var(--font-body); background-color: var(--lux-bg); color: var(--color-text-body); }
+    h1, h2, h3, h4, .font-heading { font-family: var(--font-heading); }
     
-    .gold-gradient {
-        background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+    /* Gold Gradient Text */
+    .text-gradient-gold {
+        background: linear-gradient(to bottom, #fcf6ba, #d4af37, #aa771c, #d4af37, #fcf6ba);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        background-size: 200% auto;
+        animation: shine 4s linear infinite;
     }
 
-    .frame-corner {
-        position: absolute;
-        width: 40px;
-        height: 40px;
-        border: 2px solid var(--lux-gold);
-        pointer-events: none;
+    /* Gradient Border */
+    .border-gold-gradient {
+        border-image: linear-gradient(to bottom right, #fcf6ba, #d4af37, #aa771c) 1;
     }
-    .top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
-    .top-right { top: 20px; right: 20px; border-left: none; border-bottom: none; }
-    .bottom-left { bottom: 20px; left: 20px; border-right: none; border-top: none; }
-    .bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; }
+
+    /* Pattern Background */
+    .bg-luxury-pattern {
+        background-color: #0f172a;
+        opacity: 1;
+        background-image:  linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(to right, #1e293b 1px, transparent 1px);
+        background-size: 40px 40px;
+    }
+
+    /* Animations */
+    @keyframes shine { to { background-position: 200% center; } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes pulse-gold { 0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); } }
     
-    /* Premium Animations */
-    @keyframes floatStar { 0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; } 50% { transform: translateY(-12px) scale(1.1); opacity: 1; } }
-    @keyframes shimmerGold { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 10px rgba(212,175,55,0.3); } 50% { box-shadow: 0 0 25px rgba(212,175,55,0.6); } }
-    @keyframes sparkle { 0%, 100% { opacity: 0; transform: scale(0); } 50% { opacity: 1; transform: scale(1); } }
-    
-    .animate-float-star { animation: floatStar 4s ease-in-out infinite; }
-    .animate-shimmer-gold { background: linear-gradient(90deg, #bf953f, #fcf6ba, #b38728); background-size: 200% 100%; animation: shimmerGold 3s infinite; }
-    .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
-    .animate-pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
-    
-    .delay-200 { animation-delay: 0.2s; }
-    .delay-400 { animation-delay: 0.4s; }
-    .delay-600 { animation-delay: 0.6s; }
-    
-    /* Floating Stars */
-    .floating-star { position: absolute; color: var(--lux-gold); opacity: 0.5; animation: floatStar 5s ease-in-out infinite; pointer-events: none; z-index: 5; }
-    
-    /* Sparkle Effect */
-    .sparkle { position: absolute; width: 4px; height: 4px; background: var(--lux-gold); border-radius: 50%; animation: sparkle 2s ease-in-out infinite; }
-    
-    /* Hover Effects */
-    .hover-glow { transition: all 0.4s ease; }
-    .hover-glow:hover { box-shadow: 0 0 30px rgba(212,175,55,0.4); }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-pulse-gold { animation: pulse-gold 3s infinite; }
+
+    /* Scroll Reveal */
+    .reveal-on-scroll { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
+    .reveal-on-scroll.revealed { opacity: 1; transform: translateY(0); }
+
+    /* Glass Effect (Dark) */
+    .glass-dark {
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    }
 </style>
 
-<div class="max-w-[480px] mx-auto bg-[#0f172a] min-h-screen shadow-2xl relative text-slate-200">
+<div class="max-w-[480px] mx-auto bg-luxury-pattern min-h-screen shadow-2xl relative overflow-hidden text-slate-200">
     
-    {{-- Pro Features: Preload Animation & Falling Effects --}}
-    @include('components.wedding.preload', ['wedding' => $wedding])
+    {{-- Pro Features --}}
+    @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'rings'])
+    
+    @if($wedding->show_invitation_wrapper)
+        <x-wedding.invitation-wrapper :wedding="$wedding" style="gatefold" />
+    @endif
+    
     @include('components.wedding.falling-effects', ['wedding' => $wedding])
     @include('components.wedding.upgrade-banner', ['wedding' => $wedding, 'showUpgradeBanner' => $showUpgradeBanner ?? false])
     
-    @if($musicUrl)
-    <div x-data="{ playing: false, audio: null }" x-init="audio = new Audio('{{ $musicUrl }}'); audio.loop = true;" class="fixed top-6 right-6 z-50">
-        <button @click="playing ? audio.pause() : audio.play(); playing = !playing" class="w-10 h-10 rounded-full border border-[#d4af37] text-[#d4af37] flex items-center justify-center hover:bg-[#d4af37] hover:text-black transition duration-500">
-            <template x-if="!playing"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></template>
-            <template x-if="playing"><svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></template>
-        </button>
-    </div>
-    @endif
+    <x-wedding.music-player :wedding="$wedding" />
 
-    {{-- HERO --}}
-    <section class="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden">
-        <div class="absolute inset-0 z-0 opacity-40">
-             <img src="{{ $heroUrl }}" class="w-full h-full object-cover">
-             <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/80 to-transparent"></div>
+    {{-- HERO SECTION --}}
+    <section class="h-screen relative flex flex-col justify-center items-center overflow-hidden">
+        {{-- Background Image with Parallax-like feel --}}
+        <div class="absolute inset-0 z-0">
+            <img src="{{ $heroUrl }}" class="w-full h-full object-cover opacity-50 scale-105 animate-float" style="animation-duration: 20s">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/60 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-transparent to-transparent opacity-80"></div>
         </div>
 
-        <div class="relative z-10 text-center border border-[#d4af37]/50 p-8 w-full backdrop-blur-sm bg-black/20">
-            {{-- Corners --}}
-            <div class="frame-corner top-left"></div>
-            <div class="frame-corner top-right"></div>
-            <div class="frame-corner bottom-left"></div>
-            <div class="frame-corner bottom-right"></div>
+        {{-- Frame Content --}}
+        <div class="relative z-10 p-8 w-full max-w-sm mx-auto">
+            <div class="border border-[#d4af37] p-8 relative backdrop-blur-[2px]">
+                {{-- Corner Ornaments --}}
+                <div class="absolute -top-3 -left-3 w-16 h-16 border-t-2 border-l-2 border-[#d4af37]"></div>
+                <div class="absolute -top-3 -right-3 w-16 h-16 border-t-2 border-r-2 border-[#d4af37]"></div>
+                <div class="absolute -bottom-3 -left-3 w-16 h-16 border-b-2 border-l-2 border-[#d4af37]"></div>
+                <div class="absolute -bottom-3 -right-3 w-16 h-16 border-b-2 border-r-2 border-[#d4af37]"></div>
 
-            <p class="uppercase tracking-[0.3em] text-[10px] text-[#d4af37] mb-6">Trân trọng báo tin</p>
-            <h1 class="text-4xl md:text-5xl mb-4 gold-gradient font-bold">{{ $wedding->groom_name }}</h1>
-            <div class="flex items-center justify-center gap-4 my-2">
-                <div class="h-[1px] w-12 bg-[#d4af37]"></div>
-                <span class="font-serif italic text-2xl text-[#d4af37]">&</span>
-                <div class="h-[1px] w-12 bg-[#d4af37]"></div>
+                <div class="text-center space-y-6">
+                    <p class="uppercase tracking-[0.4em] text-[10px] text-[#d4af37] font-bold">The Wedding Of</p>
+                    
+                    <div>
+                        <h1 class="text-5xl font-heading font-bold text-gradient-gold leading-tight">{{ $wedding->groom_name }}</h1>
+                        <span class="font-heading text-4xl text-[#d4af37] my-2 block">&</span>
+                        <h1 class="text-5xl font-heading font-bold text-gradient-gold leading-tight">{{ $wedding->bride_name }}</h1>
+                    </div>
+
+                    <div class="h-px w-24 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto"></div>
+
+                    <p class="font-heading text-xl text-white tracking-widest">
+                        {{ $wedding->event_date?->format('d . m . Y') }}
+                    </p>
+                    @if($wedding->event_date_lunar)
+                        <p class="text-[10px] uppercase text-[#d4af37]/70 tracking-wider">({{ $wedding->event_date_lunar }} Âm Lịch)</p>
+                    @endif
+                </div>
             </div>
-            <h1 class="text-4xl md:text-5xl mb-8 gold-gradient font-bold">{{ $wedding->bride_name }}</h1>
-            
-            <p class="text-lg mb-2 font-cinzel">{{ $wedding->event_date?->format('F d, Y') }}</p>
-            @if($wedding->event_date_lunar)
-            <p class="text-sm italic text-gray-400">({{ $wedding->event_date_lunar }})</p>
-            @endif
         </div>
-        
-        <div class="absolute bottom-10 animate-bounce text-[#d4af37]">
+
+        <div class="absolute bottom-8 animate-bounce text-[#d4af37] opacity-60">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
         </div>
     </section>
 
-    {{-- COUPLE --}}
-    <section class="py-20 px-6">
-        <div class="text-center mb-16">
-            <h2 class="font-cinzel text-3xl text-[#d4af37] mb-2">Groom & Bride</h2>
-            <div class="w-24 h-1 bg-[#d4af37] mx-auto"></div>
+    {{-- COUPLE SECTION --}}
+    <section class="py-20 px-6 relative bg-[#0f172a]">
+        <div class="text-center mb-16 reveal-on-scroll">
+            <h2 class="font-heading text-4xl text-[#d4af37] mb-4">Cô Dâu & Chú Rể</h2>
+            <p class="text-slate-400 text-sm max-w-xs mx-auto italic">"Tình yêu không phải là nhìn nhau, mà là cùng nhau nhìn về một hướng."</p>
         </div>
 
-        <div class="space-y-16">
+        <div class="grid gap-16 relative">
+            {{-- Vertical Line --}}
+            <div class="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#d4af37]/30 to-transparent -translate-x-1/2 hidden md:block"></div>
+
             {{-- Groom --}}
-             <div class="relative">
-                <div class="absolute -top-4 -left-4 w-24 h-24 border-t-2 border-l-2 border-[#d4af37] opacity-50"></div>
-                <div class="aspect-[3/4] overflow-hidden border border-[#d4af37]/30">
-                    <img src="{{ $groomPhoto }}" class="w-full h-full object-cover">
-                </div>
-                <div class="bg-[#0f172a] border border-[#d4af37] p-6 text-center -mt-10 mx-6 relative z-10 shadow-xl shadow-black/50">
-                    <h3 class="text-2xl font-cinzel text-white mb-2">{{ $wedding->groom_name }}</h3>
-                    <p class="text-[10px] uppercase tracking-widest text-[#d4af37] mb-2">Chú Rể</p>
-                    <p class="text-xs text-slate-400">Con ông {{ $wedding->groom_father }}<br>và bà {{ $wedding->groom_mother }}</p>
+            <div class="reveal-on-scroll group">
+                <div class="relative max-w-xs mx-auto">
+                    <div class="absolute -inset-1 bg-gradient-to-br from-[#d4af37] to-transparent opacity-30 rounded-lg blur-sm group-hover:opacity-60 transition duration-700"></div>
+                    <div class="aspect-[3/4] relative rounded-lg overflow-hidden border border-[#d4af37]/30 bg-black">
+                        <img src="{{ $groomPhoto }}" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 w-full p-6 text-center">
+                            <h3 class="font-heading text-2xl text-gradient-gold font-bold mb-1">{{ $wedding->groom_name }}</h3>
+                            <p class="text-[10px] uppercase tracking-widest text-slate-300 mb-2">Chú Rể</p>
+                            <p class="text-xs text-[#d4af37]/80">Con Ông: {{ $wedding->groom_father }}<br>Con Bà: {{ $wedding->groom_mother }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             {{-- Bride --}}
-             <div class="relative">
-                <div class="absolute -bottom-4 -right-4 w-24 h-24 border-b-2 border-r-2 border-[#d4af37] opacity-50"></div>
-                <div class="aspect-[3/4] overflow-hidden border border-[#d4af37]/30">
-                    <img src="{{ $bridePhoto }}" class="w-full h-full object-cover">
+            <div class="reveal-on-scroll group delay-200">
+                 <div class="relative max-w-xs mx-auto">
+                    <div class="absolute -inset-1 bg-gradient-to-bl from-[#d4af37] to-transparent opacity-30 rounded-lg blur-sm group-hover:opacity-60 transition duration-700"></div>
+                    <div class="aspect-[3/4] relative rounded-lg overflow-hidden border border-[#d4af37]/30 bg-black">
+                        <img src="{{ $bridePhoto }}" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 w-full p-6 text-center">
+                            <h3 class="font-heading text-2xl text-gradient-gold font-bold mb-1">{{ $wedding->bride_name }}</h3>
+                            <p class="text-[10px] uppercase tracking-widest text-slate-300 mb-2">Cô Dâu</p>
+                            <p class="text-xs text-[#d4af37]/80">Con Ông: {{ $wedding->bride_father }}<br>Con Bà: {{ $wedding->bride_mother }}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="bg-[#0f172a] border border-[#d4af37] p-6 text-center -mt-10 mx-6 relative z-10 shadow-xl shadow-black/50">
-                    <h3 class="text-2xl font-cinzel text-white mb-2">{{ $wedding->bride_name }}</h3>
-                    <p class="text-[10px] uppercase tracking-widest text-[#d4af37] mb-2">Cô Dâu</p>
-                    <p class="text-xs text-slate-400">Con ông {{ $wedding->bride_father }}<br>và bà {{ $wedding->bride_mother }}</p>
+            </div>
+        </div>
+    </section>
+
+    {{-- EVENTS TIMELINE --}}
+    <section class="py-20 px-4 bg-[#0B1120] relative overflow-hidden">
+        {{-- Decoration --}}
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#d4af37]/40 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#d4af37]/40 to-transparent"></div>
+
+        <h2 class="text-center font-heading text-3xl text-gradient-gold mb-16 reveal-on-scroll">Sự Kiện Trọng Đại</h2>
+
+        <div class="space-y-12 max-w-md mx-auto">
+            {{-- Groom Event --}}
+            <div class="glass-dark p-8 rounded-sm relative reveal-on-scroll border-l-2 border-[#d4af37]">
+                <div class="absolute -left-[9px] top-8 w-4 h-4 bg-[#0f172a] border-2 border-[#d4af37] rounded-full"></div>
+                <h3 class="font-heading text-xl text-white mb-2 uppercase tracking-wide">Tiệc Nhà Trai</h3>
+                <div class="text-[#d4af37] text-3xl font-heading font-bold mb-4">
+                     {{ \Carbon\Carbon::parse($wedding->groom_reception_time)->format('H:i') }}
                 </div>
+                <p class="text-slate-300 text-sm mb-4">{{ $wedding->groom_reception_venue }}</p>
+                <p class="text-slate-500 text-xs border-t border-[#d4af37]/20 pt-4 mt-4">
+                    {{ $wedding->groom_address }}
+                </p>
+                @if($wedding->groom_map_url)
+                <a href="{{ $wedding->groom_map_url }}" target="_blank" class="inline-flex items-center gap-2 mt-4 text-[#d4af37] text-xs uppercase tracking-wider hover:text-white transition">
+                    Xem bản đồ <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </a>
+                @endif
+            </div>
+
+            {{-- Bride Event --}}
+            <div class="glass-dark p-8 rounded-sm relative reveal-on-scroll border-r-2 border-[#d4af37] text-right">
+                <div class="absolute -right-[9px] top-8 w-4 h-4 bg-[#0f172a] border-2 border-[#d4af37] rounded-full"></div>
+                <h3 class="font-heading text-xl text-white mb-2 uppercase tracking-wide">Tiệc Nhà Gái</h3>
+                <div class="text-[#d4af37] text-3xl font-heading font-bold mb-4">
+                     {{ \Carbon\Carbon::parse($wedding->bride_reception_time)->format('H:i') }}
+                </div>
+                <p class="text-slate-300 text-sm mb-4">{{ $wedding->bride_reception_venue }}</p>
+                <p class="text-slate-500 text-xs border-t border-[#d4af37]/20 pt-4 mt-4">
+                    {{ $wedding->bride_address }}
+                </p>
+                 @if($wedding->bride_map_url)
+                <a href="{{ $wedding->bride_map_url }}" target="_blank" class="inline-flex items-center gap-2 mt-4 text-[#d4af37] text-xs uppercase tracking-wider hover:text-white transition justify-end">
+                    Xem bản đồ <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </a>
+                @endif
             </div>
         </div>
     </section>
 
     {{-- COUNTDOWN --}}
     @if($wedding->event_date && $wedding->event_date->isFuture())
-    <section class="py-20 px-6 bg-slate-950 border-y border-[#d4af37]/20">
-        <div class="text-center">
-            <p class="text-xs uppercase tracking-[0.3em] text-[#d4af37]/70 mb-8">Countdown to the Big Day</p>
-            <div x-data="countdown('{{ $wedding->event_date->format('Y-m-d') }}')" class="grid grid-cols-4 gap-4">
-                <div class="text-center">
-                    <div class="border border-[#d4af37]/30 p-4 bg-black/30">
-                        <span x-text="days" class="block text-4xl gold-gradient font-cinzel">00</span>
-                        <span class="text-[10px] uppercase text-slate-400 tracking-widest">Days</span>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <div class="border border-[#d4af37]/30 p-4 bg-black/30">
-                        <span x-text="hours" class="block text-4xl gold-gradient font-cinzel">00</span>
-                        <span class="text-[10px] uppercase text-slate-400 tracking-widest">Hours</span>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <div class="border border-[#d4af37]/30 p-4 bg-black/30">
-                        <span x-text="minutes" class="block text-4xl gold-gradient font-cinzel">00</span>
-                        <span class="text-[10px] uppercase text-slate-400 tracking-widest">Minutes</span>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <div class="border border-[#d4af37]/30 p-4 bg-black/30">
-                        <span x-text="seconds" class="block text-4xl gold-gradient font-cinzel">00</span>
-                        <span class="text-[10px] uppercase text-slate-400 tracking-widest">Seconds</span>
-                    </div>
-                </div>
+    <section class="py-20 px-6 text-center bg-luxury-pattern">
+        <h2 class="font-heading text-2xl text-[#d4af37] mb-8 uppercase tracking-widest">Countdown</h2>
+        <div x-data="countdown('{{ $wedding->event_date->format('Y-m-d') }}')" class="flex justify-center gap-4 md:gap-8">
+            <div class="glass-dark w-20 h-24 flex flex-col justify-center items-center rounded border border-[#d4af37]/30">
+                <div class="text-3xl font-heading font-bold text-white mb-1" x-text="days">00</div>
+                <div class="text-[10px] uppercase text-[#d4af37]">Ngày</div>
+            </div>
+            <div class="glass-dark w-20 h-24 flex flex-col justify-center items-center rounded border border-[#d4af37]/30">
+                <div class="text-3xl font-heading font-bold text-white mb-1" x-text="hours">00</div>
+                <div class="text-[10px] uppercase text-[#d4af37]">Giờ</div>
+            </div>
+            <div class="glass-dark w-20 h-24 flex flex-col justify-center items-center rounded border border-[#d4af37]/30">
+                <div class="text-3xl font-heading font-bold text-white mb-1" x-text="minutes">00</div>
+                <div class="text-[10px] uppercase text-[#d4af37]">Phút</div>
+            </div>
+            <div class="glass-dark w-20 h-24 flex flex-col justify-center items-center rounded border border-[#d4af37]/30">
+                <div class="text-3xl font-heading font-bold text-white mb-1" x-text="seconds">00</div>
+                <div class="text-[10px] uppercase text-[#d4af37]">Giây</div>
             </div>
         </div>
     </section>
     @endif
 
-    {{-- EVENTS --}}
-    <section class="py-20 px-6 bg-slate-900 border-y border-[#d4af37]/20">
-        <h2 class="text-center font-cinzel text-3xl text-[#d4af37] mb-12">Sự Kiện</h2>
-        
-        <div class="grid gap-12">
-            {{-- Event Card --}}
-            @if($wedding->groom_reception_time)
-            <div class="border border-[#d4af37]/30 p-8 text-center relative group">
-                <div class="rotate-45 w-3 h-3 bg-[#d4af37] absolute -top-1.5 left-1/2 -ml-1.5"></div>
-                <h3 class="text-xl uppercase tracking-widest text-white mb-4">Tiệc Nhà Trai</h3>
-                <p class="text-3xl text-[#d4af37] font-serif italic mb-2">{{ \Carbon\Carbon::parse($wedding->groom_reception_time)->format('H:i') }}</p>
-                <p class="text-sm text-slate-400 mb-6">{{ $wedding->groom_reception_venue }}</p>
-                <div class="w-full h-px bg-[#d4af37]/30 my-4"></div>
-                <p class="text-xs uppercase tracking-wider text-white">Lễ Thành Hôn</p>
-                <p class="text-sm mt-1 text-slate-400">{{ $wedding->groom_address }}</p>
-                 @if($wedding->groom_map_url)
-                 <a href="{{ $wedding->groom_map_url }}" target="_blank" class="inline-block mt-6 px-6 py-2 border border-[#d4af37] text-[#d4af37] text-xs uppercase hover:bg-[#d4af37] hover:text-[#0f172a] transition">Bản đồ</a>
-                 @endif
-            </div>
-            @endif
-
-            @if($wedding->bride_reception_time)
-            <div class="border border-[#d4af37]/30 p-8 text-center relative group">
-                <div class="rotate-45 w-3 h-3 bg-[#d4af37] absolute -top-1.5 left-1/2 -ml-1.5"></div>
-                <h3 class="text-xl uppercase tracking-widest text-white mb-4">Tiệc Nhà Gái</h3>
-                <p class="text-3xl text-[#d4af37] font-serif italic mb-2">{{ \Carbon\Carbon::parse($wedding->bride_reception_time)->format('H:i') }}</p>
-                <p class="text-sm text-slate-400 mb-6">{{ $wedding->bride_reception_venue }}</p>
-                 <div class="w-full h-px bg-[#d4af37]/30 my-4"></div>
-                <p class="text-xs uppercase tracking-wider text-white">Lễ Vu Quy</p>
-                <p class="text-sm mt-1 text-slate-400">{{ $wedding->bride_address }}</p>
-                @if($wedding->bride_map_url)
-                 <a href="{{ $wedding->bride_map_url }}" target="_blank" class="inline-block mt-6 px-6 py-2 border border-[#d4af37] text-[#d4af37] text-xs uppercase hover:bg-[#d4af37] hover:text-[#0f172a] transition">Bản đồ</a>
-                 @endif
-            </div>
-            @endif
-        </div>
-    </section>
-
-    {{-- GALLERY & RSVP (Combined for simplicity in execution) --}}
-    <section class="py-20 px-6 text-center">
-        <h2 class="font-cinzel text-3xl text-[#d4af37] mb-8">Album Ảnh</h2>
-        <div class="columns-2 gap-2 space-y-2 mb-12">
-            @if($wedding->getMedia('gallery')->isNotEmpty())
-                @foreach($wedding->getMedia('gallery') as $media)
-                <img src="{{ $media->getUrl() }}" class="w-full border border-[#d4af37]/20 rounded-sm">
+    {{-- GALLERY --}}
+    <section class="py-16 px-4 bg-[#0f172a]">
+        <h2 class="text-center font-heading text-4xl text-gradient-gold mb-12">Khoảnh Khắc</h2>
+        <div class="columns-2 gap-4 space-y-4">
+            @if($wedding->gallery_images->isNotEmpty())
+                @foreach($wedding->gallery_images as $media)
+                <div class="break-inside-avoid relative group overflow-hidden rounded-sm border border-[#d4af37]/20">
+                    <img src="{{ $media->getUrl() }}" class="w-full transition duration-700 group-hover:scale-110 grayscale-[30%] group-hover:grayscale-0">
+                    <div class="absolute inset-0 bg-[#d4af37]/10 opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                </div>
                 @endforeach
             @else
-                {{-- Placeholder gallery for demo --}}
-                @foreach(['https://images.unsplash.com/photo-1519741497674-611481863552?w=600', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600', 'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=600', 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600', 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600', 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600'] as $placeholder)
-                <img src="{{ $placeholder }}" class="w-full border border-[#d4af37]/20 rounded-sm">
+                @foreach(['https://images.unsplash.com/photo-1519741497674-611481863552?w=600', 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600', 'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=600', 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600'] as $placeholder)
+               <div class="break-inside-avoid relative group overflow-hidden rounded-sm border border-[#d4af37]/20">
+                    <img src="{{ $placeholder }}" class="w-full transition duration-700 group-hover:scale-110 grayscale-[30%] group-hover:grayscale-0">
+                    <div class="absolute inset-0 bg-[#d4af37]/10 opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                </div>
                 @endforeach
             @endif
         </div>
-
-        <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-[#d4af37] p-8 mt-12">
-            <h3 class="text-2xl font-cinzel text-white mb-8">Gửi Lời Chúc</h3>
-            <div class="flex gap-4 justify-center mb-8">
-                @if($wedding->getFirstMediaUrl('groom_qr'))
-                <div class="text-center">
-                    <img src="{{ $wedding->getFirstMediaUrl('groom_qr') }}" class="w-32 h-32 mx-auto mb-2 border-2 border-[#d4af37]">
-                    <p class="text-[10px] uppercase text-[#d4af37]">Nhà Trai</p>
-                </div>
-                @endif
-                @if($wedding->getFirstMediaUrl('bride_qr'))
-                <div class="text-center">
-                    <img src="{{ $wedding->getFirstMediaUrl('bride_qr') }}" class="w-32 h-32 mx-auto mb-2 border-2 border-[#d4af37]">
-                     <p class="text-[10px] uppercase text-[#d4af37]">Nhà Gái</p>
-                </div>
-                @endif
-            </div>
-            <p class="text-sm text-slate-400">Rất mong sự hiện diện của quý khách!</p>
-        </div>
     </section>
 
-    <footer class="py-10 text-center border-t border-[#d4af37]/10">
-        <h2 class="gold-gradient font-cinzel text-2xl">{{ $wedding->groom_name }} & {{ $wedding->bride_name }}</h2>
+    {{-- GIFT BOX & RSVP & GUESTBOOK --}}
+    <div class="py-20 bg-[#1e293b] space-y-20 relative">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#d4af37]/30 to-transparent"></div>
+
+        {{-- Gift Box --}}
+        <div class="px-6">
+            <x-wedding.gift-box :wedding="$wedding">
+                <div class="text-center py-8 px-4 border border-[#d4af37]/30 bg-[#0f172a]">
+                    <h2 class="font-heading text-2xl text-[#d4af37] mb-6">Hộp Mừng Cưới</h2>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button @click="showQr = 'groom'" class="bg-[#d4af37] text-black font-bold px-6 py-3 uppercase tracking-widest text-xs hover:bg-[#fcf6ba] transition shadow-lg shadow-[#d4af37]/20">Nhà Trai</button>
+                        <button @click="showQr = 'bride'" class="bg-[#d4af37] text-black font-bold px-6 py-3 uppercase tracking-widest text-xs hover:bg-[#fcf6ba] transition shadow-lg shadow-[#d4af37]/20">Nhà Gái</button>
+                    </div>
+                </div>
+            </x-wedding.gift-box>
+        </div>
+
+        {{-- Wrappers for standard components to force them into the theme if needed, 
+           or relying on :root variables which we set nicely --}}
+        
+        <div class="px-4">
+             @include('components.wedding.rsvp-form', ['wedding' => $wedding])
+        </div>
+
+        <div class="px-4">
+             @include('components.wedding.guestbook', ['wedding' => $wedding])
+        </div>
+    </div>
+
+    {{-- FOOTER --}}
+    <footer class="py-16 bg-[#0f172a] text-center border-t border-[#d4af37]/20">
+        <h2 class="font-heading text-3xl text-gradient-gold mb-4">{{ $wedding->groom_name }} & {{ $wedding->bride_name }}</h2>
+        <p class="text-slate-500 text-xs tracking-[0.3em] uppercase">Built with Love</p>
     </footer>
 </div>
 
-@push('scripts')
 <script>
-function countdown(targetDate) {
-    return {
-        days: '00', hours: '00', minutes: '00', seconds: '00',
-        init() { this.updateCountdown(); setInterval(() => this.updateCountdown(), 1000); },
-        updateCountdown() {
-            const diff = new Date(targetDate + 'T00:00:00').getTime() - new Date().getTime();
-            if (diff > 0) {
-                this.days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                this.hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                this.minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                this.seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
-            }
-        }
-    }
-}
+    document.addEventListener('DOMContentLoaded', () => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+    });
 </script>
+
+@push('scripts')
+    <x-wedding.countdown-script />
 @endpush
 @endsection

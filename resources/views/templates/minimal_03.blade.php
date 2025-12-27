@@ -13,7 +13,19 @@
         --bg-color: #f4f4f0;
         --text-color: #1a1a1a;
         --accent-color: #8c8c88;
-    }
+
+        /* Theming for Shared Components */
+        --color-primary: #111827; /* gray-900 */
+        --color-primary-dark: #000000;
+        --color-primary-light: #f3f4f6; /* gray-100 */
+        --color-bg-secondary: #f9fafb; /* gray-50 */
+        --color-text-body: #1a1a1a;
+        --bg-paper: #ffffff;
+        --bg-input: #fdfdfd;
+        --font-heading: 'Italiana', serif;
+        --font-body: 'Jost', sans-serif;
+        --radius-box: 0px; /* Editorial Magazine style = squares */
+        --shadow-box: none; /* Flat design */    }
 
     body { font-family: 'Jost', sans-serif; background-color: var(--bg-color); color: var(--text-color); }
     h1, h2, h3, .font-display { font-family: 'Italiana', serif; }
@@ -62,19 +74,17 @@
 <div class="max-w-[480px] mx-auto bg-[#fdfdfd] min-h-screen shadow-xl relative text-[#1a1a1a]">
 
     {{-- Pro Features: Preload Animation & Falling Effects --}}
-    @include('components.wedding.preload', ['wedding' => $wedding])
+    @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'heartbeat'])
+    {{-- Invitation Wrapper (Envelope) --}}
+    @if($wedding->show_invitation_wrapper)
+        <x-wedding.invitation-wrapper :wedding="$wedding" />
+    @endif
+    
     @include('components.wedding.falling-effects', ['wedding' => $wedding])
     @include('components.wedding.upgrade-banner', ['wedding' => $wedding, 'showUpgradeBanner' => $showUpgradeBanner ?? false])
 
-    {{-- Music --}}
-    @if($musicUrl)
-    <div x-data="{ playing: false, audio: null }" x-init="audio = new Audio('{{ $musicUrl }}'); audio.loop = true;" class="fixed top-8 right-8 z-50 mixture-blend-difference">
-        <button @click="playing ? audio.pause() : audio.play(); playing = !playing" class="w-8 h-8 flex items-center justify-center text-[#1a1a1a] opacity-80 hover:opacity-100 transition">
-            <template x-if="!playing"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></template>
-            <template x-if="playing"><svg class="w-6 h-6 animate-spin-slow" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></template>
-        </button>
-    </div>
-    @endif
+    {{-- Music Player (Global Premium Vinyl) --}}
+    <x-wedding.music-player :wedding="$wedding" />
 
     {{-- MAGAZINE COVER HERO --}}
     <section class="h-screen relative flex flex-col justify-between p-6 bg-[#f4f4f0]">
@@ -100,13 +110,13 @@
     </section>
 
     {{-- EDITORIAL COUPLE --}}
-    <section class="py-24 px-6">
-        <div class="mb-16">
+    <section class="py-16 px-6">
+        <div class="mb-12">
             <h2 class="text-8xl font-display opacity-5 absolute -left-4 pointer-events-none">Love</h2>
             <p class="text-[10px] uppercase tracking-[0.3em] font-bold border-l-2 border-black pl-3 ml-2">The Protagonists</p>
         </div>
 
-        <div class="space-y-20">
+        <div class="space-y-12">
             {{-- GROOM --}}
             <div class="editorial-grid">
                 <div class="vertical-text">The Groom</div>
@@ -145,7 +155,7 @@
 
     {{-- COUNTDOWN TYPOGRAPHY --}}
     @if($wedding->event_date && $wedding->event_date->isFuture())
-    <section class="py-24 px-6 bg-[#1a1a1a] text-[#f4f4f0] overflow-hidden relative">
+    <section class="py-16 px-6 bg-[#1a1a1a] text-[#f4f4f0] overflow-hidden relative">
         <h2 class="text-[120px] leading-none font-display opacity-10 absolute -top-10 -right-20 pointer-events-none whitespace-nowrap">Forever</h2>
         
         <div class="relative z-10">
@@ -169,13 +179,13 @@
     @endif
 
     {{-- EVENTS MINIMAL LIST --}}
-    <section class="py-24 px-6 bg-[#fdfdfd]">
+    <section class="py-16 px-6 bg-[#fdfdfd]">
         <div class="mb-16 text-center">
             <h2 class="text-4xl font-display mb-2 text-black">The Timeline</h2>
             <p class="text-[10px] uppercase tracking-widest text-gray-400">Save these moments</p>
         </div>
 
-        <div class="space-y-16 max-w-sm mx-auto">
+        <div class="space-y-12 max-w-sm mx-auto">
             {{-- NHÀ GÁI --}}
             <div class="block"> {{-- Removed group/hover --}}
                 <div class="flex items-center gap-4 mb-4">
@@ -239,7 +249,7 @@
     </section>
 
     {{-- RSVP & WISHES --}}
-    <section class="py-24 px-6 bg-[#f4f4f0]" x-data="{ showQr: null, showWishes: false }">
+    <x-wedding.gift-box :wedding="$wedding" class="py-16 px-6 bg-[#f4f4f0]">
         <h2 class="text-center font-display text-4xl mb-12">Box of Wishes</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-0 border border-black/10 max-w-md mx-auto mb-10 bg-white">
@@ -253,59 +263,21 @@
             </button>
         </div>
 
-        <div class="text-center">
-            <button @click="showWishes = true" class="text-sm uppercase tracking-[0.3em] font-bold border-b-2 border-black pb-1 text-black hover:opacity-70 transition">
-                Send Your Love
-            </button>
-        </div>
 
-        {{-- CLEAN MODALS --}}
-        <div x-show="showWishes" class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-white/95" style="display: none;">
-             <div class="w-full max-w-md relative" @click.outside="showWishes = false">
-                <button @click="showWishes = false" class="absolute -top-12 right-0 text-xl font-serif italic text-black">Close</button>
-                <h3 class="text-4xl font-display mb-8 text-center text-black">Words of Love</h3>
-                <form class="space-y-8">
-                    <input type="text" placeholder="Your Name" class="w-full bg-transparent border-b border-gray-300 py-4 text-xl font-display focus:border-black outline-none placeholder:text-gray-300 text-black">
-                    <textarea rows="3" placeholder="Your Message" class="w-full bg-transparent border-b border-gray-300 py-4 text-xl font-display focus:border-black outline-none placeholder:text-gray-300 text-black"></textarea>
-                    <button type="submit" class="w-full bg-black text-white py-4 text-xs uppercase tracking-widest hover:bg-gray-800 transition">Send Message</button>
-                </form>
-             </div>
-        </div>
-        
-        <div x-show="showQr" class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-white/95" style="display: none;">
-            <div class="w-full max-w-sm text-center relative" @click.outside="showQr = null">
-                <button @click="showQr = null" class="absolute -top-12 right-0 text-xl font-serif italic text-black">Close</button>
-                <h3 class="text-2xl font-display mb-8 text-black" x-text="showQr === 'groom' ? 'Groom\'s Gift Box' : 'Bride\'s Gift Box'"></h3>
-                <template x-if="showQr === 'groom'">
-                    <div>
-                         @if($wedding->getFirstMediaUrl('groom_qr'))
-                            <img src="{{ $wedding->getFirstMediaUrl('groom_qr') }}" class="w-48 h-48 mx-auto mb-6 border border-gray-200">
-                        @else
-                            <div class="w-48 h-48 mx-auto mb-6 bg-gray-100 flex items-center justify-center"><p class="text-[10px] uppercase">No QR Code</p></div>
-                        @endif
-                        <p class="font-mono text-xs text-gray-500">{{ $wedding->groom_qr_info }}</p>
-                    </div>
-                </template>
-                <template x-if="showQr === 'bride'">
-                    <div>
-                         @if($wedding->getFirstMediaUrl('bride_qr'))
-                            <img src="{{ $wedding->getFirstMediaUrl('bride_qr') }}" class="w-48 h-48 mx-auto mb-6 border border-gray-200">
-                        @else
-                             <div class="w-48 h-48 mx-auto mb-6 bg-gray-100 flex items-center justify-center"><p class="text-[10px] uppercase">No QR Code</p></div>
-                        @endif
-                         <p class="font-mono text-xs text-gray-500">{{ $wedding->bride_qr_info }}</p>
-                    </div>
-                </template>
-            </div>
-        </div>
-    </section>
+    </x-wedding.gift-box>
+
+    {{-- RSVP Section --}}
+    @include('components.wedding.rsvp-form', ['wedding' => $wedding])
+
+    {{-- Guestbook Section --}}
+    @include('components.wedding.guestbook', ['wedding' => $wedding])
 
     {{-- GALLERY EDITORIAL --}}
-    <section class="py-24 px-4 bg-white">
+    <section class="py-16 px-4 bg-white">
         <h2 class="text-[10vw] font-display text-center leading-none opacity-5 mb-[-5vw] relative z-0 text-black">Memories</h2>
         <div class="columns-1 md:columns-2 gap-8 space-y-8 relative z-10 px-4">
-            @if($wedding->getMedia('gallery')->isNotEmpty())
-                @foreach($wedding->getMedia('gallery') as $media)
+            @if($wedding->gallery_images->isNotEmpty())
+                @foreach($wedding->gallery_images as $media)
                 <div class="break-inside-avoid">
                     <img src="{{ $media->getUrl() }}" class="w-full h-auto">
                 </div>
@@ -327,21 +299,7 @@
     </footer>
 </div>
 
-<script>
-    function countdown(targetDate) {
-        return {
-            days: '00', hours: '00', minutes: '00', seconds: '00',
-            init() { this.updateCountdown(); setInterval(() => this.updateCountdown(), 1000); },
-            updateCountdown() {
-                const diff = new Date(targetDate + 'T00:00:00').getTime() - new Date().getTime();
-                if (diff > 0) {
-                    this.days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                    this.hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                    this.minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                    this.seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
-                }
-            }
-        }
-    }
-</script>
+@push('scripts')
+    <x-wedding.countdown-script />
+@endpush
 @endsection

@@ -503,10 +503,31 @@ class WeddingForm
                                     ->columns(2)
                                     ->description('Chỉ áp dụng cho gói Pro')
                                     ->schema([
-                                        \Filament\Forms\Components\Toggle::make('show_preload')
-                                            ->label('Animation mở cửa "囍"')
-                                            ->helperText('Hiển thị cửa Song Hỷ trượt mở khi vào thiệp')
-                                            ->default(false),
+                            \Filament\Forms\Components\Toggle::make('show_invitation_wrapper')
+                                ->label('Hiệu ứng Phong bì (Envelope)')
+                                ->default(true)
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->columnSpan('full'),
+
+                            \Filament\Forms\Components\Toggle::make('show_preload')
+                                ->label('Màn hình chờ (Preload)')
+                                ->default(false)
+                                ->live()
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->columnSpan('full'),
+                            
+                            Select::make('preload_variant')
+                                ->label('Kiểu Preload')
+                                ->options([
+                                    'traditional' => 'Truyền thống (Song Hỷ)',
+                                    'heartbeat' => 'Hiện đại (Nhịp tim)',
+                                    'rings' => 'Sang trọng (Nhẫn cưới)',
+                                ])
+                                ->default('heartbeat')
+                                ->visible(fn (Get $get) => $get('show_preload') && $get('tier') === 'pro')
+                                ->required(fn (Get $get) => $get('show_preload')),
                                         
                                         Select::make('falling_effect')
                                             ->label('Hiệu ứng rơi')

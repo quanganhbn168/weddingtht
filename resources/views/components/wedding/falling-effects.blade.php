@@ -53,6 +53,46 @@ Variety of shapes, sizes, colors for each effect type
 @media (prefers-reduced-motion: reduce) {
     .fall-item { display: none; }
 }
+
+    /* Stars */
+    .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle linear infinite;
+        opacity: 0.8;
+    }
+    @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 1; transform: scale(1.5); } }
+
+    /* Shooting Star */
+    .shooting-star {
+        position: fixed;
+        width: 4px;
+        height: 4px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1), 0 0 0 8px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 1);
+        animation: shoot 3s linear infinite;
+        opacity: 0;
+        z-index: 9999;
+        pointer-events: none;
+    }
+    .shooting-star::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 300px;
+        height: 1px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 1), transparent);
+    }
+    @keyframes shoot {
+        0% { transform: rotate(315deg) translateX(0); opacity: 1; }
+        70% { opacity: 1; }
+        100% { transform: rotate(315deg) translateX(-1000px); opacity: 0; }
+    }
 </style>
 
 <!-- SVG Definitions with Multiple Gradients -->
@@ -130,8 +170,33 @@ Variety of shapes, sizes, colors for each effect type
     const isPro = {{ $isPro ? 'true' : 'false' }};
     const canvas = document.getElementById('fallingCanvas');
     if (!canvas) return;
+
+    // Handle Shooting Stars Logic (Separate from falling logic)
+    if (effect === 'shooting_stars') {
+        function createShootingStar() {
+            const shootingStar = document.createElement('div');
+            shootingStar.className = 'shooting-star';
+            shootingStar.style.left = Math.random() * 100 + '%';
+            shootingStar.style.top = Math.random() * 40 + '%'; // Upper sky
+            shootingStar.style.animationDuration = (Math.random() * 1 + 1.5) + 's';
+            
+            canvas.appendChild(shootingStar);
+            
+            // Remove after animation
+            setTimeout(() => {
+                shootingStar.remove();
+            }, 3000);
+        }
+
+        // Interval loop for shooting stars
+        const frequency = isPro ? 3000 : 6000; // 3s for Pro, 6s for Standard
+        setInterval(() => createShootingStar(), frequency);
+        createShootingStar(); // Create one immediately
+        return; // Exit normal flow
+    }
     
-    const count = isPro ? 30 : 10;
+    // Normal Falling Logic (Hearts, Petals, Snow, Leaves, Standard Stars)
+    const count = isPro ? 12 : 6;
     const sizes = ['size-xs', 'size-sm', 'size-md', 'size-lg', 'size-xl'];
     
     // Multiple SVG variations for each effect
@@ -159,25 +224,25 @@ Variety of shapes, sizes, colors for each effect type
         ],
         
         snow: [
-            // Simple snowflake
-            '<svg viewBox="0 0 24 24" width="16" height="16"><circle fill="#fff" cx="12" cy="12" r="5" style="filter:drop-shadow(0 0 4px rgba(255,255,255,0.8))"/></svg>',
-            // Crystal snowflake
-            '<svg viewBox="0 0 24 24" width="20" height="20"><g fill="#fff" style="filter:drop-shadow(0 0 6px rgba(200,230,255,0.9))"><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="8" stroke="#fff" stroke-width="2"/><line x1="12" y1="16" x2="12" y2="22" stroke="#fff" stroke-width="2"/><line x1="2" y1="12" x2="8" y2="12" stroke="#fff" stroke-width="2"/><line x1="16" y1="12" x2="22" y2="12" stroke="#fff" stroke-width="2"/></g></svg>',
-            // Tiny dot
-            '<svg viewBox="0 0 16 16" width="10" height="10"><circle fill="#fff" cx="8" cy="8" r="4" style="filter:drop-shadow(0 0 3px #fff)"/></svg>',
-            // Star snowflake
-            '<svg viewBox="0 0 24 24" width="18" height="18"><g fill="#e8f4ff" style="filter:drop-shadow(0 0 5px rgba(255,255,255,0.9))"><circle cx="12" cy="12" r="4"/><line x1="12" y1="0" x2="12" y2="6" stroke="#fff" stroke-width="1.5"/><line x1="12" y1="18" x2="12" y2="24" stroke="#fff" stroke-width="1.5"/><line x1="0" y1="12" x2="6" y2="12" stroke="#fff" stroke-width="1.5"/><line x1="18" y1="12" x2="24" y2="12" stroke="#fff" stroke-width="1.5"/><line x1="3" y1="3" x2="7" y2="7" stroke="#fff" stroke-width="1"/><line x1="17" y1="17" x2="21" y2="21" stroke="#fff" stroke-width="1"/><line x1="21" y1="3" x2="17" y2="7" stroke="#fff" stroke-width="1"/><line x1="7" y1="17" x2="3" y2="21" stroke="#fff" stroke-width="1"/></g></svg>',
+            // Detailed Snowflake 1 (Delicate)
+            '<svg viewBox="0 0 24 24" width="20" height="20"><path fill="#fff" d="M12 0L9 5h6l-3-5zm0 24l3-5H9l3 5zM0 12l5 3V9L0 12zm24 0l-5-3v6l5-3zM3.5 3.5l4 4-1.5 1.5-4-4 1.5-1.5zm17 17l-4-4 1.5-1.5 4 4-1.5 1.5zM3.5 20.5l4-4 1.5 1.5-4 4-1.5-1.5zm17-17l-4 4 1.5 1.5 4-4-1.5-1.5z" style="filter:drop-shadow(0 0 2px rgba(255,255,255,0.9)) opacity(0.9)"/></svg>',
+            // Soft Hexagon Snow
+            '<svg viewBox="0 0 24 24" width="16" height="16"><path fill="#fff" d="M12 2L6 5v6l6 3 6-3V5l-6-3zm0 20l6-3v-6l-6-3-6 3v6l6 3z" style="filter:drop-shadow(0 0 4px rgba(255,255,255,0.8)) opacity(0.8)"/></svg>',
+            // Star Snow
+            '<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="4" fill="#fff" style="filter:blur(1px); opacity:0.9"/><path stroke="#fff" stroke-width="1.5" stroke-linecap="round" d="M12 2v20M2 12h20M5 5l14 14M5 19L19 5" style="opacity:0.8"/></svg>',
+            // Glitter Dot
+            '<svg viewBox="0 0 16 16" width="8" height="8"><circle fill="#fff" cx="8" cy="8" r="3" style="filter:drop-shadow(0 0 4px #fff)"/></svg>',
         ],
         
         leaves: [
-            // Maple leaf
-            '<svg viewBox="0 0 28 32" width="22" height="26"><path fill="url(#leaf1)" d="M14 2l3 6 5-2-2 6 6 2-4 4 2 6-5-2-5 8-5-8-5 2 2-6-4-4 6-2-2-6 5 2z"/></svg>',
-            // Oak leaf
-            '<svg viewBox="0 0 24 32" width="20" height="28"><path fill="url(#leaf2)" d="M12 2c-8 8-10 16-10 24 0 2 10 4 10 4s10-2 10-4c0-8-2-16-10-24z"/><line x1="12" y1="8" x2="12" y2="28" stroke="#8b5a2b" stroke-width="1.5"/></svg>',
-            // Ginkgo leaf  
-            '<svg viewBox="0 0 28 28" width="24" height="24"><path fill="url(#leaf3)" d="M14 26c-8 0-12-8-12-14C2 6 8 2 14 2s12 4 12 10c0 6-4 14-12 14z"/><line x1="14" y1="26" x2="14" y2="12" stroke="#8b6914" stroke-width="1.5"/></svg>',
-            // Simple leaf
-            '<svg viewBox="0 0 20 28" width="16" height="22"><ellipse fill="url(#leaf4)" cx="10" cy="12" rx="8" ry="10" transform="rotate(-30 10 12)"/><line x1="10" y1="22" x2="10" y2="8" stroke="#8b4513" stroke-width="1"/></svg>',
+            // Realistic Maple Leaf (Detailed)
+            '<svg viewBox="0 0 24 24" width="22" height="26"><path fill="url(#leaf1)" d="M21.5 10.5c-1-1-2.5-.5-3-1 .5-2-1-3.5-3-3.5 0-1.5-2-2-3.5-1-.5-1.5-2.5-1.5-3 0-1.5-.5-3 .5-3 2-.5-.5-2 0-2.5 1.5-.5.5-2 0-3 1 .5 1.5 0 3 .5 3.5-1 .5-1.5 2-1 3.5 0 1.5 1.5 2 2 3 .5 0 1 .5 1.5 1 0 1.5.5 3 2 4 .5.5 1.5 0 2-1v4c.5.5 1.5.5 2 0v-4c.5 1 1.5 1.5 2 1 1.5-1 2-2.5 2-4 .5-.5 1-1 1.5-1 .5-1 2-1 3-2.5.5-1.5 0-3-.5-3.5 1-.5 1.5-2 1-3.5z" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,0.1))"/></svg>',
+            // Delicate Fern Leaf
+            '<svg viewBox="0 0 24 32" width="18" height="28"><path fill="url(#leaf2)" d="M12 2c0 0-2 5-2 8s-3 4-3 7c0 2 2 4 5 4s5-2 5-4c0-3-3-4-3-7s-2-8-2-8zM12 8c0 0 3 4 3 7M12 12c-2 3-2 6-2 6" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.1))"/></svg>',
+            // Elegant Elm Leaf
+            '<svg viewBox="0 0 24 28" width="20" height="24"><path fill="url(#leaf3)" d="M12 24c-1 2-1.5 4-1.5 4h3s-.5-2-1.5-4c4-1 9-6 9-13C21 5 15 2 12 2S3 5 3 11c0 7 5 12 9 13z" style="filter:drop-shadow(0 2px 3px rgba(0,0,0,0.1))"/><line x1="12" y1="4" x2="12" y2="22" stroke="rgba(0,0,0,0.1)" stroke-width="1"/></svg>',
+            // Flying Small Leaf
+            '<svg viewBox="0 0 20 20" width="14" height="14"><path fill="url(#leaf4)" d="M2 18s5-1 9-5c4-4 5-9 5-13 0 0-5 1-9 5-4 4-5 9-5 13z" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.1))"/></svg>',
         ],
         
         stars: [
@@ -202,9 +267,10 @@ Variety of shapes, sizes, colors for each effect type
         item.innerHTML = variations[Math.floor(Math.random() * variations.length)];
         
         const left = Math.random() * 95 + 2.5;
-        const duration = 10 + Math.random() * 8;
-        const delay = Math.random() * 15;
-        const swayDuration = 2 + Math.random() * 3;
+        // Make it much slower and more gentle
+        const duration = 15 + Math.random() * 10; // 15s to 25s
+        const delay = Math.random() * 20; // Spread out start times more
+        const swayDuration = 3 + Math.random() * 4; // Slower sway
         
         item.style.cssText = `
             left: ${left}%;
@@ -216,7 +282,7 @@ Variety of shapes, sizes, colors for each effect type
     }
     
     for (let i = 0; i < count; i++) {
-        setTimeout(() => createParticle(), i * 150);
+        setTimeout(() => createParticle(), i * 800); // Add slowly one by one
     }
     
     document.addEventListener('visibilitychange', function() {

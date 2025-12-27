@@ -220,75 +220,31 @@
                     <span>Thiệp Cưới Online</span>
                 </h3>
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Modern 01 -->
-                    <a href="/minh-quang-thu-ha-2025" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up">
-                        <div class="aspect-[3/4] bg-gradient-to-br from-pink-100 to-rose-200 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Modern 01">
+                    @forelse($demoWeddings as $index => $wedding)
+                    <a href="{{ url($wedding->slug) }}" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="{{ $index * 50 }}">
+                        <div class="aspect-[3/4] relative overflow-hidden bg-gray-100">
+                            @if($wedding->template && $wedding->template->thumbnail_url)
+                                <img src="{{ $wedding->template->thumbnail_url }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="{{ $wedding->template->name }}">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center bg-gray-200">
+                                    <span class="text-gray-400">No Image</span>
+                                </div>
+                            @endif
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-60"></div>
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                                 <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
                             </div>
                         </div>
                         <div class="p-5">
-                            <h4 class="font-bold text-lg">Modern 01</h4>
-                            <p class="text-sm text-gray-500">Hiện đại, trẻ trung</p>
+                            <h4 class="font-bold text-lg truncate">{{ $wedding->template->name ?? 'Mẫu thiệp cưới' }}</h4>
+                            <p class="text-sm text-gray-500 truncate">{{ $wedding->groom_name }} & {{ $wedding->bride_name }}</p>
                         </div>
                     </a>
-
-                    <!-- Elegant 02 -->
-                    <a href="/duc-long-ngoc-anh-2025" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="50">
-                        <div class="aspect-[3/4] bg-gradient-to-br from-amber-100 to-yellow-200 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1550005809-91ad75fb315f?q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Elegant 02">
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg">Elegant 02</h4>
-                            <p class="text-sm text-gray-500">Sang trọng, tinh tế</p>
-                        </div>
-                    </a>
-
-                    <!-- Minimal 03 -->
-                    <a href="/hoang-anh-minh-chau-2025" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="100">
-                        <div class="aspect-[3/4] bg-gradient-to-br from-gray-100 to-slate-200 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Minimal 03">
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg">Minimal 03</h4>
-                            <p class="text-sm text-gray-500">Tối giản, nhẹ nhàng</p>
-                        </div>
-                    </a>
-
-                    <!-- Traditional Red -->
-                    <a href="/van-hung-thanh-tam-2025" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="150">
-                        <div class="aspect-[3/4] bg-gradient-to-br from-red-100 to-rose-300 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Traditional Red">
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg">Traditional Red</h4>
-                            <p class="text-sm text-gray-500">Truyền thống, đỏ may mắn</p>
-                        </div>
-                    </a>
-
-                    <!-- Luxury Gold (Wedding) -->
-                    <a href="/quoc-bao-kim-ngan-2025" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="200">
-                        <div class="aspect-[3/4] bg-gradient-to-br from-yellow-200 to-amber-400 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Luxury Gold">
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg">Luxury Gold</h4>
-                            <p class="text-sm text-gray-500">Vàng gold quyền quý</p>
-                        </div>
-                    </a>
+                    @empty
+                    <div class="col-span-full text-center py-10">
+                        <p class="text-gray-500">Đang cập nhật các mẫu demo...</p>
+                    </div>
+                    @endforelse
                 </div>
             </div>
 
@@ -299,104 +255,33 @@
                     <span>Danh Thiếp Số (Business Card)</span>
                 </h3>
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- CEO Profile -->
-                    <a href="/p/nguyen-van-an" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up">
-                        <div class="aspect-[3/4] bg-gradient-to-br from-slate-800 to-slate-900 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400" class="w-full h-full object-cover opacity-80 group-hover:scale-110 transition duration-700" alt="CEO Profile">
+                    @forelse($demoBusinessCards as $index => $card)
+                    <a href="{{ url('p/' . $card->slug) }}" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="{{ $index * 50 }}">
+                        <div class="aspect-[3/4] relative overflow-hidden bg-slate-900">
+                            @if($card->template && $card->template->thumbnail_url)
+                                <img src="{{ $card->template->thumbnail_url }}" class="w-full h-full object-cover opacity-80 group-hover:scale-110 transition duration-700" alt="{{ $card->template->name }}">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center bg-gray-800">
+                                    <span class="text-gray-400">No Image</span>
+                                </div>
+                            @endif
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                                 <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
                             </div>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg">CEO Profile</h4>
-                            <p class="text-sm text-gray-500">Đẳng cấp doanh nhân</p>
-                        </div>
-                    </a>
-
-                    <!-- Luxury Gold -->
-                    <a href="/p/tran-quang-anh" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="50">
-                        <div class="aspect-[3/4] bg-gradient-to-br from-yellow-900 to-black relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=400" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition duration-700" alt="Luxury Gold">
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
-                            </div>
+                            @if($index < 2)
                             <div class="absolute top-4 right-4 px-3 py-1 bg-amber-500 text-black text-xs font-bold rounded-full">HOT</div>
+                            @endif
                         </div>
                         <div class="p-5">
-                            <h4 class="font-bold text-lg">Luxury Gold</h4>
-                            <p class="text-sm text-gray-500">Tông đen vàng quyền lực</p>
+                            <h4 class="font-bold text-lg truncate">{{ $card->template->name ?? 'Mẫu danh thiếp' }}</h4>
+                            <p class="text-sm text-gray-500 truncate">{{ $card->name }}</p>
                         </div>
                     </a>
-
-                    <!-- Minimal White -->
-                    <a href="/p/le-minh-tu" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="100">
-                        <div class="aspect-[3/4] bg-gradient-to-br from-gray-50 to-gray-200 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Minimal White">
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg">Minimal White</h4>
-                            <p class="text-sm text-gray-500">Tối giản tinh tế</p>
-                        </div>
-                    </a>
-
-                    <!-- Corporate Blue -->
-                    <a href="/p/pham-thi-huong" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="150">
-                        <div class="aspect-[3/4] bg-gradient-to-br from-blue-600 to-indigo-900 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400" class="w-full h-full object-cover opacity-60 group-hover:scale-110 transition duration-700" alt="Corporate Blue">
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg">Corporate Blue</h4>
-                            <p class="text-sm text-gray-500">Chuyên nghiệp doanh nghiệp</p>
-                        </div>
-                    </a>
-
-                    <!-- Creative Dark -->
-                    <a href="/p/do-hoang-nam" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="200">
-                        <div class="aspect-[3/4] bg-gradient-to-br from-pink-600 via-purple-700 to-black relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=400" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition duration-700" alt="Creative Dark">
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg">Creative Dark</h4>
-                            <p class="text-sm text-gray-500">Neon sáng tạo</p>
-                        </div>
-                    </a>
-
-                    <!-- Tech Gradient -->
-                    <a href="/p/vu-duc-thanh" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="250">
-                        <div class="aspect-[3/4] bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-900 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400" class="w-full h-full object-cover opacity-60 group-hover:scale-110 transition duration-700" alt="Tech Gradient">
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg">Tech Gradient</h4>
-                            <p class="text-sm text-gray-500">Công nghệ tương lai</p>
-                        </div>
-                    </a>
-
-                    <!-- Simple Card -->
-                    <a href="/p/hoang-thi-mai" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-500" data-aos="fade-up" data-aos-delay="300">
-                        <div class="aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-300 relative overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Simple Card">
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold text-sm">Xem Demo</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <h4 class="font-bold text-lg">Simple Card</h4>
-                            <p class="text-sm text-gray-500">Đơn giản, hiệu quả</p>
-                        </div>
-                    </a>
+                    @empty
+                    <div class="col-span-full text-center py-10">
+                        <p class="text-gray-500">Đang cập nhật các mẫu demo...</p>
+                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>

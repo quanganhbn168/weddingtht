@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Add auto-approve setting for wishes
+     * Run the migrations.
      */
     public function up(): void
     {
         Schema::table('weddings', function (Blueprint $table) {
-            $table->boolean('is_auto_approve_wishes')->default(false)->after('content');
+            $table->string('preload_variant')->nullable()->default('heartbeat');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('weddings', function (Blueprint $table) {
-            $table->dropColumn('is_auto_approve_wishes');
+            //
         });
     }
 };

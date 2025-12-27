@@ -33,7 +33,9 @@ class Wedding extends Model implements HasMedia
         'show_preload' => 'boolean',
         'can_share' => 'boolean',
         'expires_at' => 'date',
-        // Note: status, tier, falling_effect are stored as strings, use Enum::options() for dropdowns
+        'falling_effect' => FallingEffect::class,
+        'status' => WeddingStatus::class,
+        'tier' => WeddingTier::class,
     ];
 
     // ==========================================
@@ -42,27 +44,130 @@ class Wedding extends Model implements HasMedia
     
     public function isPro(): bool
     {
+        if ($this->tier instanceof WeddingTier) {
+            return $this->tier === WeddingTier::PRO;
+        }
         return $this->tier === 'pro' || $this->tier === WeddingTier::PRO->value;
     }
     
     public function isPublished(): bool
     {
+        if ($this->status instanceof WeddingStatus) {
+            return $this->status === WeddingStatus::PUBLISHED;
+        }
         return $this->status === 'published' || $this->status === WeddingStatus::PUBLISHED->value;
     }
     
     public function getStatusLabel(): string
     {
+        if ($this->status instanceof WeddingStatus) {
+            return $this->status->label();
+        }
         return WeddingStatus::tryFrom($this->status)?->label() ?? $this->status ?? 'N/A';
     }
     
     public function getTierLabel(): string
     {
+        if ($this->tier instanceof WeddingTier) {
+            return $this->tier->label();
+        }
         return WeddingTier::tryFrom($this->tier)?->label() ?? $this->tier ?? 'Tiêu chuẩn';
     }
     
     public function getFallingEffectLabel(): string
     {
+        if ($this->falling_effect instanceof FallingEffect) {
+            return $this->falling_effect->label();
+        }
         return FallingEffect::tryFrom($this->falling_effect)?->label() ?? $this->falling_effect ?? 'Không';
+    }
+
+    public function getMusicUrlAttribute(): ?string
+    {
+        // 1. If it's a demo, try to get from Global Config
+        if ($this->is_demo) {
+            $demo = \App\Models\DemoContent::first();
+            if ($demo && $demo->background_music) {
+                return $demo->background_music;
+            }
+        }
+        
+        // 2. Fallback to local music
+        if (!$this->background_music) return null;
+        if (Str::startsWith($this->background_music, ['http', 'https'])) return $this->background_music;
+        return asset('storage/' . $this->background_music);
+    }
+    
+    public function getGalleryImagesAttribute()
+    {
+        // 1. If it's a demo, try to get from Global Config first
+        if ($this->is_demo) {
+            $demo = \App\Models\DemoContent::first();
+            if ($demo && $demo->hasMedia('demo_gallery')) {
+                return $demo->getMedia('demo_gallery');
+            }
+        }
+        
+        // 2. Fallback to local gallery
+        return $this->getMedia('gallery');
+    }
+
+    // ==========================================
+    // CENTRALIZED DEMO ASSETS HELPERS
+    // ==========================================
+
+    /**
+     * Helper to get URL from DemoContent if is_demo, else fallback to local
+     */
+    private function getMediaUrlWithDemoFallback(string $collection, string $conversion = ''): string
+    {
+        // 1. Check Demo
+        if ($this->is_demo) {
+            $demo = \App\Models\DemoContent::first();
+            // Note: We use the SAME collection name in DemoContent for simplicity
+            if ($demo && $demo->hasMedia($collection)) {
+                return $demo->getFirstMediaUrl($collection, $conversion);
+            }
+        }
+        
+        // 2. Fallback to local
+        return $this->getFirstMediaUrl($collection, $conversion);
+    }
+
+    public function getCoverUrl(): string
+    {
+        $url = $this->getMediaUrlWithDemoFallback('cover');
+        return $url ?: asset('images/default-cover.jpg'); // Fallback placeholder if absolutely nothing
+    }
+
+    public function getHeroUrl(): string
+    {
+        $url = $this->getMediaUrlWithDemoFallback('hero');
+        return $url ?: asset('images/default-hero.jpg');
+    }
+
+    public function getGroomPhotoUrl(): string
+    {
+        $url = $this->getMediaUrlWithDemoFallback('groom_photo');
+        return $url ?: 'https://ui-avatars.com/api/?name=Groom&background=random';
+    }
+
+    public function getBridePhotoUrl(): string
+    {
+        $url = $this->getMediaUrlWithDemoFallback('bride_photo');
+        return $url ?: 'https://ui-avatars.com/api/?name=Bride&background=random';
+    }
+
+    public function getGroomQrUrl(): string
+    {
+        $url = $this->getMediaUrlWithDemoFallback('groom_qr');
+        return $url ?: asset('images/qr-placeholder.png');
+    }
+
+    public function getBrideQrUrl(): string
+    {
+        $url = $this->getMediaUrlWithDemoFallback('bride_qr');
+        return $url ?: asset('images/qr-placeholder.png');
     }
 
     public function template(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -135,16 +240,39 @@ class Wedding extends Model implements HasMedia
 
     protected static function booted()
     {
+        static::creating(function ($wedding) {
+            $wedding->status = $wedding->status ?? WeddingStatus::DRAFT->value;
+            $wedding->tier = $wedding->tier ?? WeddingTier::STANDARD->value;
+            $wedding->falling_effect = $wedding->falling_effect ?? FallingEffect::HEARTS->value;
+        });
+
+
         static::saving(function ($wedding) {
             // Auto calculate lunar date
             if ($wedding->event_date) {
-                $wedding->event_date_lunar = \App\Helpers\LunarHelper::solarToLunar($wedding->event_date);
+                // Check if LunarHelper exists, if not, skip or use fallback
+                if (class_exists(\App\Helpers\LunarHelper::class)) {
+                    $wedding->event_date_lunar = \App\Helpers\LunarHelper::solarToLunar($wedding->event_date);
+                }
             }
             
-            // Fallback slug generation if empty (though form handles it now)
+            // Generate slug if empty
             if (empty($wedding->slug)) {
-                $baseSlug = Str::slug($wedding->groom_name . '-va-' . $wedding->bride_name . '-' . now()->year);
-                $wedding->slug = $baseSlug . '-' . rand(1000, 9999);
+                $groom = $wedding->groom_name ?? 'groom';
+                $bride = $wedding->bride_name ?? 'bride';
+                // Use event date year or current year
+                $year = $wedding->event_date ? $wedding->event_date->format('d-m-Y') : now()->year;
+                
+                $baseSlug = Str::slug("$groom-va-$bride-$year");
+                $slug = $baseSlug;
+                $counter = 1;
+
+                // Ensure uniqueness
+                while (static::where('slug', $slug)->where('id', '!=', $wedding->id)->exists()) {
+                    $slug = $baseSlug . '-' . $counter++;
+                }
+                
+                $wedding->slug = $slug;
             }
         });
     }
@@ -157,6 +285,9 @@ class Wedding extends Model implements HasMedia
     public function isViewable()
     {
         // Allow view if status is preview or published
+        if ($this->status instanceof WeddingStatus) {
+            return in_array($this->status, [WeddingStatus::PREVIEW, WeddingStatus::PUBLISHED]);
+        }
         return in_array($this->status, ['preview', 'published']);
     }
 

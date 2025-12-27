@@ -9,6 +9,7 @@ enum FallingEffect: string
     case SNOW = 'snow';
     case LEAVES = 'leaves';
     case STARS = 'stars';
+    case SHOOTING_STARS = 'shooting_stars';
     case NONE = 'none';
     
     public function label(): string
@@ -19,6 +20,7 @@ enum FallingEffect: string
             self::SNOW => '❄️ Tuyết',
             self::LEAVES => '🍂 Lá rơi',
             self::STARS => '⭐ Ngôi sao',
+            self::SHOOTING_STARS => '🌠 Sao băng (Pro)',
             self::NONE => '🚫 Không hiệu ứng',
         };
     }

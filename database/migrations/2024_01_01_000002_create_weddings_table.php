@@ -63,6 +63,21 @@ return new class extends Migration
             // Appearance & Settings
             $table->string('template_view')->default('templates.modern_01');
             $table->enum('status', ['draft', 'preview', 'published', 'archived'])->default('draft');
+            
+            // Pro Features
+            $table->enum('tier', ['standard', 'pro'])->default('standard');
+            $table->boolean('is_demo')->default(false);
+            $table->enum('falling_effect', ['hearts', 'petals', 'snow', 'leaves', 'stars', 'none'])->default('hearts');
+            $table->boolean('show_preload')->default(false);
+            $table->string('custom_domain')->nullable();
+            $table->date('expires_at')->nullable();
+            
+            // Sharing & Agency
+            $table->foreignId('agent_id')->nullable()->constrained('agents')->nullOnDelete();
+            $table->boolean('can_share')->default(true);
+            $table->string('preview_token')->nullable();
+            $table->boolean('is_auto_approve_wishes')->default(false);
+            
             $table->string('password')->nullable();
             $table->string('background_music')->nullable();
             
