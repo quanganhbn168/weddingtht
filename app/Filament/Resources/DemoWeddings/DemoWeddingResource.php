@@ -20,6 +20,8 @@ class DemoWeddingResource extends Resource
 {
     protected static ?string $model = Wedding::class;
 
+    protected static ?string $slug = 'demo-weddings';
+
     public static function getNavigationLabel(): string
     {
         return 'Quản lý Demo';
@@ -186,7 +188,7 @@ class DemoWeddingResource extends Resource
                         'primary' => 'standard',
                         'success' => 'pro',
                     ])
-                    ->formatStateUsing(fn (?string $state): string => strtoupper($state ?? 'standard')),
+                    ->formatStateUsing(fn ($state): string => strtoupper($state instanceof \App\Enums\WeddingTier ? $state->value : ($state ?? 'standard'))),
                 
                 Tables\Columns\TextColumn::make('status')
                     ->label('Trạng thái')

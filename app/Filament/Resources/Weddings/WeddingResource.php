@@ -18,6 +18,8 @@ class WeddingResource extends Resource
 {
     protected static ?string $model = Wedding::class;
 
+    protected static ?string $slug = 'weddings';
+
     public static function getNavigationLabel(): string
     {
         return 'Khách Hàng';
