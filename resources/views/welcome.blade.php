@@ -150,7 +150,7 @@
                             
                             @if($thumbnail)
                                 <img src="{{ $thumbnail }}" 
-                                     class="w-full h-full object-cover opacity-90 transition-all ease-in-out {{ $isCustom ? 'duration-[3000ms] object-top group-hover:object-bottom' : 'duration-1000 group-hover:scale-105' }}" 
+                                     class="w-full h-full object-cover opacity-90 transition duration-1000 group-hover:scale-105" 
                                      alt="{{ $wedding->template->name ?? 'Demo' }}">
                             @else
                                 <div class="w-full h-full flex items-center justify-center bg-slate-800">
@@ -198,7 +198,7 @@
 
                             @if($thumbStd)
                                 <img src="{{ $thumbStd }}" 
-                                     class="w-full h-full object-cover transition-all ease-in-out {{ $isCustomStd ? 'duration-[3000ms] object-top group-hover:object-bottom' : 'duration-700 group-hover:scale-110' }}" 
+                                     class="w-full h-full object-cover transition duration-700 group-hover:scale-110" 
                                      alt="{{ $wedding->template->name ?? 'Demo' }}">
                             @else
                                 <div class="w-full h-full flex items-center justify-center bg-gray-200">
