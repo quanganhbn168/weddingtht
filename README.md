@@ -105,3 +105,6 @@ MIT License
 ## 👨‍💻 Author
 
 **Quang Anh** - [GitHub](https://github.com/quanganhbn168)
+
+---
+> Project updated: 2025 - Ready for Production 🚀
