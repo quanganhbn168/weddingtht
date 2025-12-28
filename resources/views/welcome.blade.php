@@ -143,8 +143,15 @@
                         <div class="absolute top-4 right-4 z-20 px-3 py-1 rounded-full gradient-gold text-white text-xs font-bold shadow-lg">PREMIUM</div>
                         
                         <div class="aspect-[3/4] relative overflow-hidden">
-                            @if($wedding->template && $wedding->template->thumbnail_url)
-                                <img src="{{ $wedding->template->thumbnail_url }}" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition duration-1000" alt="{{ $wedding->template->name }}">
+                            @php
+                                $thumbnail = $wedding->getFirstMediaUrl('demo_thumbnail') ?: ($wedding->template->thumbnail_url ?? null);
+                                $isCustom = $wedding->hasMedia('demo_thumbnail');
+                            @endphp
+                            
+                            @if($thumbnail)
+                                <img src="{{ $thumbnail }}" 
+                                     class="w-full h-full object-cover opacity-90 transition-all ease-in-out {{ $isCustom ? 'duration-[3000ms] object-top group-hover:object-bottom' : 'duration-1000 group-hover:scale-105' }}" 
+                                     alt="{{ $wedding->template->name ?? 'Demo' }}">
                             @else
                                 <div class="w-full h-full flex items-center justify-center bg-slate-800">
                                     <span class="text-gray-500">PRO Template</span>
@@ -184,8 +191,15 @@
                     @forelse($standardWeddings as $index => $wedding)
                     <a href="{{ url($wedding->slug) }}" class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition duration-500" data-aos="fade-up" data-aos-delay="{{ $index * 50 }}">
                         <div class="aspect-[3/4] relative overflow-hidden bg-gray-100">
-                            @if($wedding->template && $wedding->template->thumbnail_url)
-                                <img src="{{ $wedding->template->thumbnail_url }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="{{ $wedding->template->name }}">
+                            @php
+                                $thumbStd = $wedding->getFirstMediaUrl('demo_thumbnail') ?: ($wedding->template->thumbnail_url ?? null);
+                                $isCustomStd = $wedding->hasMedia('demo_thumbnail');
+                            @endphp
+
+                            @if($thumbStd)
+                                <img src="{{ $thumbStd }}" 
+                                     class="w-full h-full object-cover transition-all ease-in-out {{ $isCustomStd ? 'duration-[3000ms] object-top group-hover:object-bottom' : 'duration-700 group-hover:scale-110' }}" 
+                                     alt="{{ $wedding->template->name ?? 'Demo' }}">
                             @else
                                 <div class="w-full h-full flex items-center justify-center bg-gray-200">
                                     <span class="text-gray-400">Standard</span>

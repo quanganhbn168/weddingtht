@@ -130,6 +130,15 @@ class DemoWeddingResource extends Resource
                         Forms\Components\Hidden::make('type')
                             ->default('wedding'),
                     ]),
+
+                Forms\Components\Section::make('Demo Image')
+                    ->schema([
+                        Forms\Components\SpatieMediaLibraryFileUpload::make('demo_thumbnail')
+                            ->label('Demo Thumbnail (Ảnh dài full trang)')
+                            ->collection('demo_thumbnail')
+                            ->image()
+                            ->imageEditor(),
+                    ]),
                 
                 Forms\Components\Section::make('Pro Features')
                     ->columns(2)

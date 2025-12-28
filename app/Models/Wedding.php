@@ -209,6 +209,7 @@ class Wedding extends Model implements HasMedia
         $this->addMediaCollection('bride_photo')->singleFile();
         $this->addMediaCollection('groom_qr')->singleFile();
         $this->addMediaCollection('bride_qr')->singleFile();
+        $this->addMediaCollection('demo_thumbnail')->singleFile();
         $this->addMediaCollection('gallery');
     }
 
