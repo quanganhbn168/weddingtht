@@ -60,6 +60,11 @@
                 <a href="#portfolio" class="hover:text-gray-900 transition">Mẫu thiết kế</a>
                 <a href="#about" class="hover:text-gray-900 transition">Về chúng tôi</a>
                 <a href="#contact" class="hover:text-gray-900 transition">Liên hệ</a>
+                @auth
+                    <a href="{{ url('/dashboard') }}" class="text-rose-600 font-semibold">Tài khoản</a>
+                @else
+                    <a href="{{ route('login') }}" class="text-gray-900 font-semibold hover:text-rose-600 transition">Đăng nhập</a>
+                @endauth
             </div>
             <a href="tel:0375433678" class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 rounded-full gradient-gold text-white font-semibold text-sm hover:opacity-90 transition shadow-lg shadow-amber-200">
                 <i class="fas fa-phone"></i>
