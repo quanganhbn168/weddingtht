@@ -15,7 +15,7 @@
             <span class="text-sm text-gray-500">{{ $wedding->template?->name }}</span>
         </div>
         <div class="flex items-center gap-2">
-            <a href="/w/{{ $wedding->slug }}" target="_blank" 
+            <a href="/{{ $wedding->slug }}" target="_blank" 
                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -408,7 +408,7 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">URL Slug</label>
                                 <div class="flex">
-                                    <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">/w/</span>
+                                    <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">/</span>
                                     <input type="text" wire:model="slug" 
                                         class="flex-1 border-gray-300 rounded-r-lg focus:ring-pink-500 focus:border-pink-500">
                                 </div>
@@ -483,10 +483,10 @@
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Link chia sẻ thiệp cưới</label>
                         <div class="flex items-center gap-2">
-                            <input type="text" readonly value="{{ url('/w/' . $wedding->slug) }}" 
+                            <input type="text" readonly value="{{ url('/' . $wedding->slug) }}" 
                                 class="flex-1 bg-white border-gray-300 rounded-lg text-gray-600 text-sm">
                             <button type="button" 
-                                onclick="navigator.clipboard.writeText('{{ url('/w/' . $wedding->slug) }}'); alert('Đã copy link!');" 
+                                onclick="navigator.clipboard.writeText('{{ url('/' . $wedding->slug) }}'); alert('Đã copy link!');" 
                                 class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
                                 Copy
                             </button>
