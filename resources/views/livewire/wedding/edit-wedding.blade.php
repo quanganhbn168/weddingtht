@@ -382,8 +382,8 @@
                         @if($wedding->getMedia('gallery')->count() > 0)
                             <div class="grid grid-cols-4 md:grid-cols-6 gap-2 mb-4">
                                 @foreach($wedding->getMedia('gallery') as $media)
-                                    <div class="relative">
-                                        <img src="{{ $media->getUrl() }}" class="w-full h-16 object-cover border rounded">
+                                    <div class="relative group">
+                                        <img src="{{ $media->getUrl() }}" class="w-full h-32 object-contain bg-gray-50 border rounded">
                                         <button type="button" wire:click="deleteMedia('gallery', {{ $media->id }})" 
                                             class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
