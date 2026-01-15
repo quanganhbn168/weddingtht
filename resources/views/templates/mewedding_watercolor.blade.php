@@ -940,21 +940,24 @@
                                     <label class="cursor-pointer">
                                         <input type="radio" x-model="formData.attendance" value="yes" required class="sr-only">
                                         <div class="px-6 py-2 border border-gray-200 rounded-full text-sm font-bold transition-all hover:scale-105 shadow-sm"
-                                             :class="formData.attendance === 'yes' ? 'bg-[#BB6A07] text-white border-[#BB6A07] shadow-md opacity-100' : 'bg-white text-gray-500'">
+                                             :class="formData.attendance === 'yes' ? 'shadow-md opacity-100' : 'bg-white text-gray-500'"
+                                             :style="formData.attendance === 'yes' ? 'background-color: #BB6A07; color: white; border-color: #BB6A07;' : ''">
                                             Sẽ Tham Dự
                                         </div>
                                     </label>
                                     <label class="cursor-pointer">
                                         <input type="radio" x-model="formData.attendance" value="maybe" class="sr-only">
                                         <div class="px-6 py-2 border border-gray-200 rounded-full text-sm font-bold transition-all hover:scale-105 shadow-sm"
-                                             :class="formData.attendance === 'maybe' ? 'bg-yellow-500 text-white border-yellow-500 shadow-md' : 'bg-white text-gray-500'">
+                                             :class="formData.attendance === 'maybe' ? 'shadow-md' : 'bg-white text-gray-500'"
+                                             :style="formData.attendance === 'maybe' ? 'background-color: #EAB308; color: white; border-color: #EAB308;' : ''">
                                             Chưa Chắc
                                         </div>
                                     </label>
                                     <label class="cursor-pointer">
                                         <input type="radio" x-model="formData.attendance" value="no" class="sr-only">
                                         <div class="px-6 py-2 border border-gray-200 rounded-full text-sm font-bold transition-all hover:scale-105 shadow-sm"
-                                             :class="formData.attendance === 'no' ? 'bg-stone-600 text-white border-stone-600 shadow-md' : 'bg-white text-gray-500'">
+                                             :class="formData.attendance === 'no' ? 'shadow-md' : 'bg-white text-gray-500'"
+                                             :style="formData.attendance === 'no' ? 'background-color: #57534E; color: white; border-color: #57534E;' : ''">
                                             Rất Tiếc
                                         </div>
                                     </label>
