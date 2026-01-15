@@ -6,11 +6,26 @@
 
 @section('content')
 
+<!-- AOS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<!-- Swiper -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
 <style>
+    @font-face {
+        font-family: 'utm-viceroyjf';
+        src: url('{{ asset('fonts/utm-viceroyjf.ttf') }}') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
     @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap');
     
     :root {
-        --color-primary: #C5A25D;
+        --color-primary: rgb(187, 106, 7);
         --color-primary-dark: #A88B4A;
         --color-primary-light: #E8D5B5;
         --color-bg-main: #FFFFFF;
@@ -18,6 +33,7 @@
         --color-text-dark: #545353;
         --color-text-body: #6B7280;
         
+        --font-viceroy: 'utm-viceroyjf', cursive;
         --font-script: 'Dancing Script', cursive;
         --font-body: 'Quicksand', sans-serif;
         --font-serif: 'Noto Serif', serif;
@@ -31,16 +47,34 @@
         color: var(--color-text-dark); 
     }
     
+    .font-viceroy { font-family: var(--font-viceroy); }
     .font-script { font-family: var(--font-script); }
     .font-serif { font-family: var(--font-serif); }
     
     .text-gold { color: var(--color-primary); }
+    .text-brown { color: #8B4513; }
     .bg-cream { background-color: var(--color-bg-cream); }
     
+    .bg-main-watercolor {
+        background-image: url('{{ asset('images/back-ground-1.png') }}');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
     /* Watercolor floral overlay */
     .watercolor-overlay {
-        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><circle cx="50" cy="50" r="40" fill="%23fce7f3" opacity="0.3"/><circle cx="350" cy="80" r="50" fill="%23fdf2f8" opacity="0.4"/><circle cx="380" cy="350" r="45" fill="%23fce7f3" opacity="0.3"/><circle cx="30" cy="380" r="35" fill="%23fdf2f8" opacity="0.4"/></svg>');
+        position: relative;
+    }
+    
+    .watercolor-overlay::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-image: url('{{ asset('images/back-ground-1.png') }}');
         background-size: cover;
+        opacity: 0.1;
+        pointer-events: none;
     }
     
     /* Animations */
@@ -63,10 +97,6 @@
     .animate-fade-in { animation: fadeIn 1.2s ease-out forwards; }
     .animate-float { animation: float 4s ease-in-out infinite; }
     
-    /* Scroll reveal */
-    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
-    
     /* Card shadow */
     .card-shadow {
         box-shadow: 0 4px 20px rgba(0,0,0,0.08);
@@ -86,17 +116,6 @@
         background: linear-gradient(to right, transparent, var(--color-primary), transparent);
     }
     
-    /* Timeline dot */
-    .timeline-dot {
-        width: 12px;
-        height: 12px;
-        background: var(--color-primary);
-        border-radius: 50%;
-        border: 3px solid white;
-        box-shadow: 0 0 0 2px var(--color-primary);
-    }
-    
-    /* Button style matching mewedding */
     .btn-mewedding {
         background: #9CA3AF;
         color: white;
@@ -109,15 +128,38 @@
     .btn-mewedding:hover {
         background: var(--color-primary);
     }
-    
-    .btn-primary-mewedding {
-        background: linear-gradient(135deg, #8B5CF6, #EC4899);
-        color: white;
-        padding: 14px 32px;
-        border-radius: 25px;
-        font-weight: 600;
-        font-size: 14px;
+
+    /* Custom Swiper */
+    .swiper-button-next, .swiper-button-prev {
+        color: var(--color-primary);
+        background: rgba(255, 255, 255, 0.8);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
     }
+    .swiper-button-next:after, .swiper-button-prev:after {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .gallery-thumbs .swiper-slide {
+        opacity: 0.4;
+        transition: opacity 0.3s;
+    }
+    .gallery-thumbs .swiper-slide-thumb-active {
+        opacity: 1;
+        border: 2px solid var(--color-primary);
+        border-radius: 8px;
+    }
+    
+    .floral-decoration {
+        position: absolute;
+        width: 120px;
+        z-index: 10;
+        pointer-events: none;
+    }
+    .floral-top-left { top: -20px; left: -20px; transform: rotate(0deg); }
+    .floral-bottom-right { bottom: -20px; right: -20px; transform: rotate(180deg); }
 </style>
 
 <div class="max-w-[480px] mx-auto bg-white min-h-screen shadow-2xl relative overflow-hidden">
@@ -135,155 +177,166 @@
 
     {{-- SECTION 1: HERO / INTRO --}}
     <section class="min-h-screen relative flex flex-col justify-center items-center px-6 py-12 bg-cream watercolor-overlay">
-        <div class="text-center animate-fade-in-up">
-            <p class="text-sm tracking-[0.3em] uppercase text-gray-500 mb-6">Thân Mời Tới Dự Bữa Tiệc</p>
+        <div class="text-center" data-aos="fade-up">
+            <p class="text-sm tracking-[0.3em] uppercase text-gray-500 mb-6 font-medium">Thân Mời Tới Dự Bữa Tiệc</p>
             
             <div class="mb-8">
-                <h1 class="font-script text-5xl text-gold leading-tight mb-2">{{ $wedding->groom_name }}</h1>
-                <p class="font-script text-3xl text-gold">&</p>
-                <h1 class="font-script text-5xl text-gold leading-tight mt-2">{{ $wedding->bride_name }}</h1>
+                <h1 class="font-viceroy text-6xl text-gold leading-tight mb-2">{{ $wedding->groom_name }}</h1>
+                <p class="font-viceroy text-4xl text-gold">&</p>
+                <h1 class="font-viceroy text-6xl text-gold leading-tight mt-2">{{ $wedding->bride_name }}</h1>
             </div>
             
+            {{-- Western Date --}}
+            <div class="mb-8 text-gold font-serif text-lg tracking-widest">
+                {{ $wedding->event_date?->format('d/m/Y') }}
+            </div>
+
             {{-- Couple Hero Image --}}
-            <div class="relative mx-auto mb-8 max-w-[280px]">
-                <div class="aspect-[3/4] rounded-t-full overflow-hidden border-4 border-white shadow-xl">
-                    <img src="{{ $heroUrl }}" class="w-full h-full object-cover" alt="Couple Photo">
+            <div class="relative mx-auto mb-8 max-w-[320px]">
+                <div class="aspect-[3/4] rounded-t-full overflow-hidden border-8 border-white shadow-2xl">
+                    <img src="{{ $heroUrl }}" class="w-full h-full object-contain bg-gray-50" alt="Couple Photo">
                 </div>
             </div>
             
             <div class="separator">
-                <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 text-gold" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                 </svg>
             </div>
         </div>
         
-        <div class="absolute bottom-8 animate-bounce text-gold opacity-60">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="absolute bottom-12 animate-bounce text-gold opacity-60">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
             </svg>
         </div>
     </section>
 
     {{-- SECTION 2: SAVE THE DATE --}}
-    <section class="py-16 px-6 text-center bg-white watercolor-overlay reveal">
-        <p class="text-sm text-gray-500 uppercase tracking-widest mb-4">Xin Hãy Lưu Ngày</p>
-        <div class="font-serif text-6xl font-bold text-gold mb-2">
-            {{ $wedding->event_date?->format('d.m') }}
+    <section class="py-20 px-6 text-center bg-white relative overflow-hidden bg-main-watercolor" data-aos="fade-up">
+        <div class="relative z-10 max-w-sm mx-auto">
+            <img src="{{ asset('images/save-the-date.png') }}" class="w-full h-auto drop-shadow-lg" alt="Save the Date">
+            
+            <div class="mt-8 font-serif text-2xl font-bold text-gold tracking-widest">
+                {{ $wedding->event_date?->format('d . m . Y') }}
+            </div>
         </div>
-        <p class="text-gray-600 text-lg">{{ $wedding->event_date?->format('Y') }}</p>
-        @if($wedding->event_date_lunar)
-            <p class="text-sm text-gray-500 mt-2">({{ $wedding->event_date_lunar }} Âm Lịch)</p>
-        @endif
     </section>
 
     {{-- SECTION 3: GROOM & BRIDE INFO --}}
-    <section class="py-16 px-6 bg-cream reveal">
-        <div class="text-center mb-10">
-            <h2 class="font-script text-4xl text-gold mb-2">Chú Rể & Cô Dâu</h2>
+    <section class="py-20 px-6 bg-cream relative overflow-hidden">
+        <div class="text-center mb-12" data-aos="zoom-in">
+            <h2 class="font-viceroy text-5xl text-gold mb-4">Chú Rể & Cô Dâu</h2>
             <div class="separator">
-                <svg class="w-4 h-4 text-gold" fill="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 text-gold" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                 </svg>
             </div>
         </div>
         
-        <div class="grid grid-cols-2 gap-6">
+        <div class="grid grid-cols-2 gap-4">
             {{-- Groom --}}
-            <div class="text-center">
-                <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
+            <div class="text-center" data-aos="fade-right">
+                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl">
                     <img src="{{ $groomPhoto }}" class="w-full h-full object-cover" alt="{{ $wedding->groom_name }}">
                 </div>
-                <h3 class="font-script text-2xl text-gold mb-1">{{ $wedding->groom_name }}</h3>
-                <p class="text-xs text-gray-500 leading-relaxed">
-                    Con Ông: {{ $wedding->groom_father }}<br>
-                    Con Bà: {{ $wedding->groom_mother }}
-                </p>
+                <h3 class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->groom_name }}</h3>
+                <div class="text-gray-600 text-sm space-y-1">
+                    <p class="font-medium italic">Con ông: <span class="not-italic text-gray-800">{{ $wedding->groom_father }}</span></p>
+                    <p class="font-medium italic">Con bà: <span class="not-italic text-gray-800">{{ $wedding->groom_mother }}</span></p>
+                </div>
             </div>
             
             {{-- Bride --}}
-            <div class="text-center">
-                <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
+            <div class="text-center" data-aos="fade-left">
+                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl">
                     <img src="{{ $bridePhoto }}" class="w-full h-full object-cover" alt="{{ $wedding->bride_name }}">
                 </div>
-                <h3 class="font-script text-2xl text-gold mb-1">{{ $wedding->bride_name }}</h3>
-                <p class="text-xs text-gray-500 leading-relaxed">
-                    Con Ông: {{ $wedding->bride_father }}<br>
-                    Con Bà: {{ $wedding->bride_mother }}
-                </p>
+                <h3 class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->bride_name }}</h3>
+                <div class="text-gray-600 text-sm space-y-1">
+                    <p class="font-medium italic">Con ông: <span class="not-italic text-gray-800">{{ $wedding->bride_father }}</span></p>
+                    <p class="font-medium italic">Con bà: <span class="not-italic text-gray-800">{{ $wedding->bride_mother }}</span></p>
+                </div>
             </div>
         </div>
     </section>
 
     {{-- SECTION 4: GALLERY --}}
-    <section class="py-16 px-6 bg-white reveal">
-        <h2 class="font-script text-4xl text-gold text-center mb-8">Kỷ Niệm Của Chúng Tôi</h2>
+    <section class="py-20 px-6 bg-white relative overflow-hidden" data-aos="fade-up">
+        {{-- Floral decorations --}}
+        <img src="{{ asset('images/hoa-1.png') }}" class="floral-decoration floral-top-left" alt="decor">
+        <img src="{{ asset('images/hoa-1.png') }}" class="floral-decoration floral-bottom-right" alt="decor">
+
+        <h2 class="font-viceroy text-5xl text-gold text-center mb-12">Kỷ Niệm Của Chúng Tôi</h2>
         
-        <div class="grid grid-cols-3 gap-2 mb-4">
-            @php
-                $galleryImages = $wedding->gallery_images->take(6);
-                $placeholders = [
-                    'https://images.unsplash.com/photo-1519741497674-611481863552?w=400',
-                    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400',
-                    'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=400',
-                    'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=400',
-                    'https://images.unsplash.com/photo-1519741497674-611481863552?w=400',
-                    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400'
-                ];
-            @endphp
-            
-            @if($galleryImages->isNotEmpty())
-                @foreach($galleryImages as $media)
-                    <div class="aspect-square rounded-lg overflow-hidden">
-                        <img src="{{ $media->getUrl() }}" class="w-full h-full object-cover hover:scale-110 transition duration-500">
+        <div class="space-y-12">
+            {{-- Main Slider 1 --}}
+            <div class="relative">
+                <div class="swiper mainGallery rounded-2xl overflow-hidden aspect-[4/5] shadow-2xl">
+                    <div class="swiper-wrapper">
+                        @php
+                            $galleryImages = $wedding->gallery_images;
+                            $placeholders = [
+                                'https://images.unsplash.com/photo-1519741497674-611481863552?w=800',
+                                'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800',
+                                'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=800',
+                                'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800'
+                            ];
+                            $imagesToDisplay = $galleryImages->isNotEmpty() ? $galleryImages->map->getUrl() : $placeholders;
+                        @endphp
+                        @foreach($imagesToDisplay as $imgUrl)
+                            <div class="swiper-slide">
+                                <img src="{{ $imgUrl }}" class="w-full h-full object-cover">
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
-            @else
-                @foreach($placeholders as $placeholder)
-                    <div class="aspect-square rounded-lg overflow-hidden">
-                        <img src="{{ $placeholder }}" class="w-full h-full object-cover hover:scale-110 transition duration-500">
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+
+                {{-- Thumbs Slider 1 --}}
+                <div class="swiper thumbGallery mt-4 h-24">
+                    <div class="swiper-wrapper">
+                        @foreach($imagesToDisplay as $imgUrl)
+                            <div class="swiper-slide rounded-lg overflow-hidden cursor-pointer">
+                                <img src="{{ $imgUrl }}" class="w-full h-full object-cover">
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
-            @endif
-        </div>
-        
-        {{-- Main slider image --}}
-        <div class="relative rounded-2xl overflow-hidden aspect-[4/3]" x-data="{ current: 0, images: {{ json_encode($galleryImages->isNotEmpty() ? $galleryImages->map->getUrl()->toArray() : $placeholders) }} }">
-            <template x-for="(img, index) in images" :key="index">
-                <img :src="img" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500" 
-                     :class="current === index ? 'opacity-100' : 'opacity-0'">
-            </template>
-            
-            <button @click="current = (current - 1 + images.length) % images.length" 
-                    class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition">
-                <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-            </button>
-            <button @click="current = (current + 1) % images.length" 
-                    class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 rounded-full flex items-center justify-center hover:bg-white transition">
-                <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            </button>
+                </div>
+            </div>
+
+            {{-- Slider 2 (Secondary) --}}
+            <div class="swiper secondaryGallery rounded-2xl overflow-hidden aspect-[16/9] shadow-xl" data-aos="fade-up">
+                <div class="swiper-wrapper">
+                    @foreach($imagesToDisplay->reverse() as $imgUrl)
+                        <div class="swiper-slide">
+                            <img src="{{ $imgUrl }}" class="w-full h-full object-cover">
+                        </div>
+                    @endforeach
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
         </div>
     </section>
 
     {{-- SECTION 5: CALENDAR & COUNTDOWN --}}
     @if($wedding->event_date)
-    <section class="py-16 px-6 bg-cream watercolor-overlay reveal">
-        <h2 class="font-script text-4xl text-gold text-center mb-8">Lịch Cưới</h2>
+    <section class="py-20 px-6 bg-cream relative overflow-hidden bg-main-watercolor" data-aos="fade-up">
+        <h2 class="font-viceroy text-5xl text-gold text-center mb-12">Lịch Cưới</h2>
         
-        {{-- Calendar Grid --}}
-        <div class="bg-white rounded-2xl p-6 card-shadow max-w-xs mx-auto mb-8">
-            <div class="text-center mb-4">
-                <p class="font-serif text-lg font-bold text-gray-800">Tháng {{ $wedding->event_date->format('m') }}</p>
-                <p class="text-sm text-gray-500">{{ $wedding->event_date->format('Y') }}</p>
+        {{-- Calendar Card --}}
+        <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-8 card-shadow max-w-sm mx-auto mb-12 relative">
+            <div class="text-center mb-8">
+                <p class="font-serif text-2xl font-bold text-gray-800 uppercase tracking-widest">
+                    {{ $wedding->event_date->translatedFormat('F') }}
+                </p>
+                <p class="text-gold font-bold italic">Năm {{ $wedding->event_date->format('Y') }}</p>
             </div>
             
-            <div class="grid grid-cols-7 gap-1 text-center text-sm">
+            <div class="grid grid-cols-7 gap-2 text-center">
                 @foreach(['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'] as $day)
-                    <div class="text-gray-400 font-medium py-1">{{ $day }}</div>
+                    <div class="text-gray-400 font-bold text-xs py-2">{{ $day }}</div>
                 @endforeach
                 
                 @php
@@ -298,220 +351,287 @@
                 @endfor
                 
                 @for($d = 1; $d <= $daysInMonth; $d++)
-                    <div class="py-2 {{ $d == $eventDay ? 'bg-red-500 text-white rounded-full font-bold relative' : 'text-gray-600' }}">
-                        {{ $d }}
+                    <div class="py-3 relative flex items-center justify-center">
+                        <span class="z-10 text-sm font-semibold {{ $d == $eventDay ? 'text-white' : 'text-gray-700' }}">{{ $d }}</span>
                         @if($d == $eventDay)
-                            <svg class="w-3 h-3 absolute -top-1 -right-1 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center p-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90" class="w-full h-full" fill="#F06464">
+                                    <path d="M83.187,25.7c-0.876-2.142-2.227-3.936-3.734-5.473c-1.512-1.543-3.212-2.838-5.01-3.934  c-1.796-1.099-3.679-2.031-5.646-2.735c-3.906-1.35-8.197-2.167-12.283-1.04l-0.008,0.001c-0.947,0.268-1.895,0.566-2.84,0.918  c-0.931,0.359-1.846,0.757-2.74,1.202c-0.889,0.455-1.752,0.955-2.6,1.481c-0.84,0.542-1.647,1.132-2.423,1.764l-1.124,0.995  l-1.059,1.067l-0.996,1.126l-0.921,1.193c-0.58,0.821-1.111,1.676-1.592,2.562l-0.679,1.352l-0.292,0.681  c-2.903-2.597-6.235-4.866-10.103-6.082c-4.059-1.339-8.719-1.216-12.724,0.124c-2.091,0.676-4.112,1.535-5.939,2.934  c-1.822,1.362-3.375,3.34-4.075,5.648c-0.737,2.295-0.63,4.704-0.187,6.89c0.477,2.194,1.293,4.233,2.257,6.155  c1.947,3.839,4.461,7.246,7.16,10.438c1.345,1.604,2.764,3.131,4.208,4.629c1.437,1.501,2.978,2.938,4.371,4.349  c2.834,2.853,5.561,5.806,7.997,8.91c1.212,1.552,2.361,3.142,3.321,4.768c0.482,0.819,0.9,1.609,1.255,2.439l0.083,0.191  l0.07,0.148l0.067,0.131c0.036,0.061,0.045,0.098,0.201,0.317c0.165-0.593-0.052,2.234,3.981,0.301  c1.01-1.418,0.549-1.152,0.725-1.468c0.027-0.192,0.03-0.271,0.036-0.336l0.015-0.23c0.016-0.229,0.034-0.409,0.06-0.609  c0.052-0.392,0.132-0.793,0.233-1.2c0.85-3.307,2.979-6.579,5.398-9.51c2.456-2.947,5.269-5.682,8.227-8.283  c5.928-5.209,12.436-9.896,19.008-14.584l2.526-1.785c0.962-0.706,1.822-1.429,2.646-2.253c1.638-1.625,3.054-3.707,3.668-6.115  C84.374,30.378,84.063,27.817,83.187,25.7z M41.546,76.046l-0.026-0.053c0.006,0.011,0.011,0.021,0.017,0.03l0.023,0.046  C41.568,76.087,41.553,76.059,41.546,76.046z M80.101,31.647c-0.601,1.508-1.71,2.82-3.083,3.926  c-0.686,0.552-1.456,1.063-2.192,1.492l-0.668,0.375l-0.167,0.094c0.03-0.023-0.091,0.044-0.129,0.062l-0.346,0.177l-1.369,0.731  c-3.656,1.945-7.205,4.11-10.646,6.465c-3.432,2.367-6.761,4.924-9.895,7.755c-3.127,2.836-6.089,5.922-8.657,9.415  c-1.866,2.582-3.614,5.343-4.816,8.489c-0.723-0.96-1.469-1.887-2.236-2.788c-2.74-3.213-5.688-6.15-8.724-8.97  c-3.076-2.784-5.93-5.468-8.599-8.466c-2.651-2.961-5.097-6.115-6.939-9.519c-1.817-3.355-3.075-7.174-2.145-10.468  c0.86-3.297,4.207-5.592,7.759-6.844c1.899-0.681,3.696-1.158,5.627-1.311c1.906-0.155,3.843-0.012,5.736,0.426  c3.796,0.879,7.355,2.907,10.464,5.456l-0.111-0.135c0.045,0.077,0.117,0.15,0.194,0.195l0.462,0.275l0.28-0.467l0.005-0.01  l0.045-0.097l0.007-0.021l0.015-0.043l0.03-0.085l0.061-0.171l0.121-0.341l0.242-0.685L41,25.228  c0.425-0.871,0.901-1.716,1.426-2.533l0.84-1.191l0.919-1.134l1.011-1.057l1.079-0.987c0.746-0.628,1.525-1.217,2.34-1.76  c0.816-0.539,1.672-1.015,2.549-1.446c0.883-0.424,1.785-0.802,2.702-1.141c0.911-0.326,1.85-0.608,2.807-0.864  c1.94-0.457,3.97-0.444,5.941-0.144c1.978,0.293,3.907,0.898,5.726,1.724c3.644,1.62,6.949,4.058,9.36,7.083  c1.197,1.508,2.124,3.199,2.595,4.919C80.766,28.419,80.717,30.148,80.101,31.647z"></path>
+                                </svg>
+                            </div>
                         @endif
                     </div>
                 @endfor
             </div>
+
+            <div class="mt-8 pt-6 border-t border-gray-100 text-center">
+                <p class="font-serif text-lg font-bold text-gray-800">
+                    {{ $wedding->event_date?->translatedFormat('l, d/m/Y') }}
+                </p>
+                @if($wedding->event_date_lunar)
+                <p class="text-sm text-gray-500 italic mt-1">(Tức ngày {{ $wedding->event_date_lunar }} Âm Lịch)</p>
+                @endif
+            </div>
         </div>
         
         {{-- Countdown --}}
-        @if($wedding->event_date->isFuture())
-        <div x-data="countdown('{{ $wedding->event_date->format('Y-m-d') }}')" class="grid grid-cols-4 gap-3 max-w-xs mx-auto">
-            <div class="bg-white rounded-xl p-4 text-center card-shadow">
+        <h3 class="text-center font-viceroy text-4xl text-gold mb-12">Đếm Ngược Ngày Hạnh Phúc</h3>
+        <div x-data="countdown('{{ $wedding->event_date->format('Y-m-d H:i:s') }}')" class="grid grid-cols-4 gap-4 max-w-sm mx-auto">
+            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 text-center card-shadow">
                 <div class="text-3xl font-bold text-gray-800" x-text="days">00</div>
-                <div class="text-xs text-gray-500 uppercase">Ngày</div>
+                <div class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Ngày</div>
             </div>
-            <div class="bg-white rounded-xl p-4 text-center card-shadow">
+            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 text-center card-shadow">
                 <div class="text-3xl font-bold text-gray-800" x-text="hours">00</div>
-                <div class="text-xs text-gray-500 uppercase">Giờ</div>
+                <div class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Giờ</div>
             </div>
-            <div class="bg-white rounded-xl p-4 text-center card-shadow">
+            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 text-center card-shadow">
                 <div class="text-3xl font-bold text-gray-800" x-text="minutes">00</div>
-                <div class="text-xs text-gray-500 uppercase">Phút</div>
+                <div class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Phút</div>
             </div>
-            <div class="bg-white rounded-xl p-4 text-center card-shadow">
+            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 text-center card-shadow">
                 <div class="text-3xl font-bold text-gray-800" x-text="seconds">00</div>
-                <div class="text-xs text-gray-500 uppercase">Giây</div>
+                <div class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Giây</div>
             </div>
         </div>
-        @endif
     </section>
     @endif
 
-    {{-- SECTION 6: STORY / LỜI NGỎ --}}
-    <section class="relative py-20 px-6 reveal">
-        <div class="absolute inset-0">
-            <img src="{{ $heroUrl }}" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/60"></div>
-        </div>
-        
-        <div class="relative z-10 text-center text-white">
-            <h2 class="font-script text-4xl mb-6">Lời Ngỏ</h2>
-            <p class="text-sm leading-relaxed max-w-sm mx-auto opacity-90">
-                {{ $wedding->invitation_message ?? 'Ngày ấy, chúng tôi đã gặp nhau và yêu thương nhau. Giờ đây, chúng tôi mong muốn được chia sẻ niềm hạnh phúc này với bạn bè và người thân. Xin mời bạn đến chung vui cùng chúng tôi trong ngày trọng đại này.' }}
+    {{-- SECTION 6: BLESSING / CHÚC PHÚC --}}
+    <section class="py-20 px-6 bg-white relative overflow-hidden bg-main-watercolor" data-aos="fade-up">
+        <div class="relative z-10">
+            <h2 class="font-viceroy text-5xl text-gold text-center mb-6">Mừng Cưới</h2>
+            <p class="text-center text-gray-700 italic mb-12 max-w-xs mx-auto font-medium">
+                Cảm ơn tất cả tình cảm của cô dì chú bác, bạn bè và anh chị em đã dành cho {{ $wedding->groom_name }} & {{ $wedding->bride_name }}.
             </p>
-            
-            <div class="mt-8 font-script text-2xl text-gold">
-                {{ $wedding->groom_name }} & {{ $wedding->bride_name }}
-            </div>
-        </div>
-    </section>
 
-    {{-- SECTION 7: WEDDING EVENTS / TIMELINE --}}
-    <section class="py-16 px-6 bg-white reveal">
-        <h2 class="font-script text-4xl text-gold text-center mb-10">Sự Kiện Cưới</h2>
-        
-        <div class="space-y-6">
-            {{-- Groom Event Card --}}
-            <div class="bg-cream rounded-2xl p-6 card-shadow">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-gold">
+            <div class="grid grid-cols-2 gap-8 mb-12">
+                {{-- Groom QR --}}
+                <div class="text-center" data-aos="fade-right">
+                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
                         <img src="{{ $groomPhoto }}" class="w-full h-full object-cover">
                     </div>
-                    <div>
-                        <h3 class="font-serif font-bold text-gray-800 border-b border-gold pb-1">Tiệc Cưới Nhà Trai</h3>
+                    <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Chú Rể</p>
+                    <h3 class="font-viceroy text-2xl text-brown mb-4">{{ $wedding->groom_name }}</h3>
+                    
+                    @if($wedding->groom_qr_code)
+                    <div class="bg-white p-2 rounded-2xl inline-block shadow-md">
+                        <img src="{{ $wedding->groom_qr_code }}" class="w-24 h-24 object-contain" alt="Groom QR">
                     </div>
-                </div>
-                
-                <div class="flex items-center gap-2 text-sm text-gray-600 mb-2">
-                    <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    {{ \Carbon\Carbon::parse($wedding->groom_reception_time)->format('H:i') }} - {{ $wedding->event_date?->format('d/m/Y') }}
-                </div>
-                
-                <div class="flex items-start gap-2 text-sm text-gray-600 mb-4">
-                    <svg class="w-4 h-4 text-gold mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                    <span>{{ $wedding->groom_reception_venue }}<br>{{ $wedding->groom_address }}</span>
-                </div>
-                
-                <div class="flex gap-3">
-                    <a href="#rsvp-section" class="btn-mewedding flex-1 text-center">Xác nhận tham dự</a>
-                    @if($wedding->groom_map_url)
-                    <a href="{{ $wedding->groom_map_url }}" target="_blank" class="btn-mewedding flex-1 text-center">Xem bản đồ</a>
                     @endif
                 </div>
-            </div>
-            
-            {{-- Bride Event Card --}}
-            <div class="bg-cream rounded-2xl p-6 card-shadow">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-gold">
+
+                {{-- Bride QR --}}
+                <div class="text-center" data-aos="fade-left">
+                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
                         <img src="{{ $bridePhoto }}" class="w-full h-full object-cover">
                     </div>
-                    <div>
-                        <h3 class="font-serif font-bold text-gray-800 border-b border-gold pb-1">Tiệc Cưới Nhà Gái</h3>
+                    <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Cô Dâu</p>
+                    <h3 class="font-viceroy text-2xl text-brown mb-4">{{ $wedding->bride_name }}</h3>
+                    
+                    @if($wedding->bride_qr_code)
+                    <div class="bg-white p-2 rounded-2xl inline-block shadow-md">
+                        <img src="{{ $wedding->bride_qr_code }}" class="w-24 h-24 object-contain" alt="Bride QR">
                     </div>
-                </div>
-                
-                <div class="flex items-center gap-2 text-sm text-gray-600 mb-2">
-                    <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    {{ \Carbon\Carbon::parse($wedding->bride_reception_time)->format('H:i') }} - {{ $wedding->event_date?->format('d/m/Y') }}
-                </div>
-                
-                <div class="flex items-start gap-2 text-sm text-gray-600 mb-4">
-                    <svg class="w-4 h-4 text-gold mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                    <span>{{ $wedding->bride_reception_venue }}<br>{{ $wedding->bride_address }}</span>
-                </div>
-                
-                <div class="flex gap-3">
-                    <a href="#rsvp-section" class="btn-mewedding flex-1 text-center">Xác nhận tham dự</a>
-                    @if($wedding->bride_map_url)
-                    <a href="{{ $wedding->bride_map_url }}" target="_blank" class="btn-mewedding flex-1 text-center">Xem bản đồ</a>
                     @endif
                 </div>
             </div>
         </div>
     </section>
 
-    {{-- SECTION 8: RSVP / WISHES --}}
-    <section id="rsvp-section" class="relative py-16 reveal">
+    {{-- SECTION 7: STORY / LỜI NGỎ --}}
+    <section class="relative py-32 px-6 overflow-hidden" data-aos="fade-up">
         <div class="absolute inset-0">
             <img src="{{ $heroUrl }}" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black/70"></div>
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
         </div>
         
-        <div class="relative z-10 px-6">
-            <h2 class="font-script text-4xl text-white text-center mb-8">Gửi Lời Chúc</h2>
-            
-            @include('components.wedding.guestbook', ['wedding' => $wedding])
-        </div>
-    </section>
-
-    {{-- SECTION 9: GIFT / MỪNG CƯỚI --}}
-    <section class="py-16 px-6 bg-cream watercolor-overlay reveal">
-        <h2 class="font-script text-4xl text-gold text-center mb-8">Mừng Cưới</h2>
-        
-        <x-wedding.gift-box :wedding="$wedding">
-            <div class="space-y-4">
-                <button @click="showQr = 'groom'" 
-                        class="w-full bg-white rounded-2xl p-4 card-shadow flex items-center gap-4 hover:bg-pink-50 transition">
-                    <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                    </div>
-                    <div class="text-left">
-                        <p class="font-bold text-gray-800">Mừng cưới Chú Rể</p>
-                        <p class="text-sm text-gray-500">{{ $wedding->groom_name }}</p>
-                    </div>
-                    <svg class="w-5 h-5 text-gray-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        <div class="relative z-10 text-center text-white" data-aos="zoom-in">
+            <div class="inline-block relative mb-12">
+                <h2 class="font-viceroy text-6xl mb-2">Lời Ngỏ</h2>
+                <div class="absolute -bottom-4 left-0 w-full h-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 356.13 42.62" fill="white">
+                        <path d="M353.92,19.33c-33.86-1.58-67.75-2.65-101.62-3.86-34.82-1.24-69.64-2.52-104.46-3.8-33.47-1.24-66.94-2.48-100.41-3.72a4.48,4.48,0,0,0-.46,9l.46-.1c33.47,1.24,66.94,2.48,100.41,3.72,34.82,1.28,69.64,2.56,104.46,3.8,33.87,1.21,67.76,2.28,101.62,3.86a4.48,4.48,0,0,0,.46-9Z"/>
                     </svg>
-                </button>
-                
-                <button @click="showQr = 'bride'" 
-                        class="w-full bg-white rounded-2xl p-4 card-shadow flex items-center gap-4 hover:bg-pink-50 transition">
-                    <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                    </div>
-                    <div class="text-left">
-                        <p class="font-bold text-gray-800">Mừng cưới Cô Dâu</p>
-                        <p class="text-sm text-gray-500">{{ $wedding->bride_name }}</p>
-                    </div>
-                    <svg class="w-5 h-5 text-gray-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </button>
+                </div>
             </div>
-        </x-wedding.gift-box>
+
+            <div class="space-y-6 text-lg leading-relaxed max-w-md mx-auto opacity-95 font-medium">
+                <p>Gặp gỡ, yêu và cưới. Điều bạn vừa nghe không nằm trong một câu chuyện cổ tích, mà chính là câu chuyện về cuộc đời hai chúng tôi.</p>
+                <p>Chúng tôi sẽ yêu thương, chăm sóc, trân trọng và nắm tay nhau cùng đi đến hết cuộc đời này.</p>
+                <p>Thật là một niềm vinh hạnh lớn khi ngày hạnh phúc nhất cuộc đời chúng tôi có sự hiện diện và chúc phúc của bạn!</p>
+                <p class="font-viceroy text-4xl text-gold pt-6">Chân thành cảm ơn bạn ♥ ♥</p>
+            </div>
+        </div>
     </section>
 
-    {{-- RSVP FORM --}}
-    <section class="py-16 px-6 bg-white reveal">
-        @include('components.wedding.rsvp-form', ['wedding' => $wedding])
+    {{-- SECTION 8: GỬI LỜI CHÚC ĐẾN CẶP ĐÔI --}}
+    <section class="relative py-20 overflow-hidden bg-main-watercolor" data-aos="fade-up">
+        <div class="relative z-10 px-6">
+            <h2 class="font-viceroy text-5xl text-gold text-center mb-12">Gửi Lời Chúc</h2>
+            <div class="max-w-md mx-auto">
+                @include('components.wedding.guestbook', ['wedding' => $wedding])
+            </div>
+        </div>
     </section>
 
-    {{-- FOOTER --}}
-    <footer class="py-12 bg-cream text-center watercolor-overlay">
-        <div class="font-script text-3xl text-gold mb-2">{{ $wedding->groom_name }} & {{ $wedding->bride_name }}</div>
-        <p class="text-sm text-gray-500">{{ $wedding->event_date?->format('d.m.Y') }}</p>
-        <p class="text-xs text-gray-400 mt-4">Made with ❤️ by THT Media</p>
+    {{-- SECTION 9: SỰ KIỆN CƯỚI --}}
+    <section class="py-20 px-6 bg-white relative overflow-hidden bg-main-watercolor" data-aos="fade-up">
+        <h2 class="font-viceroy text-5xl text-gold text-center mb-12">Sự Kiện Cưới</h2>
+        
+        <div class="space-y-8 max-w-sm mx-auto">
+            {{-- House of Groom --}}
+            <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-8 card-shadow border border-gold/10" data-aos="fade-right">
+                <div class="text-center mb-6">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold p-1 shadow-md">
+                        <img src="{{ $groomPhoto }}" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <h3 class="font-viceroy text-3xl text-brown border-b border-gold/20 pb-2 inline-block">Tiệc Cưới Nhà Trai</h3>
+                </div>
+                
+                <div class="space-y-4 text-gray-700">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase text-gray-400">Thời gian</p>
+                            <p class="font-bold">{{ \Carbon\Carbon::parse($wedding->groom_reception_time)->format('H:i') }} - {{ $wedding->event_date?->format('d/m/Y') }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <div class="overflow-hidden">
+                            <p class="text-[10px] font-bold uppercase text-gray-400">Địa điểm</p>
+                            <p class="font-bold leading-snug">{{ $wedding->groom_reception_venue }}</p>
+                            <p class="text-xs italic text-gray-500">{{ $wedding->groom_address }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    @if($wedding->groom_map_url)
+                    <a href="{{ $wedding->groom_map_url }}" target="_blank" class="block w-full py-4 bg-gold text-white rounded-2xl text-center font-bold shadow-lg shadow-gold/20 hover:scale-[1.02] transition">XEM BẢN ĐỒ</a>
+                    @endif
+                </div>
+            </div>
+            
+            {{-- House of Bride --}}
+            <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-8 card-shadow border border-gold/10" data-aos="fade-left">
+                <div class="text-center mb-6">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold p-1 shadow-md">
+                        <img src="{{ $bridePhoto }}" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <h3 class="font-viceroy text-3xl text-brown border-b border-gold/20 pb-2 inline-block">Tiệc Cưới Nhà Gái</h3>
+                </div>
+                
+                <div class="space-y-4 text-gray-700">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase text-gray-400">Thời gian</p>
+                            <p class="font-bold">{{ \Carbon\Carbon::parse($wedding->bride_reception_time)->format('H:i') }} - {{ $wedding->event_date?->format('d/m/Y') }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <div class="overflow-hidden">
+                            <p class="text-[10px] font-bold uppercase text-gray-400">Địa điểm</p>
+                            <p class="font-bold leading-snug">{{ $wedding->bride_reception_venue }}</p>
+                            <p class="text-xs italic text-gray-500">{{ $wedding->bride_address }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    @if($wedding->bride_map_url)
+                    <a href="{{ $wedding->bride_map_url }}" target="_blank" class="block w-full py-4 bg-gold text-white rounded-2xl text-center font-bold shadow-lg shadow-gold/20 hover:scale-[1.02] transition">XEM BẢN ĐỒ</a>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- SECTION 10: THÔNG TIN PHẢN HỒI --}}
+    <section class="py-20 px-6 bg-white relative overflow-hidden" data-aos="fade-up">
+        <div class="text-center mb-12">
+            <h2 class="font-viceroy text-5xl text-gold mb-4">Xác Nhận Tham Dự</h2>
+            <p class="text-gray-600 max-w-xs mx-auto italic font-medium">
+                Đám cưới sẽ trọn vẹn và ý nghĩa hơn khi có sự hiện diện và chúc phúc của bạn. Hãy xác nhận sự có mặt của bạn để chúng tôi chuẩn bị đón tiếp chu đáo nhất!
+            </p>
+        </div>
+        
+        <div class="max-w-md mx-auto">
+            @include('components.wedding.rsvp-form', ['wedding' => $wedding])
+        </div>
+    </section>
+
+    {{-- FOOTER & THANK YOU --}}
+    <footer class="py-24 bg-cream text-center relative overflow-hidden bg-main-watercolor" data-aos="fade-up">
+        <div class="relative z-10">
+            <h2 class="font-viceroy text-6xl text-gold mb-8">Thank You!</h2>
+            <div class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->groom_name }} & {{ $wedding->bride_name }}</div>
+            <p class="text-gold font-bold tracking-[0.3em] mb-12">{{ $wedding->event_date?->format('d.m.Y') }}</p>
+            
+            <div class="separator mb-12">
+                <svg class="w-8 h-8 text-gold" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+            
+            <p class="text-[10px] text-gray-400 uppercase tracking-widest">Designed with ❤️ by THT Media</p>
+        </div>
     </footer>
 </div>
 
 <script>
-    // Scroll reveal
+    // Initialize AOS
     document.addEventListener('DOMContentLoaded', () => {
-        const reveals = document.querySelectorAll('.reveal');
-        
-        const revealOnScroll = () => {
-            reveals.forEach(el => {
-                const top = el.getBoundingClientRect().top;
-                if (top < window.innerHeight - 100) {
-                    el.classList.add('active');
-                }
-            });
-        };
-        
-        window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll();
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Initialize Swipers
+        const thumbSwiper = new Swiper(".thumbGallery", {
+            spaceBetween: 10,
+            slidesPerView: 4,
+            freeMode: true,
+            watchSlidesProgress: true,
+        });
+
+        const mainSwiper = new Swiper(".mainGallery", {
+            spaceBetween: 10,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            thumbs: {
+                swiper: thumbSwiper,
+            },
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+        });
+
+        const secondarySwiper = new Swiper(".secondaryGallery", {
+            effect: "cards",
+            grabCursor: true,
+            autoplay: {
+                delay: 4000,
+                disableOnInteraction: false,
+            },
+        });
     });
 </script>
 
