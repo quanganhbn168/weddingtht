@@ -711,7 +711,7 @@
                     <h3 class="font-viceroy text-2xl text-brown border-b border-gold/20 pb-2 inline-block">Tiệc Mừng Nhà Trai</h3>
                 </div>
                 
-                <div class="space-y-4 text-gray-700">
+                <div class="space-y-4 text-gray-700 font-sans">
                     <div class="flex items-center gap-4">
                         <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -749,7 +749,7 @@
                     <h3 class="font-viceroy text-2xl text-brown border-b border-gold/20 pb-2 inline-block">Tiệc Cưới Nhà Gái</h3>
                 </div>
                 
-                <div class="space-y-4 text-gray-700">
+                <div class="space-y-4 text-gray-700 font-sans">
                     <div class="flex items-center gap-4">
                         <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -788,7 +788,7 @@
                     <h3 class="font-viceroy text-2xl text-brown border-b border-gold/20 pb-2 inline-block">Lễ Vu Quy</h3>
                 </div>
                 
-                <div class="space-y-4 text-gray-700">
+                <div class="space-y-4 text-gray-700 font-sans">
                     <div class="flex items-center gap-4">
                         <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -822,7 +822,7 @@
                     <h3 class="font-viceroy text-2xl text-brown border-b border-gold/20 pb-2 inline-block">Lễ Thành Hôn</h3>
                 </div>
                 
-                <div class="space-y-4 text-gray-700">
+                <div class="space-y-4 text-gray-700 font-sans">
                     <div class="flex items-center gap-4">
                         <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -938,20 +938,23 @@
                                 <label class="block text-xs font-bold uppercase text-gray-500 mb-4 opacity-70">Bạn sẽ tham dự chứ?</label>
                                 <div class="flex flex-wrap justify-center gap-3">
                                     <label class="cursor-pointer">
-                                        <input type="radio" x-model="formData.attendance" value="yes" required class="peer sr-only">
-                                        <div class="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm font-bold text-gray-500 transition-all peer-checked:bg-[#BB6A07] peer-checked:text-white peer-checked:border-[#BB6A07] peer-checked:shadow-md hover:scale-105 peer-checked:opacity-100">
+                                        <input type="radio" x-model="formData.attendance" value="yes" required class="sr-only">
+                                        <div class="px-6 py-2 border border-gray-200 rounded-full text-sm font-bold transition-all hover:scale-105 shadow-sm"
+                                             :class="formData.attendance === 'yes' ? 'bg-[#BB6A07] text-white border-[#BB6A07] shadow-md opacity-100' : 'bg-white text-gray-500'">
                                             Sẽ Tham Dự
                                         </div>
                                     </label>
                                     <label class="cursor-pointer">
-                                        <input type="radio" x-model="formData.attendance" value="maybe" class="peer sr-only">
-                                        <div class="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm font-bold text-gray-500 transition-all peer-checked:bg-yellow-500 peer-checked:text-white peer-checked:border-yellow-500 peer-checked:shadow-md hover:scale-105">
+                                        <input type="radio" x-model="formData.attendance" value="maybe" class="sr-only">
+                                        <div class="px-6 py-2 border border-gray-200 rounded-full text-sm font-bold transition-all hover:scale-105 shadow-sm"
+                                             :class="formData.attendance === 'maybe' ? 'bg-yellow-500 text-white border-yellow-500 shadow-md' : 'bg-white text-gray-500'">
                                             Chưa Chắc
                                         </div>
                                     </label>
                                     <label class="cursor-pointer">
-                                        <input type="radio" x-model="formData.attendance" value="no" class="peer sr-only">
-                                        <div class="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm font-bold text-gray-500 transition-all peer-checked:bg-stone-600 peer-checked:text-white peer-checked:border-stone-600 peer-checked:shadow-md hover:scale-105">
+                                        <input type="radio" x-model="formData.attendance" value="no" class="sr-only">
+                                        <div class="px-6 py-2 border border-gray-200 rounded-full text-sm font-bold transition-all hover:scale-105 shadow-sm"
+                                             :class="formData.attendance === 'no' ? 'bg-stone-600 text-white border-stone-600 shadow-md' : 'bg-white text-gray-500'">
                                             Rất Tiếc
                                         </div>
                                     </label>
