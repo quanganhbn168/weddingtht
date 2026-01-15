@@ -137,7 +137,11 @@ class Wedding extends Model implements HasMedia
     public function getCoverUrl(): string
     {
         $url = $this->getMediaUrlWithDemoFallback('cover');
-        return $url ?: asset('images/default-cover.jpg'); // Fallback placeholder if absolutely nothing
+        // Fallback to hero image if cover is missing, then to default placeholder
+        if (!$url) {
+            $url = $this->getMediaUrlWithDemoFallback('hero');
+        }
+        return $url ?: asset('images/default-cover.jpg'); 
     }
 
     public function getHeroUrl(): string
