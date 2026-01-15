@@ -213,12 +213,30 @@
     </section>
 
     {{-- SECTION 2: SAVE THE DATE --}}
-    <section class="py-20 px-6 text-center bg-white relative overflow-hidden bg-main-watercolor" data-aos="fade-up">
+    <section class="py-24 px-6 text-center relative overflow-hidden bg-main-watercolor" data-aos="fade-up">
         <div class="relative z-10 max-w-sm mx-auto">
-            <img src="{{ asset('images/save-the-date.png') }}" class="w-full h-auto drop-shadow-lg" alt="Save the Date">
+            {{-- Date Section First - Cute Typography --}}
+            <div class="mb-12" data-aos="zoom-in">
+                <h2 class="font-viceroy text-6xl text-gold mb-6">Save the Date</h2>
+                <div class="inline-block">
+                    <div class="font-viceroy text-4xl text-brown border-y-2 border-gold/20 py-4 px-8">
+                        {{ $wedding->event_date?->format('d . m . Y') }}
+                    </div>
+                </div>
+            </div>
             
-            <div class="mt-8 font-serif text-2xl font-bold text-gold tracking-widest">
-                {{ $wedding->event_date?->format('d . m . Y') }}
+            {{-- Image Section Second - Preserving Aspect Ratio --}}
+            <div class="relative px-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="relative group">
+                    {{-- Soft Glow --}}
+                    <div class="absolute -inset-4 bg-gold/5 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition duration-700"></div>
+                    
+                    {{-- Main Image - Long aspect, no crop --}}
+                    <img src="{{ asset('images/save-the-date.png') }}" 
+                         class="w-full h-auto rounded-[60px] border-8 border-white shadow-2xl relative z-10 hover:scale-[1.02] transition duration-500" 
+                         style="max-height: 80vh; object-fit: contain;"
+                         alt="Save the Date">
+                </div>
             </div>
         </div>
     </section>
