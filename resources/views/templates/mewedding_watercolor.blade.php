@@ -255,7 +255,7 @@
         <div class="grid grid-cols-2 gap-4">
             {{-- Groom --}}
             <div class="text-center" data-aos="fade-right">
-                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 flex items-center justify-center">
+                <div class="w-36 h-36 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 aspect-square">
                     <img src="{{ $groomPhoto }}" class="w-full h-full object-cover" style="object-position: top;" alt="{{ $wedding->groom_name }}">
                 </div>
                 <h3 class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->groom_name }}</h3>
@@ -267,7 +267,7 @@
             
             {{-- Bride --}}
             <div class="text-center" data-aos="fade-left">
-                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 flex items-center justify-center">
+                <div class="w-36 h-36 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 aspect-square">
                     <img src="{{ $bridePhoto }}" class="w-full h-full object-cover" style="object-position: top;" alt="{{ $wedding->bride_name }}">
                 </div>
                 <h3 class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->bride_name }}</h3>
