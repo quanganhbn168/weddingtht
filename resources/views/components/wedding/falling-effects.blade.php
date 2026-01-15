@@ -6,7 +6,7 @@ Variety of shapes, sizes, colors for each effect type
 @php
     $effectRaw = $wedding->falling_effect ?? 'hearts';
     $effect = is_object($effectRaw) ? $effectRaw->value : (string)$effectRaw;
-    $isPro = ($wedding->tier ?? 'standard') === 'pro';
+    $isPro = true; // Unlock all effects for everyone
     $showEffect = $effect !== 'none';
 @endphp
 
@@ -291,12 +291,6 @@ Variety of shapes, sizes, colors for each effect type
 })();
 </script>
 
-@if(!$isPro)
-<div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:101;background:linear-gradient(135deg,#ff6b8a,#e91e63);color:#fff;padding:10px 24px;border-radius:30px;font-size:14px;box-shadow:0 4px 20px rgba(233,30,99,0.4);cursor:pointer;" 
-     onclick="window.location.href='{{ route('dashboard.pricing') }}'">
-    ⭐ Nâng cấp Pro để có hiệu ứng đầy đủ
-</div>
-@endif
 @endif
 
 @if($wedding->is_demo ?? false)
