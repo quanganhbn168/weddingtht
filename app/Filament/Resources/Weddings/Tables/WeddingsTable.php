@@ -45,7 +45,7 @@ class WeddingsTable
                         'primary' => 'standard',
                         'success' => 'pro',
                     ])
-                    ->formatStateUsing(fn (string $state): string => strtoupper($state)),
+                    ->formatStateUsing(fn ($state) => $state instanceof \BackedEnum ? strtoupper($state->value) : strtoupper((string) $state)),
                 
                 // Demo badge
                 IconColumn::make('is_demo')
@@ -73,18 +73,18 @@ class WeddingsTable
                         'success' => 'published',
                         'danger' => 'archived',
                     ])
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                    ->formatStateUsing(fn ($state) => match ($state instanceof \BackedEnum ? $state->value : $state) {
                         'draft' => 'Nháp',
                         'preview' => 'Preview',
                         'published' => 'Đã xuất bản',
                         'archived' => 'Lưu trữ',
-                        default => $state,
+                        default => $state instanceof \BackedEnum ? $state->label() : ($state ?? 'N/A'),
                     }),
                 
                 // Template
                 TextColumn::make('template_view')
                     ->label('Template')
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                    ->formatStateUsing(fn ($state) => match ((string) $state) {
                         'templates.modern_01' => 'Modern',
                         'templates.elegant_02' => 'Elegant',
                         'templates.minimal_03' => 'Minimal',
