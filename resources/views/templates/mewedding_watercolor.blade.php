@@ -21,6 +21,12 @@
         font-weight: normal;
         font-style: normal;
     }
+    @font-face {
+        font-family: 'vni-ambiance';
+        src: url('{{ asset('fonts/vni-ambiancebtswash.ttf') }}') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
 
     @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap');
     
@@ -48,6 +54,7 @@
     }
     
     .font-viceroy { font-family: var(--font-viceroy); }
+    .font-ambiance { font-family: 'vni-ambiance'; }
     .font-script { font-family: var(--font-script); }
     .font-serif { font-family: var(--font-serif); }
     
@@ -666,7 +673,7 @@
     {{-- FOOTER & THANK YOU --}}
     <footer class="py-24 bg-cream text-center relative overflow-hidden bg-main-watercolor" data-aos="fade-up">
         <div class="relative z-10">
-            <h2 class="font-viceroy text-6xl text-gold mb-8">Thank You!</h2>
+            <h2 class="font-ambiance text-7xl text-gold mb-8">Thank You!</h2>
             <div class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->groom_name }} & {{ $wedding->bride_name }}</div>
             <p class="text-gold font-bold tracking-[0.3em] mb-12">{{ $wedding->event_date?->format('d.m.Y') }}</p>
             
