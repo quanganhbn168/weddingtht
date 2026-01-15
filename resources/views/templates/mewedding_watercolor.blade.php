@@ -939,19 +939,19 @@
                                 <div class="flex flex-wrap justify-center gap-3">
                                     <label class="cursor-pointer">
                                         <input type="radio" x-model="formData.attendance" value="yes" required class="peer sr-only">
-                                        <div class="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-600 transition-all peer-checked:bg-gold peer-checked:text-white peer-checked:border-gold peer-checked:shadow-md hover:scale-105">
+                                        <div class="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm font-bold text-gray-500 transition-all peer-checked:bg-[#BB6A07] peer-checked:text-white peer-checked:border-[#BB6A07] peer-checked:shadow-md hover:scale-105 peer-checked:opacity-100">
                                             Sẽ Tham Dự
                                         </div>
                                     </label>
                                     <label class="cursor-pointer">
                                         <input type="radio" x-model="formData.attendance" value="maybe" class="peer sr-only">
-                                        <div class="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-600 transition-all peer-checked:bg-yellow-500 peer-checked:text-white peer-checked:border-yellow-500 peer-checked:shadow-md hover:scale-105">
+                                        <div class="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm font-bold text-gray-500 transition-all peer-checked:bg-yellow-500 peer-checked:text-white peer-checked:border-yellow-500 peer-checked:shadow-md hover:scale-105">
                                             Chưa Chắc
                                         </div>
                                     </label>
                                     <label class="cursor-pointer">
                                         <input type="radio" x-model="formData.attendance" value="no" class="peer sr-only">
-                                        <div class="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-600 transition-all peer-checked:bg-gray-400 peer-checked:text-white peer-checked:border-gray-400 peer-checked:shadow-md hover:scale-105">
+                                        <div class="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm font-bold text-gray-500 transition-all peer-checked:bg-stone-600 peer-checked:text-white peer-checked:border-stone-600 peer-checked:shadow-md hover:scale-105">
                                             Rất Tiếc
                                         </div>
                                     </label>
