@@ -5,135 +5,58 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Template;
 use Illuminate\Support\Facades\File;
-use App\Enums\WeddingTier;
 
 class SyncTemplates extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'templates:sync {--force : Force refresh all templates}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Scan template files and sync to database';
-
-    /**
-     * Template configurations
-     */
-    private array $templateConfig = [
-        // Wedding templates - Basic
-        'templates.modern_01' => [
-            'name' => 'Modern Style (Hồng Phấn Hiện Đại)',
-            'type' => 'wedding',
-            'tier' => 'basic',
-        ],
-        'templates.elegant_02' => [
-            'name' => 'Elegant Classic (Thanh Lịch Cổ Điển)',
-            'type' => 'wedding',
-            'tier' => 'basic',
-        ],
-        'templates.minimal_03' => [
-            'name' => 'Minimal Editorial (Tối Giản Tạp Chí)',
-            'type' => 'wedding',
-            'tier' => 'basic',
-        ],
-        
-        // Wedding templates - Standard
-        'templates.luxury_gold' => [
-            'name' => 'Luxury Gold (Vàng Sang Trọng)',
-            'type' => 'wedding',
-            'tier' => 'standard',
-        ],
-        'templates.traditional_red' => [
-            'name' => 'Traditional Red (Đỏ Truyền Thống)',
-            'type' => 'wedding',
-            'tier' => 'standard',
-        ],
-        
-        // Wedding templates - Premium (Pro)
-        'templates.cherry_blossom' => [
-            'name' => '🌸 Cherry Blossom (Hoa Anh Đào)',
-            'type' => 'wedding',
-            'tier' => 'pro',
-        ],
-        'templates.cinematic_story' => [
-            'name' => '🎬 Cinematic Story (Phim Điện Ảnh)',
-            'type' => 'wedding',
-            'tier' => 'pro',
-        ],
-        'templates.galaxy_dreams' => [
-            'name' => '✨ Galaxy Dreams (Ngân Hà Lung Linh)',
-            'type' => 'wedding',
-            'tier' => 'pro',
-        ],
-        'templates.mewedding_watercolor' => [
-            'name' => '💐 MeWedding Watercolor (Hoa Màu Nước)',
-            'type' => 'wedding',
-            'tier' => 'pro',
-        ],
-    ];
+    protected $description = 'Auto-scan template files and sync to database';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->info('🔄 Syncing templates to database...');
+        $this->info('🔄 Auto-scanning templates...');
         
+        $templatesPath = resource_path('views/templates');
         $created = 0;
         $updated = 0;
         $skipped = 0;
         
-        foreach ($this->templateConfig as $viewPath => $config) {
-            // Check if view file exists
-            $bladeFile = str_replace('.', '/', $viewPath) . '.blade.php';
-            $fullPath = resource_path('views/' . $bladeFile);
+        // Scan all .blade.php files in templates directory (not subdirectories - business was removed)
+        $files = File::glob($templatesPath . '/*.blade.php');
+        
+        foreach ($files as $filePath) {
+            $filename = basename($filePath, '.blade.php');
+            $viewPath = 'templates.' . $filename;
             
-            if (!File::exists($fullPath)) {
-                $this->warn("⚠️  File not found: {$bladeFile}");
-                continue;
-            }
+            // Extract metadata from blade file
+            $metadata = $this->extractMetadata($filePath, $filename);
             
-            // Try to extract name from template comment if available
-            $templateName = $this->extractTemplateName($fullPath) ?? $config['name'];
-            
-            // Check if template exists
+            // Check if template exists in database
             $template = Template::where('view_path', $viewPath)->first();
             
             if ($template) {
                 if ($this->option('force')) {
                     $template->update([
-                        'name' => $templateName,
-                        'type' => $config['type'],
-                        'tier' => $config['tier'],
+                        'name' => $metadata['name'],
+                        'type' => 'wedding',
+                        'required_tier' => $metadata['tier'],
                     ]);
-                    $this->line("✏️  Updated: {$templateName}");
+                    $this->line("✏️  Updated: {$metadata['name']}");
                     $updated++;
                 } else {
-                    // Only update tier if needed
-                    if ($template->tier !== $config['tier']) {
-                        $template->update(['tier' => $config['tier']]);
-                        $this->line("🏷️  Updated tier: {$templateName} -> {$config['tier']}");
-                        $updated++;
-                    } else {
-                        $skipped++;
-                    }
+                    $skipped++;
                 }
             } else {
                 Template::create([
-                    'name' => $templateName,
+                    'name' => $metadata['name'],
                     'view_path' => $viewPath,
-                    'type' => $config['type'],
-                    'tier' => $config['tier'],
+                    'type' => 'wedding',
+                    'required_tier' => $metadata['tier'],
                     'is_active' => true,
                 ]);
-                $this->line("✅ Created: {$templateName}");
+                $this->line("✅ Created: {$metadata['name']}");
                 $created++;
             }
         }
@@ -146,17 +69,51 @@ class SyncTemplates extends Command
     }
     
     /**
-     * Extract template name from blade file comment
+     * Extract template metadata from blade file
      */
-    private function extractTemplateName(string $filePath): ?string
+    private function extractMetadata(string $filePath, string $filename): array
     {
         $content = File::get($filePath);
         
-        // Look for pattern: {{-- Template Name: Name Here --}}
+        // Default name from filename
+        $name = str_replace('_', ' ', ucwords($filename, '_'));
+        
+        // Try to extract name from: {{-- Template Name: Name Here --}}
         if (preg_match('/{{--\s*Template Name:\s*([^-]+)\s*--}}/i', $content, $matches)) {
-            return trim($matches[1]);
+            $name = trim($matches[1]);
         }
         
-        return null;
+        // Try to extract tier from: {{-- Tier: pro --}} or similar
+        $tier = 'standard'; // default
+        if (preg_match('/{{--\s*Tier:\s*(basic|standard|pro)\s*--}}/i', $content, $matches)) {
+            $tier = strtolower(trim($matches[1]));
+        } else {
+            // Auto-detect tier based on keywords in filename or content
+            $lowerFilename = strtolower($filename);
+            $lowerContent = strtolower($content);
+            
+            // Pro tier indicators
+            if (str_contains($lowerFilename, 'galaxy') || 
+                str_contains($lowerFilename, 'cinematic') || 
+                str_contains($lowerFilename, 'cherry') ||
+                str_contains($lowerFilename, 'mewedding') ||
+                str_contains($lowerFilename, 'luxury') ||
+                str_contains($lowerContent, 'preload') && str_contains($lowerContent, 'variant')) {
+                $tier = 'pro';
+            }
+            // Basic tier indicators
+            elseif (str_contains($lowerFilename, 'minimal') || 
+                    str_contains($lowerFilename, 'simple') ||
+                    str_contains($lowerFilename, 'modern') ||
+                    str_contains($lowerFilename, 'elegant')) {
+                $tier = 'basic';
+            }
+        }
+        
+        return [
+            'name' => $name,
+            'tier' => $tier,
+        ];
     }
 }
+

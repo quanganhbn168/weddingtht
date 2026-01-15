@@ -3,7 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Wedding;
-use App\Models\BusinessCard;
+use App\Models\Template;
 use App\Models\User;
 use App\Models\Subscription;
 use App\Models\PaymentTransaction;
@@ -17,7 +17,7 @@ class StatsOverview extends BaseWidget
     protected function getStats(): array
     {
         $totalWeddings = Wedding::count();
-        $totalCards = BusinessCard::count();
+        $totalTemplates = Template::where('is_active', true)->count();
         $totalUsers = User::count();
         $proUsers = Subscription::where('plan', 'pro')->where('status', 'active')->count();
         
@@ -46,9 +46,9 @@ class StatsOverview extends BaseWidget
                 ->descriptionIcon($weddingGrowth >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($weddingGrowth >= 0 ? 'success' : 'danger'),
                 
-            Stat::make('🪪 Name Cards', number_format($totalCards))
-                ->description('Danh thiếp điện tử')
-                ->descriptionIcon('heroicon-m-identification')
+            Stat::make('🎨 Templates', number_format($totalTemplates))
+                ->description('Mẫu thiệp đang hoạt động')
+                ->descriptionIcon('heroicon-m-squares-2x2')
                 ->color('info'),
                 
             Stat::make('💰 Doanh thu tháng', number_format($monthlyRevenue) . 'đ')
@@ -58,3 +58,4 @@ class StatsOverview extends BaseWidget
         ];
     }
 }
+
