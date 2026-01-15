@@ -705,8 +705,8 @@
             {{-- 1. House of Groom - Reception (Tiệc Mừng) --}}
             <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-8 card-shadow border border-gold/10" data-aos="fade-right">
                 <div class="text-center mb-6">
-                    <div class="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold p-1 shadow-md">
-                        <img src="{{ $groomPhoto }}" class="w-full h-full object-cover rounded-full">
+                    <div class="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden border-4 border-gold p-1 shadow-lg portrait-hover">
+                        <img src="{{ $groomPhoto }}" class="w-full h-full object-cover object-top rounded-full">
                     </div>
                     <h3 class="font-viceroy text-2xl text-brown border-b border-gold/20 pb-2 inline-block">Tiệc Mừng Nhà Trai</h3>
                 </div>
@@ -743,8 +743,8 @@
             {{-- 2. House of Bride - Reception (Tiệc Mừng) --}}
             <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-8 card-shadow border border-gold/10" data-aos="fade-left">
                 <div class="text-center mb-6">
-                    <div class="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold p-1 shadow-md">
-                        <img src="{{ $bridePhoto }}" class="w-full h-full object-cover rounded-full">
+                    <div class="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden border-4 border-gold p-1 shadow-lg portrait-hover">
+                        <img src="{{ $bridePhoto }}" class="w-full h-full object-cover object-top rounded-full">
                     </div>
                     <h3 class="font-viceroy text-2xl text-brown border-b border-gold/20 pb-2 inline-block">Tiệc Cưới Nhà Gái</h3>
                 </div>
@@ -782,8 +782,8 @@
             @if($wedding->bride_ceremony_date)
             <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-8 card-shadow border border-gold/10" data-aos="fade-left">
                 <div class="text-center mb-6">
-                    <div class="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold p-1 shadow-md">
-                        <img src="{{ $bridePhoto }}" class="w-full h-full object-cover rounded-full">
+                    <div class="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden border-4 border-gold p-1 shadow-lg portrait-hover">
+                        <img src="{{ $bridePhoto }}" class="w-full h-full object-cover object-top rounded-full">
                     </div>
                     <h3 class="font-viceroy text-2xl text-brown border-b border-gold/20 pb-2 inline-block">Lễ Vu Quy</h3>
                 </div>
@@ -816,8 +816,8 @@
             @if($wedding->groom_ceremony_date)
             <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-8 card-shadow border border-gold/10" data-aos="fade-right">
                 <div class="text-center mb-6">
-                    <div class="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold p-1 shadow-md">
-                        <img src="{{ $groomPhoto }}" class="w-full h-full object-cover rounded-full">
+                    <div class="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden border-4 border-gold p-1 shadow-lg portrait-hover">
+                        <img src="{{ $groomPhoto }}" class="w-full h-full object-cover object-top rounded-full">
                     </div>
                     <h3 class="font-viceroy text-2xl text-brown border-b border-gold/20 pb-2 inline-block">Lễ Thành Hôn</h3>
                 </div>
