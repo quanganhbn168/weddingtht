@@ -19,8 +19,13 @@ Usage: @include('components.wedding.guestbook-inline', ['wedding' => $wedding])
         {{-- Header --}}
         <div class="text-center mb-16">
             <span class="text-xs font-bold uppercase tracking-[0.3em] opacity-60 mb-3 block" style="font-family: var(--font-body); color: var(--color-text-body);">Guestbook</span>
-            <h2 class="text-4xl md:text-5xl mb-6" style="font-family: var(--font-heading); color: var(--color-primary-dark);">Lời Chúc Phúc</h2>
+            <h2 class="text-4xl md:text-5xl mb-6 text-shadow-gold" style="font-family: var(--font-heading); color: var(--color-primary-dark);">
+                {{ $wedding->getContentValue('guestbook_title', 'Lời Chúc Phúc') }}
+            </h2>
             <div class="w-16 h-px mx-auto" style="background-color: var(--color-primary);"></div>
+            @if($guestbook_desc = $wedding->getContentValue('guestbook_desc'))
+                <p class="mt-4 text-gray-500 italic max-w-md mx-auto">{{ $guestbook_desc }}</p>
+            @endif
         </div>
         
         {{-- Submit Form (AJAX & Readable) --}}

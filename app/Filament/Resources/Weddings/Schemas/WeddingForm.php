@@ -544,6 +544,56 @@ class WeddingForm
                                             ->url(false),
                                     ]),
                             ]),
+                        
+                        // === TAB 6: LỜI MỜI & LỜI CHÚC ===
+                        Tab::make('Lời mời & Lời chúc')
+                            ->icon('heroicon-o-chat-bubble-bottom-center-text')
+                            ->schema([
+                                Section::make('Lời chúc phúc (Blessing)')
+                                    ->description('Hiển thị ở phần Mừng cưới')
+                                    ->columns(1)
+                                    ->schema([
+                                        TextInput::make('content.blessing_title')
+                                            ->label('Tiêu đề')
+                                            ->placeholder('Mừng Cưới'),
+                                        Textarea::make('content.blessing_desc')
+                                            ->label('Nội dung/Thông điệp')
+                                            ->placeholder('Cảm ơn bạn đã gửi lời chúc...'),
+                                    ]),
+
+                                Section::make('Lời ngỏ (Prologue)')
+                                    ->columns(1)
+                                    ->schema([
+                                        TextInput::make('content.prologue_title')
+                                            ->label('Tiêu đề')
+                                            ->placeholder('Lời Ngỏ'),
+                                        Textarea::make('content.prologue_desc')
+                                            ->label('Nội dung')
+                                            ->placeholder('Gặp gỡ, yêu và cưới...'),
+                                    ]),
+                                
+                                Section::make('Xác nhận tham dự (RSVP)')
+                                    ->columns(1)
+                                    ->schema([
+                                        TextInput::make('content.rsvp_title')
+                                            ->label('Tiêu đề')
+                                            ->placeholder('Xác Nhận Tham Dự'),
+                                        Textarea::make('content.rsvp_desc')
+                                            ->label('Lời mời/Thông điệp')
+                                            ->placeholder('Sự hiện diện của bạn là niềm vinh hạnh...'),
+                                    ]),
+
+                                Section::make('Sổ lưu bút (Guestbook)')
+                                    ->columns(1)
+                                    ->schema([
+                                        TextInput::make('content.guestbook_title')
+                                            ->label('Tiêu đề')
+                                            ->placeholder('Sổ Lưu Bút'),
+                                        Textarea::make('content.guestbook_desc')
+                                            ->label('Lời dẫn/Thông điệp')
+                                            ->placeholder('Kỷ niệm đẹp là những gì chúng ta cùng nhau tạo ra...'),
+                                    ]),
+                            ]),
                     ]),
             ]);
     }

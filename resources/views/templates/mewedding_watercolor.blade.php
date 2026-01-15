@@ -52,7 +52,9 @@
     .font-serif { font-family: var(--font-serif); }
     
     .text-gold { color: var(--color-primary); }
+    .bg-gold { background-color: var(--color-primary); }
     .text-brown { color: #8B4513; }
+    .bg-brown { background-color: #8B4513; }
     .bg-cream { background-color: var(--color-bg-cream); }
     
     .bg-main-watercolor {
@@ -116,17 +118,29 @@
         background: linear-gradient(to right, transparent, var(--color-primary), transparent);
     }
     
-    .btn-mewedding {
-        background: #9CA3AF;
-        color: white;
-        padding: 12px 24px;
-        border-radius: 25px;
-        font-weight: 600;
-        font-size: 14px;
-        transition: all 0.3s;
+    .btn-gold-premium {
+        background: linear-gradient(135deg, var(--color-primary) 0%, #A88B4A 100%);
+        color: white !important;
+        box-shadow: 0 10px 20px -5px rgba(187, 106, 7, 0.4);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
-    .btn-mewedding:hover {
-        background: var(--color-primary);
+    .btn-gold-premium:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px -5px rgba(187, 106, 7, 0.5);
+        filter: brightness(1.1);
+    }
+    .btn-brown-premium {
+        background: linear-gradient(135deg, #8B4513 0%, #5D2E0A 100%);
+        color: white !important;
+        box-shadow: 0 10px 20px -5px rgba(139, 69, 19, 0.4);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .btn-brown-premium:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px -5px rgba(139, 69, 19, 0.5);
+        filter: brightness(1.1);
     }
 
     /* Custom Swiper */
@@ -160,6 +174,17 @@
     }
     .floral-top-left { top: -20px; left: -20px; transform: rotate(0deg); }
     .floral-bottom-right { bottom: -20px; right: -20px; transform: rotate(180deg); }
+    .portrait-hover {
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .portrait-hover:hover {
+        transform: scale(1.05);
+        filter: brightness(1.05);
+        box-shadow: 0 15px 30px -5px rgba(0,0,0,0.15);
+    }
+    .text-shadow-gold {
+        text-shadow: 2px 2px 4px rgba(187, 106, 7, 0.15);
+    }
 </style>
 
 <div class="max-w-[480px] mx-auto bg-white min-h-screen shadow-2xl relative overflow-hidden">
@@ -180,10 +205,10 @@
         <div class="text-center" data-aos="fade-up">
             <p class="text-sm tracking-[0.3em] uppercase text-gray-500 mb-6 font-medium">Thân Mời Tới Dự Bữa Tiệc</p>
             
-            <div class="mb-8">
-                <h1 class="font-viceroy text-6xl text-gold leading-tight mb-2">{{ $wedding->groom_name }}</h1>
-                <p class="font-viceroy text-4xl text-gold">&</p>
-                <h1 class="font-viceroy text-6xl text-gold leading-tight mt-2">{{ $wedding->bride_name }}</h1>
+            <div class="mb-8 text-shadow-gold">
+                <h1 class="font-viceroy text-6xl text-gold leading-tight mb-2" data-aos="fade-down">{{ $wedding->groom_name }}</h1>
+                <p class="font-viceroy text-4xl text-gold" data-aos="zoom-in" data-aos-delay="200">&</p>
+                <h1 class="font-viceroy text-6xl text-gold leading-tight mt-2" data-aos="fade-up" data-aos-delay="400">{{ $wedding->bride_name }}</h1>
             </div>
             
             {{-- Western Date --}}
@@ -255,7 +280,7 @@
         <div class="grid grid-cols-2 gap-4">
             {{-- Groom --}}
             <div class="text-center" data-aos="fade-right">
-                <div class="w-36 h-36 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 aspect-square">
+                <div class="w-36 h-36 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 aspect-square portrait-hover">
                     <img src="{{ $groomPhoto }}" class="w-full h-full object-cover" style="object-position: top;" alt="{{ $wedding->groom_name }}">
                 </div>
                 <h3 class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->groom_name }}</h3>
@@ -267,7 +292,7 @@
             
             {{-- Bride --}}
             <div class="text-center" data-aos="fade-left">
-                <div class="w-36 h-36 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 aspect-square">
+                <div class="w-36 h-36 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 aspect-square portrait-hover">
                     <img src="{{ $bridePhoto }}" class="w-full h-full object-cover" style="object-position: top;" alt="{{ $wedding->bride_name }}">
                 </div>
                 <h3 class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->bride_name }}</h3>
@@ -418,37 +443,39 @@
     {{-- SECTION 6: BLESSING / CHÚC PHÚC --}}
     <section class="py-20 px-6 bg-white relative overflow-hidden bg-main-watercolor" data-aos="fade-up" x-data="{ activeQr: null }">
         <div class="relative z-10">
-            <h2 class="font-viceroy text-5xl text-gold text-center mb-6">Mừng Cưới</h2>
+            <h2 class="font-viceroy text-5xl text-gold text-center mb-6">
+                {{ $wedding->getContentValue('blessing_title', 'Mừng Cưới') }}
+            </h2>
             <p class="text-center text-gray-700 italic mb-12 max-w-xs mx-auto font-medium">
-                Cảm ơn tất cả tình cảm của cô dì chú bác, bạn bè và anh chị em đã dành cho {{ $wedding->groom_name }} & {{ $wedding->bride_name }}.
+                {{ $wedding->getContentValue('blessing_desc', "Cảm ơn tất cả tình cảm của cô dì chú bác, bạn bè và anh chị em đã dành cho " . $wedding->groom_name . " & " . $wedding->bride_name . ".") }}
             </p>
 
             <div class="grid grid-cols-2 gap-8">
                 {{-- Groom QR Button --}}
                 <div class="text-center" data-aos="fade-right">
-                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg flex items-center justify-center bg-gray-50">
+                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg flex items-center justify-center bg-gray-50 portrait-hover">
                         <img src="{{ $groomPhoto }}" class="w-full h-full object-cover" style="object-position: top;">
                     </div>
                     <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Chú Rể</p>
                     <h3 class="font-viceroy text-2xl text-brown mb-4">{{ $wedding->groom_name }}</h3>
                     
-                    <button @click="activeQr = 'groom'" class="inline-flex items-center gap-2 px-6 py-3 bg-gold text-white rounded-full text-[10px] font-bold shadow-lg hover:bg-brown transition-all uppercase tracking-widest active:scale-95">
+                    <button @click="activeQr = 'groom'" class="inline-flex items-center gap-2 px-8 py-3 btn-gold-premium rounded-full text-[11px] font-bold shadow-lg uppercase tracking-widest active:scale-95 group">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        Mừng Cưới
+                        <span>Mừng Cưới</span>
                     </button>
                 </div>
 
                 {{-- Bride QR Button --}}
                 <div class="text-center" data-aos="fade-left">
-                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg flex items-center justify-center bg-gray-50">
+                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg flex items-center justify-center bg-gray-50 portrait-hover">
                         <img src="{{ $bridePhoto }}" class="w-full h-full object-cover" style="object-position: top;">
                     </div>
                     <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Cô Dâu</p>
                     <h3 class="font-viceroy text-2xl text-brown mb-4">{{ $wedding->bride_name }}</h3>
                     
-                    <button @click="activeQr = 'bride'" class="inline-flex items-center gap-2 px-6 py-3 bg-gold text-white rounded-full text-[10px] font-bold shadow-lg hover:bg-brown transition-all uppercase tracking-widest active:scale-95">
+                    <button @click="activeQr = 'bride'" class="inline-flex items-center gap-2 px-8 py-3 btn-gold-premium rounded-full text-[11px] font-bold shadow-lg uppercase tracking-widest active:scale-95 group">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        Mừng Cưới
+                        <span>Mừng Cưới</span>
                     </button>
                 </div>
             </div>
@@ -523,21 +550,24 @@
             </div>
 
             <div class="space-y-6 text-lg leading-relaxed max-w-md mx-auto opacity-95 font-medium">
-                <p>Gặp gỡ, yêu và cưới. Điều bạn vừa nghe không nằm trong một câu chuyện cổ tích, mà chính là câu chuyện về cuộc đời hai chúng tôi.</p>
-                <p>Chúng tôi sẽ yêu thương, chăm sóc, trân trọng và nắm tay nhau cùng đi đến hết cuộc đời này.</p>
-                <p>Thật là một niềm vinh hạnh lớn khi ngày hạnh phúc nhất cuộc đời chúng tôi có sự hiện diện và chúc phúc của bạn!</p>
+                @if($prologue_content = $wedding->getContentValue('prologue_desc'))
+                    @foreach(explode("\n", $prologue_content) as $line)
+                        @if(trim($line)) <p>{{ $line }}</p> @endif
+                    @endforeach
+                @else
+                    <p>Gặp gỡ, yêu và cưới. Điều bạn vừa nghe không nằm trong một câu chuyện cổ tích, mà chính là câu chuyện về cuộc đời hai chúng tôi.</p>
+                    <p>Chúng tôi sẽ yêu thương, chăm sóc, trân trọng và nắm tay nhau cùng đi đến hết cuộc đời này.</p>
+                    <p>Thật là một niềm vinh hạnh lớn khi ngày hạnh phúc nhất cuộc đời chúng tôi có sự hiện diện và chúc phúc của bạn!</p>
+                @endif
                 <p class="font-viceroy text-4xl text-gold pt-6">Chân thành cảm ơn bạn ♥ ♥</p>
             </div>
         </div>
     </section>
 
     {{-- SECTION 8: GỬI LỜI CHÚC ĐẾN CẶP ĐÔI --}}
-    <section class="relative py-20 overflow-hidden bg-main-watercolor" data-aos="fade-up">
+    <section class="relative py-20 overflow-hidden bg-cream" data-aos="fade-up">
         <div class="relative z-10 px-6">
-            <h2 class="font-viceroy text-5xl text-gold text-center mb-12">Gửi Lời Chúc</h2>
-            <div class="max-w-md mx-auto">
-                @include('components.wedding.guestbook', ['wedding' => $wedding])
-            </div>
+            @include('components.wedding.guestbook', ['wedding' => $wedding])
         </div>
     </section>
 
@@ -626,16 +656,9 @@
         </div>
     </section>
 
-    {{-- SECTION 10: THÔNG TIN PHẢN HỒI --}}
+    {{-- SECTION 10: XÁC NHẬN THAM DỰ --}}
     <section class="py-20 px-6 bg-white relative overflow-hidden" data-aos="fade-up">
-        <div class="text-center mb-12">
-            <h2 class="font-viceroy text-5xl text-gold mb-4">Xác Nhận Tham Dự</h2>
-            <p class="text-gray-600 max-w-xs mx-auto italic font-medium">
-                Đám cưới sẽ trọn vẹn và ý nghĩa hơn khi có sự hiện diện và chúc phúc của bạn. Hãy xác nhận sự có mặt của bạn để chúng tôi chuẩn bị đón tiếp chu đáo nhất!
-            </p>
-        </div>
-        
-        <div class="max-w-md mx-auto">
+        <div class="max-w-4xl mx-auto">
             @include('components.wedding.rsvp-form', ['wedding' => $wedding])
         </div>
     </section>
