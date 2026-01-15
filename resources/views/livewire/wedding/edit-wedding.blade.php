@@ -353,11 +353,11 @@
                                 <div class="space-y-2">
                                     <label class="block text-sm font-medium text-gray-700">{{ $media[1] }}</label>
                                     @if($wedding->getFirstMediaUrl($media[0]))
-                                        <div class="relative">
-                                            <img src="{{ $wedding->getFirstMediaUrl($media[0]) }}" class="w-full h-24 object-cover border rounded-lg">
+                                        <div class="relative group">
+                                            <img src="{{ $wedding->getFirstMediaUrl($media[0]) }}" class="w-full h-64 object-contain bg-gray-50 border rounded-lg">
                                             <button type="button" wire:click="deleteMedia('{{ $media[0] }}')" 
-                                                class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                                 </svg>
                                             </button>
@@ -365,12 +365,12 @@
                                     @endif
                                     @if(${$media[0]})
                                         <div class="relative">
-                                            <img src="{{ ${$media[0]}->temporaryUrl() }}" class="w-full h-24 object-cover border-2 border-green-300 rounded-lg">
-                                            <span class="absolute bottom-1 left-1 bg-green-500 text-white text-xs px-1 rounded">Mới</span>
+                                            <img src="{{ ${$media[0]}->temporaryUrl() }}" class="w-full h-64 object-contain bg-gray-50 border-2 border-green-300 rounded-lg">
+                                            <span class="absolute bottom-1 left-1 bg-green-500 text-white text-xs px-2 py-0.5 rounded shadow">Mới</span>
                                         </div>
                                     @endif
                                     <input type="file" wire:model="{{ $media[0] }}" accept="image/*"
-                                        class="w-full text-xs text-gray-500 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-pink-50 file:text-pink-700">
+                                        class="w-full text-xs text-gray-500 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100">
                                     <p class="text-xs text-gray-400">{{ $media[2] }}</p>
                                 </div>
                             @endforeach
