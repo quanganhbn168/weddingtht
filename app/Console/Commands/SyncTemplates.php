@@ -31,81 +31,51 @@ class SyncTemplates extends Command
         'templates.modern_01' => [
             'name' => 'Modern Style (Hồng Phấn Hiện Đại)',
             'type' => 'wedding',
-            'tier' => WeddingTier::STANDARD->value,
+            'tier' => 'basic',
         ],
         'templates.elegant_02' => [
             'name' => 'Elegant Classic (Thanh Lịch Cổ Điển)',
             'type' => 'wedding',
-            'tier' => WeddingTier::STANDARD->value,
+            'tier' => 'basic',
         ],
         'templates.minimal_03' => [
             'name' => 'Minimal Editorial (Tối Giản Tạp Chí)',
             'type' => 'wedding',
-            'tier' => WeddingTier::STANDARD->value,
+            'tier' => 'basic',
         ],
+        
+        // Wedding templates - Standard
         'templates.luxury_gold' => [
             'name' => 'Luxury Gold (Vàng Sang Trọng)',
             'type' => 'wedding',
-            'tier' => WeddingTier::STANDARD->value,
+            'tier' => 'standard',
         ],
         'templates.traditional_red' => [
             'name' => 'Traditional Red (Đỏ Truyền Thống)',
             'type' => 'wedding',
-            'tier' => WeddingTier::STANDARD->value,
+            'tier' => 'standard',
         ],
         
         // Wedding templates - Premium (Pro)
         'templates.cherry_blossom' => [
             'name' => '🌸 Cherry Blossom (Hoa Anh Đào)',
             'type' => 'wedding',
-            'tier' => WeddingTier::PRO->value,
+            'tier' => 'pro',
         ],
         'templates.cinematic_story' => [
             'name' => '🎬 Cinematic Story (Phim Điện Ảnh)',
             'type' => 'wedding',
-            'tier' => WeddingTier::PRO->value,
+            'tier' => 'pro',
         ],
         'templates.galaxy_dreams' => [
             'name' => '✨ Galaxy Dreams (Ngân Hà Lung Linh)',
             'type' => 'wedding',
-            'tier' => WeddingTier::PRO->value,
+            'tier' => 'pro',
         ],
-        
-        // Business templates
-        'templates.business.minimal_white' => [
-            'name' => 'Minimal White',
-            'type' => 'business',
-            'tier' => WeddingTier::STANDARD->value,
-        ],
-        'templates.business.tech_gradient' => [
-            'name' => 'Tech Gradient',
-            'type' => 'business',
-            'tier' => WeddingTier::STANDARD->value,
-        ],
-        'templates.business.creative_dark' => [
-            'name' => 'Creative Dark',
-            'type' => 'business',
-            'tier' => WeddingTier::STANDARD->value,
-        ],
-        'templates.business.corporate_blue' => [
-            'name' => 'Corporate Blue',
-            'type' => 'business',
-            'tier' => WeddingTier::STANDARD->value,
-        ],
-        'templates.business.luxury_gold' => [
-            'name' => 'Luxury Gold',
-            'type' => 'business',
-            'tier' => WeddingTier::STANDARD->value,
-        ],
-        'templates.business.simple_card' => [
-            'name' => 'Simple Card',
-            'type' => 'business',
-            'tier' => WeddingTier::STANDARD->value,
-        ],
-        'templates.business.ceo_profile' => [
-            'name' => 'CEO Profile',
-            'type' => 'business',
-            'tier' => WeddingTier::STANDARD->value,
+        'templates.mewedding_watercolor' => [
+            'name' => '💐 MeWedding Watercolor (Hoa Màu Nước)',
+            'type' => 'wedding',
+            'tier' => 'pro',
         ],
     ];
 
