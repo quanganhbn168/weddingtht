@@ -23,7 +23,7 @@
     }
     @font-face {
         font-family: 'vni-ambiance';
-        src: url('/fonts/vni-ambiancebtswash.ttf') format('truetype');
+        src: url('{{ asset('fonts/vni-ambiancebtswash.ttf') }}') format('truetype');
         font-weight: normal;
         font-style: normal;
     }
