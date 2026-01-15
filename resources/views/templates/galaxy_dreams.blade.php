@@ -143,7 +143,7 @@
             <div class="reveal-on-scroll group relative">
                 <div class="absolute -left-4 -top-4 w-20 h-20 border-t-2 border-l-2 border-[#00f3ff] rounded-tl-3xl opacity-50 group-hover:opacity-100 transition duration-500"></div>
                 <div class="glass-neon p-4 rounded-2xl relative z-10">
-                    <div class="aspect-square rounded-xl overflow-hidden mb-4 border border-white/10">
+                    <div class="aspect-[3/4] rounded-xl overflow-hidden mb-4 border border-white/10">
                         <img src="{{ $groomPhoto }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000">
                     </div>
                     <div class="text-center">
@@ -161,7 +161,7 @@
             <div class="reveal-on-scroll group relative">
                 <div class="absolute -right-4 -bottom-4 w-20 h-20 border-b-2 border-r-2 border-[#ec4899] rounded-br-3xl opacity-50 group-hover:opacity-100 transition duration-500"></div>
                 <div class="glass-neon p-4 rounded-2xl relative z-10">
-                    <div class="aspect-square rounded-xl overflow-hidden mb-4 border border-white/10">
+                    <div class="aspect-[3/4] rounded-xl overflow-hidden mb-4 border border-white/10">
                         <img src="{{ $bridePhoto }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000">
                     </div>
                     <div class="text-center">
