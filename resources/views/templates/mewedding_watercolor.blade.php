@@ -255,25 +255,25 @@
         <div class="grid grid-cols-2 gap-4">
             {{-- Groom --}}
             <div class="text-center" data-aos="fade-right">
-                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl">
-                    <img src="{{ $groomPhoto }}" class="w-full h-full object-cover" alt="{{ $wedding->groom_name }}">
+                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 flex items-center justify-center">
+                    <img src="{{ $groomPhoto }}" class="w-full h-full object-cover object-top" alt="{{ $wedding->groom_name }}">
                 </div>
                 <h3 class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->groom_name }}</h3>
-                <div class="text-gray-600 text-sm space-y-1">
-                    <p class="font-medium italic">Con ông: <span class="not-italic text-gray-800">{{ $wedding->groom_father }}</span></p>
-                    <p class="font-medium italic">Con bà: <span class="not-italic text-gray-800">{{ $wedding->groom_mother }}</span></p>
+                <div class="text-gray-600 text-[11px] space-y-1 font-medium italic">
+                    <p>Con ông: <span class="not-italic font-bold text-gray-800">{{ $wedding->groom_father }}</span></p>
+                    <p>Con bà: <span class="not-italic font-bold text-gray-800">{{ $wedding->groom_mother }}</span></p>
                 </div>
             </div>
             
             {{-- Bride --}}
             <div class="text-center" data-aos="fade-left">
-                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl">
-                    <img src="{{ $bridePhoto }}" class="w-full h-full object-cover" alt="{{ $wedding->bride_name }}">
+                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 flex items-center justify-center">
+                    <img src="{{ $bridePhoto }}" class="w-full h-full object-cover object-top" alt="{{ $wedding->bride_name }}">
                 </div>
                 <h3 class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->bride_name }}</h3>
-                <div class="text-gray-600 text-sm space-y-1">
-                    <p class="font-medium italic">Con ông: <span class="not-italic text-gray-800">{{ $wedding->bride_father }}</span></p>
-                    <p class="font-medium italic">Con bà: <span class="not-italic text-gray-800">{{ $wedding->bride_mother }}</span></p>
+                <div class="text-gray-600 text-[11px] space-y-1 font-medium italic">
+                    <p>Con ông: <span class="not-italic font-bold text-gray-800">{{ $wedding->bride_father }}</span></p>
+                    <p>Con bà: <span class="not-italic font-bold text-gray-800">{{ $wedding->bride_mother }}</span></p>
                 </div>
             </div>
         </div>
@@ -426,34 +426,30 @@
             <div class="grid grid-cols-2 gap-8">
                 {{-- Groom QR Button --}}
                 <div class="text-center" data-aos="fade-right">
-                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
-                        <img src="{{ $groomPhoto }}" class="w-full h-full object-cover">
+                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg flex items-center justify-center">
+                        <img src="{{ $groomPhoto }}" class="w-full h-full object-cover object-top">
                     </div>
                     <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Chú Rể</p>
                     <h3 class="font-viceroy text-2xl text-brown mb-4">{{ $wedding->groom_name }}</h3>
                     
-                    @if($wedding->groom_qr_code)
                     <button @click="activeQr = 'groom'" class="inline-flex items-center gap-2 px-6 py-3 bg-gold text-white rounded-full text-[10px] font-bold shadow-lg hover:bg-brown transition-all uppercase tracking-widest active:scale-95">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                         Mừng Cưới
                     </button>
-                    @endif
                 </div>
 
                 {{-- Bride QR Button --}}
                 <div class="text-center" data-aos="fade-left">
-                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
-                        <img src="{{ $bridePhoto }}" class="w-full h-full object-cover">
+                    <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg flex items-center justify-center">
+                        <img src="{{ $bridePhoto }}" class="w-full h-full object-cover object-top">
                     </div>
                     <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Cô Dâu</p>
                     <h3 class="font-viceroy text-2xl text-brown mb-4">{{ $wedding->bride_name }}</h3>
                     
-                    @if($wedding->bride_qr_code)
                     <button @click="activeQr = 'bride'" class="inline-flex items-center gap-2 px-6 py-3 bg-gold text-white rounded-full text-[10px] font-bold shadow-lg hover:bg-brown transition-all uppercase tracking-widest active:scale-95">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                         Mừng Cưới
                     </button>
-                    @endif
                 </div>
             </div>
         </div>
@@ -492,7 +488,7 @@
                     <p class="font-viceroy text-2xl text-brown mb-2">Mừng Cưới Chú Rể</p>
                     <p class="text-gold font-bold text-sm mb-6">{{ $wedding->groom_name }}</p>
                     <div class="bg-gray-50 p-4 rounded-3xl inline-block border-4 border-white shadow-inner mb-6">
-                        <img src="{{ $wedding->groom_qr_code }}" class="w-48 h-48 object-contain">
+                        <img src="{{ $wedding->getGroomQrUrl() }}" class="w-48 h-48 object-contain">
                     </div>
                 </div>
 
@@ -500,7 +496,7 @@
                     <p class="font-viceroy text-2xl text-brown mb-2">Mừng Cưới Cô Dâu</p>
                     <p class="text-gold font-bold text-sm mb-6">{{ $wedding->bride_name }}</p>
                     <div class="bg-gray-50 p-4 rounded-3xl inline-block border-4 border-white shadow-inner mb-6">
-                        <img src="{{ $wedding->bride_qr_code }}" class="w-48 h-48 object-contain">
+                        <img src="{{ $wedding->getBrideQrUrl() }}" class="w-48 h-48 object-contain">
                     </div>
                 </div>
 
