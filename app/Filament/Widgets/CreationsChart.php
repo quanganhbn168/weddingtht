@@ -3,13 +3,12 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Wedding;
-use App\Models\BusinessCard;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
 
 class CreationsChart extends ChartWidget
 {
-    protected static ?string $heading = '📈 Thiệp & Name Card mới (7 ngày qua)';
+    protected static ?string $heading = '📈 Thiệp Cưới mới (7 ngày qua)';
     protected static ?int $sort = 2;
     protected static ?string $maxHeight = '300px';
 
@@ -21,10 +20,6 @@ class CreationsChart extends ChartWidget
 
         $weddingData = $days->map(function ($date) {
             return Wedding::whereDate('created_at', $date)->count();
-        });
-
-        $cardData = $days->map(function ($date) {
-            return BusinessCard::whereDate('created_at', $date)->count();
         });
 
         $labels = $days->map(function ($date) {
@@ -39,13 +34,7 @@ class CreationsChart extends ChartWidget
                     'backgroundColor' => 'rgba(236, 72, 153, 0.5)',
                     'borderColor' => 'rgb(236, 72, 153)',
                     'borderWidth' => 2,
-                ],
-                [
-                    'label' => 'Name Card',
-                    'data' => $cardData->toArray(),
-                    'backgroundColor' => 'rgba(59, 130, 246, 0.5)',
-                    'borderColor' => 'rgb(59, 130, 246)',
-                    'borderWidth' => 2,
+                    'fill' => true,
                 ],
             ],
             'labels' => $labels->toArray(),
@@ -54,6 +43,7 @@ class CreationsChart extends ChartWidget
 
     protected function getType(): string
     {
-        return 'bar';
+        return 'line';
     }
 }
+

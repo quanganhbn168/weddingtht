@@ -115,10 +115,6 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Wedding::class);
     }
 
-    public function businessCards()
-    {
-        return $this->hasMany(BusinessCard::class);
-    }
 
     public function subscription()
     {
@@ -214,39 +210,5 @@ class User extends Authenticatable implements FilamentUser
         return $this->weddings()->count() < $limit;
     }
 
-    /**
-     * Check if user can create more business cards
-     */
-    public function canCreateBusinessCard(): bool
-    {
-        $subscription = $this->getActiveSubscription();
-        $limit = $subscription->getLimit('max_business_cards');
-        
-        if ($limit === -1) return true; // Unlimited
-        
-        return $this->businessCards()->count() < $limit;
-    }
 
-    /**
-     * Get remaining quota
-     */
-    public function getRemainingWeddings(): int|string
-    {
-        $subscription = $this->getActiveSubscription();
-        $limit = $subscription->getLimit('max_weddings');
-        
-        if ($limit === -1) return 'Unlimited';
-        
-        return max(0, $limit - $this->weddings()->count());
-    }
-
-    public function getRemainingBusinessCards(): int|string
-    {
-        $subscription = $this->getActiveSubscription();
-        $limit = $subscription->getLimit('max_business_cards');
-        
-        if ($limit === -1) return 'Unlimited';
-        
-        return max(0, $limit - $this->businessCards()->count());
-    }
 }
