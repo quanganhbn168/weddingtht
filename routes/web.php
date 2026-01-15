@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserWeddingController;
-use App\Http\Controllers\UserBusinessCardController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,16 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/{wedding}/wishes/{wish}', [UserWeddingController::class, 'deleteWish'])->name('wishes.delete');
     });
     
-    // Business card management
-    Route::prefix('dashboard/cards')->name('dashboard.cards.')->group(function () {
-        Route::get('/', [UserBusinessCardController::class, 'index'])->name('index');
-        Route::get('/create', [UserBusinessCardController::class, 'create'])->name('create');
-        Route::post('/', [UserBusinessCardController::class, 'store'])->name('store');
-        Route::get('/{card}/edit', [UserBusinessCardController::class, 'edit'])->name('edit');
-        Route::put('/{card}', [UserBusinessCardController::class, 'update'])->name('update');
-        Route::delete('/{card}', [UserBusinessCardController::class, 'destroy'])->name('destroy');
-        Route::get('/{card}/preview', [UserBusinessCardController::class, 'preview'])->name('preview');
-    });
+    // Business card management - REMOVED
     
     // Payment routes
     Route::post('/payment/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
@@ -77,7 +67,6 @@ require __DIR__.'/auth.php';
 // PUBLIC ROUTES (No Auth Required)
 // ====================================
 use App\Http\Controllers\WeddingController;
-use App\Http\Controllers\BusinessCardController;
 use App\Http\Controllers\RsvpController;
 use App\Http\Controllers\WishController;
 
@@ -90,8 +79,7 @@ Route::post('/w/{wedding:slug}/rsvp', [RsvpController::class, 'store'])->name('w
 Route::post('/w/{wedding:slug}/wish', [WishController::class, 'store'])->name('wedding.wish.store');
 Route::get('/api/w/{wedding:slug}/wishes', [WishController::class, 'index'])->name('wedding.wishes.api');
 
-// Business card / landing pages  
-Route::get('/p/{slug}', [BusinessCardController::class, 'show'])->name('business.show');
+// Business card routes - REMOVED
 
 // Fallback: /{slug} can be wedding OR card (check wedding first)
 Route::get('/{slug}', [\App\Http\Controllers\HomeController::class, 'resolveSlug'])

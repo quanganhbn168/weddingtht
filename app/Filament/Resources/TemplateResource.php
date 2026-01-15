@@ -54,10 +54,15 @@ class TemplateResource extends Resource
                     ->label('Loại')
                     ->options([
                         'wedding' => 'Wedding',
-                        'business' => 'Business',
                     ])
                     ->default('wedding')
                     ->required(),
+                Forms\Components\Select::make('required_tier')
+                    ->label('Gói yêu cầu')
+                    ->options(\App\Enums\WeddingTier::optionsWithPrice())
+                    ->default('basic')
+                    ->required()
+                    ->helperText('Khách hàng phải mua gói này hoặc cao hơn để sử dụng mẫu'),
                 Forms\Components\FileUpload::make('thumbnail_url')
                     ->label('Ảnh đại diện')
                     ->image()

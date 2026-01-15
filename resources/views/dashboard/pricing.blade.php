@@ -1,166 +1,160 @@
 <x-dashboard-layout>
-    <x-slot:header>Bảng giá & Nâng cấp</x-slot:header>
+    <x-slot:header>Bảng giá Thiệp Cưới</x-slot:header>
 
     <div class="max-w-5xl mx-auto">
         <div class="text-center mb-12">
             <h1 class="text-3xl font-bold text-gray-900 mb-4">Chọn gói phù hợp với bạn</h1>
-            <p class="text-gray-600">Nâng cấp để mở khóa tất cả tính năng premium</p>
+            <p class="text-gray-600">THT Media thiết kế và cài đặt hoàn chỉnh từ A-Z. Chỉ cần gửi ảnh và thông tin!</p>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Free Plan -->
-            <div class="bg-white rounded-2xl shadow-lg p-8 border-2 {{ $currentPlan === 'free' ? 'border-green-500' : 'border-gray-200' }}">
-                @if($currentPlan === 'free')
-                <div class="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-4">Gói hiện tại</div>
-                @endif
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ \App\Enums\SubscriptionPlan::FREE->label() }}</h3>
-                <div class="mb-6">
-                    <span class="text-4xl font-bold text-gray-900">0đ</span>
-                    <span class="text-gray-500">/mãi mãi</span>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Basic Plan -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-200">
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-600 text-2xl mx-auto mb-4"><i class="fas fa-leaf"></i></div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ \App\Enums\WeddingTier::BASIC->label() }}</h3>
+                    <div class="text-3xl font-bold text-gray-900 mb-1">{{ \App\Models\Setting::formatPrice(\App\Models\Setting::getTierPrice('basic')) }}</div>
+                    <div class="text-gray-500 text-sm">VNĐ / trọn gói</div>
                 </div>
                 
-                <ul class="space-y-4 mb-8">
+                <ul class="space-y-3 mb-6 text-sm">
                     <li class="flex items-center gap-2 text-gray-600">
                         <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
-                        {{ \App\Enums\SubscriptionPlan::FREE->maxWeddings() }} Thiệp Cưới
+                        Templates Cơ bản
                     </li>
                     <li class="flex items-center gap-2 text-gray-600">
                         <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
-                        {{ \App\Enums\SubscriptionPlan::FREE->maxCards() }} Name Card
+                        {{ \App\Models\Setting::getTierMaxPhotos('basic') }} ảnh cưới
                     </li>
                     <li class="flex items-center gap-2 text-gray-600">
                         <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
-                        Templates {{ \App\Enums\WeddingTier::STANDARD->label() }}
+                        Lưu trữ {{ \App\Models\Setting::getTierExpiry('basic') }} tháng
+                    </li>
+                    <li class="flex items-center gap-2 text-gray-600">
+                        <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        RSVP & Guestbook
                     </li>
                     <li class="flex items-center gap-2 text-gray-400">
                         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
-                        <span class="line-through">Templates {{ \App\Enums\WeddingTier::PRO->label() }}</span>
+                        <span class="line-through">Hiệu ứng rơi</span>
                     </li>
                 </ul>
                 
-                @if($currentPlan === 'free')
-                <button disabled class="w-full py-3 bg-gray-100 text-gray-500 rounded-lg font-medium cursor-default">Gói hiện tại</button>
-                @endif
+                <a href="#contact" class="block w-full py-3 bg-gray-100 text-gray-700 rounded-lg font-medium text-center hover:bg-gray-200 transition">
+                    Liên hệ đặt thiệp
+                </a>
+            </div>
+            
+            <!-- Standard Plan - Popular -->
+            <div class="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-6 text-white transform md:scale-105 relative">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 text-xs font-bold px-4 py-1 rounded-full">Phổ biến nhất</div>
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-white text-2xl mx-auto mb-4"><i class="fas fa-heart"></i></div>
+                    <h3 class="text-xl font-bold mb-2">{{ \App\Enums\WeddingTier::STANDARD->label() }}</h3>
+                    <div class="text-3xl font-bold mb-1">{{ \App\Models\Setting::formatPrice(\App\Models\Setting::getTierPrice('standard')) }}</div>
+                    <div class="text-blue-200 text-sm">VNĐ / trọn gói</div>
+                </div>
+                
+                <ul class="space-y-3 mb-6 text-sm">
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Templates Tiêu chuẩn
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <strong>{{ \App\Models\Setting::getTierMaxPhotos('standard') }} ảnh cưới</strong>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <strong>Lưu trữ {{ \App\Models\Setting::getTierExpiry('standard') }} tháng</strong>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <strong>Hiệu ứng Tim/Tuyết/Hoa rơi</strong>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Thống kê lượt truy cập
+                    </li>
+                </ul>
+                
+                <a href="#contact" class="block w-full py-3 bg-white text-indigo-600 rounded-lg font-bold text-center hover:bg-indigo-50 transition">
+                    Đăng ký ngay
+                </a>
             </div>
             
             <!-- Pro Plan -->
-            <div class="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl shadow-xl p-8 text-white transform md:scale-105 relative">
-                <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 text-xs font-bold px-4 py-1 rounded-full">Phổ biến nhất</div>
-                @if($currentPlan === 'pro')
-                <div class="bg-white text-indigo-600 text-xs font-bold px-3 py-1 rounded-full inline-block mb-4">Gói hiện tại</div>
-                @endif
-                <h3 class="text-2xl font-bold mb-2">{{ \App\Enums\WeddingTier::PRO->icon() }} {{ \App\Enums\SubscriptionPlan::PRO->label() }}</h3>
-                <div class="mb-6">
-                    <span class="text-4xl font-bold">199.000đ</span>
-                    <span class="text-indigo-200">/tháng</span>
+            <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl shadow-lg p-6 border-2 border-amber-400 relative">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-4 py-1 rounded-full">⭐ Premium</div>
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center text-white text-2xl mx-auto mb-4"><i class="fas fa-crown"></i></div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ \App\Enums\WeddingTier::PRO->label() }}</h3>
+                    <div class="text-3xl font-bold text-amber-600 mb-1">{{ \App\Models\Setting::formatPrice(\App\Models\Setting::getTierPrice('pro')) }}</div>
+                    <div class="text-gray-500 text-sm">VNĐ / trọn gói</div>
                 </div>
                 
-                <ul class="space-y-4 mb-8">
-                    <li class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <ul class="space-y-3 mb-6 text-sm">
+                    <li class="flex items-center gap-2 text-gray-700">
+                        <svg class="w-5 h-5 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
-                        {{ \App\Enums\SubscriptionPlan::PRO->maxWeddings() }} Thiệp Cưới
+                        <strong>Kho mẫu Premium</strong>
                     </li>
-                    <li class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <li class="flex items-center gap-2 text-gray-700">
+                        <svg class="w-5 h-5 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
-                        {{ \App\Enums\SubscriptionPlan::PRO->maxCards() }} Name Card
+                        <strong>Ảnh không giới hạn</strong>
                     </li>
-                    <li class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <li class="flex items-center gap-2 text-gray-700">
+                        <svg class="w-5 h-5 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
-                        Tất cả Templates {{ \App\Enums\WeddingTier::PRO->label() }}
+                        <strong>Lưu trữ vĩnh viễn</strong>
                     </li>
-                    <li class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <li class="flex items-center gap-2 text-gray-700">
+                        <svg class="w-5 h-5 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
-                        Hiệu ứng rơi ({{ \App\Enums\FallingEffect::HEARTS->label() }}, {{ \App\Enums\FallingEffect::PETALS->label() }}...)
+                        <strong>Màn mở thiệp 3D</strong>
                     </li>
-                    <li class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-yellow-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <li class="flex items-center gap-2 text-gray-700">
+                        <svg class="w-5 h-5 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
-                        Thống kê chi tiết
+                        <strong>Ghi tên khách cá nhân hóa</strong>
                     </li>
                 </ul>
                 
-                @if($currentPlan !== 'pro')
-                <form action="{{ route('payment.checkout') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="plan" value="pro">
-                    <button type="submit" class="w-full py-3 bg-white text-indigo-600 rounded-lg font-bold hover:bg-indigo-50 transition flex items-center justify-center gap-2">
-                        <img src="https://developers.momo.vn/v3/vi/assets/images/icon-52bd5808cecdb1970e1aeec3c31a3ee1.png" alt="MoMo" class="w-6 h-6">
-                        Thanh toán MoMo
-                    </button>
-                </form>
-                @else
-                <button disabled class="w-full py-3 bg-white/20 text-white rounded-lg font-medium cursor-default">Gói hiện tại</button>
-                @endif
-            </div>
-            
-            <!-- Enterprise Plan -->
-            <div class="bg-white rounded-2xl shadow-lg p-8 border-2 {{ $currentPlan === 'enterprise' ? 'border-green-500' : 'border-gray-200' }}">
-                @if($currentPlan === 'enterprise')
-                <div class="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-4">Gói hiện tại</div>
-                @endif
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ \App\Enums\SubscriptionPlan::ENTERPRISE->label() }}</h3>
-                <div class="mb-6">
-                    <span class="text-4xl font-bold text-gray-900">Liên hệ</span>
-                </div>
-                
-                <ul class="space-y-4 mb-8">
-                    <li class="flex items-center gap-2 text-gray-600">
-                        <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        Không giới hạn Thiệp Cưới
-                    </li>
-                    <li class="flex items-center gap-2 text-gray-600">
-                        <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        Không giới hạn Name Card
-                    </li>
-                    <li class="flex items-center gap-2 text-gray-600">
-                        <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        White-label solution
-                    </li>
-                    <li class="flex items-center gap-2 text-gray-600">
-                        <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        API Access
-                    </li>
-                    <li class="flex items-center gap-2 text-gray-600">
-                        <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        Hỗ trợ ưu tiên 24/7
-                    </li>
-                </ul>
-                
-                <a href="mailto:contact@thtmedia.com.vn" class="block w-full py-3 bg-gray-100 text-gray-700 rounded-lg font-medium text-center hover:bg-gray-200 transition">
-                    Liên hệ tư vấn
+                <a href="#contact" class="block w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg font-bold text-center hover:opacity-90 transition">
+                    Đăng ký ngay
                 </a>
             </div>
         </div>
         
         <div class="mt-12 text-center text-gray-500 text-sm">
-            <p>Có câu hỏi? Liên hệ <a href="mailto:support@thtmedia.com.vn" class="text-pink-600 hover:underline">support@thtmedia.com.vn</a></p>
+            <p>Có câu hỏi? Liên hệ <a href="tel:0375433678" class="text-pink-600 hover:underline">0375 433 678</a> hoặc <a href="mailto:support@thtmedia.com.vn" class="text-pink-600 hover:underline">support@thtmedia.com.vn</a></p>
         </div>
     </div>
 </x-dashboard-layout>
+

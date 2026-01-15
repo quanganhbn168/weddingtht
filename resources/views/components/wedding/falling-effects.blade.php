@@ -6,8 +6,13 @@ Variety of shapes, sizes, colors for each effect type
 @php
     $effectRaw = $wedding->falling_effect ?? 'hearts';
     $effect = is_object($effectRaw) ? $effectRaw->value : (string)$effectRaw;
-    $isPro = true; // Unlock all effects for everyone
-    $showEffect = $effect !== 'none';
+    
+    // Get tier enum and check if effects are enabled for this tier
+    $tierValue = is_object($wedding->tier) ? $wedding->tier->value : (string)($wedding->tier ?? 'basic');
+    $tierEnum = \App\Enums\WeddingTier::tryFrom($tierValue) ?? \App\Enums\WeddingTier::BASIC;
+    $hasEffects = $tierEnum->hasEffects(); // Standard & Pro have effects, Basic does not
+    
+    $showEffect = $hasEffects && $effect !== 'none';
 @endphp
 
 @if($showEffect)
@@ -167,7 +172,7 @@ Variety of shapes, sizes, colors for each effect type
     'use strict';
     
     const effect = '{{ $effect }}';
-    const isPro = {{ $isPro ? 'true' : 'false' }};
+    const isPro = {{ $tierEnum->value === 'pro' ? 'true' : 'false' }};
     const canvas = document.getElementById('fallingCanvas');
     if (!canvas) return;
 

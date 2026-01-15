@@ -4,7 +4,12 @@
     Usage: @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'heartbeat'])
 --}}
 
-@if($wedding->show_preload && $wedding->tier === 'pro')
+@php
+    $tierValue = is_object($wedding->tier) ? $wedding->tier->value : (string)($wedding->tier ?? 'basic');
+    $tierEnum = \App\Enums\WeddingTier::tryFrom($tierValue) ?? \App\Enums\WeddingTier::BASIC;
+@endphp
+
+@if($wedding->show_preload && $tierEnum->hasPreload())
 @php
     // Determine variant based on input or default to 'heartbeat' for modern feel if not specified
     // Ideally this could come from $wedding->preload_style if added to DB

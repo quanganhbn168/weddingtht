@@ -40,18 +40,26 @@ class Agent extends Model
     const TYPE_WEDDING_PLANNER = 'wedding_planner';
     const TYPE_OTHER = 'other';
 
-    // Subscription plans
-    const PLAN_TRIAL = 'trial';
-    const PLAN_BASIC = 'basic';
-    const PLAN_PRO = 'pro';
-    const PLAN_ENTERPRISE = 'enterprise';
+    // Subscription plans (monthly)
+    const PLAN_TRIAL = 'trial';           // Free 14 days
+    const PLAN_BASIC = 'basic';           // 199K/month
+    const PLAN_STANDARD = 'standard';     // 499K/month
+    const PLAN_ENTERPRISE = 'enterprise'; // 999K/month
 
-    // Quota limits per plan
+    // Quota limits per plan (weddings per month)
     const PLAN_LIMITS = [
         self::PLAN_TRIAL => 5,
-        self::PLAN_BASIC => 20,
-        self::PLAN_PRO => 100,
+        self::PLAN_BASIC => 10,
+        self::PLAN_STANDARD => 30,
         self::PLAN_ENTERPRISE => -1, // Unlimited
+    ];
+
+    // Pricing per plan (VND per month)
+    const PLAN_PRICES = [
+        self::PLAN_TRIAL => 0,
+        self::PLAN_BASIC => 199000,
+        self::PLAN_STANDARD => 499000,
+        self::PLAN_ENTERPRISE => 999000,
     ];
 
     // ==========================================
@@ -178,12 +186,20 @@ class Agent extends Model
     public function getSubscriptionPlanLabel(): string
     {
         return match($this->subscription_plan) {
-            self::PLAN_TRIAL => 'Dùng thử',
-            self::PLAN_BASIC => 'Cơ bản',
-            self::PLAN_PRO => 'Pro',
-            self::PLAN_ENTERPRISE => 'Enterprise',
+            self::PLAN_TRIAL => 'Dùng thử (14 ngày)',
+            self::PLAN_BASIC => 'Cơ bản (199K/tháng)',
+            self::PLAN_STANDARD => 'Tiêu chuẩn (499K/tháng)',
+            self::PLAN_ENTERPRISE => 'Doanh nghiệp (999K/tháng)',
             default => 'Không xác định',
         };
+    }
+
+    /**
+     * Get plan price
+     */
+    public function getPlanPrice(): int
+    {
+        return self::PLAN_PRICES[$this->subscription_plan] ?? 0;
     }
 
     /**
