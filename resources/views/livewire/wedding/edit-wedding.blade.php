@@ -444,10 +444,7 @@
                     <!-- PRO FEATURES -->
                     <div class="border-t pt-8">
                         <div class="flex items-center gap-2 mb-4">
-                            <h3 class="text-lg font-semibold text-gray-900">✨ Tính năng Pro</h3>
-                            @if(!$this->isPro())
-                                <span class="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">🔒 Nâng cấp để mở</span>
-                            @endif
+                            <h3 class="text-lg font-semibold text-gray-900">✨ Tính năng Nâng cao</h3>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -456,7 +453,6 @@
                                     <input type="checkbox" wire:model="show_preload" 
                                         class="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded">
                                     <span class="text-sm font-medium text-gray-700">Animation mở cửa "囍"</span>
-                                    @if(!$this->isPro())<span class="text-xs text-yellow-600 ml-1">⭐ Pro</span>@endif
                                 </label>
                                 <p class="text-xs text-gray-500 ml-7 mt-1">Hiển thị cửa Song Hỷ trượt mở</p>
                             </div>
@@ -468,13 +464,10 @@
                                         <option value="{{ $value }}">{{ $label }}</option>
                                     @endforeach
                                 </select>
-                                @if(!$this->isPro())
-                                <p class="text-xs text-yellow-600 mt-1">⚠️ Tính năng Pro - Bạn có thể xem trước, nhưng cần nâng cấp để publish</p>
-                                @endif
                             </div>
                         </div>
                         
-                        @if(!$this->isPro())
+                        @if(false)
                             <div class="mt-4 p-4 bg-gradient-to-r from-yellow-50 to-pink-50 rounded-lg border border-yellow-200">
                                 <p class="text-sm text-gray-700">
                                     <strong>Nâng cấp lên Pro</strong> để mở khóa hiệu ứng premium, domain riêng, và nhiều tính năng hấp dẫn khác.

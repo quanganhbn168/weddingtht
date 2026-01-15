@@ -62,7 +62,7 @@ class WeddingController extends Controller
 
         // Show upgrade banner for Standard tier viewing their own wedding
         $showUpgradeBanner = false;
-        if ($user && $wedding->user_id === $user->id && !$wedding->isPro() && !$wedding->can_share) {
+        if (false && $user && $wedding->user_id === $user->id && !$wedding->isPro() && !$wedding->can_share) {
             $showUpgradeBanner = true;
         }
 

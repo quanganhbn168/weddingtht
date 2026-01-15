@@ -525,7 +525,7 @@ class WeddingForm
                                     'rings' => 'Sang trọng (Nhẫn cưới)',
                                 ])
                                 ->default('heartbeat')
-                                ->visible(fn (Get $get) => $get('show_preload') && $get('tier') === 'pro')
+                                ->visible(fn (Get $get) => $get('show_preload'))
                                 ->required(fn (Get $get) => $get('show_preload')),
                                         
                                         Select::make('falling_effect')
