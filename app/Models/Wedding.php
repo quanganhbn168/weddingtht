@@ -339,7 +339,7 @@ class Wedding extends Model implements HasMedia
         }
 
         // If can_share is true, anyone can view (Pro + published)
-        if ($this->can_share && $this->status === 'published') {
+        if ($this->can_share && $this->isPublished()) {
             return true;
         }
 
@@ -374,7 +374,7 @@ class Wedding extends Model implements HasMedia
      */
     public function canBeShared(): bool
     {
-        return $this->isPro() && $this->status === 'published' && $this->can_share;
+        return $this->isPro() && $this->isPublished() && $this->can_share;
     }
 
     /**
