@@ -416,15 +416,15 @@
     @endif
 
     {{-- SECTION 6: BLESSING / CHÚC PHÚC --}}
-    <section class="py-20 px-6 bg-white relative overflow-hidden bg-main-watercolor" data-aos="fade-up">
+    <section class="py-20 px-6 bg-white relative overflow-hidden bg-main-watercolor" data-aos="fade-up" x-data="{ activeQr: null }">
         <div class="relative z-10">
             <h2 class="font-viceroy text-5xl text-gold text-center mb-6">Mừng Cưới</h2>
             <p class="text-center text-gray-700 italic mb-12 max-w-xs mx-auto font-medium">
                 Cảm ơn tất cả tình cảm của cô dì chú bác, bạn bè và anh chị em đã dành cho {{ $wedding->groom_name }} & {{ $wedding->bride_name }}.
             </p>
 
-            <div class="grid grid-cols-2 gap-8 mb-12">
-                {{-- Groom QR --}}
+            <div class="grid grid-cols-2 gap-8">
+                {{-- Groom QR Button --}}
                 <div class="text-center" data-aos="fade-right">
                     <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
                         <img src="{{ $groomPhoto }}" class="w-full h-full object-cover">
@@ -433,13 +433,14 @@
                     <h3 class="font-viceroy text-2xl text-brown mb-4">{{ $wedding->groom_name }}</h3>
                     
                     @if($wedding->groom_qr_code)
-                    <div class="bg-white p-2 rounded-2xl inline-block shadow-md">
-                        <img src="{{ $wedding->groom_qr_code }}" class="w-24 h-24 object-contain" alt="Groom QR">
-                    </div>
+                    <button @click="activeQr = 'groom'" class="inline-flex items-center gap-2 px-6 py-3 bg-gold text-white rounded-full text-[10px] font-bold shadow-lg hover:bg-brown transition-all uppercase tracking-widest active:scale-95">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        Mừng Cưới
+                    </button>
                     @endif
                 </div>
 
-                {{-- Bride QR --}}
+                {{-- Bride QR Button --}}
                 <div class="text-center" data-aos="fade-left">
                     <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
                         <img src="{{ $bridePhoto }}" class="w-full h-full object-cover">
@@ -448,11 +449,62 @@
                     <h3 class="font-viceroy text-2xl text-brown mb-4">{{ $wedding->bride_name }}</h3>
                     
                     @if($wedding->bride_qr_code)
-                    <div class="bg-white p-2 rounded-2xl inline-block shadow-md">
-                        <img src="{{ $wedding->bride_qr_code }}" class="w-24 h-24 object-contain" alt="Bride QR">
-                    </div>
+                    <button @click="activeQr = 'bride'" class="inline-flex items-center gap-2 px-6 py-3 bg-gold text-white rounded-full text-[10px] font-bold shadow-lg hover:bg-brown transition-all uppercase tracking-widest active:scale-95">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        Mừng Cưới
+                    </button>
                     @endif
                 </div>
+            </div>
+        </div>
+
+        {{-- QR Modal Backdrop --}}
+        <div x-show="activeQr" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             @click="activeQr = null"
+             class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-6"
+             style="display: none;">
+            
+            {{-- Modal Content --}}
+            <div @click.stop 
+                 class="bg-white rounded-[40px] p-8 max-w-xs w-full text-center relative overflow-hidden"
+                 x-show="activeQr"
+                 x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="scale-90 translate-y-8"
+                 x-transition:enter-end="scale-100 translate-y-0">
+                
+                {{-- Decorative background --}}
+                <div class="absolute inset-0 opacity-5 pointer-events-none">
+                    <img src="{{ asset('images/back-ground-1.png') }}" class="w-full h-full object-cover">
+                </div>
+
+                {{-- Close Button --}}
+                <button @click="activeQr = null" class="absolute top-4 right-4 text-gray-400 hover:text-gold transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+
+                <div x-show="activeQr === 'groom'">
+                    <p class="font-viceroy text-2xl text-brown mb-2">Mừng Cưới Chú Rể</p>
+                    <p class="text-gold font-bold text-sm mb-6">{{ $wedding->groom_name }}</p>
+                    <div class="bg-gray-50 p-4 rounded-3xl inline-block border-4 border-white shadow-inner mb-6">
+                        <img src="{{ $wedding->groom_qr_code }}" class="w-48 h-48 object-contain">
+                    </div>
+                </div>
+
+                <div x-show="activeQr === 'bride'">
+                    <p class="font-viceroy text-2xl text-brown mb-2">Mừng Cưới Cô Dâu</p>
+                    <p class="text-gold font-bold text-sm mb-6">{{ $wedding->bride_name }}</p>
+                    <div class="bg-gray-50 p-4 rounded-3xl inline-block border-4 border-white shadow-inner mb-6">
+                        <img src="{{ $wedding->bride_qr_code }}" class="w-48 h-48 object-contain">
+                    </div>
+                </div>
+
+                <p class="text-gray-400 text-[10px] uppercase font-bold tracking-widest italic">Cảm ơn bạn rất nhiều! ❤️</p>
             </div>
         </div>
     </section>
