@@ -105,7 +105,6 @@
     @endif
     
     @include('components.wedding.falling-effects', ['wedding' => $wedding])
-    @include('components.wedding.upgrade-banner', ['wedding' => $wedding, 'showUpgradeBanner' => $showUpgradeBanner ?? false])
     
     {{-- Music Player --}}
     <x-wedding.music-player :wedding="$wedding" />
