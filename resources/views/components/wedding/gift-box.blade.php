@@ -34,9 +34,9 @@
             <div class="p-8 text-center">
                 <template x-if="showQr === 'groom'">
                     <div>
-                        <img src="{{ $wedding->getGroomQrUrl() }}" class="w-48 h-48 mx-auto mb-4 border border-gray-100 p-1" style="border-radius: var(--radius-box, 0.5rem);">
+                        <img src="{{ $wedding->getGroomQrUrl() }}" class="w-full h-auto object-contain mx-auto mb-4 border border-gray-100 p-1 rounded-lg">
                         
-                        <div class="space-y-2 text-sm text-gray-600 bg-gray-50 p-3" style="border-radius: var(--radius-box, 0.5rem);">
+                        <div class="space-y-2 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
                             <p class="whitespace-pre-line">{{ $wedding->groom_qr_info }}</p>
                         </div>
                     </div>
@@ -44,9 +44,9 @@
                 
                 <template x-if="showQr === 'bride'">
                     <div>
-                        <img src="{{ $wedding->getBrideQrUrl() }}" class="w-48 h-48 mx-auto mb-4 border border-gray-100 p-1" style="border-radius: var(--radius-box, 0.5rem);">
+                        <img src="{{ $wedding->getBrideQrUrl() }}" class="w-full h-auto object-contain mx-auto mb-4 border border-gray-100 p-1 rounded-lg">
 
-                         <div class="space-y-2 text-sm text-gray-600 bg-gray-50 p-3" style="border-radius: var(--radius-box, 0.5rem);">
+                         <div class="space-y-2 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
                             <p class="whitespace-pre-line">{{ $wedding->bride_qr_info }}</p>
                         </div>
                     </div>
