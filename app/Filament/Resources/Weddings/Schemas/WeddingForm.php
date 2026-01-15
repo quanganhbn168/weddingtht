@@ -35,26 +35,6 @@ class WeddingForm
                         Tab::make('Thông tin cơ bản')
                             ->icon('heroicon-o-information-circle')
                             ->schema([
-                                Section::make('👤 Tài khoản Khách hàng (Chủ sở hữu)')
-                                    ->description('Tạo tài khoản mới hoặc gán vào tài khoản cũ (theo Email)')
-                                    ->schema([
-                                        TextInput::make('user_email')
-                                            ->label('Email đăng nhập')
-                                            ->email()
-                                            ->required()
-                                            ->dehydrated(false) // Not saved to wedding table directly
-                                            ->placeholder('VD: codau@example.com'),
-                                            
-                                        TextInput::make('user_password')
-                                            ->label('Mật khẩu')
-                                            ->password()
-                                            ->revealable()
-                                            ->dehydrated(false)
-                                            ->required(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\CreateRecord)
-                                            ->placeholder('Nhập mật khẩu cho khách'),
-                                    ])
-                                    ->visible(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\CreateRecord), // Only show on Create
-
                                 Section::make('Cô dâu & Chú rể')
                                     ->columns(2)
                                     ->schema([
