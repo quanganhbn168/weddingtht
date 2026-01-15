@@ -357,7 +357,7 @@
             </div>
 
             {{-- Slider 2 (Secondary) --}}
-            <div class="swiper secondaryGallery rounded-2xl overflow-hidden aspect-[16/9] shadow-xl" data-aos="fade-up">
+            <div class="swiper secondaryGallery rounded-2xl overflow-hidden aspect-[4/5] shadow-xl" data-aos="fade-up">
                 <div class="swiper-wrapper">
                     @foreach($imagesToDisplay->reverse() as $imgUrl)
                             <div class="swiper-slide">
