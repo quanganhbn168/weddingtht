@@ -256,7 +256,7 @@
             {{-- Groom --}}
             <div class="text-center" data-aos="fade-right">
                 <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 flex items-center justify-center">
-                    <img src="{{ $groomPhoto }}" class="w-full h-full object-contain" alt="{{ $wedding->groom_name }}">
+                    <img src="{{ $groomPhoto }}" class="w-full h-full object-cover" style="object-position: top;" alt="{{ $wedding->groom_name }}">
                 </div>
                 <h3 class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->groom_name }}</h3>
                 <div class="text-gray-600 text-[11px] space-y-1 font-medium italic">
@@ -268,7 +268,7 @@
             {{-- Bride --}}
             <div class="text-center" data-aos="fade-left">
                 <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-xl bg-gray-50 flex items-center justify-center">
-                    <img src="{{ $bridePhoto }}" class="w-full h-full object-contain" alt="{{ $wedding->bride_name }}">
+                    <img src="{{ $bridePhoto }}" class="w-full h-full object-cover" style="object-position: top;" alt="{{ $wedding->bride_name }}">
                 </div>
                 <h3 class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->bride_name }}</h3>
                 <div class="text-gray-600 text-[11px] space-y-1 font-medium italic">
@@ -427,7 +427,7 @@
                 {{-- Groom QR Button --}}
                 <div class="text-center" data-aos="fade-right">
                     <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg flex items-center justify-center bg-gray-50">
-                        <img src="{{ $groomPhoto }}" class="w-full h-full object-contain">
+                        <img src="{{ $groomPhoto }}" class="w-full h-full object-cover" style="object-position: top;">
                     </div>
                     <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Chú Rể</p>
                     <h3 class="font-viceroy text-2xl text-brown mb-4">{{ $wedding->groom_name }}</h3>
@@ -441,7 +441,7 @@
                 {{-- Bride QR Button --}}
                 <div class="text-center" data-aos="fade-left">
                     <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg flex items-center justify-center bg-gray-50">
-                        <img src="{{ $bridePhoto }}" class="w-full h-full object-contain">
+                        <img src="{{ $bridePhoto }}" class="w-full h-full object-cover" style="object-position: top;">
                     </div>
                     <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">Cô Dâu</p>
                     <h3 class="font-viceroy text-2xl text-brown mb-4">{{ $wedding->bride_name }}</h3>
