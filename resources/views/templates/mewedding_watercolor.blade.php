@@ -249,7 +249,6 @@
         <div class="relative z-10 max-w-sm mx-auto">
             {{-- Date Section First - Cute Typography --}}
             <div class="mb-12" data-aos="zoom-in">
-                <h2 class="font-viceroy text-6xl text-gold mb-6">Save the Date</h2>
                 <div class="inline-block">
                     <div class="font-viceroy text-4xl text-brown border-y-2 border-gold/20 py-4 px-8">
                         {{ $wedding->event_date?->format('d . m . Y') }}
