@@ -56,6 +56,7 @@ class EditWedding extends Component
     public $is_auto_approve_wishes = false;
     public $show_preload = false;
     public $falling_effect = 'hearts'; // String value for Livewire binding
+    public $can_share = true;
     
     // Media Uploads (temporary)
     public $cover;
@@ -91,6 +92,8 @@ class EditWedding extends Component
             'bride_qr_info' => 'nullable|string|max:1000',
             'slug' => 'nullable|string|max:255|unique:weddings,slug,' . $this->wedding->id,
             'password' => 'nullable|string|max:255',
+            'password' => 'nullable|string|max:255',
+            'can_share' => 'boolean',
             'falling_effect' => 'nullable|string',
             'cover' => 'nullable|image|max:5120',
             'hero' => 'nullable|image|max:5120',
@@ -148,7 +151,9 @@ class EditWedding extends Component
         $this->slug = $wedding->slug;
         $this->password = $wedding->password;
         $this->is_auto_approve_wishes = $wedding->is_auto_approve_wishes;
+        $this->is_auto_approve_wishes = $wedding->is_auto_approve_wishes;
         $this->show_preload = $wedding->show_preload;
+        $this->can_share = $wedding->can_share;
         
         // Convert Enum to string value
         $this->falling_effect = $wedding->falling_effect instanceof FallingEffect 
@@ -191,6 +196,8 @@ class EditWedding extends Component
             'password' => $this->password,
             'is_auto_approve_wishes' => $this->is_auto_approve_wishes,
             'show_preload' => $this->show_preload,
+            'show_preload' => $this->show_preload,
+            'can_share' => $this->can_share,
             'falling_effect' => $this->falling_effect,
         ]);
         

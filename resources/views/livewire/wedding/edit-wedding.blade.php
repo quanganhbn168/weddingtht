@@ -420,6 +420,16 @@
                                     placeholder="Để trống nếu không cần">
                             </div>
                         </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                             <label class="flex items-center gap-3">
+                                <input type="checkbox" wire:model="can_share" 
+                                    class="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded">
+                                <span class="text-sm font-medium text-gray-700">Cho phép mọi người xem (Public)</span>
+                            </label>
+                            <p class="text-xs text-gray-500 ml-7 mt-1">Bật để khách có thể xem thiệp mà không cần đăng nhập. Tắt để chỉ mình bạn xem.</p>
+                        </div>
                     </div>
 
                     <div>

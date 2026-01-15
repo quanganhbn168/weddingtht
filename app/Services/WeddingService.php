@@ -43,6 +43,7 @@ class WeddingService
             'bride_qr_info' => 'nullable|string|max:1000',
             'slug' => 'nullable|string|max:255|unique:weddings,slug,' . $wedding->id,
             'password' => 'nullable|string|max:255',
+            'can_share' => 'boolean',
         ];
     }
 
@@ -71,9 +72,12 @@ class WeddingService
             $data['tier'] = self::normalizeEnum($data['tier'], WeddingTier::class);
         }
 
-        // Convert falling_effect string to enum value if needed
         if (isset($data['falling_effect'])) {
             $data['falling_effect'] = self::normalizeEnum($data['falling_effect'], FallingEffect::class);
+        }
+
+        if (isset($data['can_share'])) {
+            $data['can_share'] = filter_var($data['can_share'], FILTER_VALIDATE_BOOLEAN);
         }
 
         return $data;

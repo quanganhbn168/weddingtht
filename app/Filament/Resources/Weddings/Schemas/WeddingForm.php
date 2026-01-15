@@ -479,8 +479,7 @@ class WeddingForm
                                         \Filament\Forms\Components\Toggle::make('can_share')
                                             ->label('Cho phép Share Public')
                                             ->helperText('Bật = ai có link xem được. Tắt = chỉ chủ sở hữu xem')
-                                            ->default(false)
-                                            ->visible(fn (Get $get) => $get('tier') === 'pro'),
+                                            ->default(true),
                                         
                                         Select::make('agent_id')
                                             ->label('Đại lý tạo')
