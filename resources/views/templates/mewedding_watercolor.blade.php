@@ -569,10 +569,131 @@
         </div>
     </section>
 
-    {{-- SECTION 8: GỬI LỜI CHÚC ĐẾN CẶP ĐÔI --}}
-    <section class="relative py-20 overflow-hidden bg-cream" data-aos="fade-up">
-        <div class="relative z-10 px-6">
-            @include('components.wedding.guestbook', ['wedding' => $wedding])
+    {{-- SECTION 8: SỔ LƯU BÚT --}}
+    <section id="guestbook" class="relative py-20 px-6 overflow-hidden" data-aos="fade-up">
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-8 card-shadow border border-gold/10 text-center">
+                <h2 class="font-viceroy text-4xl md:text-5xl text-brown mb-4 text-shadow-gold">
+                    {{ $wedding->getContentValue('guestbook_title', 'Sổ Lưu Bút') }}
+                </h2>
+                <div class="w-16 h-px bg-gold mx-auto mb-6"></div>
+                <p class="text-gray-600 italic mb-8 max-w-lg mx-auto">
+                    {{ $wedding->getContentValue('guestbook_desc', 'Hãy để lại những lời chúc phúc tốt đẹp nhất cho chúng tôi nhé!') }}
+                </p>
+
+                {{-- Wish List (Editorial Style Swiper) --}}
+                @php
+                    $wishes = $wedding->approvedWishes()->latest()->take(10)->get();
+                @endphp
+
+                @if($wishes->count() > 0)
+                <div class="mb-12 relative px-8">
+                    <div class="swiper guestbook-slider pb-10">
+                        <div class="swiper-wrapper">
+                            @foreach($wishes as $wish)
+                            <div class="swiper-slide">
+                                <div class="text-center px-4">
+                                    <div class="text-6xl font-viceroy text-gold/20 mb-4">“</div>
+                                    <p class="text-xl md:text-2xl text-gray-700 italic font-serif leading-relaxed mb-6">
+                                        {{ $wish->message }}
+                                    </p>
+                                    <div class="font-bold text-brown uppercase tracking-widest text-sm mb-1">
+                                        {{ $wish->name }}
+                                    </div>
+                                    <div class="text-xs text-gold/80">
+                                        {{ $wish->created_at->format('d/m/Y') }}
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        <div class="swiper-pagination !bottom-0"></div>
+                    </div>
+                </div>
+                @else
+                <div class="mb-12 text-gray-400 italic">Chưa có lời chúc nào. Hãy là người đầu tiên!</div>
+                @endif
+
+                {{-- Submit Button & Form --}}
+                <div x-data="{ 
+                    open: false,
+                    submitting: false,
+                    success: false,
+                    error: null,
+                    formData: { name: '', message: '' },
+                    async submitWish() {
+                        this.submitting = true;
+                        this.error = null;
+                        try {
+                            const response = await fetch('{{ route('wedding.wish.store', $wedding->slug) }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify(this.formData)
+                            });
+                            if (response.ok) {
+                                this.success = true;
+                                this.formData = { name: '', message: '' };
+                                setTimeout(() => { this.success = false; this.open = false; }, 3000);
+                            } else {
+                                const data = await response.json();
+                                this.error = data.message || 'Có lỗi xảy ra.';
+                            }
+                        } catch (e) {
+                            this.error = 'Lỗi kết nối mạng.';
+                        } finally {
+                            this.submitting = false;
+                        }
+                    }
+                }">
+                    <button @click="open = true" class="btn-gold-premium px-8 py-3 rounded-full font-bold uppercase tracking-widest text-sm shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                        Gửi Lời Chúc
+                    </button>
+
+                    {{-- Modal --}}
+                    <div x-show="open" style="display: none;" 
+                         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
+                         x-transition.opacity>
+                        
+                        <div class="bg-white rounded-3xl p-8 max-w-md w-full relative shadow-2xl border-4 border-gold/20" @click.outside="open = false">
+                            <button @click="open = false" class="absolute top-4 right-4 text-gray-400 hover:text-gold transition">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+
+                            <h3 class="font-viceroy text-3xl text-brown text-center mb-6">Viết Lời Chúc</h3>
+
+                            <div x-show="success" class="text-center py-8">
+                                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <h4 class="text-xl font-bold text-gray-800 mb-2">Đã Gửi Thành Công!</h4>
+                                <p class="text-gray-600">Cảm ơn bạn rất nhiều.</p>
+                            </div>
+
+                            <form @submit.prevent="submitWish" x-show="!success" class="space-y-4 text-left">
+                                <div x-show="error" class="p-3 bg-red-50 text-red-600 text-sm rounded-lg text-center" x-text="error"></div>
+                                
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Tên của bạn</label>
+                                    <input type="text" x-model="formData.name" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-colors bg-gray-50/50">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Lời chúc</label>
+                                    <textarea x-model="formData.message" required rows="4" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-colors bg-gray-50/50 resize-none"></textarea>
+                                </div>
+
+                                <button type="submit" class="w-full py-4 text-white font-bold uppercase rounded-xl shadow-lg btn-gold-premium transition-all" :disabled="submitting">
+                                    <span x-show="!submitting">Gửi Ngay</span>
+                                    <span x-show="submitting">Đang Gửi...</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -728,9 +849,150 @@
     </section>
 
     {{-- SECTION 10: XÁC NHẬN THAM DỰ --}}
-    <section class="py-20 px-6 bg-white relative overflow-hidden" data-aos="fade-up">
+    <section id="rsvp" class="py-20 px-6 bg-white relative overflow-hidden" data-aos="fade-up">
         <div class="max-w-4xl mx-auto">
-            @include('components.wedding.rsvp-form', ['wedding' => $wedding])
+            <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-8 card-shadow border border-gold/10 text-center relative overflow-hidden">
+                {{-- Decorative Background --}}
+                <div class="absolute inset-0 opacity-5 pointer-events-none">
+                    <img src="{{ asset('images/back-ground-1.png') }}" class="w-full h-full object-cover">
+                </div>
+
+                <div class="relative z-10">
+                    <h2 class="font-viceroy text-4xl md:text-5xl text-brown mb-4 text-shadow-gold">Xác Nhận Tham Dự</h2>
+                    <div class="w-16 h-px bg-gold mx-auto mb-6"></div>
+                    <p class="text-gray-600 italic mb-10 max-w-lg mx-auto">
+                        {{ $wedding->getContentValue('rsvp_desc', 'Sự hiện diện của bạn là niềm vinh hạnh của chúng tôi.') }}
+                    </p>
+
+                    <div x-data="{
+                        submitting: false,
+                        success: false,
+                        error: null,
+                        formData: {
+                            name: '{{ $wedding->getGuestName() ? urldecode($wedding->getGuestName()) : '' }}',
+                            phone: '',
+                            attendance: 'yes',
+                            guests: '1',
+                            side: 'both',
+                            note: ''
+                        },
+                        async submitRsvp() {
+                            this.submitting = true;
+                            this.error = null;
+                            try {
+                                const response = await fetch('{{ route('wedding.rsvp.store', $wedding->slug) }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
+                                        'Accept': 'application/json'
+                                    },
+                                    body: JSON.stringify(this.formData)
+                                });
+                                if (response.ok) {
+                                    this.success = true;
+                                    setTimeout(() => { this.success = false; }, 5000);
+                                } else {
+                                    const data = await response.json();
+                                    this.error = data.message || 'Có lỗi xảy ra, vui lòng kiểm tra lại.';
+                                }
+                            } catch (e) {
+                                this.error = 'Lỗi kết nối mạng.';
+                            } finally {
+                                this.submitting = false;
+                            }
+                        }
+                    }">
+                        {{-- Success State --}}
+                        <div x-show="success" class="mb-8 p-6 bg-green-50 border border-green-200 rounded-2xl animate-fade-in" style="display: none;">
+                            <div class="flex flex-col items-center">
+                                <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-3">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <h4 class="font-bold text-gray-800 text-lg">Xác nhận thành công!</h4>
+                                <p class="text-sm text-gray-600">Cảm ơn bạn, chúng tôi đã nhận được thông tin.</p>
+                            </div>
+                        </div>
+                        
+                        {{-- Form --}}
+                        <form @submit.prevent="submitRsvp" x-show="!success" class="space-y-6 text-left max-w-2xl mx-auto">
+                            <div x-show="error" class="p-4 bg-red-50 text-red-600 text-sm border border-red-100 rounded-xl text-center" style="display: none;" x-text="error"></div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Họ và Tên <span class="text-red-400">*</span></label>
+                                    <input type="text" x-model="formData.name" required
+                                        class="w-full px-4 py-3 bg-white/50 border border-gray-200 rounded-xl text-gray-900 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all"
+                                        placeholder="Nhập tên...">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Số Điện Thoại</label>
+                                    <input type="tel" x-model="formData.phone"
+                                        class="w-full px-4 py-3 bg-white/50 border border-gray-200 rounded-xl text-gray-900 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all"
+                                        placeholder="Số điện thoại...">
+                                </div>
+                            </div>
+                            
+                            {{-- Attendance Radio --}}
+                            <div class="text-center py-4">
+                                <label class="block text-xs font-bold uppercase text-gray-500 mb-4 opacity-70">Bạn sẽ tham dự chứ?</label>
+                                <div class="flex flex-wrap justify-center gap-3">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" x-model="formData.attendance" value="yes" required class="peer sr-only">
+                                        <div class="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-600 transition-all peer-checked:bg-gold peer-checked:text-white peer-checked:border-gold peer-checked:shadow-md hover:scale-105">
+                                            Sẽ Tham Dự
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" x-model="formData.attendance" value="maybe" class="peer sr-only">
+                                        <div class="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-600 transition-all peer-checked:bg-yellow-500 peer-checked:text-white peer-checked:border-yellow-500 peer-checked:shadow-md hover:scale-105">
+                                            Chưa Chắc
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" x-model="formData.attendance" value="no" class="peer sr-only">
+                                        <div class="px-6 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-600 transition-all peer-checked:bg-gray-400 peer-checked:text-white peer-checked:border-gray-400 peer-checked:shadow-md hover:scale-105">
+                                            Rất Tiếc
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                     <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Số Khách</label>
+                                     <select x-model="formData.guests"
+                                        class="w-full px-4 py-3 bg-white/50 border border-gray-200 rounded-xl text-gray-900 focus:border-gold focus:ring-1 focus:ring-gold outline-none cursor-pointer">
+                                        <option value="1">1 Người</option>
+                                        <option value="2">2 Người</option>
+                                        <option value="3">3 Người</option>
+                                        <option value="4">4 Người</option>
+                                        <option value="5">5+ Người</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Khách Của</label>
+                                    <select x-model="formData.side"
+                                        class="w-full px-4 py-3 bg-white/50 border border-gray-200 rounded-xl text-gray-900 focus:border-gold focus:ring-1 focus:ring-gold outline-none cursor-pointer">
+                                        <option value="both">Bạn Chung</option>
+                                        <option value="groom">Nhà Trai</option>
+                                        <option value="bride">Nhà Gái</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-6">
+                                <button type="submit"
+                                    class="btn-gold-premium w-full py-4 rounded-xl font-bold uppercase tracking-widest text-sm shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 block"
+                                    :disabled="submitting">
+                                    <span x-show="!submitting">Gửi Xác Nhận</span>
+                                    <span x-show="submitting">Đang Gửi...</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
