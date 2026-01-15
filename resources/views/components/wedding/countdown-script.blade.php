@@ -7,7 +7,17 @@
                 setInterval(() => this.updateCountdown(), 1000); 
             },
             updateCountdown() {
-                const diff = new Date(targetDate + 'T00:00:00').getTime() - new Date().getTime();
+                // Ensure targetDate is a valid date string for new Date()
+                let dateStr = targetDate;
+                if (dateStr.length === 10) { // YYYY-MM-DD
+                    dateStr += 'T00:00:00';
+                } else {
+                    dateStr = dateStr.replace(' ', 'T');
+                }
+                
+                const target = new Date(dateStr);
+                const diff = target.getTime() - new Date().getTime();
+                
                 if (diff > 0) {
                     this.days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
                     this.hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
