@@ -335,8 +335,8 @@
                             $imagesToDisplay = $galleryImages->isNotEmpty() ? $galleryImages->map->getUrl() : $placeholders;
                         @endphp
                         @foreach($imagesToDisplay as $imgUrl)
-                            <div class="swiper-slide bg-gray-50 flex items-center justify-center">
-                                <img src="{{ $imgUrl }}" class="w-full h-full object-contain">
+                            <div class="swiper-slide">
+                                <img src="{{ $imgUrl }}" class="w-full h-full object-cover object-top">
                             </div>
                         @endforeach
                     </div>
@@ -348,8 +348,8 @@
                 <div class="swiper thumbGallery mt-4 h-24">
                     <div class="swiper-wrapper">
                         @foreach($imagesToDisplay as $imgUrl)
-                            <div class="swiper-slide rounded-lg overflow-hidden cursor-pointer bg-gray-50 flex items-center justify-center">
-                                <img src="{{ $imgUrl }}" class="w-full h-full object-contain">
+                            <div class="swiper-slide rounded-lg overflow-hidden cursor-pointer">
+                                <img src="{{ $imgUrl }}" class="w-full h-full object-cover object-top">
                             </div>
                         @endforeach
                     </div>
@@ -360,8 +360,8 @@
             <div class="swiper secondaryGallery rounded-2xl overflow-hidden aspect-[16/9] shadow-xl" data-aos="fade-up">
                 <div class="swiper-wrapper">
                     @foreach($imagesToDisplay->reverse() as $imgUrl)
-                            <div class="swiper-slide bg-gray-50 flex items-center justify-center">
-                                <img src="{{ $imgUrl }}" class="w-full h-full object-contain">
+                            <div class="swiper-slide">
+                                <img src="{{ $imgUrl }}" class="w-full h-full object-cover object-top">
                             </div>
                     @endforeach
                 </div>
