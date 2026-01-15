@@ -23,7 +23,7 @@
     }
     @font-face {
         font-family: 'vni-ambiance';
-        src: url('{{ asset('fonts/vni-ambiancebtswash.ttf') }}') format('truetype');
+        src: url('/fonts/vni-ambiancebtswash.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
     }
@@ -402,7 +402,7 @@
                 
                 @for($d = 1; $d <= $daysInMonth; $d++)
                     <div class="py-3 relative flex items-center justify-center">
-                        <span class="z-10 text-sm font-semibold {{ $d == $eventDay ? 'text-white' : 'text-gray-700' }}">{{ $d }}</span>
+                        <span class="z-10 text-sm font-bold {{ $d == $eventDay ? 'text-gray-900' : 'text-gray-700' }}">{{ $d }}</span>
                         @if($d == $eventDay)
                             <div class="absolute inset-0 flex items-center justify-center p-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90" class="w-full h-full" fill="#F06464">
@@ -450,9 +450,7 @@
     {{-- SECTION 6: BLESSING / CHÚC PHÚC --}}
     <section class="py-20 px-6 bg-white relative overflow-hidden bg-main-watercolor" data-aos="fade-up" x-data="{ activeQr: null }">
         <div class="relative z-10">
-            <h2 class="font-viceroy text-5xl text-gold text-center mb-6">
-                {{ $wedding->getContentValue('blessing_title', 'Mừng Cưới') }}
-            </h2>
+            <h2 class="font-viceroy text-5xl text-gold text-center mb-6">Mừng Cưới</h2>
             <p class="text-center text-gray-700 italic mb-12 max-w-xs mx-auto font-medium">
                 {{ $wedding->getContentValue('blessing_desc', "Cảm ơn tất cả tình cảm của cô dì chú bác, bạn bè và anh chị em đã dành cho " . $wedding->groom_name . " & " . $wedding->bride_name . ".") }}
             </p>
@@ -583,7 +581,71 @@
         <h2 class="font-viceroy text-5xl text-gold text-center mb-12">Sự Kiện Cưới</h2>
         
         <div class="space-y-8 max-w-sm mx-auto">
-            {{-- House of Groom --}}
+            {{-- House of Groom - Ceremony (Lễ Thành Hôn) --}}
+            @if($wedding->groom_ceremony_date)
+            <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-8 card-shadow border border-gold/10" data-aos="fade-right">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold p-1 shadow-md">
+                        <img src="{{ $groomPhoto }}" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <h3 class="font-viceroy text-2xl text-brown border-b border-gold/20 pb-2 inline-block">Lễ Thành Hôn</h3>
+                </div>
+                
+                <div class="space-y-4 text-gray-700">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase text-gray-400">Thời gian</p>
+                            <p class="font-bold">{{ \Carbon\Carbon::parse($wedding->groom_ceremony_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($wedding->groom_ceremony_date)->format('d/m/Y') }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <div class="overflow-hidden">
+                            <p class="text-[10px] font-bold uppercase text-gray-400">Địa điểm</p>
+                            <p class="font-bold leading-snug">{{ $wedding->groom_address }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            {{-- House of Groom - Reception (Tiệc Mừng) --}}
+            <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-8 card-shadow border border-gold/10" data-aos="fade-right">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold p-1 shadow-md">
+                        <img src="{{ $groomPhoto }}" class="w-full h-full object-cover rounded-full">
+                    </div>
+                    <h3 class="font-viceroy text-2xl text-brown border-b border-gold/20 pb-2 inline-block">Tiệc Mừng Nhà Trai</h3>
+                </div>
+                
+                <div class="space-y-4 text-gray-700">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase text-gray-400">Thời gian</p>
+                            <p class="font-bold">{{ \Carbon\Carbon::parse($wedding->groom_reception_time)->format('H:i') }} - {{ $wedding->event_date?->format('d/m/Y') }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center text-gold shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <div class="overflow-hidden">
+                            <p class="text-[10px] font-bold uppercase text-gray-400">Địa điểm</p>
+                            <p class="font-bold leading-snug">{{ $wedding->groom_reception_venue }}</p>
+                            <p class="text-xs italic text-gray-500">{{ $wedding->groom_reception_address }}</p>
+                        </div>
+                    </div>
+                </div>
             <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-8 card-shadow border border-gold/10" data-aos="fade-right">
                 <div class="text-center mb-6">
                     <div class="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gold p-1 shadow-md">

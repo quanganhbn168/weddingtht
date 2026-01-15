@@ -49,7 +49,7 @@
         <div class="mb-12">
             <span class="text-xs font-bold uppercase tracking-[0.3em] opacity-60 mb-3 block" style="font-family: var(--font-body); color: var(--color-text-body);">R.S.V.P</span>
             <h2 class="text-4xl md:text-5xl mb-6 text-shadow-gold" style="font-family: var(--font-heading); color: var(--color-primary-dark);">
-                {{ $wedding->getContentValue('rsvp_title', 'Xác Nhận Tham Dự') }}
+                Xác Nhận Tham Dự
             </h2>
             <p class="text-lg opacity-80 leading-relaxed max-w-md mx-auto py-2" style="font-family: var(--font-body); color: var(--color-text-body);">
                 {{ $wedding->getContentValue('rsvp_desc', 'Sự hiện diện của bạn là niềm vinh hạnh của chúng tôi.') }}
