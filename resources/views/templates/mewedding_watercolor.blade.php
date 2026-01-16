@@ -220,7 +220,16 @@
             
             {{-- Western Date --}}
             <div class="mb-8 text-gold font-serif text-lg tracking-widest">
-                {{ $wedding->event_date?->format('d/m/Y') }}
+                @if($wedding->event_date)
+                    @php
+                        $prevDate = $wedding->event_date->copy()->subDay();
+                    @endphp
+                    @if($prevDate->month == $wedding->event_date->month)
+                        {{ $prevDate->format('d') }}-{{ $wedding->event_date->format('d/m/Y') }}
+                    @else
+                        {{ $prevDate->format('d/m') }}-{{ $wedding->event_date->format('d/m/Y') }}
+                    @endif
+                @endif
             </div>
 
             {{-- Couple Hero Image --}}
