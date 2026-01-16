@@ -297,6 +297,10 @@ class WeddingForm
                                             ->label('Giờ tiệc')
                                             ->seconds(false),
                                         
+                                        DatePicker::make('groom_reception_date')
+                                            ->label('Ngày tiệc (Nếu khác ngày cưới)')
+                                            ->displayFormat('d/m/Y'),
+                                        
                                         TextInput::make('groom_reception_venue')
                                             ->label('Tên nhà hàng/địa điểm'),
                                         
@@ -365,6 +369,10 @@ class WeddingForm
                                         TimePicker::make('bride_reception_time')
                                             ->label('Giờ tiệc')
                                             ->seconds(false),
+                                        
+                                        DatePicker::make('bride_reception_date')
+                                            ->label('Ngày tiệc (Nếu khác ngày cưới)')
+                                            ->displayFormat('d/m/Y'),
                                         
                                         TextInput::make('bride_reception_venue')
                                             ->label('Tên nhà hàng/địa điểm'),
