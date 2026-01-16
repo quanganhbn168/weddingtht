@@ -22,6 +22,8 @@ class Wedding extends Model implements HasMedia
         'event_date' => 'date',
         'groom_ceremony_date' => 'date',
         'bride_ceremony_date' => 'date',
+        'groom_reception_date' => 'date',
+        'bride_reception_date' => 'date',
         'groom_reception_time' => 'datetime',
         'bride_reception_time' => 'datetime',
         'groom_ceremony_time' => 'datetime',

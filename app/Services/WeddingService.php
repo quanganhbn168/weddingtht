@@ -39,6 +39,8 @@ class WeddingService
             'bride_reception_venue' => 'nullable|string|max:255',
             'groom_reception_address' => 'nullable|string|max:1000',
             'bride_reception_address' => 'nullable|string|max:1000',
+            'groom_reception_date' => 'nullable|date',
+            'bride_reception_date' => 'nullable|date',
             'groom_qr_info' => 'nullable|string|max:1000',
             'bride_qr_info' => 'nullable|string|max:1000',
             'slug' => 'nullable|string|max:255|unique:weddings,slug,' . $wedding->id,

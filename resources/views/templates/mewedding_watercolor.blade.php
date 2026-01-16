@@ -717,7 +717,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] font-bold uppercase text-gray-400">Thời gian</p>
-                            <p class="font-bold">{{ \Carbon\Carbon::parse($wedding->groom_reception_time)->format('H:i') }} - {{ $wedding->event_date?->format('d/m/Y') }}</p>
+                            <p class="font-bold">{{ \Carbon\Carbon::parse($wedding->groom_reception_time)->format('H:i') }} - {{ ($wedding->groom_reception_date ?? $wedding->event_date)?->format('d/m/Y') }}</p>
                         </div>
                     </div>
                     
@@ -755,7 +755,7 @@
                         </div>
                         <div>
                             <p class="text-[10px] font-bold uppercase text-gray-400">Thời gian</p>
-                            <p class="font-bold">{{ \Carbon\Carbon::parse($wedding->bride_reception_time)->format('H:i') }} - {{ $wedding->event_date?->format('d/m/Y') }}</p>
+                            <p class="font-bold">{{ \Carbon\Carbon::parse($wedding->bride_reception_time)->format('H:i') }} - {{ ($wedding->bride_reception_date ?? $wedding->event_date)?->format('d/m/Y') }}</p>
                         </div>
                     </div>
                     

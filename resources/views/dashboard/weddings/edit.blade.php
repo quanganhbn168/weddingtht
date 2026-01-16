@@ -214,10 +214,21 @@
                             <h3 class="text-lg font-semibold text-gray-900 mb-4">🍽️ Tiệc cưới nhà trai</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                                 <div>
-                                    <label for="groom_reception_time" class="block text-sm font-medium text-gray-700 mb-2">Giờ tiệc</label>
-                                    <input type="time" name="groom_reception_time" id="groom_reception_time" 
-                                        value="{{ old('groom_reception_time', $wedding->groom_reception_time?->format('H:i')) }}"
-                                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="groom_reception_time" class="block text-sm font-medium text-gray-700 mb-2">Giờ tiệc</label>
+                                            <input type="time" name="groom_reception_time" id="groom_reception_time" 
+                                                value="{{ old('groom_reception_time', $wedding->groom_reception_time?->format('H:i')) }}"
+                                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500">
+                                        </div>
+                                        <div>
+                                            <label for="groom_reception_date" class="block text-sm font-medium text-gray-700 mb-2">Ngày tiệc</label>
+                                            <input type="date" name="groom_reception_date" id="groom_reception_date" 
+                                                value="{{ old('groom_reception_date', $wedding->groom_reception_date?->format('Y-m-d')) }}"
+                                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500">
+                                            <p class="text-xs text-gray-500 mt-1">Để trống nếu chung ngày cưới</p>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div>
                                     <label for="groom_reception_venue" class="block text-sm font-medium text-gray-700 mb-2">Tên nhà hàng/địa điểm</label>
@@ -309,10 +320,21 @@
                             <h3 class="text-lg font-semibold text-gray-900 mb-4">🍽️ Tiệc cưới nhà gái</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                                 <div>
-                                    <label for="bride_reception_time" class="block text-sm font-medium text-gray-700 mb-2">Giờ tiệc</label>
-                                    <input type="time" name="bride_reception_time" id="bride_reception_time" 
-                                        value="{{ old('bride_reception_time', $wedding->bride_reception_time?->format('H:i')) }}"
-                                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="bride_reception_time" class="block text-sm font-medium text-gray-700 mb-2">Giờ tiệc</label>
+                                            <input type="time" name="bride_reception_time" id="bride_reception_time" 
+                                                value="{{ old('bride_reception_time', $wedding->bride_reception_time?->format('H:i')) }}"
+                                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500">
+                                        </div>
+                                        <div>
+                                            <label for="bride_reception_date" class="block text-sm font-medium text-gray-700 mb-2">Ngày tiệc</label>
+                                            <input type="date" name="bride_reception_date" id="bride_reception_date" 
+                                                value="{{ old('bride_reception_date', $wedding->bride_reception_date?->format('Y-m-d')) }}"
+                                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500">
+                                            <p class="text-xs text-gray-500 mt-1">Để trống nếu chung ngày cưới</p>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div>
                                     <label for="bride_reception_venue" class="block text-sm font-medium text-gray-700 mb-2">Tên nhà hàng/địa điểm</label>
