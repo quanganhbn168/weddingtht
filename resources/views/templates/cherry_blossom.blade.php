@@ -7,7 +7,20 @@
 @section('content')
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Nunito:wght@300;400;600;700&display=swap');
+    @font-face {
+        font-family: 'utm-viceroyjf';
+        src: url('{{ asset('fonts/utm-viceroyjf.ttf') }}') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: 'vni-ambiance';
+        src: url('{{ asset('fonts/vni-ambiancebtswash.ttf') }}') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Nunito:wght@300;400;600;700&display=swap&subset=vietnamese');
     
     :root {
         /* Standardized Theme Variables */
@@ -19,7 +32,7 @@
         --bg-paper: #ffffff;
         --bg-input: #fff1f2;
         
-        --font-heading: 'Dancing Script', cursive;
+        --font-heading: 'utm-viceroyjf', 'Dancing Script', cursive;
         --font-body: 'Nunito', sans-serif;
         --radius-box: 24px; /* Soft rounded corners */
         --shadow-box: 0 15px 35px -5px rgba(244, 63, 94, 0.15);
@@ -157,10 +170,10 @@
                     </div>
                     <div class="text-center px-4 pb-4">
                         <h3 class="font-heading text-3xl text-[#881337] mb-2">{{ $wedding->groom_name }}</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed">
-                            Con ông: <strong class="text-[#f43f5e]">{{ $wedding->groom_father }}</strong><br>
-                            Con bà: <strong class="text-[#f43f5e]">{{ $wedding->groom_mother }}</strong>
-                        </p>
+                        <div class="text-sm text-gray-600 leading-relaxed">
+                            @if($wedding->groom_father)<p>Con ông: <strong class="text-[#f43f5e]">{{ $wedding->groom_father }}</strong></p>@endif
+                            @if($wedding->groom_mother)<p>Con bà: <strong class="text-[#f43f5e]">{{ $wedding->groom_mother }}</strong></p>@endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -176,10 +189,10 @@
                     </div>
                     <div class="text-center px-4 pb-4">
                         <h3 class="font-heading text-3xl text-[#881337] mb-2">{{ $wedding->bride_name }}</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed">
-                            Con ông: <strong class="text-[#f43f5e]">{{ $wedding->bride_father }}</strong><br>
-                            Con bà: <strong class="text-[#f43f5e]">{{ $wedding->bride_mother }}</strong>
-                        </p>
+                        <div class="text-sm text-gray-600 leading-relaxed">
+                            @if($wedding->bride_father)<p>Con ông: <strong class="text-[#f43f5e]">{{ $wedding->bride_father }}</strong></p>@endif
+                            @if($wedding->bride_mother)<p>Con bà: <strong class="text-[#f43f5e]">{{ $wedding->bride_mother }}</strong></p>@endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -283,8 +296,40 @@
     </section>
     @endif
 
+    {{-- STORY / LỜI NGỎ --}}
+    <section class="relative py-32 px-6 overflow-hidden" data-aos="fade-up">
+        <div class="absolute inset-0">
+            <img src="{{ $heroUrl }}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
+        </div>
+        
+        <div class="relative z-10 text-center text-white" data-aos="zoom-in">
+            <div class="inline-block relative mb-12">
+                <h2 class="font-viceroy text-6xl mb-2">Lời Ngỏ</h2>
+                <div class="absolute -bottom-4 left-0 w-full h-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 356.13 42.62" fill="white">
+                        <path d="M353.92,19.33c-33.86-1.58-67.75-2.65-101.62-3.86-34.82-1.24-69.64-2.52-104.46-3.8-33.47-1.24-66.94-2.48-100.41-3.72a4.48,4.48,0,0,0-.46,9l.46-.1c33.47,1.24,66.94,2.48,100.41,3.72,34.82,1.28,69.64,2.56,104.46,3.8,33.87,1.21,67.76,2.28,101.62,3.86a4.48,4.48,0,0,0,.46-9Z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="space-y-6 text-lg leading-relaxed max-w-md mx-auto opacity-95 font-medium">
+                @if($prologue_content = $wedding->getContentValue('prologue_desc'))
+                    @foreach(explode("\n", $prologue_content) as $line)
+                        @if(trim($line)) <p>{{ $line }}</p> @endif
+                    @endforeach
+                @else
+                    <p>Gặp gỡ, yêu và cưới. Điều bạn vừa nghe không nằm trong một câu chuyện cổ tích, mà chính là câu chuyện về cuộc đời hai chúng tôi.</p>
+                    <p>Chúng tôi sẽ yêu thương, chăm sóc, trân trọng và nắm tay nhau cùng đi đến hết cuộc đời này.</p>
+                    <p>Thật là một niềm vinh hạnh lớn khi ngày hạnh phúc nhất cuộc đời chúng tôi có sự hiện diện và chúc phúc của bạn!</p>
+                @endif
+                <p class="font-viceroy text-4xl text-[#f43f5e] pt-6">Chân thành cảm ơn bạn ♥ ♥</p>
+            </div>
+        </div>
+    </section>
+
     {{-- GALLERY --}}
-    <section class="py-16 px-4 bg-[#fff1f2]">
+    <section class="py-16 px-4 bg-[#fff1f2]" data-aos="fade-up">
         <h2 class="text-center font-heading text-4xl text-[#f43f5e] mb-10">Khoảnh Khắc Ngọt Ngào</h2>
         <div class="columns-2 gap-3 space-y-3">
             @if($wedding->gallery_images->isNotEmpty())

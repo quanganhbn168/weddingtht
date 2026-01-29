@@ -150,7 +150,10 @@
                 </div>
                 <h3 class="text-3xl mb-1">{{ $wedding->groom_name }}</h3>
                 <p class="text-[#c0a062] text-xs uppercase tracking-widest mb-4">The Groom</p>
-                <p class="text-sm italic text-gray-600">Con ông {{ $wedding->groom_father }} & bà {{ $wedding->groom_mother }}</p>
+                <div class="text-sm italic text-gray-600">
+                    @if($wedding->groom_father)<p>Con ông {{ $wedding->groom_father }}</p>@endif
+                    @if($wedding->groom_mother)<p>& bà {{ $wedding->groom_mother }}</p>@endif
+                </div>
             </div>
 
             {{-- Bride --}}
@@ -161,7 +164,10 @@
                 </div>
                 <h3 class="text-3xl mb-1">{{ $wedding->bride_name }}</h3>
                  <p class="text-[#c0a062] text-xs uppercase tracking-widest mb-4">The Bride</p>
-                <p class="text-sm italic text-gray-600">Con ông {{ $wedding->bride_father }} & bà {{ $wedding->bride_mother }}</p>
+                <div class="text-sm italic text-gray-600">
+                    @if($wedding->bride_father)<p>Con ông {{ $wedding->bride_father }}</p>@endif
+                    @if($wedding->bride_mother)<p>& bà {{ $wedding->bride_mother }}</p>@endif
+                </div>
             </div>
         </div>
     </section>

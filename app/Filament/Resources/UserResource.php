@@ -23,6 +23,17 @@ class UserResource extends Resource
     protected static ?string $navigationLabel = 'Người dùng';
     
     protected static ?int $navigationSort = 2;
+    
+    public static function shouldRegisterNavigation(): bool
+    {
+        return \Filament\Facades\Filament::getCurrentPanel()->getId() === 'admin';
+    }
+
+    public static function canAccess(): bool
+    {
+        return \Filament\Facades\Filament::getCurrentPanel()->getId() === 'admin' 
+            && (auth()->user()->isSuperAdmin() || auth()->user()->isAdmin());
+    }
 
     /**
      * Hide super_admin from all queries

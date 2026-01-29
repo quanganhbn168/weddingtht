@@ -16,10 +16,45 @@ class WeddingRsvpResource extends Resource
     protected static ?string $model = WeddingRsvp::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    public static function getNavigationGroup(): ?string
+    {
+        if (\Filament\Facades\Filament::getCurrentPanel()->getId() === 'app') {
+            return null;
+        }
+
+        return 'Quản lý Đám cưới';
+    }
     
-    protected static ?string $navigationGroup = 'Quản lý Đám cưới';
-    
-    protected static ?string $navigationLabel = 'Khách mời RSVP';
+    public static function getNavigationLabel(): string
+    {
+        return 'Khách mời RSVP';
+    }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $user = auth()->user();
+        $panelId = \Filament\Facades\Filament::getCurrentPanel()->getId();
+        $query = parent::getEloquentQuery();
+
+        if ($panelId === 'admin') {
+            return $query;
+        }
+
+        if ($panelId === 'agent') {
+            return $query->whereHas('wedding.user', function ($q) use ($user) {
+                $q->where('agent_id', $user->id);
+            });
+        }
+
+        if ($panelId === 'app') {
+            return $query->whereHas('wedding', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
+        }
+
+        return $query;
+    }
 
     public static function form(Form $form): Form
     {

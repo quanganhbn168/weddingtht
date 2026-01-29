@@ -153,7 +153,11 @@
                         <div class="absolute bottom-0 left-0 w-full p-6 text-center">
                             <h3 class="font-heading text-2xl text-gradient-gold font-bold mb-1">{{ $wedding->groom_name }}</h3>
                             <p class="text-[10px] uppercase tracking-widest text-slate-300 mb-2">Chú Rể</p>
-                            <p class="text-xs text-[#d4af37]/80">Con Ông: {{ $wedding->groom_father }}<br>Con Bà: {{ $wedding->groom_mother }}</p>
+                            <p class="text-xs text-[#d4af37]/80">
+                                @if($wedding->groom_father) Con Ông: {{ $wedding->groom_father }} @endif
+                                @if($wedding->groom_father && $wedding->groom_mother) <br> @endif
+                                @if($wedding->groom_mother) Con Bà: {{ $wedding->groom_mother }} @endif
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -169,7 +173,11 @@
                         <div class="absolute bottom-0 left-0 w-full p-6 text-center">
                             <h3 class="font-heading text-2xl text-gradient-gold font-bold mb-1">{{ $wedding->bride_name }}</h3>
                             <p class="text-[10px] uppercase tracking-widest text-slate-300 mb-2">Cô Dâu</p>
-                            <p class="text-xs text-[#d4af37]/80">Con Ông: {{ $wedding->bride_father }}<br>Con Bà: {{ $wedding->bride_mother }}</p>
+                            <p class="text-xs text-[#d4af37]/80">
+                                @if($wedding->bride_father) Con Ông: {{ $wedding->bride_father }} @endif
+                                @if($wedding->bride_father && $wedding->bride_mother) <br> @endif
+                                @if($wedding->bride_mother) Con Bà: {{ $wedding->bride_mother }} @endif
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -35,6 +35,17 @@ class TemplateResource extends Resource
         return 2;
     }
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return \Filament\Facades\Filament::getCurrentPanel()->getId() === 'admin';
+    }
+
+    public static function canAccess(): bool
+    {
+        return \Filament\Facades\Filament::getCurrentPanel()->getId() === 'admin' 
+            && (auth()->user()->isSuperAdmin() || auth()->user()->isAdmin());
+    }
+
     // Query filter removed to allow showing all template types
 
     public static function form(Form $form): Form

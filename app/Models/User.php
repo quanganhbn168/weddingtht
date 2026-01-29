@@ -66,8 +66,21 @@ class User extends Authenticatable implements FilamentUser
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        // Allow admin role OR legacy email check
-        return $this->isSuperAdmin() || $this->isAdmin() || str_ends_with($this->email, '@thtmedia.com.vn');
+        $panelId = $panel->getId();
+
+        if ($panelId === 'admin') {
+            return $this->isSuperAdmin() || $this->isAdmin() || str_ends_with($this->email, '@thtmedia.com.vn');
+        }
+
+        if ($panelId === 'agent') {
+            return $this->isAgent() || $this->isSuperAdmin() || $this->isAdmin();
+        }
+
+        if ($panelId === 'app') {
+            return $this->isCustomer() || $this->isAgent() || $this->isSuperAdmin() || $this->isAdmin();
+        }
+
+        return false;
     }
 
     // ==========================================

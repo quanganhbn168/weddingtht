@@ -260,12 +260,10 @@ class WeddingForm
                                     ->schema([
                                         TextInput::make('groom_father')
                                             ->label('Ông (Cha)')
-                                            ->placeholder('Nguyễn Văn A')
-                                            ->required(fn (Get $get) => $get('type') === 'wedding'),
+                                            ->placeholder('Nguyễn Văn A'),
                                         TextInput::make('groom_mother')
                                             ->label('Bà (Mẹ)')
-                                            ->placeholder('Trần Thị B')
-                                            ->required(fn (Get $get) => $get('type') === 'wedding'),
+                                            ->placeholder('Trần Thị B'),
                                     ]),
                                     
                                 Section::make('💒 Lễ Thành Hôn (Nhà trai)')
@@ -333,12 +331,10 @@ class WeddingForm
                                     ->schema([
                                         TextInput::make('bride_father')
                                             ->label('Ông (Cha)')
-                                            ->placeholder('Lê Văn C')
-                                            ->required(fn (Get $get) => $get('type') === 'wedding'),
+                                            ->placeholder('Lê Văn C'),
                                         TextInput::make('bride_mother')
                                             ->label('Bà (Mẹ)')
-                                            ->placeholder('Phạm Thị D')
-                                            ->required(fn (Get $get) => $get('type') === 'wedding'),
+                                            ->placeholder('Phạm Thị D'),
                                     ]),
                                     
                                 Section::make('💐 Lễ Vu Quy (Nhà gái)')

@@ -22,21 +22,45 @@ class WeddingResource extends Resource
 
     public static function getNavigationLabel(): string
     {
+        $panelId = \Filament\Facades\Filament::getCurrentPanel()?->getId();
+        
+        if ($panelId === 'app') {
+            return 'Thiệp của tôi';
+        }
+
         return 'Khách Hàng';
     }
 
     public static function getModelLabel(): string
     {
+        $panelId = \Filament\Facades\Filament::getCurrentPanel()?->getId();
+        
+        if ($panelId === 'app') {
+            return 'Thiệp';
+        }
+
         return 'Khách Hàng';
     }
 
     public static function getPluralModelLabel(): string
     {
+        $panelId = \Filament\Facades\Filament::getCurrentPanel()?->getId();
+        
+        if ($panelId === 'app') {
+            return 'Thiệp của tôi';
+        }
+
         return 'Khách Hàng';
     }
 
     public static function getNavigationGroup(): ?string
     {
+        $panelId = \Filament\Facades\Filament::getCurrentPanel()?->getId();
+        
+        if ($panelId === 'app') {
+            return null;
+        }
+
         return 'Quản lý';
     }
 
@@ -52,9 +76,29 @@ class WeddingResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
-            ->where('type', 'wedding')
+        $user = auth()->user();
+        $panelId = \Filament\Facades\Filament::getCurrentPanel()?->getId();
+
+        $query = parent::getEloquentQuery()
             ->where('is_demo', false);
+
+        if ($panelId === 'admin') {
+            return $query->where('type', 'wedding');
+        }
+
+        if ($panelId === 'agent') {
+            // Agent only sees weddings of their customers
+            return $query->whereHas('user', function ($q) use ($user) {
+                $q->where('agent_id', $user->id);
+            });
+        }
+
+        if ($panelId === 'app') {
+            // Customer only sees their own weddings
+            return $query->where('user_id', $user->id);
+        }
+
+        return $query;
     }
 
     protected static ?string $recordTitleAttribute = 'groom_name';

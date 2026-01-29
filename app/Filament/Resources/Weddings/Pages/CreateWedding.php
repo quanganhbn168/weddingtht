@@ -10,25 +10,31 @@ class CreateWedding extends CreateRecord
     protected static string $resource = WeddingResource::class;
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        $currentPanel = \Filament\Facades\Filament::getCurrentPanel()->getId();
+        $currentUser = auth()->user();
+
+        // If in App panel (Customer), always assign to self
+        if ($currentPanel === 'app') {
+            $data['user_id'] = $currentUser->id;
+            return $data;
+        }
+
+        // If in Agent panel, might want to assign to a customer or create one
+        // For now, let's keep the legacy logic for admin/agent or improve it
+        
         // 1. Determine User Credentials
-        // Default to slug if no specific email provided (which is not in form anymore)
         $usernameStub = $data['slug'] ?? \Illuminate\Support\Str::slug($data['groom_name'] . '-va-' . $data['bride_name']);
-        
-        // Ensure email uniqueness properly?
-        // Let's use a fake email domain for these auto-generated accounts
         $email = $usernameStub . '@wedding.com'; 
-        
-        // Password: Use the view password if set, else default
         $password = !empty($data['password']) ? $data['password'] : '12345678';
 
         // 2. Find or Create User
-        // Check if user exists by email
         $user = \App\Models\User::firstOrCreate(
             ['email' => $email],
             [
                 'name' => $data['groom_name'] . ' & ' . $data['bride_name'],
                 'password' => \Illuminate\Support\Facades\Hash::make($password),
                 'role' => \App\Models\User::ROLE_CUSTOMER,
+                'agent_id' => $currentPanel === 'agent' ? $currentUser->id : null,
             ]
         );
 

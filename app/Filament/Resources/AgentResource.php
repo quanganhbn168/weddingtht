@@ -29,6 +29,17 @@ class AgentResource extends Resource
     
     protected static ?int $navigationSort = 1;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return \Filament\Facades\Filament::getCurrentPanel()->getId() === 'admin';
+    }
+
+    public static function canAccess(): bool
+    {
+        return \Filament\Facades\Filament::getCurrentPanel()->getId() === 'admin' 
+            && (auth()->user()->isSuperAdmin() || auth()->user()->isAdmin());
+    }
+
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::where('is_active', true)->count();

@@ -17,10 +17,45 @@ class WeddingWishResource extends Resource
     protected static ?string $model = WeddingWish::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+
+    public static function getNavigationGroup(): ?string
+    {
+        if (\Filament\Facades\Filament::getCurrentPanel()->getId() === 'app') {
+            return null;
+        }
+
+        return 'Quản lý Đám cưới';
+    }
     
-    protected static ?string $navigationGroup = 'Quản lý Đám cưới';
-    
-    protected static ?string $navigationLabel = 'Lời chúc & Sổ lưu bút';
+    public static function getNavigationLabel(): string
+    {
+        return 'Lời chúc & Sổ lưu bút';
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $user = auth()->user();
+        $panelId = \Filament\Facades\Filament::getCurrentPanel()->getId();
+        $query = parent::getEloquentQuery();
+
+        if ($panelId === 'admin') {
+            return $query;
+        }
+
+        if ($panelId === 'agent') {
+            return $query->whereHas('wedding.user', function ($q) use ($user) {
+                $q->where('agent_id', $user->id);
+            });
+        }
+
+        if ($panelId === 'app') {
+            return $query->whereHas('wedding', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
+        }
+
+        return $query;
+    }
 
     public static function form(Form $form): Form
     {

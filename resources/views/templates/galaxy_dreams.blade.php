@@ -7,7 +7,20 @@
 @section('content')
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:ital,wght@0,300;0,400;0,600;1,400&display=swap');
+    @font-face {
+        font-family: 'utm-viceroyjf';
+        src: url('{{ asset('fonts/utm-viceroyjf.ttf') }}') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: 'vni-ambiance';
+        src: url('{{ asset('fonts/vni-ambiancebtswash.ttf') }}') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:ital,wght@0,300;0,400;0,600;1,400&display=swap&subset=vietnamese');
     
     :root {
         /* Standardized Theme Variables */
@@ -19,7 +32,7 @@
         --bg-paper: #0f0f23; 
         --bg-input: #ffffff;
         
-        --font-heading: 'Orbitron', sans-serif;
+        --font-heading: 'utm-viceroyjf', 'Orbitron', sans-serif;
         --font-body: 'Exo 2', sans-serif;
         --radius-box: 16px; 
         --shadow-box: 0 0 30px rgba(0, 243, 255, 0.2);
@@ -89,8 +102,40 @@
     
     <x-wedding.music-player :wedding="$wedding" />
 
+    {{-- STORY / LỜI NGỎ --}}
+    <section class="relative py-32 px-6 overflow-hidden" data-aos="fade-up">
+        {{-- Cosmic Background for Story --}}
+        <div class="absolute inset-0 z-0">
+             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-b from-purple-900/40 to-transparent blur-[100px]"></div>
+        </div>
+
+        <div class="relative z-10 text-center text-white" data-aos="zoom-in">
+            <div class="inline-block relative mb-12">
+                <h2 class="font-viceroy text-6xl mb-2 text-glow-cyan">Lời Ngỏ</h2>
+                <div class="absolute -bottom-4 left-0 w-full h-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 356.13 42.62" fill="white" class="opacity-50">
+                        <path d="M353.92,19.33c-33.86-1.58-67.75-2.65-101.62-3.86-34.82-1.24-69.64-2.52-104.46-3.8-33.47-1.24-66.94-2.48-100.41-3.72a4.48,4.48,0,0,0-.46,9l.46-.1c33.47,1.24,66.94,2.48,100.41,3.72,34.82,1.28,69.64,2.56,104.46,3.8,33.87,1.21,67.76,2.28,101.62,3.86a4.48,4.48,0,0,0,.46-9Z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="space-y-6 text-lg leading-relaxed max-w-md mx-auto opacity-95 font-medium">
+                @if($prologue_content = $wedding->getContentValue('prologue_desc'))
+                    @foreach(explode("\n", $prologue_content) as $line)
+                        @if(trim($line)) <p>{{ $line }}</p> @endif
+                    @endforeach
+                @else
+                    <p>Gặp gỡ, yêu và cưới. Điều bạn vừa nghe không nằm trong một câu chuyện cổ tích, mà chính là câu chuyện về cuộc đời hai chúng tôi.</p>
+                    <p>Chúng tôi sẽ yêu thương, chăm sóc, trân trọng và nắm tay nhau cùng đi đến hết cuộc đời này.</p>
+                    <p>Thật là một niềm vinh hạnh lớn khi ngày hạnh phúc nhất cuộc đời chúng tôi có sự hiện diện và chúc phúc của bạn!</p>
+                @endif
+                <p class="font-viceroy text-4xl text-[#00f3ff] pt-6 text-glow-cyan">Chân thành cảm ơn bạn ♥ ♥</p>
+            </div>
+        </div>
+    </section>
+
     {{-- HERO SECTION --}}
-    <section class="min-h-screen relative flex flex-col justify-center items-center overflow-hidden py-12">
+    <section class="min-h-screen relative flex flex-col justify-center items-center overflow-hidden py-12" data-aos="fade">
         {{-- Background Gradients --}}
         <div class="absolute inset-0 z-0">
              <div class="absolute top-[10%] left-[20%] w-80 h-80 bg-purple-600/30 rounded-full blur-[100px] animate-pulse-neon"></div>
@@ -132,7 +177,7 @@
     </section>
 
     {{-- COUPLE SECTION --}}
-    <section class="py-20 px-6 relative bg-[#0f0f23]/50 backdrop-blur-sm">
+    <section class="py-20 px-6 relative bg-[#0f0f23]/50 backdrop-blur-sm" data-aos="fade-up">
         <div class="text-center mb-16 reveal-on-scroll">
             <h2 class="font-heading text-3xl text-white mb-2 text-glow-cyan">Star-Crossed Lovers</h2>
             <div class="w-32 h-1 bg-gradient-to-r from-transparent via-[#ec4899] to-transparent mx-auto"></div>
@@ -178,7 +223,7 @@
     </section>
 
     {{-- EVENTS --}}
-    <section class="py-24 px-4 relative overflow-hidden">
+    <section class="py-24 px-4 relative overflow-hidden" data-aos="fade-up">
         {{-- Planet Decoration --}}
         <div class="absolute top-[20%] right-[-100px] w-[300px] h-[300px] rounded-full bg-gradient-to-b from-[#ec4899]/10 to-transparent blur-[3px] border border-white/5 opacity-50"></div>
 
@@ -239,7 +284,7 @@
 
     {{-- COUNTDOWN --}}
     @if($wedding->event_date && $wedding->event_date->isFuture())
-    <section class="py-24 px-6 text-center bg-[#050510]">
+    <section class="py-24 px-6 text-center bg-[#050510]" data-aos="zoom-in">
         <h2 class="font-heading text-3xl text-white mb-8 text-glow-cyan">Launch Sequence</h2>
         <div x-data="countdown('{{ $wedding->event_date->format('Y-m-d') }}')" class="flex justify-center flex-wrap gap-4">
             <div class="glass-neon w-20 h-24 flex flex-col justify-center items-center rounded-xl p-2 animate-pulse-neon">
@@ -263,7 +308,7 @@
     @endif
 
     {{-- GALLERY --}}
-    <section class="py-20 px-4">
+    <section class="py-20 px-4" data-aos="fade-up">
         <h2 class="text-center font-heading text-4xl text-white mb-10 text-glow-pink">Nebula Memories</h2>
         <div class="columns-2 gap-3 space-y-3">
             @if($wedding->gallery_images->isNotEmpty())

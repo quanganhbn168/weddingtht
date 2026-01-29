@@ -7,7 +7,20 @@
 @section('og_image', $shareUrl)
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Italiana&family=Jost:wght@300;400;500&display=swap');
+    @font-face {
+        font-family: 'utm-viceroyjf';
+        src: url('{{ asset('fonts/utm-viceroyjf.ttf') }}') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: 'vni-ambiance';
+        src: url('{{ asset('fonts/vni-ambiancebtswash.ttf') }}') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    
+    @import url('https://fonts.googleapis.com/css2?family=Italiana&family=Jost:wght@300;400;500&family=Dancing+Script:wght@400;700&display=swap&subset=vietnamese');
     
     :root {
         --bg-color: #f4f4f0;
@@ -22,13 +35,13 @@
         --color-text-body: #1a1a1a;
         --bg-paper: #ffffff;
         --bg-input: #fdfdfd;
-        --font-heading: 'Italiana', serif;
+        --font-heading: 'utm-viceroyjf', 'Italiana', serif;
         --font-body: 'Jost', sans-serif;
         --radius-box: 0px; /* Editorial Magazine style = squares */
         --shadow-box: none; /* Flat design */    }
 
     body { font-family: 'Jost', sans-serif; background-color: var(--bg-color); color: var(--text-color); }
-    h1, h2, h3, .font-display { font-family: 'Italiana', serif; }
+    h1, h2, h3, .font-display { font-family: 'utm-viceroyjf', serif; }
 
     .tracking-widest-xl { letter-spacing: 0.3em; }
     
@@ -86,7 +99,7 @@
     <x-wedding.music-player :wedding="$wedding" />
 
     {{-- MAGAZINE COVER HERO --}}
-    <section class="h-screen relative flex flex-col justify-between p-6 bg-[#f4f4f0]">
+    <section class="h-screen relative flex flex-col justify-between p-6 bg-[#f4f4f0]" data-aos="fade">
         <div class="flex justify-between items-start pt-4 border-b border-black/10 pb-4">
             <span class="text-[10px] uppercase tracking-widest font-bold">Volume. 01</span>
             <span class="text-[10px] uppercase tracking-widest font-bold">The Wedding Edition</span>
@@ -109,7 +122,7 @@
     </section>
 
     {{-- EDITORIAL COUPLE --}}
-    <section class="py-16 px-6">
+    <section class="py-16 px-6" data-aos="fade-up">
         <div class="mb-12">
             <h2 class="text-8xl font-display opacity-5 absolute -left-4 pointer-events-none">Love</h2>
             <p class="text-[10px] uppercase tracking-[0.3em] font-bold border-l-2 border-black pl-3 ml-2">The Protagonists</p>
@@ -130,6 +143,10 @@
                     <p class="text-sm text-gray-500 leading-relaxed pl-4 border-l border-gray-200">
                         "Là một người đàn ông của gia đình, anh luôn tâm niệm rằng hạnh phúc không phải là những điều to lớn, mà là những khoảnh khắc bình yên bên người mình yêu."
                     </p>
+                    <div class="text-[10px] text-gray-400 mt-4 pl-4 space-y-1">
+                        @if($wedding->groom_father)<p>Con ông: {{ $wedding->groom_father }}</p>@endif
+                        @if($wedding->groom_mother)<p>Con bà: {{ $wedding->groom_mother }}</p>@endif
+                    </div>
                 </div>
             </div>
 
@@ -146,6 +163,10 @@
                     <p class="text-sm text-gray-500 leading-relaxed pr-4 border-r border-gray-200 inline-block text-right">
                         "Em không cần một câu chuyện cổ tích, em chỉ cần một hiện thực mà ở đó có anh cùng em đi qua những tháng năm."
                     </p>
+                    <div class="text-[10px] text-gray-400 mt-4 pr-4 space-y-1 text-right">
+                        @if($wedding->bride_father)<p>Con ông: {{ $wedding->bride_father }}</p>@endif
+                        @if($wedding->bride_mother)<p>Con bà: {{ $wedding->bride_mother }}</p>@endif
+                    </div>
                 </div>
                 <div class="vertical-text" style="writing-mode: vertical-lr; transform: none; border-left: none; border-right: 1px solid #e0e0e0; padding-left: 0; padding-right: 10px;">The Bride</div>
             </div>
@@ -178,7 +199,7 @@
     @endif
 
     {{-- EVENTS MINIMAL LIST --}}
-    <section class="py-16 px-6 bg-[#fdfdfd]">
+    <section class="py-16 px-6 bg-[#fdfdfd]" data-aos="fade-up">
         <div class="mb-16 text-center">
             <h2 class="text-4xl font-display mb-2 text-black">The Timeline</h2>
             <p class="text-[10px] uppercase tracking-widest text-gray-400">Save these moments</p>
@@ -271,8 +292,40 @@
     {{-- Guestbook Section --}}
     @include('components.wedding.guestbook', ['wedding' => $wedding])
 
+    {{-- STORY / LỜI NGỎ --}}
+    <section class="relative py-32 px-6 overflow-hidden" data-aos="fade-up">
+        <div class="absolute inset-0">
+            <img src="{{ $heroUrl }}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
+        </div>
+        
+        <div class="relative z-10 text-center text-white" data-aos="zoom-in">
+            <div class="inline-block relative mb-12">
+                <h2 class="font-viceroy text-6xl mb-2">Lời Ngỏ</h2>
+                <div class="absolute -bottom-4 left-0 w-full h-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 356.13 42.62" fill="white">
+                        <path d="M353.92,19.33c-33.86-1.58-67.75-2.65-101.62-3.86-34.82-1.24-69.64-2.52-104.46-3.8-33.47-1.24-66.94-2.48-100.41-3.72a4.48,4.48,0,0,0-.46,9l.46-.1c33.47,1.24,66.94,2.48,100.41,3.72,34.82,1.28,69.64,2.56,104.46,3.8,33.87,1.21,67.76,2.28,101.62,3.86a4.48,4.48,0,0,0,.46-9Z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="space-y-6 text-lg leading-relaxed max-w-md mx-auto opacity-95 font-medium">
+                @if($prologue_content = $wedding->getContentValue('prologue_desc'))
+                    @foreach(explode("\n", $prologue_content) as $line)
+                        @if(trim($line)) <p>{{ $line }}</p> @endif
+                    @endforeach
+                @else
+                    <p>Gặp gỡ, yêu và cưới. Điều bạn vừa nghe không nằm trong một câu chuyện cổ tích, mà chính là câu chuyện về cuộc đời hai chúng tôi.</p>
+                    <p>Chúng tôi sẽ yêu thương, chăm sóc, trân trọng và nắm tay nhau cùng đi đến hết cuộc đời này.</p>
+                    <p>Thật là một niềm vinh hạnh lớn khi ngày hạnh phúc nhất cuộc đời chúng tôi có sự hiện diện và chúc phúc của bạn!</p>
+                @endif
+                <p class="font-viceroy text-4xl text-[#D4AF37] pt-6">Chân thành cảm ơn bạn ♥ ♥</p>
+            </div>
+        </div>
+    </section>
+
     {{-- GALLERY EDITORIAL --}}
-    <section class="py-16 px-4 bg-white">
+    <section class="py-16 px-4 bg-white" data-aos="fade-up">
         <h2 class="text-[10vw] font-display text-center leading-none opacity-5 mb-[-5vw] relative z-0 text-black">Memories</h2>
         <div class="columns-1 md:columns-2 gap-8 space-y-8 relative z-10 px-4">
             @if($wedding->gallery_images->isNotEmpty())

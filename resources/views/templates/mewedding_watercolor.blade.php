@@ -6,9 +6,6 @@
 
 @section('content')
 
-<!-- AOS -->
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
 <!-- Swiper -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -300,8 +297,8 @@
                 </div>
                 <h3 class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->groom_name }}</h3>
                 <div class="text-gray-600 text-[11px] space-y-1 font-medium italic">
-                    <p>Con ông: <span class="not-italic font-bold text-gray-800">{{ $wedding->groom_father }}</span></p>
-                    <p>Con bà: <span class="not-italic font-bold text-gray-800">{{ $wedding->groom_mother }}</span></p>
+                    @if($wedding->groom_father)<p>Con ông: <span class="not-italic font-bold text-gray-800">{{ $wedding->groom_father }}</span></p>@endif
+                    @if($wedding->groom_mother)<p>Con bà: <span class="not-italic font-bold text-gray-800">{{ $wedding->groom_mother }}</span></p>@endif
                 </div>
             </div>
             
@@ -312,8 +309,8 @@
                 </div>
                 <h3 class="font-viceroy text-3xl text-brown mb-2">{{ $wedding->bride_name }}</h3>
                 <div class="text-gray-600 text-[11px] space-y-1 font-medium italic">
-                    <p>Con ông: <span class="not-italic font-bold text-gray-800">{{ $wedding->bride_father }}</span></p>
-                    <p>Con bà: <span class="not-italic font-bold text-gray-800">{{ $wedding->bride_mother }}</span></p>
+                    @if($wedding->bride_father)<p>Con ông: <span class="not-italic font-bold text-gray-800">{{ $wedding->bride_father }}</span></p>@endif
+                    @if($wedding->bride_mother)<p>Con bà: <span class="not-italic font-bold text-gray-800">{{ $wedding->bride_mother }}</span></p>@endif
                 </div>
             </div>
         </div>
@@ -1029,15 +1026,8 @@
 </div>
 
 <script>
-    // Initialize AOS
+    // Initialize Swipers
     document.addEventListener('DOMContentLoaded', () => {
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 100
-        });
-
-        // Initialize Swipers
         const thumbSwiper = new Swiper(".thumbGallery", {
             spaceBetween: 10,
             slidesPerView: 4,
