@@ -34,15 +34,29 @@
             this.audio = new Audio('{{ $url }}');
             this.audio.loop = true;
             
-            // Auto-play attempt (muted first if needed, but we try standard play)
-            // Browsers block unmuted autoplay, so we wait for interaction
-            document.addEventListener('click', () => {
-                if(!this.playing && this.audio.paused) {
-                    this.audio.play().then(() => {
-                         this.playing = true; 
-                    }).catch(e => console.log('Autoplay blocked', e));
-                }
-            }, { once: true });
+            // 1. Try to play immediately (modern browsers will likely block this unless user has interacted with domain before)
+            this.audio.play()
+                .then(() => { this.playing = true; })
+                .catch(() => {
+                    console.log('Autoplay blocked. Waiting for interaction.');
+                    
+                    // 2. Fallback: Play on first interaction (click or touch)
+                    const playOnInteraction = () => {
+                        if(!this.playing && this.audio.paused) {
+                            this.audio.play()
+                                .then(() => { 
+                                    this.playing = true;
+                                    // Remove listeners once played
+                                    document.removeEventListener('click', playOnInteraction);
+                                    document.removeEventListener('touchstart', playOnInteraction);
+                                })
+                                .catch(e => console.log('Autoplay blocked after interaction', e));
+                        }
+                    };
+
+                    document.addEventListener('click', playOnInteraction, { once: true });
+                    document.addEventListener('touchstart', playOnInteraction, { once: true });
+                });
         },
         toggle() {
             if (this.playing) {
