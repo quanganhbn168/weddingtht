@@ -122,12 +122,15 @@ class WeddingController extends Controller
         ];
         $imgs = $galleryImages->isNotEmpty() ? $galleryImages->map->getUrl()->toArray() : $placeholders;
 
+        $groomReceptionDow = $dowLabels[$groomReceptionCarbon->dayOfWeek];
+        $brideReceptionDow = $dowLabels[$brideReceptionCarbon->dayOfWeek];
+
         $templateVars = compact(
-            'solar', 'lunarStr', 'dayOfWeek',
+            'solar', 'lunarStr', 'dayOfWeek', 'dowLabels',
             'groomCeremonyDay', 'groomCeremonyTime', 'groomCeremonyCarbon', 'groomDow',
-            'groomReceptionDay', 'groomReceptionTime', 'groomReceptionCarbon',
+            'groomReceptionDay', 'groomReceptionTime', 'groomReceptionCarbon', 'groomReceptionDow',
             'brideCeremonyDay', 'brideCeremonyTime', 'brideCeremonyCarbon', 'brideDow',
-            'brideReceptionDay', 'brideReceptionTime', 'brideReceptionCarbon',
+            'brideReceptionDay', 'brideReceptionTime', 'brideReceptionCarbon', 'brideReceptionDow',
             'firstOfMonth', 'daysInMonth', 'startOffset', 'eventDay',
             'galleryImages', 'placeholders', 'imgs'
         );
