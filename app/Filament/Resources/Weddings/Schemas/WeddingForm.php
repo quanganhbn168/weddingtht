@@ -343,6 +343,16 @@ class WeddingForm
                                         Textarea::make('groom_reception_address')
                                             ->label('Địa chỉ tiệc')
                                             ->columnSpanFull(),
+
+                                        TimePicker::make('groom_reception_time_2')
+                                            ->label('Giờ tiệc (Ngày 2)')
+                                            ->seconds(false)
+                                            ->helperText('Nếu có tiệc ngày thứ 2'),
+
+                                        DatePicker::make('groom_reception_date_2')
+                                            ->label('Ngày tiệc 2')
+                                            ->displayFormat('d/m/Y')
+                                            ->helperText('Ngày diễn ra tiệc thứ 2'),
                                     ]),
                                     
                                 Section::make('💳 QR Mừng cưới nhà trai')
@@ -430,6 +440,16 @@ class WeddingForm
                                         Textarea::make('bride_reception_address')
                                             ->label('Địa chỉ tiệc')
                                             ->columnSpanFull(),
+
+                                        TimePicker::make('bride_reception_time_2')
+                                            ->label('Giờ tiệc (Ngày 2)')
+                                            ->seconds(false)
+                                            ->helperText('Nếu có tiệc ngày thứ 2'),
+
+                                        DatePicker::make('bride_reception_date_2')
+                                            ->label('Ngày tiệc 2')
+                                            ->displayFormat('d/m/Y')
+                                            ->helperText('Ngày diễn ra tiệc thứ 2'),
                                     ]),
                                     
                                 Section::make('💳 QR Mừng cưới nhà gái')

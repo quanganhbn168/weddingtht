@@ -367,6 +367,12 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
                 <p class="ev-day">{{ $dayOfWeek }} | {{ $groomReceptionTime ?? '18:00' }}</p>
                 <p class="ev-date">{{ $solar->format('d . m . Y') }}</p>
                 @if($lunarStr)<p class="ev-lunar">({{ $lunarStr }})</p>@endif
+                @if($groomReceptionTime2)
+                <p class="ev-day" style="margin-top:10px;padding-top:10px;border-top:1px dashed #dde8f0;">
+                    {{ $groomReceptionDay2 ? $dowLabels[\Carbon\Carbon::parse($groomReceptionDay2)->dayOfWeek] : $dayOfWeek }} | {{ $groomReceptionTime2 }}
+                </p>
+                @if($groomReceptionDay2)<p class="ev-date">{{ \Carbon\Carbon::parse($groomReceptionDay2)->format('d . m . Y') }}</p>@endif
+                @endif
                 @if($wedding->groom_reception_venue)
                 <p class="ev-venue">{{ $wedding->groom_reception_venue }}</p>
                 @endif
@@ -393,6 +399,12 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
                 <p class="ev-day">{{ $dayOfWeek }} | {{ $brideReceptionTime ?? '18:00' }}</p>
                 <p class="ev-date">{{ $solar->format('d . m . Y') }}</p>
                 @if($lunarStr)<p class="ev-lunar">({{ $lunarStr }})</p>@endif
+                @if($brideReceptionTime2)
+                <p class="ev-day" style="margin-top:10px;padding-top:10px;border-top:1px dashed #dde8f0;">
+                    {{ $brideReceptionDay2 ? $dowLabels[\Carbon\Carbon::parse($brideReceptionDay2)->dayOfWeek] : $dayOfWeek }} | {{ $brideReceptionTime2 }}
+                </p>
+                @if($brideReceptionDay2)<p class="ev-date">{{ \Carbon\Carbon::parse($brideReceptionDay2)->format('d . m . Y') }}</p>@endif
+                @endif
                 @if($wedding->bride_reception_venue)
                 <p class="ev-venue">{{ $wedding->bride_reception_venue }}</p>
                 @endif

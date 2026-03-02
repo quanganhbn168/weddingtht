@@ -99,6 +99,12 @@ class WeddingController extends Controller
         $brideReceptionDay   = $wedding->bride_reception_date ?? $solar;
         $brideReceptionTime  = $wedding->bride_reception_time ? \Carbon\Carbon::parse($wedding->bride_reception_time)->format('H:i') : null;
 
+        // Slot 2 — second reception day
+        $groomReceptionDay2  = $wedding->groom_reception_date_2 ?? null;
+        $groomReceptionTime2 = $wedding->groom_reception_time_2 ? \Carbon\Carbon::parse($wedding->groom_reception_time_2)->format('H:i') : null;
+        $brideReceptionDay2  = $wedding->bride_reception_date_2 ?? null;
+        $brideReceptionTime2 = $wedding->bride_reception_time_2 ? \Carbon\Carbon::parse($wedding->bride_reception_time_2)->format('H:i') : null;
+
         // Pre-parsed Carbon objects
         $groomCeremonyCarbon  = \Carbon\Carbon::parse($groomCeremonyDay);
         $brideCeremonyCarbon  = \Carbon\Carbon::parse($brideCeremonyDay);
@@ -129,8 +135,10 @@ class WeddingController extends Controller
             'solar', 'lunarStr', 'dayOfWeek', 'dowLabels',
             'groomCeremonyDay', 'groomCeremonyTime', 'groomCeremonyCarbon', 'groomDow',
             'groomReceptionDay', 'groomReceptionTime', 'groomReceptionCarbon', 'groomReceptionDow',
+            'groomReceptionDay2', 'groomReceptionTime2',
             'brideCeremonyDay', 'brideCeremonyTime', 'brideCeremonyCarbon', 'brideDow',
             'brideReceptionDay', 'brideReceptionTime', 'brideReceptionCarbon', 'brideReceptionDow',
+            'brideReceptionDay2', 'brideReceptionTime2',
             'firstOfMonth', 'daysInMonth', 'startOffset', 'eventDay',
             'galleryImages', 'placeholders', 'imgs'
         );
