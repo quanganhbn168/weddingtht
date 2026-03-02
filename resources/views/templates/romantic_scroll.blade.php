@@ -557,9 +557,11 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
                             <span class="day-num">{{ $d }}</span>
                         </div>
                         @elseif($d === $eventDay2)
-                        <div class="cal-wed-inner" style="background:var(--blue-lt);border-radius:50%;">
-                            <span style="font-size:.8rem;">🥂</span>
-                            <span class="day-num" style="color:var(--navy);">{{ $d }}</span>
+                        <div class="cal-wed-inner">
+                            <svg class="heart-svg" viewBox="0 0 90 90" fill="#e91e8c" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M45 75 C45 75 10 50 10 28 C10 18 18 10 28 10 C34 10 40 13 45 18 C50 13 56 10 62 10 C72 10 80 18 80 28 C80 50 45 75 45 75Z"/>
+                            </svg>
+                            <span class="day-num">{{ $d }}</span>
                         </div>
                         @elseif($d !== null)
                         {{ $d }}
