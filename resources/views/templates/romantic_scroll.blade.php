@@ -742,7 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function openRsvp(eventType) {
-    document.getElementById('rsvp-modal').dispatchEvent(
+    window.dispatchEvent(
         new CustomEvent('open-rsvp', { detail: { type: eventType } })
     );
     document.body.style.overflow = 'hidden';
