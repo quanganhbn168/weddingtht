@@ -15,7 +15,7 @@
          style="display: none;" 
          x-transition.opacity>
         
-        <div class="bg-white w-full max-w-sm relative shadow-2xl overflow-hidden" 
+        <div class="bg-white w-full max-w-sm relative shadow-2xl overflow-y-auto max-h-[90vh]" 
              style="border-radius: var(--radius-box, 0.5rem);"
              @click.outside="showQr = null">
             {{-- Close Button --}}
@@ -78,6 +78,25 @@
                             <p class="whitespace-pre-line text-gray-600">{{ $wedding->groom_qr_info }}</p>
                             @endif
                         </div>
+                        {{-- Action buttons --}}
+                        <div class="flex gap-3 mt-4">
+                            @if(!empty($groomInfo['account_number']))
+                            <button type="button"
+                                x-data="{ copied: false }"
+                                @click="navigator.clipboard.writeText('{{ $groomInfo['account_number'] }}'); copied=true; setTimeout(()=>copied=false,2000)"
+                                class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-gray-300 text-sm font-semibold text-gray-700 hover:bg-gray-100 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                <span x-show="!copied">Sao chép số TK</span>
+                                <span x-show="copied" class="text-green-600">✓ Đã sao chép!</span>
+                            </button>
+                            @endif
+                            <button type="button"
+                                @click="fetch('{{ $wedding->getGroomQrUrl() }}').then(r=>r.blob()).then(b=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='qr-nha-trai.jpg'; a.click(); })"
+                                class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                Tải QR về
+                            </button>
+                        </div>
                     </div>
                 </template>
 
@@ -113,6 +132,25 @@
                             @if(empty($brideInfo) && $wedding->bride_qr_info)
                             <p class="whitespace-pre-line text-gray-600">{{ $wedding->bride_qr_info }}</p>
                             @endif
+                        </div>
+                        {{-- Action buttons --}}
+                        <div class="flex gap-3 mt-4">
+                            @if(!empty($brideInfo['account_number']))
+                            <button type="button"
+                                x-data="{ copied: false }"
+                                @click="navigator.clipboard.writeText('{{ $brideInfo['account_number'] }}'); copied=true; setTimeout(()=>copied=false,2000)"
+                                class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-gray-300 text-sm font-semibold text-gray-700 hover:bg-gray-100 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                <span x-show="!copied">Sao chép số TK</span>
+                                <span x-show="copied" class="text-green-600">✓ Đã sao chép!</span>
+                            </button>
+                            @endif
+                            <button type="button"
+                                @click="fetch('{{ $wedding->getBrideQrUrl() }}').then(r=>r.blob()).then(b=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='qr-nha-gai.jpg'; a.click(); })"
+                                class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                Tải QR về
+                            </button>
                         </div>
                     </div>
                 </template>
