@@ -68,18 +68,74 @@ class WeddingController extends Controller
 
         // Prepare Media Data
         $mediaData = [
-            'heroUrl' => $wedding->getHeroUrl(),
-            'shareUrl' => $wedding->getCoverUrl(), 
+            'heroUrl'    => $wedding->getHeroUrl(),
+            'shareUrl'   => $wedding->getCoverUrl(),
             'groomPhoto' => $wedding->getGroomPhotoUrl(),
             'bridePhoto' => $wedding->getBridePhotoUrl(),
-            'musicUrl' => $wedding->music_url,
+            'musicUrl'   => $wedding->music_url,
         ];
+
+        // Prepare Template Variables (previously @php in blade)
+        $solar = $wedding->event_date ?? now();
+
+        try {
+            $lnr      = \Vantran\LunarCalendar\LunarDateTime::fromSolar($solar->year, $solar->month, $solar->day);
+            $lunarStr = 'Tức ngày ' . $lnr->getDay() . ' Tháng ' . $lnr->getMonth() . ' Năm ' . $lnr->getYearName();
+        } catch (\Throwable) {
+            $lunarStr = '';
+        }
+
+        $dowLabels  = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+        $dayOfWeek  = $dowLabels[$solar->dayOfWeek];
+
+        // Ceremony / Reception dates & times
+        $groomCeremonyDay    = $wedding->groom_ceremony_date  ?? $solar;
+        $groomCeremonyTime   = $wedding->groom_ceremony_time  ? \Carbon\Carbon::parse($wedding->groom_ceremony_time)->format('H:i')  : '12:00';
+        $groomReceptionDay   = $wedding->groom_reception_date ?? $solar;
+        $groomReceptionTime  = $wedding->groom_reception_time ? \Carbon\Carbon::parse($wedding->groom_reception_time)->format('H:i') : null;
+
+        $brideCeremonyDay    = $wedding->bride_ceremony_date  ?? $solar;
+        $brideCeremonyTime   = $wedding->bride_ceremony_time  ? \Carbon\Carbon::parse($wedding->bride_ceremony_time)->format('H:i')  : '10:00';
+        $brideReceptionDay   = $wedding->bride_reception_date ?? $solar;
+        $brideReceptionTime  = $wedding->bride_reception_time ? \Carbon\Carbon::parse($wedding->bride_reception_time)->format('H:i') : null;
+
+        // Pre-parsed Carbon objects
+        $groomCeremonyCarbon  = \Carbon\Carbon::parse($groomCeremonyDay);
+        $brideCeremonyCarbon  = \Carbon\Carbon::parse($brideCeremonyDay);
+        $groomReceptionCarbon = \Carbon\Carbon::parse($groomReceptionDay);
+        $brideReceptionCarbon = \Carbon\Carbon::parse($brideReceptionDay);
+        $groomDow = $dowLabels[$groomCeremonyCarbon->dayOfWeek];
+        $brideDow = $dowLabels[$brideCeremonyCarbon->dayOfWeek];
+
+        // Calendar
+        $firstOfMonth = $solar->copy()->startOfMonth();
+        $daysInMonth  = $solar->daysInMonth;
+        $startOffset  = $firstOfMonth->dayOfWeek; // 0=Sun
+        $eventDay     = (int) $solar->format('j');
+
+        // Gallery
+        $galleryImages = $wedding->gallery_images;
+        $placeholders  = [
+            'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80',
+            'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80',
+            'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80',
+        ];
+        $imgs = $galleryImages->isNotEmpty() ? $galleryImages->map->getUrl()->toArray() : $placeholders;
+
+        $templateVars = compact(
+            'solar', 'lunarStr', 'dayOfWeek',
+            'groomCeremonyDay', 'groomCeremonyTime', 'groomCeremonyCarbon', 'groomDow',
+            'groomReceptionDay', 'groomReceptionTime', 'groomReceptionCarbon',
+            'brideCeremonyDay', 'brideCeremonyTime', 'brideCeremonyCarbon', 'brideDow',
+            'brideReceptionDay', 'brideReceptionTime', 'brideReceptionCarbon',
+            'firstOfMonth', 'daysInMonth', 'startOffset', 'eventDay',
+            'galleryImages', 'placeholders', 'imgs'
+        );
 
         // Determine View Path
         $viewPath = $wedding->template?->view_path ?? $wedding->template_view;
 
-        // Return the template view
-        return view($viewPath, array_merge(compact('wedding', 'isEditable', 'showUpgradeBanner'), $mediaData));
+        return view($viewPath, array_merge(compact('wedding', 'isEditable', 'showUpgradeBanner'), $mediaData, $templateVars));
     }
 }
 

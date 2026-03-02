@@ -7,58 +7,6 @@
 
 @section('content')
 
-@php
-    use Vantran\LunarCalendar\LunarDateTime;
-    $solar = $wedding->event_date ?? now();
-    try {
-        $lnr   = LunarDateTime::fromSolar($solar->year, $solar->month, $solar->day);
-        $lunarStr = 'Tức ngày ' . $lnr->getDay() . ' Tháng ' . $lnr->getMonth() . ' Năm ' . $lnr->getYearName();
-    } catch (\Throwable $e) { $lunarStr = ''; }
-
-    $dayOfWeek = match($solar->dayOfWeek) {
-        0=>'Chủ Nhật', 1=>'Thứ Hai', 2=>'Thứ Ba',
-        3=>'Thứ Tư',   4=>'Thứ Năm', 5=>'Thứ Sáu', 6=>'Thứ Bảy',
-    };
-
-    // Groom ceremony
-    $groomCeremonyDay  = $wedding->groom_ceremony_date ?? $solar;
-    $groomCeremonyTime = $wedding->groom_ceremony_time ? \Carbon\Carbon::parse($wedding->groom_ceremony_time)->format('H:i') : '12:00';
-    $groomReceptionTime= $wedding->groom_reception_time? \Carbon\Carbon::parse($wedding->groom_reception_time)->format('H:i') : null;
-    $groomReceptionDay = $wedding->groom_reception_date ?? $solar;
-
-    // Bride ceremony
-    $brideCeremonyDay  = $wedding->bride_ceremony_date ?? $solar;
-    $brideCeremonyTime = $wedding->bride_ceremony_time ? \Carbon\Carbon::parse($wedding->bride_ceremony_time)->format('H:i') : '10:00';
-    $brideReceptionTime= $wedding->bride_reception_time? \Carbon\Carbon::parse($wedding->bride_reception_time)->format('H:i') : null;
-    $brideReceptionDay = $wedding->bride_reception_date ?? $solar;
-
-    // Calendar
-    $firstOfMonth = $solar->copy()->startOfMonth();
-    $daysInMonth  = $solar->daysInMonth;
-    $startOffset  = $firstOfMonth->dayOfWeek; // 0=Sun
-    $eventDay     = (int)$solar->format('j');
-
-    // Gallery
-    $galleryImages = $wedding->gallery_images;
-    $placeholders  = [
-        'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80',
-        'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80',
-        'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80',
-    ];
-    $imgs = $galleryImages->isNotEmpty() ? $galleryImages->map->getUrl()->toArray() : $placeholders;
-
-    // Pre-parse ceremony Carbon objects for use in HTML (no inline @php needed)
-    $groomCeremonyCarbon = \Carbon\Carbon::parse($groomCeremonyDay);
-    $brideCeremonyCarbon = \Carbon\Carbon::parse($brideCeremonyDay);
-    $groomReceptionCarbon = \Carbon\Carbon::parse($groomReceptionDay);
-    $brideReceptionCarbon = \Carbon\Carbon::parse($brideReceptionDay);
-
-    $dowLabels = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
-    $groomDow = $dowLabels[$groomCeremonyCarbon->dayOfWeek];
-    $brideDow = $dowLabels[$brideCeremonyCarbon->dayOfWeek];
-@endphp
-
-
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Oswald:wght@400;500;600&family=Philosopher:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@300;400;500;600;700&display=swap');
 
