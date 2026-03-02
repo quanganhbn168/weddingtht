@@ -278,6 +278,14 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
             <p class="label">Lễ Thành Hôn</p>
             <p class="date">{{ $solar->format('d . m . Y') }}</p>
             @if($lunarStr)<p class="lunar">({{ $lunarStr }})</p>@endif
+            @if($groomReceptionTime)
+            <div class="line" style="margin:8px 0;opacity:.5;"></div>
+            <p class="time">{{ $dayOfWeek }} - {{ $groomReceptionTime }}</p>
+            <p class="label">Tiệc Cưới</p>
+            @if($groomReceptionDay && $groomReceptionCarbon->format('d.m.Y') !== $solar->format('d.m.Y'))
+            <p class="date">{{ $groomReceptionCarbon->format('d . m . Y') }}</p>
+            @endif
+            @endif
         </div>
 
         {{-- Scroll hint --}}
