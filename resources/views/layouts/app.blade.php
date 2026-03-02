@@ -4,7 +4,12 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        @php $favicon = \App\Models\Setting::get('site_favicon'); @endphp
+        @if($favicon)
+        <link rel="icon" href="{{ Storage::url($favicon) }}" type="image/png">
+        @else
         <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
+        @endif
 
 
         <title>@yield('title', config('app.name', 'Laravel'))</title>
@@ -24,8 +29,6 @@
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
-        <!-- AOS Animation Library -->
-        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         @stack('styles')
     </head>
     <body class="font-sans antialiased">
@@ -53,15 +56,6 @@
             </div>
         @endif
         
-        <!-- AOS Init -->
-        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-        <script>
-            AOS.init({
-                duration: 1000,
-                once: true,
-                offset: 50,
-            });
-        </script>
         
         @stack('scripts')
     </body>
