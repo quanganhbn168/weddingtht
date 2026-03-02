@@ -430,8 +430,7 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
     {{-- ══ RSVP MODAL ══ --}}
     <div id="rsvp-modal" x-data="rsvpModal()" x-show="open" x-cloak
          @open-rsvp.window="title=$event.detail.type; form.event_type=$event.detail.type; open=true;"
-         style="position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;padding:16px;"
-         :style="open ? 'display:flex' : 'display:none'"
+         style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;"
          @click.self="close()">
         <div style="position:absolute;inset:0;background:rgba(0,0,0,.55);" @click="close()"></div>
         <div style="background:#fff;border-radius:16px;padding:24px 20px;max-width:360px;width:100%;position:relative;max-height:90vh;overflow-y:auto;">
@@ -549,13 +548,18 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
                 @foreach($rows as $row)
                 <tr>
                     @foreach($row as $d)
-                    <td class="{{ $d === null ? 'cal-empty' : ($d === $eventDay ? 'cal-wed' : '') }}">
+                    <td class="{{ $d === null ? 'cal-empty' : ($d === $eventDay ? 'cal-wed' : ($d === $eventDay2 ? 'cal-reception' : '')) }}">
                         @if($d === $eventDay)
                         <div class="cal-wed-inner">
                             <svg class="heart-svg" viewBox="0 0 90 90" fill="#c0392b" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M45 75 C45 75 10 50 10 28 C10 18 18 10 28 10 C34 10 40 13 45 18 C50 13 56 10 62 10 C72 10 80 18 80 28 C80 50 45 75 45 75Z"/>
                             </svg>
                             <span class="day-num">{{ $d }}</span>
+                        </div>
+                        @elseif($d === $eventDay2)
+                        <div class="cal-wed-inner" style="background:var(--blue-lt);border-radius:50%;">
+                            <span style="font-size:.8rem;">🥂</span>
+                            <span class="day-num" style="color:var(--navy);">{{ $d }}</span>
                         </div>
                         @elseif($d !== null)
                         {{ $d }}

@@ -118,6 +118,9 @@ class WeddingController extends Controller
         $daysInMonth  = $solar->daysInMonth;
         $startOffset  = $firstOfMonth->dayOfWeek; // 0=Sun
         $eventDay     = (int) $solar->format('j');
+        $eventDay2    = $groomReceptionDay instanceof \Carbon\Carbon
+            ? (int) $groomReceptionDay->format('j')
+            : ($groomReceptionDay ? (int) \Carbon\Carbon::parse($groomReceptionDay)->format('j') : $eventDay - 1);
 
         // Gallery
         $galleryImages = $wedding->gallery_images;
@@ -139,7 +142,7 @@ class WeddingController extends Controller
             'brideCeremonyDay', 'brideCeremonyTime', 'brideCeremonyCarbon', 'brideDow',
             'brideReceptionDay', 'brideReceptionTime', 'brideReceptionCarbon', 'brideReceptionDow',
             'brideReceptionDay2', 'brideReceptionTime2',
-            'firstOfMonth', 'daysInMonth', 'startOffset', 'eventDay',
+            'firstOfMonth', 'daysInMonth', 'startOffset', 'eventDay', 'eventDay2',
             'galleryImages', 'placeholders', 'imgs'
         );
 
