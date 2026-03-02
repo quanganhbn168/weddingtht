@@ -246,6 +246,8 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
 .cnt-box { background: #fff; border-radius: 12px; padding: 12px 6px; text-align: center; box-shadow: 0 4px 14px rgba(74,127,165,.1); border: 1px solid var(--blue-lt); }
 .cnt-num { font-size: 1.8rem; font-weight: 700; color: var(--blue-dk); }
 .cnt-lbl { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #8aa8bf; margin-top: 2px; }
+[x-cloak] { display: none !important; }
+#rsvp-modal { display: flex; align-items: center; justify-content: center; }
 </style>
 
 <div class="max-w-[480px] mx-auto min-h-screen shadow-2xl" style="background: var(--cream);">
@@ -430,7 +432,7 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
     {{-- ══ RSVP MODAL ══ --}}
     <div id="rsvp-modal" x-data="rsvpModal()" x-show="open" x-cloak
          @open-rsvp.window="title=$event.detail.type; form.event_type=$event.detail.type; open=true;"
-         style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;"
+         style="position:fixed;inset:0;z-index:9999;padding:16px;"
          @click.self="close()">
         <div style="position:absolute;inset:0;background:rgba(0,0,0,.55);" @click="close()"></div>
         <div style="background:#fff;border-radius:16px;padding:24px 20px;max-width:360px;width:100%;position:relative;max-height:90vh;overflow-y:auto;">
