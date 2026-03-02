@@ -481,12 +481,26 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
     </div>
 
     {{-- ══════════════════════════════════════════ --}}
-    {{-- LỄ THÀNH HÔN / LỄ RƯỚc DÂU               --}}
+    {{-- LỄ VU QUY / LỄ THÀNH HÔN                 --}}
     {{-- ══════════════════════════════════════════ --}}
     <section class="reveal" style="padding: 32px 16px; background: #fff;">
         <div class="divider" style="margin-bottom:20px;"><span style="color:var(--blue); font-size:.9rem;">✦</span></div>
         <div class="ceremony-row">
-            {{-- Lễ thành hôn --}}
+            {{-- Lễ Vu Quy --}}
+            <div class="cer-box" style="text-align:center;">
+                <h4>Lễ Vu Quy</h4>
+                <p class="cer-time">Vào {{ $brideDow }}{{ $brideCeremonyTime ? ' - ' . $brideCeremonyTime : '' }}</p>
+                <div class="cer-month-year" style="margin-top:8px;">
+                    <span>Tháng {{ $brideCeremonyCarbon->format('n') }}</span>
+                    <div class="sep"></div>
+                    <span class="cer-date-num">{{ $brideCeremonyCarbon->format('j') }}</span>
+                    <div class="sep"></div>
+                    <span>{{ $brideCeremonyCarbon->format('Y') }}</span>
+                </div>
+                @if($lunarStr)<p class="cer-lunar">({{ $lunarStr }})</p>@endif
+            </div>
+            <div class="divider" style="margin: 12px 0;"><span style="color:var(--blue); font-size:.7rem;">✦</span></div>
+            {{-- Lễ Thành Hôn --}}
             <div class="cer-box" style="text-align:center;">
                 <h4>Lễ Thành Hôn</h4>
                 <p class="cer-time">Vào {{ $groomDow }}{{ $groomCeremonyTime ? ' - ' . $groomCeremonyTime : '' }}</p>
@@ -496,20 +510,6 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
                     <span class="cer-date-num">{{ $groomCeremonyCarbon->format('j') }}</span>
                     <div class="sep"></div>
                     <span>{{ $groomCeremonyCarbon->format('Y') }}</span>
-                </div>
-                @if($lunarStr)<p class="cer-lunar">({{ $lunarStr }})</p>@endif
-            </div>
-            <div class="divider" style="margin: 12px 0;"><span style="color:var(--blue); font-size:.7rem;">✦</span></div>
-            {{-- Lễ rước dâu --}}
-            <div class="cer-box" style="text-align:center;">
-                <h4>Lễ Rước Dâu</h4>
-                <p class="cer-time">Vào {{ $brideDow }}{{ $brideCeremonyTime ? ' - ' . $brideCeremonyTime : '' }}</p>
-                <div class="cer-month-year" style="margin-top:8px;">
-                    <span>Tháng {{ $brideCeremonyCarbon->format('n') }}</span>
-                    <div class="sep"></div>
-                    <span class="cer-date-num">{{ $brideCeremonyCarbon->format('j') }}</span>
-                    <div class="sep"></div>
-                    <span>{{ $brideCeremonyCarbon->format('Y') }}</span>
                 </div>
                 @if($lunarStr)<p class="cer-lunar">({{ $lunarStr }})</p>@endif
             </div>
