@@ -1,4 +1,6 @@
+@import 'glightbox/dist/css/glightbox.css';
+@import 'aos/dist/aos.css';
+@import 'wedding-theme.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import 'wedding-theme.css';

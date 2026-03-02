@@ -1,8 +1,18 @@
 import './bootstrap';
+import AOS from 'aos';
+import GLightbox from 'glightbox';
 
-// Alpine is provided by Livewire 3, but for public pages without Livewire, we need to initialize it manually
-// or ensure Livewire scripts are present. Since we want these pages to be lightweight:
-// Alpine is provided by Livewire 3 (Dashboard) or CDN (Public Pages)
-// import Alpine from 'alpinejs';
-// window.Alpine = Alpine;
-// Alpine.start();
+// Init AOS on DOM ready
+document.addEventListener('DOMContentLoaded', function () {
+    AOS.init({
+        duration: 800,
+        once: true,
+        offset: 60,
+        easing: 'ease-out-cubic',
+    });
+
+    // Init GLightbox
+    if (document.querySelector('.glightbox')) {
+        GLightbox({ selector: '.glightbox' });
+    }
+});

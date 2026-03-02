@@ -46,11 +46,18 @@
         'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80',
     ];
     $imgs = $galleryImages->isNotEmpty() ? $galleryImages->map->getUrl()->toArray() : $placeholders;
+
+    // Pre-parse ceremony Carbon objects for use in HTML (no inline @php needed)
+    $groomCeremonyCarbon = \Carbon\Carbon::parse($groomCeremonyDay);
+    $brideCeremonyCarbon = \Carbon\Carbon::parse($brideCeremonyDay);
+    $groomReceptionCarbon = \Carbon\Carbon::parse($groomReceptionDay);
+    $brideReceptionCarbon = \Carbon\Carbon::parse($brideReceptionDay);
+
+    $dowLabels = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+    $groomDow = $dowLabels[$groomCeremonyCarbon->dayOfWeek];
+    $brideDow = $dowLabels[$brideCeremonyCarbon->dayOfWeek];
 @endphp
 
-{{-- GLightbox --}}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
-<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Oswald:wght@400;500;600&family=Philosopher:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@300;400;500;600;700&display=swap');
@@ -296,10 +303,6 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
 <div class="max-w-[480px] mx-auto min-h-screen shadow-2xl" style="background: var(--cream);">
 
     {{-- Pro Features --}}
-    @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'heartbeat'])
-    @if($wedding->show_invitation_wrapper)
-        <x-wedding.invitation-wrapper :wedding="$wedding" />
-    @endif
     @include('components.wedding.falling-effects', ['wedding' => $wedding])
     <x-wedding.music-player :wedding="$wedding" />
 
@@ -321,8 +324,8 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
         <div class="hero-info">
             <p class="tag">Thư Mời Tiệc Cưới</p>
             <div class="line"></div>
-            @if($groomReceptionTime)
-            <p class="time">{{ $dayOfWeek }} - {{ $groomReceptionTime }}</p>
+            @if($groomCeremonyTime)
+            <p class="time">{{ $dayOfWeek }} - {{ $groomCeremonyTime }}</p>
             @endif
             <p class="label">Lễ Thành Hôn</p>
             <p class="date">{{ $solar->format('d . m . Y') }}</p>
@@ -340,7 +343,7 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
     {{-- ══════════════════════════════════════════ --}}
     {{-- QUOTE                                       --}}
     {{-- ══════════════════════════════════════════ --}}
-    <section class="quote-wrap reveal">
+    <section class="quote-wrap reveal" data-aos="fade-up">
         <div class="divider" style="margin-bottom:18px;"></div>
         <p class="quote-text">"Hôn nhân là chuyện cả đời,<br>Yêu người vừa ý, cưới người mình thương"</p>
         <div class="divider" style="margin-top:18px;"></div>
@@ -349,7 +352,7 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
     {{-- ══════════════════════════════════════════ --}}
     {{-- CÔ DÂU & CHÚ RỂ                           --}}
     {{-- ══════════════════════════════════════════ --}}
-    <section class="reveal" style="padding: 32px 20px 40px; background:#fff;">
+    <section class="reveal" style="padding: 32px 20px 40px; background:#fff;" data-aos="fade-up">
 
         <div class="couple-grid">
             <div class="person">
@@ -376,7 +379,7 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
     {{-- ══════════════════════════════════════════ --}}
     {{-- THƯ MỜI BANNER                             --}}
     {{-- ══════════════════════════════════════════ --}}
-    <section class="invite-banner reveal">
+    <section class="invite-banner reveal" data-aos="fade-up">
         <div class="divider" style="margin-bottom:20px;"></div>
         <p class="font-script" style="font-size:clamp(2.2rem,8vw,3.5rem); color:var(--navy); margin-bottom:6px;">Thư Mời</p>
         <p style="font-family:'Great Vibes',cursive; font-size:clamp(1.4rem,5vw,2rem); color:var(--blue-dk); margin-bottom:14px;">Bạn và Người thương</p>
@@ -399,7 +402,7 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
     {{-- ══════════════════════════════════════════ --}}
     {{-- TIỆC CƯỚI NHÀ TRAI / NHÀ GÁI             --}}
     {{-- ══════════════════════════════════════════ --}}
-    <section class="reveal" style="padding: 28px 16px 36px; background: #fff;">
+    <section class="reveal" style="padding: 28px 16px 36px; background: #fff;" data-aos="fade-up">
 
         <div class="events-grid">
             {{-- Nhà trai --}}
@@ -518,14 +521,13 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
             {{-- Lễ thành hôn --}}
             <div class="cer-box" style="text-align:center;">
                 <h4>Lễ Thành Hôn</h4>
-                @php $groomDow = match(\Carbon\Carbon::parse($groomCeremonyDay)->dayOfWeek){0=>'Chủ Nhật',1=>'Thứ Hai',2=>'Thứ Ba',3=>'Thứ Tư',4=>'Thứ Năm',5=>'Thứ Sáu',6=>'Thứ Bảy'}; @endphp
                 <p class="cer-time">Vào {{ $groomDow }}{{ $groomCeremonyTime ? ' - ' . $groomCeremonyTime : '' }}</p>
                 <div class="cer-month-year" style="margin-top:8px;">
-                    <span>Tháng {{ \Carbon\Carbon::parse($groomCeremonyDay)->format('n') }}</span>
+                    <span>Tháng {{ $groomCeremonyCarbon->format('n') }}</span>
                     <div class="sep"></div>
-                    <span class="cer-date-num">{{ \Carbon\Carbon::parse($groomCeremonyDay)->format('j') }}</span>
+                    <span class="cer-date-num">{{ $groomCeremonyCarbon->format('j') }}</span>
                     <div class="sep"></div>
-                    <span>{{ \Carbon\Carbon::parse($groomCeremonyDay)->format('Y') }}</span>
+                    <span>{{ $groomCeremonyCarbon->format('Y') }}</span>
                 </div>
                 @if($lunarStr)<p class="cer-lunar">({{ $lunarStr }})</p>@endif
             </div>
@@ -533,14 +535,13 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
             {{-- Lễ rước dâu --}}
             <div class="cer-box" style="text-align:center;">
                 <h4>Lễ Rước Dâu</h4>
-                @php $brideDow = match(\Carbon\Carbon::parse($brideCeremonyDay)->dayOfWeek){0=>'Chủ Nhật',1=>'Thứ Hai',2=>'Thứ Ba',3=>'Thứ Tư',4=>'Thứ Năm',5=>'Thứ Sáu',6=>'Thứ Bảy'}; @endphp
                 <p class="cer-time">Vào {{ $brideDow }}{{ $brideCeremonyTime ? ' - ' . $brideCeremonyTime : '' }}</p>
                 <div class="cer-month-year" style="margin-top:8px;">
-                    <span>Tháng {{ \Carbon\Carbon::parse($brideCeremonyDay)->format('n') }}</span>
+                    <span>Tháng {{ $brideCeremonyCarbon->format('n') }}</span>
                     <div class="sep"></div>
-                    <span class="cer-date-num">{{ \Carbon\Carbon::parse($brideCeremonyDay)->format('j') }}</span>
+                    <span class="cer-date-num">{{ $brideCeremonyCarbon->format('j') }}</span>
                     <div class="sep"></div>
-                    <span>{{ \Carbon\Carbon::parse($brideCeremonyDay)->format('Y') }}</span>
+                    <span>{{ $brideCeremonyCarbon->format('Y') }}</span>
                 </div>
                 @if($lunarStr)<p class="cer-lunar">({{ $lunarStr }})</p>@endif
             </div>
