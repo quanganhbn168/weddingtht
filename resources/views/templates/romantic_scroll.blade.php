@@ -364,8 +364,8 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
             {{-- Nhà trai --}}
             <div class="ev-card">
                 <h3>TIỆC CƯỚI NHÀ TRAI</h3>
-                <p class="ev-day">{{ $dayOfWeek }} | {{ $groomReceptionTime ?? '18:00' }}</p>
-                <p class="ev-date">{{ $solar->format('d . m . Y') }}</p>
+                <p class="ev-day">{{ $groomReceptionDow }} | {{ $groomReceptionTime ?? '18:00' }}</p>
+                <p class="ev-date">{{ $groomReceptionCarbon->format('d . m . Y') }}</p>
                 @if($lunarStr)<p class="ev-lunar">({{ $lunarStr }})</p>@endif
                 @if($groomReceptionTime2)
                 <p class="ev-day" style="margin-top:10px;padding-top:10px;border-top:1px dashed #dde8f0;">
@@ -396,8 +396,8 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
             {{-- Nhà gái --}}
             <div class="ev-card">
                 <h3>TIỆC CƯỚI NHÀ GÁI</h3>
-                <p class="ev-day">{{ $dayOfWeek }} | {{ $brideReceptionTime ?? '18:00' }}</p>
-                <p class="ev-date">{{ $solar->format('d . m . Y') }}</p>
+                <p class="ev-day">{{ $brideReceptionDow }} | {{ $brideReceptionTime ?? '18:00' }}</p>
+                <p class="ev-date">{{ $brideReceptionCarbon->format('d . m . Y') }}</p>
                 @if($lunarStr)<p class="ev-lunar">({{ $lunarStr }})</p>@endif
                 @if($brideReceptionTime2)
                 <p class="ev-day" style="margin-top:10px;padding-top:10px;border-top:1px dashed #dde8f0;">
