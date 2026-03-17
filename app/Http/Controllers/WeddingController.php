@@ -75,11 +75,18 @@ class WeddingController extends Controller
             'musicUrl' => $wedding->music_url,
         ];
 
+        // Side parameter: groom / bride / both (default)
+        // Used by templates like DA05 VIP to show different content per invitation side
+        $side = $request->get('side', 'both');
+        if (!in_array($side, ['groom', 'bride', 'both'])) {
+            $side = 'both';
+        }
+
         // Determine View Path
         $viewPath = $wedding->template?->view_path ?? $wedding->template_view;
 
         // Return the template view
-        return view($viewPath, array_merge(compact('wedding', 'isEditable', 'showUpgradeBanner'), $mediaData));
+        return view($viewPath, array_merge(compact('wedding', 'isEditable', 'showUpgradeBanner', 'side'), $mediaData));
     }
 }
 

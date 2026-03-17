@@ -9,6 +9,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
@@ -596,6 +597,34 @@ class WeddingForm
                                         Textarea::make('content.guestbook_desc')
                                             ->label('Lời dẫn/Thông điệp')
                                             ->placeholder('Kỷ niệm đẹp là những gì chúng ta cùng nhau tạo ra...'),
+                                    ]),
+
+                                Section::make('Câu chuyện tình yêu (Love Story)')
+                                    ->description('Timeline các cột mốc tình yêu, hiển thị trên template DA05 VIP')
+                                    ->columns(1)
+                                    ->schema([
+                                        Repeater::make('content.love_story')
+                                            ->label('Các mốc thời gian')
+                                            ->schema([
+                                                TextInput::make('year')
+                                                    ->label('Năm')
+                                                    ->placeholder('2021')
+                                                    ->maxLength(10),
+                                                TextInput::make('title')
+                                                    ->label('Tiêu đề')
+                                                    ->placeholder('Gặp Gỡ Định Mệnh')
+                                                    ->maxLength(255),
+                                                Textarea::make('description')
+                                                    ->label('Mô tả')
+                                                    ->placeholder('Năm ấy, giữa muôn vàn người...')
+                                                    ->rows(3),
+                                            ])
+                                            ->columns(1)
+                                            ->collapsible()
+                                            ->cloneable()
+                                            ->defaultItems(0)
+                                            ->addActionLabel('+ Thêm mốc thời gian')
+                                            ->itemLabel(fn (array $state): ?string => ($state['year'] ?? '') . ' - ' . ($state['title'] ?? 'Mốc mới')),
                                     ]),
                             ]),
                     ]),
