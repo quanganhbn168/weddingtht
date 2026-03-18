@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Wedding;
-use App\Models\WeddingTemplate;
+use App\Models\Template;
 use Illuminate\Database\Seeder;
 
 class TruongLongWeddingSeeder extends Seeder
@@ -11,14 +11,14 @@ class TruongLongWeddingSeeder extends Seeder
     public function run(): void
     {
         // Ensure template exists
-        $template = WeddingTemplate::firstOrCreate(
-            ['slug' => 'da05_vip'],
+        $template = Template::firstOrCreate(
+            ['view_path' => 'templates.da05_vip'],
             [
-                'name' => 'DA05 VIP',
-                'view' => 'templates.da05_vip',
-                'tier' => 'pro',
+                'name' => 'DA05 VIP (MeHappy)',
+                'type' => 'wedding',
+                'required_tier' => 'pro',
                 'is_active' => true,
-                'thumbnail' => null,
+                'thumbnail_url' => null,
             ]
         );
 
