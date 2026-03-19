@@ -20,7 +20,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
 
 <style>
     :root {
@@ -34,7 +34,7 @@
         --color-text-body: #6B6055;
         --font-display: 'Playfair Display', serif;
         --font-script: 'Great Vibes', cursive;
-        --font-body: 'Quicksand', sans-serif;
+        --font-body: 'Be Vietnam Pro', sans-serif;
         --font-vietnam: 'Be Vietnam Pro', sans-serif;
     }
 
