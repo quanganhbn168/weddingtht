@@ -91,12 +91,7 @@
             </div>
         </div>
         @if($wedding->bride_ceremony_map_url)
-        <div class="mt-4 rounded-xl overflow-hidden shadow-md" style="height:160px">
-            <iframe src="{{ $wedding->bride_ceremony_map_embed }}" width="100%" height="160" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-        @endif
-        @if($wedding->bride_ceremony_map_url)
-        <a href="{{ $wedding->bride_ceremony_map_url }}" target="_blank" class="block w-full mt-3 py-3 btn-gold rounded-xl text-center text-sm font-bold uppercase tracking-wider">Xem Bản Đồ</a>
+        <a href="{{ $wedding->bride_ceremony_map_url }}" target="_blank" class="block w-full mt-4 py-3 btn-gold rounded-xl text-center text-sm font-bold uppercase tracking-wider">Xem Bản Đồ</a>
         @endif
     </div>
     @endif
@@ -119,12 +114,7 @@
             </div>
         </div>
         @if($wedding->groom_ceremony_map_url)
-        <div class="mt-4 rounded-xl overflow-hidden shadow-md" style="height:160px">
-            <iframe src="{{ $wedding->groom_ceremony_map_embed }}" width="100%" height="160" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-        @endif
-        @if($wedding->groom_ceremony_map_url)
-        <a href="{{ $wedding->groom_ceremony_map_url }}" target="_blank" class="block w-full mt-3 py-3 btn-gold rounded-xl text-center text-sm font-bold uppercase tracking-wider">Xem Bản Đồ</a>
+        <a href="{{ $wedding->groom_ceremony_map_url }}" target="_blank" class="block w-full mt-4 py-3 btn-gold rounded-xl text-center text-sm font-bold uppercase tracking-wider">Xem Bản Đồ</a>
         @endif
     </div>
     @endif
