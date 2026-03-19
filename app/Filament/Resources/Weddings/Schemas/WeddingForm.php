@@ -224,18 +224,8 @@ class WeddingForm
                                             ->label('Địa chỉ')
                                             ->columnSpanFull(),
                                         
-                                        TextInput::make('groom_map_url')
-                                            ->label('Link Google Maps')
-                                            ->url()
-                                            ->columnSpanFull(),
-
-                                        Textarea::make('groom_map_embed')
-                                            ->label('Google Maps Embed URL (src iframe)')
-                                            ->placeholder('https://maps.google.com/maps?...')
-                                            ->helperText('Dán URL src từ iframe embed của Google Maps. Nếu trống sẽ fallback về địa điểm mặc định.')
-                                            ->rows(2)
-                                            ->columnSpanFull(),
                                     ]),
+
                                 
                                 Section::make('Tiệc cưới nhà trai')
                                     ->columns(2)
@@ -253,6 +243,18 @@ class WeddingForm
                                         
                                         Textarea::make('groom_reception_address')
                                             ->label('Địa chỉ tiệc')
+                                            ->columnSpanFull(),
+
+                                        TextInput::make('groom_map_url')
+                                            ->label('Link Google Maps')
+                                            ->url()
+                                            ->columnSpanFull(),
+
+                                        Textarea::make('groom_map_embed')
+                                            ->label('Google Maps Embed URL (src iframe)')
+                                            ->placeholder('https://maps.google.com/maps?...')
+                                            ->helperText('Dán URL src từ iframe embed của Google Maps. Nếu trống sẽ fallback về địa điểm mặc định.')
+                                            ->rows(2)
                                             ->columnSpanFull(),
                                     ]),
                                     
@@ -301,18 +303,6 @@ class WeddingForm
                                         Textarea::make('bride_address')
                                             ->label('Địa chỉ')
                                             ->columnSpanFull(),
-                                        
-                                        TextInput::make('bride_map_url')
-                                            ->label('Link Google Maps')
-                                            ->url()
-                                            ->columnSpanFull(),
-
-                                        Textarea::make('bride_map_embed')
-                                            ->label('Google Maps Embed URL (src iframe)')
-                                            ->placeholder('https://maps.google.com/maps?...')
-                                            ->helperText('Dán URL src từ iframe embed của Google Maps. Nếu trống sẽ fallback về địa điểm mặc định.')
-                                            ->rows(2)
-                                            ->columnSpanFull(),
                                     ]),
                                 
                                 Section::make('Tiệc cưới nhà gái')
@@ -331,6 +321,18 @@ class WeddingForm
                                         
                                         Textarea::make('bride_reception_address')
                                             ->label('Địa chỉ tiệc')
+                                            ->columnSpanFull(),
+
+                                        TextInput::make('bride_map_url')
+                                            ->label('Link Google Maps')
+                                            ->url()
+                                            ->columnSpanFull(),
+
+                                        Textarea::make('bride_map_embed')
+                                            ->label('Google Maps Embed URL (src iframe)')
+                                            ->placeholder('https://maps.google.com/maps?...')
+                                            ->helperText('Dán URL src từ iframe embed của Google Maps.')
+                                            ->rows(2)
                                             ->columnSpanFull(),
                                     ]),
                                     
