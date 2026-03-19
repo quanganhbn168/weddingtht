@@ -138,9 +138,37 @@
         <x-wedding.rsvp-form :wedding="$wedding" />
     </section>
 
-    {{-- ═══ FOOTER (SHARED component) ═══ --}}
-    <footer class="py-20 bg-cream text-center relative bg-main-watercolor" data-aos="fade-up">
-        <x-wedding.wedding-footer :wedding="$wedding" :side="$side" />
+    {{-- ═══ FOOTER (da05 with gallery background) ═══ --}}
+    @php
+        $footerImages = $wedding->gallery_images;
+        $footerBg = $footerImages->isNotEmpty()
+            ? ($footerImages->last()->getUrl('gallery_web') ?: $footerImages->last()->getUrl())
+            : null;
+    @endphp
+    <footer class="relative py-20 text-center overflow-hidden" data-aos="fade-up">
+        {{-- Background ảnh gallery --}}
+        @if($footerBg)
+        <img src="{{ $footerBg }}" class="absolute inset-0 w-full h-full object-cover object-top" alt="">
+        <div class="absolute inset-0 bg-black/55"></div>
+        @else
+        <div class="absolute inset-0 bg-main-watercolor bg-cream"></div>
+        @endif
+
+        {{-- Content --}}
+        <div class="relative z-10 {{ $footerBg ? 'text-white' : '' }}">
+            <p class="font-script text-6xl {{ $footerBg ? 'text-white' : 'text-gold' }} mb-6 drop-shadow-lg">Thank You!</p>
+            @php
+                $isBride = $side === 'bride';
+                $firstName = $isBride ? $wedding->bride_name : $wedding->groom_name;
+                $secondName = $isBride ? $wedding->groom_name : $wedding->bride_name;
+            @endphp
+            <div class="font-display text-2xl {{ $footerBg ? 'text-white/80' : 'text-gold/80' }} mb-2 italic">{{ $firstName }} & {{ $secondName }}</div>
+            <p class="{{ $footerBg ? 'text-white/60' : 'text-gold/60' }} font-bold tracking-[0.3em] text-sm mb-10">{{ $wedding->event_date?->format('d.m.Y') }}</p>
+            <div class="separator mb-10">
+                <svg class="w-6 h-6 {{ $footerBg ? 'text-white' : 'text-gold' }}" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+            <p class="text-[10px] {{ $footerBg ? 'text-white/40' : 'text-gray-400' }} uppercase tracking-widest">Designed with ❤️ by THT Media</p>
+        </div>
     </footer>
 </div>
 
