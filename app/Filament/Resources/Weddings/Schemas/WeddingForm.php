@@ -182,6 +182,11 @@ class WeddingForm
                                             ->default(false)
                                             ->helperText('Nếu bật, lời chúc sẽ hiện ngay lập tức không cần duyệt'),
 
+                                        Toggle::make('show_love_story')
+                                            ->label('Hiển thị Love Story')
+                                            ->default(true)
+                                            ->helperText('Bật/tắt phần câu chuyện tình yêu trên thiệp'),
+
                                         TextInput::make('password')
                                             ->label('Mật khẩu xem thiệp')
                                             ->password()

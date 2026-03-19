@@ -109,7 +109,9 @@
     <x-wedding.da05-couple :wedding="$wedding" :groomPhoto="$groomPhoto" :bridePhoto="$bridePhoto" />
 
     {{-- ═══ LOVE STORY (da05-specific timeline) ═══ --}}
+    @if($wedding->show_love_story !== false)
     <x-wedding.da05-love-story :wedding="$wedding" />
+    @endif
 
     {{-- ═══ PHOTO ALBUM (da05-specific film strip + polaroid) ═══ --}}
     <x-wedding.da05-album :wedding="$wedding" />
