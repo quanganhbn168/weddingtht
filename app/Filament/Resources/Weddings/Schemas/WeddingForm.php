@@ -221,9 +221,19 @@ class WeddingForm
                                             ->helperText('Nếu khác ngày cưới chính'),
                                         
                                         Textarea::make('groom_address')
-                                            ->label('Địa chỉ')
+                                            ->label('Địa chỉ hôn lễ')
                                             ->columnSpanFull(),
-                                        
+
+                                        TextInput::make('groom_ceremony_map_url')
+                                            ->label('Link Google Maps hôn lễ')
+                                            ->url()
+                                            ->columnSpanFull(),
+
+                                        Textarea::make('groom_ceremony_map_embed')
+                                            ->label('Google Maps Embed hôn lễ (src iframe)')
+                                            ->placeholder('https://maps.google.com/maps?...')
+                                            ->rows(2)
+                                            ->columnSpanFull(),
                                     ]),
 
                                 
@@ -243,7 +253,18 @@ class WeddingForm
                                         
                                         Textarea::make('groom_reception_address')
                                             ->label('Địa chỉ tiệc')
-                                            ->columnSpanFull(),
+                                            ->columnSpanFull()
+                                            ->hintAction(
+                                                \Filament\Forms\Components\Actions\Action::make('copy_from_ceremony')
+                                                    ->label('Dùng địa chỉ hôn lễ')
+                                                    ->icon('heroicon-o-clipboard-document')
+                                                    ->action(function (\Filament\Forms\Set $set, \Filament\Forms\Get $get) {
+                                                        $set('groom_reception_address', $get('groom_address'));
+                                                        $set('groom_reception_venue', $get('groom_reception_venue') ?: '');
+                                                        $set('groom_map_url', $get('groom_ceremony_map_url'));
+                                                        $set('groom_map_embed', $get('groom_ceremony_map_embed'));
+                                                    })
+                                            ),
 
                                         TextInput::make('groom_map_url')
                                             ->label('Link Google Maps')
@@ -301,7 +322,18 @@ class WeddingForm
                                             ->helperText('Nếu khác ngày cưới chính'),
                                         
                                         Textarea::make('bride_address')
-                                            ->label('Địa chỉ')
+                                            ->label('Địa chỉ hôn lễ')
+                                            ->columnSpanFull(),
+
+                                        TextInput::make('bride_ceremony_map_url')
+                                            ->label('Link Google Maps hôn lễ')
+                                            ->url()
+                                            ->columnSpanFull(),
+
+                                        Textarea::make('bride_ceremony_map_embed')
+                                            ->label('Google Maps Embed hôn lễ (src iframe)')
+                                            ->placeholder('https://maps.google.com/maps?...')
+                                            ->rows(2)
                                             ->columnSpanFull(),
                                     ]),
                                 
@@ -321,7 +353,17 @@ class WeddingForm
                                         
                                         Textarea::make('bride_reception_address')
                                             ->label('Địa chỉ tiệc')
-                                            ->columnSpanFull(),
+                                            ->columnSpanFull()
+                                            ->hintAction(
+                                                \Filament\Forms\Components\Actions\Action::make('copy_bride_ceremony')
+                                                    ->label('Dùng địa chỉ hôn lễ')
+                                                    ->icon('heroicon-o-clipboard-document')
+                                                    ->action(function (\Filament\Forms\Set $set, \Filament\Forms\Get $get) {
+                                                        $set('bride_reception_address', $get('bride_address'));
+                                                        $set('bride_map_url', $get('bride_ceremony_map_url'));
+                                                        $set('bride_map_embed', $get('bride_ceremony_map_embed'));
+                                                    })
+                                            ),
 
                                         TextInput::make('bride_map_url')
                                             ->label('Link Google Maps')
