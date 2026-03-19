@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\BusinessType;
 use App\Filament\Resources\AgentResource\Pages;
 use App\Filament\Resources\AgentResource\RelationManagers;
 use App\Models\Agent;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -31,13 +33,13 @@ class AgentResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return \Filament\Facades\Filament::getCurrentPanel()->getId() === 'admin';
+        return Filament::getCurrentPanel()?->getId() === 'admin';
     }
 
     public static function canAccess(): bool
     {
-        return \Filament\Facades\Filament::getCurrentPanel()->getId() === 'admin' 
-            && (auth()->user()->isSuperAdmin() || auth()->user()->isAdmin());
+        return Filament::getCurrentPanel()?->getId() === 'admin' 
+            && (auth()->user()?->isSuperAdmin() || auth()->user()?->isAdmin());
     }
 
     public static function getNavigationBadge(): ?string
@@ -98,14 +100,8 @@ class AgentResource extends Resource
                         
                         Forms\Components\Select::make('business_type')
                             ->label('Loại hình')
-                            ->options([
-                                'print' => '🖨️ Nhà in',
-                                'photo' => '📷 Chụp ảnh',
-                                'studio' => '🎬 Studio',
-                                'wedding_planner' => '💒 Wedding Planner',
-                                'other' => '📦 Khác',
-                            ])
-                            ->default('other')
+                            ->options(BusinessType::options())
+                            ->default(BusinessType::OTHER->value)
                             ->required(),
                         
                         Forms\Components\TextInput::make('phone')
@@ -128,19 +124,16 @@ class AgentResource extends Resource
                         Forms\Components\Select::make('subscription_plan')
                             ->label('Gói dịch vụ')
                             ->options([
-                                'trial' => '🎁 Dùng thử (1 tháng)',
-                                'basic' => '📦 Cơ bản (20 thiệp)',
-                                'pro' => '⭐ Pro (100 thiệp)',
-                                'enterprise' => '🏢 Enterprise (Không giới hạn)',
+                                Agent::PLAN_STANDARD => 'Standard (20 thiệp)',
+                                Agent::PLAN_PRO => 'Pro (Không giới hạn)',
                             ])
-                            ->default('trial')
-                            ->required()
-                            ->live(),
+                            ->default(Agent::PLAN_STANDARD)
+                            ->required(),
                         
                         Forms\Components\TextInput::make('quota_weddings')
                             ->label('Quota cho phép')
                             ->numeric()
-                            ->default(5),
+                            ->default(20),
                         
                         Forms\Components\TextInput::make('quota_used')
                             ->label('Đã dùng')
@@ -148,13 +141,8 @@ class AgentResource extends Resource
                             ->default(0)
                             ->disabled(),
                         
-                        Forms\Components\DateTimePicker::make('trial_ends_at')
-                            ->label('Hết hạn dùng thử')
-                            ->visible(fn ($get) => $get('subscription_plan') === 'trial'),
-                        
                         Forms\Components\DateTimePicker::make('subscription_ends_at')
-                            ->label('Hết hạn gói')
-                            ->visible(fn ($get) => $get('subscription_plan') !== 'trial'),
+                            ->label('Hết hạn gói'),
                     ]),
                 
                 Forms\Components\Section::make('Trạng thái')
@@ -191,22 +179,14 @@ class AgentResource extends Resource
                 Tables\Columns\TextColumn::make('business_type')
                     ->label('Loại hình')
                     ->badge()
-                    ->formatStateUsing(fn ($state) => match($state) {
-                        'print' => '🖨️ Nhà in',
-                        'photo' => '📷 Chụp ảnh',
-                        'studio' => '🎬 Studio',
-                        'wedding_planner' => '💒 Wedding Planner',
-                        default => '📦 Khác',
-                    }),
+                    ->formatStateUsing(fn ($state) => BusinessType::tryFrom($state)?->label() ?? $state),
                 
                 Tables\Columns\TextColumn::make('subscription_plan')
                     ->label('Gói')
                     ->badge()
                     ->color(fn ($state) => match($state) {
-                        'trial' => 'warning',
-                        'basic' => 'gray',
+                        'standard' => 'gray',
                         'pro' => 'success',
-                        'enterprise' => 'primary',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn ($state) => strtoupper($state)),
@@ -231,20 +211,12 @@ class AgentResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('business_type')
                     ->label('Loại hình')
-                    ->options([
-                        'print' => 'Nhà in',
-                        'photo' => 'Chụp ảnh',
-                        'studio' => 'Studio',
-                        'wedding_planner' => 'Wedding Planner',
-                        'other' => 'Khác',
-                    ]),
+                    ->options(BusinessType::options()),
                 Tables\Filters\SelectFilter::make('subscription_plan')
                     ->label('Gói dịch vụ')
                     ->options([
-                        'trial' => 'Dùng thử',
-                        'basic' => 'Cơ bản',
-                        'pro' => 'Pro',
-                        'enterprise' => 'Enterprise',
+                        Agent::PLAN_STANDARD => 'Standard',
+                        Agent::PLAN_PRO => 'Pro',
                     ]),
                 Tables\Filters\TernaryFilter::make('is_active')
                     ->label('Hoạt động'),
@@ -259,12 +231,12 @@ class AgentResource extends Resource
                     ->action(fn (Agent $record) => $record->update(['is_verified' => true]))
                     ->visible(fn (Agent $record) => !$record->is_verified)
                     ->requiresConfirmation(),
-                Tables\Actions\Action::make('start_trial')
-                    ->label('Bắt đầu Trial')
-                    ->icon('heroicon-o-gift')
+                Tables\Actions\Action::make('upgrade_pro')
+                    ->label('Nâng cấp Pro')
+                    ->icon('heroicon-o-arrow-up-circle')
                     ->color('warning')
-                    ->action(fn (Agent $record) => $record->startTrial())
-                    ->visible(fn (Agent $record) => !$record->trial_ends_at)
+                    ->action(fn (Agent $record) => $record->upgradeToPro())
+                    ->visible(fn (Agent $record) => $record->subscription_plan !== Agent::PLAN_PRO)
                     ->requiresConfirmation(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

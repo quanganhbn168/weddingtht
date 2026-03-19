@@ -4,12 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\WeddingRsvpResource\Pages;
 use App\Models\WeddingRsvp;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
 
 class WeddingRsvpResource extends Resource
 {
@@ -19,7 +21,7 @@ class WeddingRsvpResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        if (\Filament\Facades\Filament::getCurrentPanel()->getId() === 'app') {
+        if (Filament::getCurrentPanel()?->getId() === 'app') {
             return null;
         }
 
@@ -31,10 +33,10 @@ class WeddingRsvpResource extends Resource
         return 'Khách mời RSVP';
     }
 
-    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    public static function getEloquentQuery(): Builder
     {
         $user = auth()->user();
-        $panelId = \Filament\Facades\Filament::getCurrentPanel()->getId();
+        $panelId = Filament::getCurrentPanel()?->getId();
         $query = parent::getEloquentQuery();
 
         if ($panelId === 'admin') {

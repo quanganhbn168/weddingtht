@@ -9,6 +9,7 @@ use App\Filament\Resources\Weddings\Schemas\WeddingForm;
 use App\Filament\Resources\Weddings\Tables\WeddingsTable;
 use App\Models\Wedding;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -22,7 +23,7 @@ class WeddingResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        $panelId = \Filament\Facades\Filament::getCurrentPanel()?->getId();
+        $panelId = Filament::getCurrentPanel()?->getId();
         
         if ($panelId === 'app') {
             return 'Thiệp của tôi';
@@ -33,7 +34,7 @@ class WeddingResource extends Resource
 
     public static function getModelLabel(): string
     {
-        $panelId = \Filament\Facades\Filament::getCurrentPanel()?->getId();
+        $panelId = Filament::getCurrentPanel()?->getId();
         
         if ($panelId === 'app') {
             return 'Thiệp';
@@ -44,7 +45,7 @@ class WeddingResource extends Resource
 
     public static function getPluralModelLabel(): string
     {
-        $panelId = \Filament\Facades\Filament::getCurrentPanel()?->getId();
+        $panelId = Filament::getCurrentPanel()?->getId();
         
         if ($panelId === 'app') {
             return 'Thiệp của tôi';
@@ -55,7 +56,7 @@ class WeddingResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        $panelId = \Filament\Facades\Filament::getCurrentPanel()?->getId();
+        $panelId = Filament::getCurrentPanel()?->getId();
         
         if ($panelId === 'app') {
             return null;
@@ -77,7 +78,7 @@ class WeddingResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $user = auth()->user();
-        $panelId = \Filament\Facades\Filament::getCurrentPanel()?->getId();
+        $panelId = Filament::getCurrentPanel()?->getId();
 
         $query = parent::getEloquentQuery()
             ->where('is_demo', false);

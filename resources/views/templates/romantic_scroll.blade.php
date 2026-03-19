@@ -643,7 +643,7 @@ body { font-family: var(--body); background: var(--cream); color: var(--navy); o
             @if($galleryImages->isNotEmpty())
                 @foreach($galleryImages as $m)
                 <a href="{{ $m->getUrl() }}" class="gal-item glightbox" data-gallery="wedding-album" data-description="">
-                    <img src="{{ $m->getUrl('thumb') ?: $m->getUrl() }}" alt="ảnh cưới" loading="lazy">
+                    <img src="{{ $m->getUrl('gallery_web') ?: $m->getUrl() }}" alt="ảnh cưới" loading="lazy">
                 </a>
                 @endforeach
             @else

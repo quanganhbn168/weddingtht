@@ -3,14 +3,20 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Wedding;
+use Filament\Facades\Filament;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
 
 class CreationsChart extends ChartWidget
 {
-    protected static ?string $heading = '📈 Thiệp Cưới mới (7 ngày qua)';
+    protected static ?string $heading = 'Thiệp Cưới mới (7 ngày qua)';
     protected static ?int $sort = 2;
     protected static ?string $maxHeight = '300px';
+
+    public static function canView(): bool
+    {
+        return Filament::getCurrentPanel()?->getId() === 'admin';
+    }
 
     protected function getData(): array
     {

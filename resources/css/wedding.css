@@ -1,0 +1,130 @@
+@import 'aos/dist/aos.css';
+@import 'glightbox/dist/css/glightbox.css';
+@import 'swiper/swiper-bundle.css';
+@import '@fortawesome/fontawesome-free/css/all.css';
+
+
+/* Animation utilities nay dung wedding-animations.css + AOS */
+
+/* ==========================================
+   WEDDING COMPONENT BASE STYLES
+   ========================================== */
+
+/* Mobile-first container */
+.wedding-container {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Button styles */
+.wc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 2rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wc-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.wc-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Card styles */
+.wc-card-glass {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Separator */
+.wc-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.wc-separator::before,
+.wc-separator::after {
+    content: '';
+    width: 60px;
+    height: 1px;
+}
+
+/* Form inputs */
+.wc-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    outline: none;
+    background: rgba(255, 255, 255, 0.5);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.wc-input:focus {
+    border-color: var(--wc-primary, #A67C52);
+    box-shadow: 0 0 0 1px var(--wc-primary, #A67C52);
+}
+
+/* Floral corner decoration */
+.wc-floral-corner {
+    position: absolute;
+    width: 140px;
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+/* Swiper overrides */
+.wedding-container .swiper-button-next,
+.wedding-container .swiper-button-prev {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.wedding-container .swiper-button-next:after,
+.wedding-container .swiper-button-prev:after {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* QR Modal overlay */
+.wc-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.wc-modal-content {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    max-width: 320px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+}

@@ -141,7 +141,7 @@ class TemplateResource extends Resource
             ])
             ->headerActions([
                 Tables\Actions\Action::make('sync')
-                    ->label('🔄 Sync Templates')
+                    ->label('Sync Templates')
                     ->action(function () {
                         \Artisan::call('templates:sync');
                         \Filament\Notifications\Notification::make()

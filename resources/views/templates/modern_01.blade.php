@@ -7,73 +7,20 @@
 @section('content')
 @section('og_image', $shareUrl)
 
-{{-- Animations Styles --}}
+{{-- Template Theme Variables (override defaults from wedding-animations.css) --}}
 <style>
-    /* Base Animations */
     :root {
-        /* Theming for Shared Components */
-        --color-primary: #f43f5e; /* rose-500 */
-        --color-primary-dark: #e11d48; /* rose-600 */
-        --color-primary-light: #fffcdb;
-        --color-bg-secondary: #fff1f2;
-        --color-text-body: #374151; /* gray-700 */
-        --bg-paper: #ffffff;
-        --bg-input: #ffffff;
-        --font-heading: 'Crimson Pro', serif;
-        --font-body: 'Plus Jakarta Sans', sans-serif;
-        --radius-box: 1rem; /* Rounded modern look */
-        --shadow-box: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        --wedding-primary: #f43f5e;
+        --wedding-primary-dark: #e11d48;
+        --wedding-primary-light: #fffcdb;
+        --wedding-bg: #ffffff;
+        --wedding-bg-secondary: #fff1f2;
+        --wedding-text: #374151;
+        --wedding-font-heading: 'Crimson Pro', serif;
+        --wedding-font-body: 'Plus Jakarta Sans', sans-serif;
+        --wedding-radius: 1rem;
+        --wedding-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
-
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-    @keyframes floatHeart { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-15px) rotate(5deg); } }
-    @keyframes sparkle { 0%, 100% { opacity: 0; transform: scale(0); } 50% { opacity: 1; transform: scale(1); } }
-    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-    @keyframes gentleBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    @keyframes rotateIn { from { opacity: 0; transform: rotate(-10deg) scale(0.9); } to { opacity: 1; transform: rotate(0) scale(1); } }
-    
-    .animate-fade-up { animation: fadeInUp 1s ease-out forwards; }
-    .animate-fade-down { animation: fadeInDown 1s ease-out forwards; }
-    .animate-zoom-in { animation: zoomIn 1s ease-out forwards; }
-    .animate-float-heart { animation: floatHeart 4s ease-in-out infinite; }
-    .animate-sparkle { animation: sparkle 2s ease-in-out infinite; }
-    .animate-pulse { animation: pulse 2s ease-in-out infinite; }
-    .animate-shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); background-size: 200% 100%; animation: shimmer 3s infinite; }
-    .animate-gentle-bounce { animation: gentleBounce 3s ease-in-out infinite; }
-    .animate-rotate-in { animation: rotateIn 0.8s ease-out forwards; }
-    
-    .delay-200 { animation-delay: 0.2s; }
-    .delay-300 { animation-delay: 0.3s; }
-    .delay-500 { animation-delay: 0.5s; }
-    .delay-700 { animation-delay: 0.7s; }
-    .delay-1000 { animation-delay: 1s; }
-    
-    /* Floating Hearts Decoration */
-    .floating-heart { position: absolute; font-size: 20px; opacity: 0.4; animation: floatHeart 6s ease-in-out infinite; pointer-events: none; z-index: 5; }
-    
-    /* Sparkle Stars */
-    .sparkle-star { position: absolute; width: 6px; height: 6px; background: gold; border-radius: 50%; animation: sparkle 2s ease-in-out infinite; pointer-events: none; }
-    
-    /* Glassmorphism Cards */
-    .glass-card { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
-    
-    /* Premium Hover Effects */
-    .hover-lift { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    .hover-lift:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
-    
-    /* Scroll Reveal Enhancement */
-    .reveal-on-scroll { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-    .reveal-on-scroll.revealed { opacity: 1; transform: translateY(0); }
-    
-    /* Music Player Spin */
-    .animate-spin-slow { animation: spin 3s linear infinite; }
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    
-    /* Image Parallax Effect */
-    .parallax-bg { background-attachment: fixed; background-size: cover; background-position: center; }
 </style>
 
 <div class="max-w-[480px] mx-auto bg-white min-h-screen shadow-2xl relative text-gray-800 overflow-hidden">
@@ -143,7 +90,7 @@
 
     {{-- INTRO COUPLE --}}
     <section class="py-16 px-6 bg-white">
-        <div class="text-center mb-12 animate-on-scroll">
+        <div data-aos="fade-up">
             <span class="block w-[1px] h-12 bg-gray-300 mx-auto mb-6"></span>
             <p class="text-gray-400 text-xs tracking-[0.4em] uppercase mb-4 font-sans">The Couple</p>
             <h2 class="text-4xl md:text-5xl font-serif text-gray-900 leading-tight">Cô Dâu & Chú Rể</h2>
@@ -151,7 +98,7 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {{-- Chú rể --}}
-            <div class="flex flex-col items-center animate-on-scroll group">
+            <div data-aos="fade-up">
                 <div class="w-full aspect-[3/4] overflow-hidden mb-4 relative bg-gray-100">
                     <img src="{{ $groomPhoto }}" class="w-full h-full object-cover transition duration-1000 group-hover:scale-105 brightness-95 group-hover:brightness-100 grayscale-[5%] group-hover:grayscale-0">
                 </div>
@@ -331,7 +278,7 @@
             @if($wedding->gallery_images->isNotEmpty())
                 @foreach($wedding->gallery_images as $media)
                 <div class="break-inside-avoid overflow-hidden shadow-sm hover:shadow-2xl transition duration-500 cursor-pointer group bg-white p-1">
-                    <img src="{{ $media->getUrl() }}" class="w-full h-auto transition duration-1000 group-hover:scale-[1.02] filter grayscale-[10%] group-hover:grayscale-0">
+                    <img src="{{ $media->getUrl('gallery_web') ?: $media->getUrl() }}" class="w-full h-auto transition duration-1000 group-hover:scale-[1.02] filter grayscale-[10%] group-hover:grayscale-0">
                 </div>
                 @endforeach
             @else
@@ -343,6 +290,7 @@
                 @endforeach
             @endif
         </div>
+
     </section>
 
     {{-- RSVP Section --}}
@@ -362,22 +310,6 @@
         </div>
     </footer>
 </div>
-
-<script>
-    // Intersection Observer for scroll animations
-    document.addEventListener('DOMContentLoaded', () => {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-up');
-                    observer.unobserve(entry.target);
-                }
-            });
-        });
-        
-        document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
-    });
-</script>
 
 @endsection
 

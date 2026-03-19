@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DemoContentResource\Pages;
 use App\Filament\Resources\DemoContentResource\RelationManagers;
 use App\Models\DemoContent;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -18,6 +19,19 @@ class DemoContentResource extends Resource
     protected static ?string $model = DemoContent::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationGroup = 'Cài đặt';
+    protected static ?string $navigationLabel = 'Nội dung Demo';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Filament::getCurrentPanel()?->getId() === 'admin';
+    }
+
+    public static function canAccess(): bool
+    {
+        return Filament::getCurrentPanel()?->getId() === 'admin';
+    }
 
     public static function form(Form $form): Form
     {

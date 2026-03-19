@@ -337,7 +337,7 @@
                                 'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=800',
                                 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800'
                             ];
-                            $imagesToDisplay = $galleryImages->isNotEmpty() ? $galleryImages->map->getUrl() : $placeholders;
+                            $imagesToDisplay = $galleryImages->isNotEmpty() ? $galleryImages->map->getUrl('gallery_web') : $placeholders;
                         @endphp
                         @foreach($imagesToDisplay as $imgUrl)
                             <div class="swiper-slide">

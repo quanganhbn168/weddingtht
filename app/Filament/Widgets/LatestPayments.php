@@ -3,15 +3,21 @@
 namespace App\Filament\Widgets;
 
 use App\Models\PaymentTransaction;
+use Filament\Facades\Filament;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 
 class LatestPayments extends BaseWidget
 {
-    protected static ?string $heading = '💳 Thanh Toán Gần Đây';
+    protected static ?string $heading = 'Thanh Toán Gần Đây';
     protected static ?int $sort = 5;
     protected int | string | array $columnSpan = 1;
+
+    public static function canView(): bool
+    {
+        return Filament::getCurrentPanel()?->getId() === 'admin';
+    }
 
     public function table(Table $table): Table
     {

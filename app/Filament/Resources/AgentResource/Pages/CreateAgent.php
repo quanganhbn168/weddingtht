@@ -22,10 +22,5 @@ class CreateAgent extends CreateRecord
         if ($user) {
             $user->update(['role' => User::ROLE_AGENT]);
         }
-        
-        // Start trial if no dates set
-        if (!$this->record->trial_ends_at && $this->record->subscription_plan === 'trial') {
-            $this->record->startTrial();
-        }
     }
 }

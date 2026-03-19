@@ -25,6 +25,16 @@ class SiteSettings extends Page implements HasForms
     protected static ?int $navigationSort = 99;
     protected static ?string $navigationGroup = 'Hệ thống';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return \Filament\Facades\Filament::getCurrentPanel()?->getId() === 'admin';
+    }
+
+    public static function canAccess(): bool
+    {
+        return \Filament\Facades\Filament::getCurrentPanel()?->getId() === 'admin';
+    }
+
     protected static string $view = 'filament.pages.site-settings';
 
     public ?array $data = [];

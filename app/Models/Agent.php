@@ -40,26 +40,20 @@ class Agent extends Model
     const TYPE_WEDDING_PLANNER = 'wedding_planner';
     const TYPE_OTHER = 'other';
 
-    // Subscription plans (monthly)
-    const PLAN_TRIAL = 'trial';           // Free 14 days
-    const PLAN_BASIC = 'basic';           // 199K/month
-    const PLAN_STANDARD = 'standard';     // 499K/month
-    const PLAN_ENTERPRISE = 'enterprise'; // 999K/month
+    // Gói đăng ký
+    const PLAN_STANDARD = 'standard';     // Gói cơ bản
+    const PLAN_PRO = 'pro';              // Gói nâng cao
 
-    // Quota limits per plan (weddings per month)
+    // Giới hạn quota theo gói (số thiệp)
     const PLAN_LIMITS = [
-        self::PLAN_TRIAL => 5,
-        self::PLAN_BASIC => 10,
-        self::PLAN_STANDARD => 30,
-        self::PLAN_ENTERPRISE => -1, // Unlimited
+        self::PLAN_STANDARD => 20,
+        self::PLAN_PRO => -1, // Không giới hạn
     ];
 
-    // Pricing per plan (VND per month)
+    // Giá theo gói (VND)
     const PLAN_PRICES = [
-        self::PLAN_TRIAL => 0,
-        self::PLAN_BASIC => 199000,
-        self::PLAN_STANDARD => 499000,
-        self::PLAN_ENTERPRISE => 999000,
+        self::PLAN_STANDARD => 0,
+        self::PLAN_PRO => 499000,
     ];
 
     // ==========================================
@@ -86,23 +80,19 @@ class Agent extends Model
     // ==========================================
 
     /**
-     * Check if agent is on trial
+     * Check if agent is on standard plan
      */
-    public function isOnTrial(): bool
+    public function isStandard(): bool
     {
-        return $this->subscription_plan === self::PLAN_TRIAL;
+        return $this->subscription_plan === self::PLAN_STANDARD;
     }
 
     /**
-     * Check if trial is still valid
+     * Check if agent is on pro plan
      */
-    public function isTrialValid(): bool
+    public function isPro(): bool
     {
-        if (!$this->isOnTrial()) {
-            return false;
-        }
-
-        return $this->trial_ends_at && $this->trial_ends_at->isFuture();
+        return $this->subscription_plan === self::PLAN_PRO;
     }
 
     /**
@@ -112,10 +102,6 @@ class Agent extends Model
     {
         if (!$this->is_active) {
             return false;
-        }
-
-        if ($this->isOnTrial()) {
-            return $this->isTrialValid();
         }
 
         if ($this->subscription_ends_at && $this->subscription_ends_at->isPast()) {
@@ -151,7 +137,7 @@ class Agent extends Model
         $limit = self::PLAN_LIMITS[$this->subscription_plan] ?? 0;
         
         if ($limit === -1) {
-            return 'Unlimited';
+            return 'Không giới hạn';
         }
 
         return max(0, $limit - $this->quota_used);
@@ -186,11 +172,9 @@ class Agent extends Model
     public function getSubscriptionPlanLabel(): string
     {
         return match($this->subscription_plan) {
-            self::PLAN_TRIAL => 'Dùng thử (14 ngày)',
-            self::PLAN_BASIC => 'Cơ bản (199K/tháng)',
-            self::PLAN_STANDARD => 'Tiêu chuẩn (499K/tháng)',
-            self::PLAN_ENTERPRISE => 'Doanh nghiệp (999K/tháng)',
-            default => 'Không xác định',
+            self::PLAN_STANDARD => 'Standard',
+            self::PLAN_PRO => 'Pro',
+            default => 'Chưa xác định',
         };
     }
 
@@ -203,13 +187,12 @@ class Agent extends Model
     }
 
     /**
-     * Start trial period (1 month)
+     * Upgrade to Pro
      */
-    public function startTrial(): void
+    public function upgradeToPro(): void
     {
         $this->update([
-            'subscription_plan' => self::PLAN_TRIAL,
-            'trial_ends_at' => now()->addMonth(),
+            'subscription_plan' => self::PLAN_PRO,
         ]);
     }
 }

@@ -34,15 +34,7 @@ enum SubscriptionPlan: string
             self::ENTERPRISE => -1, // Unlimited
         };
     }
-    
-    public function maxCards(): int
-    {
-        return match($this) {
-            self::FREE => 1,
-            self::PRO => 10,
-            self::ENTERPRISE => -1,
-        };
-    }
+
     
     public static function options(): array
     {

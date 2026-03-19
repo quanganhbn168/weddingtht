@@ -2,6 +2,11 @@
 
 namespace App\Filament\Resources\Weddings\Tables;
 
+use App\Enums\WeddingStatus;
+use App\Enums\WeddingTier;
+use App\Models\Template;
+use App\Models\Wedding;
+use BackedEnum;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -12,7 +17,6 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
-use App\Models\Wedding;
 
 class WeddingsTable
 {
@@ -45,7 +49,7 @@ class WeddingsTable
                         'primary' => 'standard',
                         'success' => 'pro',
                     ])
-                    ->formatStateUsing(fn ($state) => $state instanceof \BackedEnum ? strtoupper($state->value) : strtoupper((string) $state)),
+                    ->formatStateUsing(fn ($state) => $state instanceof BackedEnum ? strtoupper($state->value) : strtoupper((string) $state)),
                 
                 // Demo badge
                 IconColumn::make('is_demo')
@@ -73,27 +77,20 @@ class WeddingsTable
                         'success' => 'published',
                         'danger' => 'archived',
                     ])
-                    ->formatStateUsing(fn ($state) => match ($state instanceof \BackedEnum ? $state->value : $state) {
+                    ->formatStateUsing(fn ($state) => match ($state instanceof BackedEnum ? $state->value : $state) {
                         'draft' => 'Nháp',
                         'preview' => 'Preview',
                         'published' => 'Đã xuất bản',
                         'archived' => 'Lưu trữ',
-                        default => $state instanceof \BackedEnum ? $state->label() : ($state ?? 'N/A'),
+                        default => $state instanceof BackedEnum ? $state->label() : ($state ?? 'N/A'),
                     }),
                 
                 // Template
                 TextColumn::make('template_view')
                     ->label('Template')
-                    ->formatStateUsing(fn ($state) => match ((string) $state) {
-                        'templates.modern_01' => 'Modern',
-                        'templates.elegant_02' => 'Elegant',
-                        'templates.minimal_03' => 'Minimal',
-                        'templates.luxury_gold' => 'Luxury Gold',
-                        'templates.traditional_red' => 'Traditional',
-                        'templates.cherry_blossom' => '🌸 Cherry',
-                        'templates.cinematic_story' => '🎬 Cinema',
-                        'templates.galaxy_dreams' => '✨ Galaxy',
-                        default => $state,
+                    ->formatStateUsing(function ($state) {
+                        $template = Template::where('view_path', (string) $state)->first();
+                        return $template?->name ?? str_replace('templates.', '', (string) $state);
                     })
                     ->badge()
                     ->color('info'),
@@ -110,37 +107,22 @@ class WeddingsTable
                 TernaryFilter::make('is_demo')
                     ->label('Loại')
                     ->placeholder('Tất cả')
-                    ->trueLabel('🧪 Demo')
-                    ->falseLabel('👥 Khách hàng'),
+                    ->trueLabel('Demo')
+                    ->falseLabel('Khách hàng'),
                 
                 // Filter: Tier
                 SelectFilter::make('tier')
                     ->label('Gói dịch vụ')
-                    ->options([
-                        'standard' => '📦 Standard',
-                        'pro' => '⭐ Pro',
-                    ]),
+                    ->options(WeddingTier::options()),
                 
                 SelectFilter::make('status')
                     ->label('Trạng thái')
-                    ->options([
-                        'draft' => 'Bản nháp',
-                        'preview' => 'Xem trước',
-                        'published' => 'Đã xuất bản',
-                        'archived' => 'Đã lưu trữ',
-                    ]),
+                    ->options(WeddingStatus::options()),
                 SelectFilter::make('template_view')
                     ->label('Template')
-                    ->options([
-                        'templates.modern_01' => 'Modern',
-                        'templates.elegant_02' => 'Elegant',
-                        'templates.minimal_03' => 'Minimal',
-                        'templates.luxury_gold' => 'Luxury Gold',
-                        'templates.traditional_red' => 'Traditional',
-                        'templates.cherry_blossom' => '🌸 Cherry Blossom',
-                        'templates.cinematic_story' => '🎬 Cinematic Story',
-                        'templates.galaxy_dreams' => '✨ Galaxy Dreams',
-                    ]),
+                    ->options(fn () => Template::where('is_active', true)
+                        ->pluck('name', 'view_path')
+                        ->toArray()),
             ])
             ->actions([
                 ViewAction::make()

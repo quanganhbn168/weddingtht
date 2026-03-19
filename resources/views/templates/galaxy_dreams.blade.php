@@ -314,7 +314,7 @@
             @if($wedding->gallery_images->isNotEmpty())
                 @foreach($wedding->gallery_images as $media)
                 <div class="break-inside-avoid relative rounded-xl overflow-hidden shadow-lg border border-white/10 group">
-                    <img src="{{ $media->getUrl() }}" class="w-full transition duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                    <img src="{{ $media->getUrl('gallery_web') ?: $media->getUrl() }}" class="w-full transition duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#ec4899]/30 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
                 </div>
                 @endforeach

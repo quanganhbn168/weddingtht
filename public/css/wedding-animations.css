@@ -1,0 +1,169 @@
+/* ==========================================
+   WEDDING ANIMATIONS - Shared CSS
+   ==========================================
+   CSS rieng cho cac effects ma AOS KHONG cover.
+   Scroll animations: dung AOS (data-aos="fade-up")
+   ========================================== */
+
+/* ==========================================
+   KEYFRAMES (chi nhung cai AOS khong co)
+   ========================================== */
+
+@keyframes floatHeart {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes gentleBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 5px var(--wedding-primary, #f43f5e); }
+    50% { box-shadow: 0 0 20px var(--wedding-primary, #f43f5e); }
+}
+
+/* ==========================================
+   INFINITE ANIMATION UTILITIES
+   (AOS chi lam 1 lan, day la loop animations)
+   ========================================== */
+
+.animate-float-heart { animation: floatHeart 4s ease-in-out infinite; }
+.animate-sparkle { animation: sparkle 2s ease-in-out infinite; }
+.animate-pulse { animation: pulse 2s ease-in-out infinite; }
+.animate-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+}
+.animate-gentle-bounce { animation: gentleBounce 3s ease-in-out infinite; }
+.animate-spin-slow { animation: spin 3s linear infinite; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-glow { animation: glow 2s ease-in-out infinite; }
+
+/* ==========================================
+   ANIMATION DELAYS (dung voi AOS: data-aos-delay)
+   hoac voi infinite animations
+   ========================================== */
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-1000 { animation-delay: 1s; }
+
+/* ==========================================
+   DECORATIVE ELEMENTS
+   ========================================== */
+
+.floating-heart {
+    position: absolute;
+    font-size: 20px;
+    opacity: 0.4;
+    animation: floatHeart 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.sparkle-star {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: gold;
+    border-radius: 50%;
+    animation: sparkle 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* ==========================================
+   GLASSMORPHISM
+   ========================================== */
+
+.glass-card {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.glass-dark {
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ==========================================
+   HOVER EFFECTS
+   ========================================== */
+
+.hover-lift {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+/* ==========================================
+   PARALLAX
+   ========================================== */
+
+.parallax-bg {
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+
+@supports (-webkit-touch-callout: none) {
+    .parallax-bg {
+        background-attachment: scroll;
+    }
+}
+
+/* ==========================================
+   STANDARD CSS VARIABLES (defaults)
+   Moi template override lai trong :root
+   ========================================== */
+
+:root {
+    --wedding-primary: #f43f5e;
+    --wedding-primary-dark: #e11d48;
+    --wedding-primary-light: #fffcdb;
+    --wedding-primary-rgb: 244, 63, 94;
+    --wedding-bg: #ffffff;
+    --wedding-bg-secondary: #fff1f2;
+    --wedding-text: #374151;
+    --wedding-text-light: #9ca3af;
+    --wedding-font-heading: 'Crimson Pro', serif;
+    --wedding-font-body: 'Plus Jakarta Sans', sans-serif;
+    --wedding-radius: 1rem;
+    --wedding-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}

@@ -44,21 +44,18 @@ class Subscription extends Model
         return match($plan) {
             self::PLAN_FREE => [
                 'max_weddings' => 1,
-                'max_business_cards' => 1,
                 'premium_templates' => false,
                 'custom_domain' => false,
                 'analytics' => false,
             ],
             self::PLAN_PRO => [
                 'max_weddings' => 10,
-                'max_business_cards' => 10,
                 'premium_templates' => true,
                 'custom_domain' => true,
                 'analytics' => true,
             ],
             self::PLAN_ENTERPRISE => [
                 'max_weddings' => -1, // Unlimited
-                'max_business_cards' => -1,
                 'premium_templates' => true,
                 'custom_domain' => true,
                 'analytics' => true,

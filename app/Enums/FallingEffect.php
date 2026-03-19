@@ -15,13 +15,13 @@ enum FallingEffect: string
     public function label(): string
     {
         return match($this) {
-            self::HEARTS => '💕 Trái tim',
-            self::PETALS => '🌸 Cánh hoa',
-            self::SNOW => '❄️ Tuyết',
-            self::LEAVES => '🍂 Lá rơi',
-            self::STARS => '⭐ Ngôi sao',
-            self::SHOOTING_STARS => '🌠 Sao băng (Pro)',
-            self::NONE => '🚫 Không hiệu ứng',
+            self::HEARTS => 'Trái tim',
+            self::PETALS => 'Cánh hoa',
+            self::SNOW => 'Tuyết rơi',
+            self::LEAVES => 'Lá rơi',
+            self::STARS => 'Ngôi sao',
+            self::SHOOTING_STARS => 'Sao băng (Pro)',
+            self::NONE => 'Không hiệu ứng',
         };
     }
     

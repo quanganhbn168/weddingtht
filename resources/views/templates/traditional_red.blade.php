@@ -296,7 +296,7 @@
             @if($wedding->gallery_images->isNotEmpty())
                 @foreach($wedding->gallery_images as $media)
                 <div class="break-inside-avoid p-[2px] bg-gradient-to-br from-[#d4af37] to-[#8a1c1c]">
-                    <img src="{{ $media->getUrl() }}" class="w-full grayscale-[50%] hover:grayscale-0 transition duration-500">
+                    <img src="{{ $media->getUrl('gallery_web') ?: $media->getUrl() }}" class="w-full grayscale-[50%] hover:grayscale-0 transition duration-500">
                 </div>
                 @endforeach
             @else

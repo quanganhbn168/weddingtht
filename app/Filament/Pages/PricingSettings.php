@@ -16,6 +16,16 @@ class PricingSettings extends Page
     protected static ?string $title = 'Cài đặt Bảng giá';
     protected static ?string $navigationGroup = 'Cài đặt';
     protected static ?int $navigationSort = 10;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return \Filament\Facades\Filament::getCurrentPanel()?->getId() === 'admin';
+    }
+
+    public static function canAccess(): bool
+    {
+        return \Filament\Facades\Filament::getCurrentPanel()?->getId() === 'admin';
+    }
     
     protected static string $view = 'filament.pages.pricing-settings';
 
@@ -50,7 +60,7 @@ class PricingSettings extends Page
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('💒 Giá Thiệp Cưới (Khách lẻ)')
+                Forms\Components\Section::make('Giá Thiệp Cưới (Khách lẻ)')
                     ->description('Giá bán trọn gói cho khách hàng cá nhân')
                     ->schema([
                         Forms\Components\Grid::make(3)
@@ -76,7 +86,7 @@ class PricingSettings extends Page
                             ]),
                     ]),
                     
-                Forms\Components\Section::make('🏢 Giá Đại lý (Thuê theo tháng)')
+                Forms\Components\Section::make('Giá Đại lý (Thuê theo tháng)')
                     ->description('Giá thuê hàng tháng cho đại lý/studio')
                     ->schema([
                         Forms\Components\Grid::make(3)
@@ -115,7 +125,7 @@ class PricingSettings extends Page
                             ]),
                     ]),
                     
-                Forms\Components\Section::make('📊 Giới hạn theo gói')
+                Forms\Components\Section::make('Giới hạn theo gói')
                     ->description('Số ảnh và thời hạn cho từng gói')
                     ->schema([
                         Forms\Components\Grid::make(4)

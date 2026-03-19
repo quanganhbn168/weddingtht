@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -26,13 +27,13 @@ class UserResource extends Resource
     
     public static function shouldRegisterNavigation(): bool
     {
-        return \Filament\Facades\Filament::getCurrentPanel()->getId() === 'admin';
+        return Filament::getCurrentPanel()?->getId() === 'admin';
     }
 
     public static function canAccess(): bool
     {
-        return \Filament\Facades\Filament::getCurrentPanel()->getId() === 'admin' 
-            && (auth()->user()->isSuperAdmin() || auth()->user()->isAdmin());
+        return Filament::getCurrentPanel()?->getId() === 'admin' 
+            && (auth()->user()?->isSuperAdmin() || auth()->user()?->isAdmin());
     }
 
     /**
@@ -62,9 +63,9 @@ class UserResource extends Resource
                         Forms\Components\Select::make('role')
                             ->label('Vai trò')
                             ->options([
-                                User::ROLE_ADMIN => '👑 Quản trị viên',
-                                User::ROLE_AGENT => '🏪 Đại lý',
-                                User::ROLE_CUSTOMER => '💕 Khách hàng',
+                                User::ROLE_ADMIN => 'Quản trị viên',
+                                User::ROLE_AGENT => 'Đại lý',
+                                User::ROLE_CUSTOMER => 'Khách hàng',
                             ])
                             ->default(User::ROLE_CUSTOMER)
                             ->required(),
@@ -108,9 +109,9 @@ class UserResource extends Resource
                         default => 'gray',
                     })
                     ->formatStateUsing(fn ($state) => match($state) {
-                        User::ROLE_ADMIN => '👑 Admin',
-                        User::ROLE_AGENT => '🏪 Đại lý',
-                        User::ROLE_CUSTOMER => '💕 Khách hàng',
+                        User::ROLE_ADMIN => 'Admin',
+                        User::ROLE_AGENT => 'Đại lý',
+                        User::ROLE_CUSTOMER => 'Khách hàng',
                         default => $state ?? 'Chưa xác định',
                     }),
                 Tables\Columns\TextColumn::make('managingAgent.name')

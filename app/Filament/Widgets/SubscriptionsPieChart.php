@@ -3,13 +3,19 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Subscription;
+use Filament\Facades\Filament;
 use Filament\Widgets\ChartWidget;
 
 class SubscriptionsPieChart extends ChartWidget
 {
-    protected static ?string $heading = '📊 Phân bố gói đăng ký';
+    protected static ?string $heading = 'Phân bố gói đăng ký';
     protected static ?int $sort = 6;
     protected static ?string $maxHeight = '250px';
+
+    public static function canView(): bool
+    {
+        return Filament::getCurrentPanel()?->getId() === 'admin';
+    }
 
     protected function getData(): array
     {

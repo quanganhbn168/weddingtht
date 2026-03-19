@@ -9,7 +9,7 @@
 
 @php
     $galleryImages = $wedding->gallery_images;
-    $imagesToDisplay = $galleryImages->isNotEmpty() ? $galleryImages->map->getUrl() : [
+    $imagesToDisplay = $galleryImages->isNotEmpty() ? $galleryImages->map->getUrl('gallery_web') : [
         'https://images.unsplash.com/photo-1519741497674-611481863552?w=800',
         'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800',
         'https://images.unsplash.com/photo-1522673607200-1645062cd958?w=800'

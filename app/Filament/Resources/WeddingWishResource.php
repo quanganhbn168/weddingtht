@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\WeddingWishResource\Pages;
 use App\Models\WeddingWish;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -11,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class WeddingWishResource extends Resource
 {
@@ -20,7 +22,7 @@ class WeddingWishResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        if (\Filament\Facades\Filament::getCurrentPanel()->getId() === 'app') {
+        if (Filament::getCurrentPanel()?->getId() === 'app') {
             return null;
         }
 
@@ -35,7 +37,7 @@ class WeddingWishResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $user = auth()->user();
-        $panelId = \Filament\Facades\Filament::getCurrentPanel()->getId();
+        $panelId = Filament::getCurrentPanel()?->getId();
         $query = parent::getEloquentQuery();
 
         if ($panelId === 'admin') {
@@ -128,7 +130,7 @@ class WeddingWishResource extends Resource
                         ->label('Duyệt đã chọn')
                         ->icon('heroicon-o-check')
                         ->color('success')
-                        ->action(fn (\Illuminate\Database\Eloquent\Collection $records) => $records->each->approve()),
+                        ->action(fn (Collection $records) => $records->each->approve()),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);

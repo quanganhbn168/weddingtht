@@ -3,15 +3,21 @@
 namespace App\Filament\Widgets;
 
 use App\Models\PaymentTransaction;
+use Filament\Facades\Filament;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
 
 class RevenueChart extends ChartWidget
 {
-    protected static ?string $heading = '💰 Doanh thu 30 ngày qua';
+    protected static ?string $heading = 'Doanh thu 30 ngày qua';
     protected static ?int $sort = 3;
     protected static ?string $maxHeight = '300px';
     protected int | string | array $columnSpan = 'full';
+
+    public static function canView(): bool
+    {
+        return Filament::getCurrentPanel()?->getId() === 'admin';
+    }
 
     protected function getData(): array
     {

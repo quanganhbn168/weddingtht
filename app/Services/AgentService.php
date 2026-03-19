@@ -30,8 +30,7 @@ class AgentService
             'quota_used' => $agent->quota_used,
             'quota_remaining' => $agent->getRemainingQuota(),
             'subscription_plan' => $agent->getSubscriptionPlanLabel(),
-            'is_trial' => $agent->isOnTrial(),
-            'trial_ends_at' => $agent->trial_ends_at,
+            'is_pro' => $agent->isPro(),
             'subscription_ends_at' => $agent->subscription_ends_at,
         ];
     }

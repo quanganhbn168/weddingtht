@@ -5,10 +5,11 @@ namespace App\Filament\Resources\DemoWeddings;
 use App\Filament\Resources\DemoWeddings\Pages\CreateDemoWedding;
 use App\Filament\Resources\DemoWeddings\Pages\EditDemoWedding;
 use App\Filament\Resources\DemoWeddings\Pages\ListDemoWeddings;
-use App\Models\Wedding;
+use App\Enums\FallingEffect;
 use App\Enums\WeddingStatus;
 use App\Enums\WeddingTier;
-use App\Enums\FallingEffect;
+use App\Models\Wedding;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -50,6 +51,16 @@ class DemoWeddingResource extends Resource
     public static function getNavigationSort(): ?int
     {
         return 1;
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Filament::getCurrentPanel()?->getId() === 'admin';
+    }
+
+    public static function canAccess(): bool
+    {
+        return Filament::getCurrentPanel()?->getId() === 'admin';
     }
 
     public static function getNavigationBadge(): ?string

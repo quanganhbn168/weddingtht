@@ -7,10 +7,9 @@ Variety of shapes, sizes, colors for each effect type
     $effectRaw = $wedding->falling_effect ?? 'hearts';
     $effect = is_object($effectRaw) ? $effectRaw->value : (string)$effectRaw;
     
-    // Get tier enum and check if effects are enabled for this tier
-    $tierValue = is_object($wedding->tier) ? $wedding->tier->value : (string)($wedding->tier ?? 'basic');
-    $tierEnum = \App\Enums\WeddingTier::tryFrom($tierValue) ?? \App\Enums\WeddingTier::BASIC;
-    $hasEffects = $tierEnum->hasEffects(); // Standard & Pro have effects, Basic does not
+    // Check if effects are enabled via FeatureGate (Pro only)
+    $hasEffects = \App\Services\FeatureGate::can($wedding, 'falling_effect');
+    $tierEnum = $wedding->tier instanceof \App\Enums\WeddingTier ? $wedding->tier : (\App\Enums\WeddingTier::tryFrom($wedding->tier ?? 'standard') ?? \App\Enums\WeddingTier::STANDARD);
     
     $showEffect = $hasEffects && $effect !== 'none';
 @endphp

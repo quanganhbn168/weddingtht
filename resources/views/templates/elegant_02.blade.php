@@ -285,7 +285,7 @@
             @if($wedding->gallery_images->isNotEmpty())
                 @foreach($wedding->gallery_images as $media)
                 <div class="break-inside-avoid p-2 bg-white border border-[#eae4dc] shadow-md">
-                    <img src="{{ $media->getUrl() }}" class="w-full h-auto">
+                    <img src="{{ $media->getUrl('gallery_web') ?: $media->getUrl() }}" class="w-full h-auto">
                 </div>
                 @endforeach
             @else
