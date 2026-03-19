@@ -8,14 +8,14 @@
     if ($isBride) {
         $mainTime = $wedding->bride_ceremony_time ?? $wedding->bride_reception_time;
         $mainDate = $wedding->bride_ceremony_date ?? $wedding->bride_reception_date ?? $wedding->event_date;
-        $mainVenue = $wedding->bride_address;
-        $mainAddress = '';
+        $mainVenue = 'Tư gia nhà gái';
+        $mainAddress = $wedding->bride_address;
         $mainMapUrl = $wedding->bride_ceremony_map_url ?? $wedding->bride_map_url;
     } else {
         $mainTime = $wedding->groom_ceremony_time ?? $wedding->groom_reception_time;
         $mainDate = $wedding->groom_ceremony_date ?? $wedding->groom_reception_date ?? $wedding->event_date;
-        $mainVenue = $wedding->groom_address;
-        $mainAddress = '';
+        $mainVenue = 'Tư gia nhà trai';
+        $mainAddress = $wedding->groom_address;
         $mainMapUrl = $wedding->groom_ceremony_map_url ?? $wedding->groom_map_url;
     }
 @endphp
