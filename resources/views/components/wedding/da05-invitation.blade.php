@@ -25,7 +25,7 @@
     <img src="{{ asset('images/hoa-1.png') }}" class="floral-corner bottom-0 right-0 rotate-180" alt="">
 
     {{-- Family Info Grid: Nhà Trai | Nhà Gái --}}
-    <div class="grid grid-cols-2 gap-4 mb-10 max-w-sm mx-auto items-stretch" data-aos="fade-up">
+    <div class="grid grid-cols-2 gap-4 mb-10 max-w-md mx-auto items-stretch" data-aos="fade-up">
         {{-- Nhà Trai --}}
         <div class="text-center flex flex-col">
             <p class="font-display text-sm font-bold text-gold tracking-wider mb-2">Nhà Trai</p>
