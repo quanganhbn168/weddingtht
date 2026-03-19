@@ -25,25 +25,25 @@
     <img src="{{ asset('images/hoa-1.png') }}" class="floral-corner bottom-0 right-0 rotate-180" alt="">
 
     {{-- Family Info Grid: Nhà Trai | Nhà Gái --}}
-    <div class="grid grid-cols-2 gap-4 mb-10 max-w-sm mx-auto" data-aos="fade-up">
+    <div class="grid grid-cols-2 gap-4 mb-10 max-w-sm mx-auto items-stretch" data-aos="fade-up">
         {{-- Nhà Trai --}}
-        <div class="text-center">
+        <div class="text-center flex flex-col">
             <p class="font-display text-sm font-bold text-gold tracking-wider mb-2">Nhà Trai</p>
             <p class="text-xs text-gray-600 font-semibold">{{ $wedding->groom_father }}</p>
             <p class="text-xs text-gray-600 font-semibold mb-2">{{ $wedding->groom_mother }}</p>
-            <p class="text-[10px] text-gray-400 italic leading-tight mb-3">{{ $wedding->groom_address }}</p>
+            <p class="text-[10px] text-gray-400 italic leading-tight mb-3 flex-1">{{ $wedding->groom_address }}</p>
             @if($wedding->groom_ceremony_map_url)
-            <a href="{{ $wedding->groom_ceremony_map_url }}" target="_blank" class="inline-block border border-gold/40 rounded-full px-4 py-1.5 text-[10px] font-bold text-gold tracking-wider hover:bg-gold/10 transition uppercase">Xem chỉ đường</a>
+            <a href="{{ $wedding->groom_ceremony_map_url }}" target="_blank" class="inline-block border border-gold/40 rounded-full px-4 py-1.5 text-[10px] font-bold text-gold tracking-wider hover:bg-gold/10 transition uppercase mt-auto">Xem chỉ đường</a>
             @endif
         </div>
         {{-- Nhà Gái --}}
-        <div class="text-center">
+        <div class="text-center flex flex-col">
             <p class="font-display text-sm font-bold text-gold tracking-wider mb-2">Nhà Gái</p>
             <p class="text-xs text-gray-600 font-semibold">{{ $wedding->bride_father }}</p>
             <p class="text-xs text-gray-600 font-semibold mb-2">{{ $wedding->bride_mother }}</p>
-            <p class="text-[10px] text-gray-400 italic leading-tight mb-3">{{ $wedding->bride_address }}</p>
+            <p class="text-[10px] text-gray-400 italic leading-tight mb-3 flex-1">{{ $wedding->bride_address }}</p>
             @if($wedding->bride_ceremony_map_url)
-            <a href="{{ $wedding->bride_ceremony_map_url }}" target="_blank" class="inline-block border border-gold/40 rounded-full px-4 py-1.5 text-[10px] font-bold text-gold tracking-wider hover:bg-gold/10 transition uppercase">Xem chỉ đường</a>
+            <a href="{{ $wedding->bride_ceremony_map_url }}" target="_blank" class="inline-block border border-gold/40 rounded-full px-4 py-1.5 text-[10px] font-bold text-gold tracking-wider hover:bg-gold/10 transition uppercase mt-auto">Xem chỉ đường</a>
             @endif
         </div>
     </div>
