@@ -26,8 +26,17 @@
                 <div><p class="text-[10px] font-bold uppercase text-gray-400">Địa điểm</p><p class="font-bold text-gray-700">{{ $wedding->groom_reception_venue }}</p><p class="text-xs italic text-gray-500">{{ $wedding->groom_reception_address }}</p></div>
             </div>
         </div>
+        @php
+            $DEFAULT_MAP = 'https://maps.google.com/maps?q=Ha+Noi,+Vietnam&output=embed';
+            $groomEmbed = $wedding->groom_map_embed ?: ($wedding->groom_map_url ? str_replace('/maps?', '/maps?', $wedding->groom_map_url) : $DEFAULT_MAP);
+        @endphp
+        @if($wedding->groom_map_embed)
+        <div class="mt-4 rounded-xl overflow-hidden shadow-md" style="height:160px">
+            <iframe src="{{ $wedding->groom_map_embed }}" width="100%" height="160" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        @endif
         @if($wedding->groom_map_url)
-        <a href="{{ $wedding->groom_map_url }}" target="_blank" class="block w-full mt-4 py-3 btn-gold rounded-xl text-center text-sm font-bold uppercase tracking-wider">Xem Bản Đồ</a>
+        <a href="{{ $wedding->groom_map_url }}" target="_blank" class="block w-full mt-3 py-3 btn-gold rounded-xl text-center text-sm font-bold uppercase tracking-wider">Xem Bản Đồ</a>
         @endif
     </div>
     @endif
@@ -51,8 +60,13 @@
                 <div><p class="text-[10px] font-bold uppercase text-gray-400">Địa điểm</p><p class="font-bold text-gray-700">{{ $wedding->bride_reception_venue }}</p><p class="text-xs italic text-gray-500">{{ $wedding->bride_address }}</p></div>
             </div>
         </div>
+        @if($wedding->bride_map_embed)
+        <div class="mt-4 rounded-xl overflow-hidden shadow-md" style="height:160px">
+            <iframe src="{{ $wedding->bride_map_embed }}" width="100%" height="160" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        @endif
         @if($wedding->bride_map_url)
-        <a href="{{ $wedding->bride_map_url }}" target="_blank" class="block w-full mt-4 py-3 btn-gold rounded-xl text-center text-sm font-bold uppercase tracking-wider">Xem Bản Đồ</a>
+        <a href="{{ $wedding->bride_map_url }}" target="_blank" class="block w-full mt-3 py-3 btn-gold rounded-xl text-center text-sm font-bold uppercase tracking-wider">Xem Bản Đồ</a>
         @endif
     </div>
     @endif
