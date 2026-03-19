@@ -8,6 +8,9 @@
     $isBride = $side === 'bride';
     $firstName = $isBride ? $wedding->bride_name : $wedding->groom_name;
     $secondName = $isBride ? $wedding->groom_name : $wedding->bride_name;
+    // Lấy chữ đầu của TÊN (từ cuối trong họ tên tiếng Việt)
+    $firstInitial = mb_strtoupper(mb_substr(trim(strrchr(' ' . trim($firstName), ' ')), 0, 1));
+    $secondInitial = mb_strtoupper(mb_substr(trim(strrchr(' ' . trim($secondName), ' ')), 0, 1));
 @endphp
 
 @if($wedding->event_date)
@@ -15,8 +18,8 @@
     {{-- Couple Monogram --}}
     <div class="mb-8" data-aos="zoom-in">
         <div class="relative inline-block">
-            <span class="font-display text-8xl font-bold text-gold tracking-tight">{{ mb_substr($firstName, 0, 1) }}</span>
-            <span class="font-display text-8xl font-bold text-gold tracking-tight">{{ mb_substr($secondName, 0, 1) }}</span>
+            <span class="font-display text-8xl font-bold text-gold tracking-tight">{{ $firstInitial }}</span>
+            <span class="font-display text-8xl font-bold text-gold tracking-tight">{{ $secondInitial }}</span>
         </div>
         <p class="font-script text-lg text-gold/80 -mt-2">{{ $firstName }} & {{ $secondName }}</p>
         <p class="text-[10px] uppercase tracking-[0.3em] text-gray-400 mt-1 font-bold">Happy Wedding</p>
