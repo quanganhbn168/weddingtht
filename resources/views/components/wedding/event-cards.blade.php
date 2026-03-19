@@ -57,7 +57,7 @@
             </div>
             <div class="flex items-start gap-3">
                 <div class="w-8 h-8 bg-rose/10 rounded-full flex items-center justify-center text-rose shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>
-                <div><p class="text-[10px] font-bold uppercase text-gray-400">Địa điểm</p><p class="font-bold text-gray-700">{{ $wedding->bride_reception_venue }}</p><p class="text-xs italic text-gray-500">{{ $wedding->bride_address }}</p></div>
+                <div><p class="text-[10px] font-bold uppercase text-gray-400">Địa điểm</p><p class="font-bold text-gray-700">{{ $wedding->bride_reception_venue }}</p><p class="text-xs italic text-gray-500">{{ $wedding->bride_reception_address }}</p></div>
             </div>
         </div>
         @if($wedding->bride_map_embed)
@@ -89,7 +89,8 @@
                 <div class="w-8 h-8 bg-rose/10 rounded-full flex items-center justify-center text-rose shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>
                 <div><p class="text-[10px] font-bold uppercase text-gray-400">Địa điểm</p><p class="font-bold text-gray-700">{{ $wedding->bride_address }}</p></div>
             </div>
-        @if($wedding->bride_ceremony_map_embed)
+        </div>
+        @if($wedding->bride_ceremony_map_url)
         <div class="mt-4 rounded-xl overflow-hidden shadow-md" style="height:160px">
             <iframe src="{{ $wedding->bride_ceremony_map_embed }}" width="100%" height="160" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
@@ -116,7 +117,8 @@
                 <div class="w-8 h-8 bg-gold/10 rounded-full flex items-center justify-center text-gold shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>
                 <div><p class="text-[10px] font-bold uppercase text-gray-400">Địa điểm</p><p class="font-bold text-gray-700">{{ $wedding->groom_address }}</p></div>
             </div>
-        @if($wedding->groom_ceremony_map_embed)
+        </div>
+        @if($wedding->groom_ceremony_map_url)
         <div class="mt-4 rounded-xl overflow-hidden shadow-md" style="height:160px">
             <iframe src="{{ $wedding->groom_ceremony_map_embed }}" width="100%" height="160" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
