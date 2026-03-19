@@ -10,13 +10,13 @@
         $mainDate = $wedding->bride_ceremony_date ?? $wedding->bride_reception_date ?? $wedding->event_date;
         $mainVenue = $wedding->bride_reception_venue ?? $wedding->bride_address;
         $mainAddress = $wedding->bride_address;
-        $mainMapUrl = $wedding->bride_map_url;
+        $mainMapUrl = $wedding->bride_ceremony_map_url ?? $wedding->bride_map_url;
     } else {
         $mainTime = $wedding->groom_ceremony_time ?? $wedding->groom_reception_time;
         $mainDate = $wedding->groom_ceremony_date ?? $wedding->groom_reception_date ?? $wedding->event_date;
         $mainVenue = $wedding->groom_reception_venue ?? $wedding->groom_address;
-        $mainAddress = $wedding->groom_reception_address ?? $wedding->groom_address;
-        $mainMapUrl = $wedding->groom_map_url;
+        $mainAddress = $wedding->groom_address;
+        $mainMapUrl = $wedding->groom_ceremony_map_url ?? $wedding->groom_map_url;
     }
 @endphp
 
@@ -32,8 +32,8 @@
             <p class="text-xs text-gray-600 font-semibold">{{ $wedding->groom_father }}</p>
             <p class="text-xs text-gray-600 font-semibold mb-2">{{ $wedding->groom_mother }}</p>
             <p class="text-[10px] text-gray-400 italic leading-tight mb-3">{{ $wedding->groom_address }}</p>
-            @if($wedding->groom_map_url)
-            <a href="{{ $wedding->groom_map_url }}" target="_blank" class="inline-block border border-gold/40 rounded-full px-4 py-1.5 text-[10px] font-bold text-gold tracking-wider hover:bg-gold/10 transition uppercase">Xem chỉ đường</a>
+            @if($wedding->groom_ceremony_map_url)
+            <a href="{{ $wedding->groom_ceremony_map_url }}" target="_blank" class="inline-block border border-gold/40 rounded-full px-4 py-1.5 text-[10px] font-bold text-gold tracking-wider hover:bg-gold/10 transition uppercase">Xem chỉ đường</a>
             @endif
         </div>
         {{-- Nhà Gái --}}
@@ -42,8 +42,8 @@
             <p class="text-xs text-gray-600 font-semibold">{{ $wedding->bride_father }}</p>
             <p class="text-xs text-gray-600 font-semibold mb-2">{{ $wedding->bride_mother }}</p>
             <p class="text-[10px] text-gray-400 italic leading-tight mb-3">{{ $wedding->bride_address }}</p>
-            @if($wedding->bride_map_url)
-            <a href="{{ $wedding->bride_map_url }}" target="_blank" class="inline-block border border-gold/40 rounded-full px-4 py-1.5 text-[10px] font-bold text-gold tracking-wider hover:bg-gold/10 transition uppercase">Xem chỉ đường</a>
+            @if($wedding->bride_ceremony_map_url)
+            <a href="{{ $wedding->bride_ceremony_map_url }}" target="_blank" class="inline-block border border-gold/40 rounded-full px-4 py-1.5 text-[10px] font-bold text-gold tracking-wider hover:bg-gold/10 transition uppercase">Xem chỉ đường</a>
             @endif
         </div>
     </div>
