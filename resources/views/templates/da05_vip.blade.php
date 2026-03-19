@@ -38,7 +38,7 @@
         --font-vietnam: 'Be Vietnam Pro', sans-serif;
     }
 
-    body { font-family: var(--font-body); background: var(--color-bg-cream); color: var(--color-text-body); }
+    body { font-family: var(--font-body) !important; background: var(--color-bg-cream); color: var(--color-text-body); }
     .font-display { font-family: var(--font-display); }
     .font-script { font-family: var(--font-script); }
     .font-vietnam { font-family: 'Philosopher', serif; }
