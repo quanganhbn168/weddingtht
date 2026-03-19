@@ -229,11 +229,6 @@ class WeddingForm
                                             ->url()
                                             ->columnSpanFull(),
 
-                                        Textarea::make('groom_ceremony_map_embed')
-                                            ->label('Google Maps Embed hôn lễ (src iframe)')
-                                            ->placeholder('https://maps.google.com/maps?...')
-                                            ->rows(2)
-                                            ->columnSpanFull(),
                                     ]),
 
                                 
@@ -271,12 +266,6 @@ class WeddingForm
                                             ->url()
                                             ->columnSpanFull(),
 
-                                        Textarea::make('groom_map_embed')
-                                            ->label('Google Maps Embed URL (src iframe)')
-                                            ->placeholder('https://maps.google.com/maps?...')
-                                            ->helperText('Dán URL src từ iframe embed của Google Maps. Nếu trống sẽ fallback về địa điểm mặc định.')
-                                            ->rows(2)
-                                            ->columnSpanFull(),
                                     ]),
                                     
                                 Section::make('QR Mừng cưới nhà trai')
@@ -330,11 +319,6 @@ class WeddingForm
                                             ->url()
                                             ->columnSpanFull(),
 
-                                        Textarea::make('bride_ceremony_map_embed')
-                                            ->label('Google Maps Embed hôn lễ (src iframe)')
-                                            ->placeholder('https://maps.google.com/maps?...')
-                                            ->rows(2)
-                                            ->columnSpanFull(),
                                     ]),
                                 
                                 Section::make('Tiệc cưới nhà gái')
@@ -370,12 +354,6 @@ class WeddingForm
                                             ->url()
                                             ->columnSpanFull(),
 
-                                        Textarea::make('bride_map_embed')
-                                            ->label('Google Maps Embed URL (src iframe)')
-                                            ->placeholder('https://maps.google.com/maps?...')
-                                            ->helperText('Dán URL src từ iframe embed của Google Maps.')
-                                            ->rows(2)
-                                            ->columnSpanFull(),
                                     ]),
                                     
                                 Section::make('QR Mừng cưới nhà gái')
