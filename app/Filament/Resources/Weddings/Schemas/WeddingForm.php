@@ -409,7 +409,7 @@ class WeddingForm
                                             ->multiple()
                                             ->reorderable()
                                             ->panelLayout('grid')
-                                            ->maxFiles(20),
+                                            ->maxFiles(100),
                                     ]),
 
                                 Section::make('Ảnh Film Strip (ngang)')
