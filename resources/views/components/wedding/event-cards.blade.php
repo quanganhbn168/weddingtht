@@ -5,6 +5,25 @@
 --}}
 @props(['wedding', 'side' => 'both', 'groomPhoto', 'bridePhoto'])
 
+@php
+    $gallery = $wedding->gallery_images;
+    $gallery = $gallery instanceof \Illuminate\Support\Collection ? $gallery : collect($gallery);
+    $eventImages = $gallery->take(4)->values();
+
+    $eventImageUrl = function (int $index, string $fallback) use ($eventImages): string {
+        $media = $eventImages->get($index);
+        if (!$media) {
+            return $fallback;
+        }
+
+        try {
+            return $media->getUrl('gallery_web') ?: $media->getUrl();
+        } catch (\Throwable $e) {
+            return $fallback;
+        }
+    };
+@endphp
+
 <h2 class="font-script text-5xl text-gold text-center mb-12">Sự Kiện Cưới</h2>
 <div class="space-y-6 max-w-sm mx-auto">
     {{-- Tiệc nhà trai --}}
@@ -12,7 +31,7 @@
     <div class="card-glass p-6" data-aos="fade-right">
         <div class="text-center mb-4">
             <div class="w-24 h-24 mx-auto mb-3 rounded-full overflow-hidden border-3 border-gold/40 shadow-md">
-                <img src="{{ $groomPhoto }}" class="w-full h-full object-cover object-top">
+                <img src="{{ $eventImageUrl(0, $groomPhoto) }}" class="w-full h-full object-cover object-top">
             </div>
             <h3 class="font-display text-xl text-gold font-bold">Tiệc Mừng Nhà Trai</h3>
         </div>
@@ -46,7 +65,7 @@
     <div class="card-glass p-6" data-aos="fade-left">
         <div class="text-center mb-4">
             <div class="w-24 h-24 mx-auto mb-3 rounded-full overflow-hidden border-3 border-rose/40 shadow-md">
-                <img src="{{ $bridePhoto }}" class="w-full h-full object-cover object-top">
+                <img src="{{ $eventImageUrl(1, $bridePhoto) }}" class="w-full h-full object-cover object-top">
             </div>
             <h3 class="font-display text-xl text-rose font-bold">Tiệc Cưới Nhà Gái</h3>
         </div>
@@ -76,7 +95,7 @@
     <div class="card-glass p-6" data-aos="fade-left">
         <div class="text-center mb-4">
             <div class="w-24 h-24 mx-auto mb-3 rounded-full overflow-hidden border-3 border-rose/40 shadow-md">
-                <img src="{{ $bridePhoto }}" class="w-full h-full object-cover object-top rounded-full">
+                <img src="{{ $eventImageUrl(2, $bridePhoto) }}" class="w-full h-full object-cover object-top rounded-full">
             </div>
             <h3 class="font-display text-xl text-rose font-bold">Lễ Vu Quy</h3>
         </div>
@@ -99,7 +118,7 @@
     <div class="card-glass p-6" data-aos="fade-right">
         <div class="text-center mb-4">
             <div class="w-24 h-24 mx-auto mb-3 rounded-full overflow-hidden border-3 border-gold/40 shadow-md">
-                <img src="{{ $groomPhoto }}" class="w-full h-full object-cover object-top rounded-full">
+                <img src="{{ $eventImageUrl(3, $groomPhoto) }}" class="w-full h-full object-cover object-top rounded-full">
             </div>
             <h3 class="font-display text-xl text-gold font-bold">Lễ Thành Hôn</h3>
         </div>
