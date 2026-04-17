@@ -43,51 +43,6 @@
     <img src="{{ asset('images/hoa-1.png') }}" class="floral-corner top-0 right-0 -scale-x-100" alt="">
     <img src="{{ asset('images/hoa-1.png') }}" class="floral-corner bottom-0 left-0 rotate-180 -scale-x-100" alt="">
 
-@php
-    $filmDir = public_path('images/film_gallery');
-    $filmFiles = collect();
-
-    if (file_exists($filmDir)) {
-        $globResult = glob($filmDir . '/*.{jpg,jpeg,png,webp,gif}', defined('GLOB_BRACE') ? GLOB_BRACE : 0);
-
-        if (is_array($globResult) && !empty($globResult)) {
-            $filmFiles = collect($globResult)
-                ->filter(fn ($f) => is_string($f) && $f !== '')
-                ->map(fn ($f) => asset('images/film_gallery/' . basename($f)))
-                ->values();
-        }
-    }
-@endphp
-
-@if($filmFiles->isNotEmpty())
-    {{-- Marquee Film Strip --}}
-    <div class="overflow-hidden mb-8">
-        <style>
-            @keyframes marquee-left  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-            @keyframes marquee-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-            .marquee-left  { display: flex; animation: marquee-left  25s linear infinite; }
-            .marquee-right { display: flex; animation: marquee-right 25s linear infinite; }
-            .marquee-frame { flex-shrink: 0; width: 120px; height: 120px; margin: 0 3px; overflow: hidden; }
-        </style>
-        {{-- Row 1: cuộn trái --}}
-        <div class="marquee-left mb-2">
-            @foreach($filmFiles->merge($filmFiles) as $filmUrl)
-            <div class="marquee-frame">
-                <img src="{{ $filmUrl }}" class="w-full h-full object-cover" alt="">
-            </div>
-            @endforeach
-        </div>
-        {{-- Row 2: cuộn phải --}}
-        <div class="marquee-right">
-            @foreach($filmFiles->reverse()->merge($filmFiles->reverse()) as $filmUrl)
-            <div class="marquee-frame">
-                <img src="{{ $filmUrl }}" class="w-full h-full object-cover" alt="">
-            </div>
-            @endforeach
-        </div>
-    </div>
-@endif
-
     {{-- Title --}}
     <div class="text-center px-6 mb-8">
         <p class="font-script text-4xl text-gold">The Album</p>
