@@ -4,6 +4,7 @@
 
 @php $side = $side ?? 'both'; @endphp
 @section('title', ($side === 'bride' ? $wedding->bride_name . ' & ' . $wedding->groom_name : $wedding->groom_name . ' & ' . $wedding->bride_name))
+@section('description', 'Trân trọng kính mời bạn đến chung vui cùng ' . ($side === 'bride' ? $wedding->bride_name . ' và ' . $wedding->groom_name : $wedding->groom_name . ' và ' . $wedding->bride_name) . ' vào ngày ' . ($wedding->event_date?->format('d/m/Y') ?? 'sắp tới') . '.')
 @section('og_image', $shareUrl)
 
 @section('content')
