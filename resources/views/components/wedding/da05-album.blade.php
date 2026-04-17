@@ -45,10 +45,18 @@
 
 @php
     $filmDir = public_path('images/film_gallery');
-    $filmFiles = file_exists($filmDir)
-        ? collect(glob($filmDir . '/*.{jpg,jpeg,png,webp,gif}', GLOB_BRACE))
-            ->map(fn($f) => asset('images/film_gallery/' . basename($f)))
-        : collect();
+    $filmFiles = collect();
+
+    if (file_exists($filmDir)) {
+        $globResult = glob($filmDir . '/*.{jpg,jpeg,png,webp,gif}', defined('GLOB_BRACE') ? GLOB_BRACE : 0);
+
+        if (is_array($globResult) && !empty($globResult)) {
+            $filmFiles = collect($globResult)
+                ->filter(fn ($f) => is_string($f) && $f !== '')
+                ->map(fn ($f) => asset('images/film_gallery/' . basename($f)))
+                ->values();
+        }
+    }
 @endphp
 
 @if($filmFiles->isNotEmpty())
@@ -111,4 +119,21 @@
             <div class="swiper-pagination"></div>
         </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const el = document.querySelector('.gallerySlider');
+        if (!el) return;
+        if (el.dataset.swiperInited === '1') return;
+        el.dataset.swiperInited = '1';
+
+        // eslint-disable-next-line no-undef
+        new Swiper('.gallerySlider', {
+            spaceBetween: 10,
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            pagination: { el: '.swiper-pagination', clickable: true },
+            autoplay: { delay: 3000, disableOnInteraction: false },
+        });
+    });
+    </script>
 </section>
