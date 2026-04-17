@@ -6,7 +6,7 @@
 @props(['wedding', 'side' => 'both', 'groomPhoto', 'bridePhoto'])
 
 @php
-    $eventImages = $wedding->gallery_images->slice(3, 4)->values();
+    $eventImages = $wedding->gallery_images->slice(-4)->values();
 
     $img0 = $eventImages->get(0) ? ($eventImages->get(0)->getUrl('gallery_web') ?: $eventImages->get(0)->getUrl()) : $groomPhoto;
     $img1 = $eventImages->get(1) ? ($eventImages->get(1)->getUrl('gallery_web') ?: $eventImages->get(1)->getUrl()) : $bridePhoto;
