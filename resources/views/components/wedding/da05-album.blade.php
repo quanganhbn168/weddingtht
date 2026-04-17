@@ -39,7 +39,7 @@
     }
 </style>
 
-<section class="py-16 bg-cream relative overflow-hidden bg-main-watercolor" data-aos="fade-up">
+<section class="py-16 bg-cream relative overflow-hidden bg-main-watercolor">
     <img src="{{ asset('images/hoa-1.png') }}" class="floral-corner top-0 right-0 -scale-x-100" alt="">
     <img src="{{ asset('images/hoa-1.png') }}" class="floral-corner bottom-0 left-0 rotate-180 -scale-x-100" alt="">
 
