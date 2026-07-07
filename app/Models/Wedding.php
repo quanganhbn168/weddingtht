@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Enums\FallingEffect;
+use App\Enums\LunarDateFormat;
 use App\Enums\WeddingStatus;
 use App\Enums\WeddingTier;
+use App\Helpers\LunarHelper;
 use App\Observers\WeddingObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -43,10 +45,17 @@ class Wedding extends Model implements HasMedia
         'bride_ceremony_map_embed',
         'event_date',
         'event_date_lunar',
+        'lunar_date_format',
+        'album_love_image_position_x',
+        'album_love_image_position_y',
+        'album_love_focal_point',
+        'album_love_media_id',
         'groom_ceremony_date',
         'groom_ceremony_time',
+        'groom_ceremony_venue',
         'bride_ceremony_date',
         'bride_ceremony_time',
+        'bride_ceremony_venue',
         'groom_reception_date',
         'groom_reception_time',
         'groom_reception_venue',
@@ -65,6 +74,7 @@ class Wedding extends Model implements HasMedia
         'is_auto_approve_wishes',
         'is_demo',
         'show_preload',
+        'preload_variant',
         'show_love_story',
         'show_invitation_wrapper',
         'can_share',
@@ -77,6 +87,7 @@ class Wedding extends Model implements HasMedia
 
     protected $casts = [
         'event_date' => 'date',
+        'lunar_date_format' => LunarDateFormat::class,
         'groom_ceremony_date' => 'date',
         'bride_ceremony_date' => 'date',
         'groom_reception_date' => 'date',
@@ -86,6 +97,7 @@ class Wedding extends Model implements HasMedia
         'groom_ceremony_time' => 'datetime',
         'bride_ceremony_time' => 'datetime',
         'content' => 'array',
+        'album_love_focal_point' => 'array',
         'is_active' => 'boolean',
         'is_auto_approve_wishes' => 'boolean',
         'is_demo' => 'boolean',
@@ -174,6 +186,75 @@ class Wedding extends Model implements HasMedia
     // LABEL HELPERS
     // ==========================================
 
+    public function formattedLunarDate(): ?string
+    {
+        $format = $this->lunar_date_format ?? LunarDateFormat::SHORT;
+
+        return match ($format) {
+            LunarDateFormat::FULL => ($long = LunarHelper::formatLong($this->event_date_lunar))
+                ? 'Tức '.$long
+                : null,
+            LunarDateFormat::SHORT => LunarHelper::formatShort($this->event_date_lunar),
+        };
+    }
+
+    public function albumLoveImageAlignment(): string
+    {
+        $horizontal = match ($this->album_love_image_position_x) {
+            'left' => 'xMin',
+            'right' => 'xMax',
+            default => 'xMid',
+        };
+
+        $vertical = match ($this->album_love_image_position_y) {
+            'center' => 'YMid',
+            'bottom' => 'YMax',
+            default => 'YMin',
+        };
+
+        return "{$horizontal}{$vertical} slice";
+    }
+
+    /** @return array{x: int, y: int} */
+    public function albumLoveFocalPoint(): array
+    {
+        $point = $this->album_love_focal_point;
+
+        if (is_array($point)) {
+            return [
+                'x' => max(0, min(100, (int) ($point['x'] ?? 50))),
+                'y' => max(0, min(100, (int) ($point['y'] ?? 20))),
+            ];
+        }
+
+        $x = match ($this->album_love_image_position_x) {
+            'left' => 0,
+            'right' => 100,
+            default => 50,
+        };
+        $y = match ($this->album_love_image_position_y) {
+            'center' => 50,
+            'bottom' => 100,
+            default => 20,
+        };
+
+        return compact('x', 'y');
+    }
+
+    public function albumLoveImageUrl(): ?string
+    {
+        if ($loveImage = $this->getTemplateMediaUrl('tht16_love')) {
+            return $loveImage;
+        }
+
+        $images = $this->gallery_images;
+        $selected = $this->album_love_media_id
+            ? $images->firstWhere('id', (int) $this->album_love_media_id)
+            : null;
+
+        return ($selected ?? $images->first())?->getUrl();
+    }
+
     public function getStatusLabel(): string
     {
         return $this->status?->label() ?? 'N/A';
@@ -195,7 +276,22 @@ class Wedding extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $singleCollections = ['cover', 'hero', 'groom_photo', 'bride_photo', 'groom_qr', 'bride_qr', 'demo_thumbnail'];
+        $templateCollections = collect(config('wedding-template-media', []))
+            ->flatMap(fn (array $template): array => $template['fields'] ?? [])
+            ->pluck('collection')
+            ->filter()
+            ->all();
+
+        $singleCollections = array_unique([
+            'cover',
+            'hero',
+            'groom_photo',
+            'bride_photo',
+            'groom_qr',
+            'bride_qr',
+            'demo_thumbnail',
+            ...$templateCollections,
+        ]);
 
         foreach ($singleCollections as $collection) {
             $this->addMediaCollection($collection)->singleFile();
@@ -207,6 +303,12 @@ class Wedding extends Model implements HasMedia
 
     public function registerMediaConversions(?Media $media = null): void
     {
+        $templateCollections = collect(config('wedding-template-media', []))
+            ->flatMap(fn (array $template): array => $template['fields'] ?? [])
+            ->pluck('collection')
+            ->filter()
+            ->all();
+
         $this->addMediaConversion('share')
             ->width(1200)->height(630)->sharpen(10)
             ->format('webp')->quality(85)
@@ -216,7 +318,12 @@ class Wedding extends Model implements HasMedia
         $this->addMediaConversion('optimized')
             ->width(1080)->height(1920)->sharpen(10)
             ->format('webp')->quality(85)
-            ->performOnCollections('hero', 'groom_photo', 'bride_photo')
+            ->performOnCollections(
+                'hero',
+                'groom_photo',
+                'bride_photo',
+                ...$templateCollections,
+            )
             ->nonQueued();
 
         $this->addMediaConversion('gallery_web')
@@ -272,6 +379,11 @@ class Wedding extends Model implements HasMedia
             ?: asset('images/qr-placeholder.png');
     }
 
+    public function getTemplateMediaUrl(string $collection): ?string
+    {
+        return $this->getMediaUrlWithDemoFallback($collection) ?: null;
+    }
+
     // ==========================================
     // ACCESSORS
     // ==========================================
@@ -289,7 +401,7 @@ class Wedding extends Model implements HasMedia
             return $this->sharedMusic->getUrl();
         }
 
-        if (!$this->background_music) {
+        if (! $this->background_music) {
             return null;
         }
 
@@ -297,7 +409,7 @@ class Wedding extends Model implements HasMedia
             return $this->background_music;
         }
 
-        return asset('storage/' . $this->background_music);
+        return asset('storage/'.$this->background_music);
     }
 
     public function getGalleryImagesAttribute()
@@ -340,7 +452,7 @@ class Wedding extends Model implements HasMedia
             return true;
         }
 
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -374,6 +486,7 @@ class Wedding extends Model implements HasMedia
     {
         $token = \Illuminate\Support\Str::random(32);
         $this->update(['preview_token' => $token]);
+
         return $token;
     }
 

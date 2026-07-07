@@ -2,23 +2,22 @@
 
 namespace App\DTOs;
 
-use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
-class WeddingSideData
+final readonly class WeddingSideData
 {
+    /**
+     * @param Collection<int, WeddingFamilyData> $families
+     * @param Collection<int, WeddingEventData> $events
+     */
     public function __construct(
         public string $side,
         public string $firstName,
         public string $secondName,
         public string $firstPhoto,
         public string $secondPhoto,
-        public ?string $mainCeremonyTime,
-        public ?Carbon $mainCeremonyDate,
-        public ?string $mainReceptionTime,
-        public ?Carbon $mainReceptionDate,
-        public ?string $mainVenue,
-        public ?string $mainAddress,
-        public ?string $mainMapUrl,
+        public Collection $families,
+        public Collection $events,
         public bool $showGroomEvents,
         public bool $showBrideEvents,
     ) {}

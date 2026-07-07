@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Weddings\Schemas;
 
 use App\Enums\FallingEffect;
+use App\Enums\LunarDateFormat;
 use App\Enums\WeddingStatus;
 use App\Enums\WeddingTier;
 use App\Helpers\LunarHelper;
@@ -41,7 +42,7 @@ class WeddingForm
                 Tabs::make('wedding_tabs')
                     ->columnSpanFull()
                     ->tabs([
-                        
+
                         // === TAB 1: THÔNG TIN CƠ BẢN ===
                         Tab::make('Thông tin cơ bản')
                             ->icon('heroicon-o-information-circle')
@@ -59,13 +60,13 @@ class WeddingForm
                                                 $currentSlug = $get('slug');
                                                 $eventDate = $get('event_date');
                                                 $dateSuffix = $eventDate ? Carbon::parse($eventDate)->format('d-m-Y') : now()->year;
-                                                
+
                                                 if ($state && $brideName) {
-                                                    $baseSlug = Str::slug("$state-va-$brideName-" . $dateSuffix);
+                                                    $baseSlug = Str::slug("$state-va-$brideName-".$dateSuffix);
                                                     $newSlug = $baseSlug;
 
                                                     while (Wedding::where('slug', $newSlug)->where('id', '!=', $get('id'))->exists()) {
-                                                        $newSlug = $baseSlug . '-' . Str::lower(Str::random(4));
+                                                        $newSlug = $baseSlug.'-'.Str::lower(Str::random(4));
                                                     }
 
                                                     if (blank($currentSlug) || str_contains($currentSlug, '-va-')) {
@@ -73,7 +74,7 @@ class WeddingForm
                                                     }
                                                 }
                                             }),
-                                        
+
                                         TextInput::make('bride_name')
                                             ->label('Tên cô dâu')
                                             ->required()
@@ -86,11 +87,11 @@ class WeddingForm
                                                 $dateSuffix = $eventDate ? Carbon::parse($eventDate)->format('d-m-Y') : now()->year;
 
                                                 if ($state && $groomName) {
-                                                    $baseSlug = Str::slug("$groomName-va-$state-" . $dateSuffix);
+                                                    $baseSlug = Str::slug("$groomName-va-$state-".$dateSuffix);
                                                     $newSlug = $baseSlug;
 
                                                     while (Wedding::where('slug', $newSlug)->where('id', '!=', $get('id'))->exists()) {
-                                                        $newSlug = $baseSlug . '-' . Str::lower(Str::random(4));
+                                                        $newSlug = $baseSlug.'-'.Str::lower(Str::random(4));
                                                     }
 
                                                     if (blank($currentSlug) || str_contains($currentSlug, '-va-')) {
@@ -99,7 +100,7 @@ class WeddingForm
                                                 }
                                             }),
                                     ]),
-                                
+
                                 Section::make('Ngày cưới')
                                     ->columns(2)
                                     ->schema([
@@ -115,30 +116,37 @@ class WeddingForm
 
                                                 $groomName = $get('groom_name');
                                                 $brideName = $get('bride_name');
-                                                
+
                                                 if ($groomName && $brideName && $state) {
                                                     $dateSuffix = Carbon::parse($state)->format('d-m-Y');
-                                                    $baseSlug = Str::slug("$groomName-va-$brideName-" . $dateSuffix);
+                                                    $baseSlug = Str::slug("$groomName-va-$brideName-".$dateSuffix);
                                                     $newSlug = $baseSlug;
 
                                                     while (Wedding::where('slug', $newSlug)->where('id', '!=', $get('id'))->exists()) {
-                                                        $newSlug = $baseSlug . '-' . Str::lower(Str::random(4));
+                                                        $newSlug = $baseSlug.'-'.Str::lower(Str::random(4));
                                                     }
-                                                    
+
                                                     $currentSlug = $get('slug');
                                                     if (blank($currentSlug) || str_contains($currentSlug, '-va-')) {
                                                         $set('slug', $newSlug);
                                                     }
                                                 }
                                             }),
-                                        
+
                                         TextInput::make('event_date_lunar')
                                             ->label('Ngày âm lịch')
                                             ->disabled()
                                             ->dehydrated()
                                             ->helperText('Tự động cập nhật'),
+
+                                        Select::make('lunar_date_format')
+                                            ->label('Cách hiển thị ngày âm lịch')
+                                            ->options(LunarDateFormat::options())
+                                            ->default(LunarDateFormat::SHORT->value)
+                                            ->required()
+                                            ->native(false),
                                     ]),
-                                    
+
                                 Section::make('Cài đặt')
                                     ->columns(2)
                                     ->schema([
@@ -159,7 +167,7 @@ class WeddingForm
                                                     }
                                                 }
                                             }),
-                                            
+
                                         Hidden::make('template_view')->dehydrated(),
 
                                         TextInput::make('slug')
@@ -176,7 +184,7 @@ class WeddingForm
                                             ->options(WeddingStatus::options())
                                             ->default(WeddingStatus::DRAFT->value)
                                             ->required(),
-                                        
+
                                         Toggle::make('is_auto_approve_wishes')
                                             ->label('Tự động duyệt lời chúc')
                                             ->default(false)
@@ -196,7 +204,6 @@ class WeddingForm
                                     ]),
                             ]),
 
-
                         // === TAB 2: NHÀ TRAI ===
                         Tab::make('Nhà Trai')
                             ->icon('heroicon-o-user')
@@ -212,7 +219,7 @@ class WeddingForm
                                             ->label('Bà (Mẹ)')
                                             ->placeholder('Trần Thị B'),
                                     ]),
-                                    
+
                                 Section::make('Lễ Thành Hôn (Nhà trai)')
                                     ->columns(2)
                                     ->description('Lễ đón dâu tại nhà trai')
@@ -220,11 +227,17 @@ class WeddingForm
                                         TimePicker::make('groom_ceremony_time')
                                             ->label('Giờ làm lễ')
                                             ->seconds(false),
-                                        
+
                                         DatePicker::make('groom_ceremony_date')
                                             ->label('Ngày')
                                             ->helperText('Nếu khác ngày cưới chính'),
-                                        
+
+                                        TextInput::make('groom_ceremony_venue')
+                                            ->label('Tên địa điểm tổ chức lễ thành hôn')
+                                            ->placeholder('VD: Tư gia nhà trai')
+                                            ->maxLength(255)
+                                            ->columnSpanFull(),
+
                                         Textarea::make('groom_address')
                                             ->label('Địa chỉ hôn lễ')
                                             ->columnSpanFull(),
@@ -236,21 +249,20 @@ class WeddingForm
 
                                     ]),
 
-                                
                                 Section::make('Tiệc cưới nhà trai')
                                     ->columns(2)
                                     ->schema([
                                         TimePicker::make('groom_reception_time')
                                             ->label('Giờ tiệc')
                                             ->seconds(false),
-                                        
+
                                         DatePicker::make('groom_reception_date')
                                             ->label('Ngày tiệc (Nếu khác ngày cưới)')
                                             ->displayFormat('d/m/Y'),
-                                        
+
                                         TextInput::make('groom_reception_venue')
                                             ->label('Tên nhà hàng/địa điểm'),
-                                        
+
                                         Textarea::make('groom_reception_address')
                                             ->label('Địa chỉ tiệc')
                                             ->columnSpanFull()
@@ -260,7 +272,7 @@ class WeddingForm
                                                     ->icon('heroicon-o-clipboard-document')
                                                     ->action(function (\Filament\Forms\Set $set, \Filament\Forms\Get $get) {
                                                         $set('groom_reception_address', $get('groom_address'));
-                                                        $set('groom_reception_venue', $get('groom_reception_venue') ?: '');
+                                                        $set('groom_reception_venue', $get('groom_ceremony_venue') ?: '');
                                                         $set('groom_map_url', $get('groom_ceremony_map_url'));
                                                         $set('groom_map_embed', $get('groom_ceremony_map_embed'));
                                                     })
@@ -272,7 +284,7 @@ class WeddingForm
                                             ->columnSpanFull(),
 
                                     ]),
-                                    
+
                                 Section::make('QR Mừng cưới nhà trai')
                                     ->schema([
                                         SpatieMediaLibraryFileUpload::make('groom_qr')
@@ -280,7 +292,7 @@ class WeddingForm
                                             ->collection('groom_qr')
                                             ->disk('public')
                                             ->image(),
-                                        
+
                                         Textarea::make('groom_qr_info')
                                             ->label('Thông tin tài khoản')
                                             ->placeholder("Ngân hàng: ...\nSố TK: ...\nChủ TK: ..."),
@@ -302,7 +314,7 @@ class WeddingForm
                                             ->label('Bà (Mẹ)')
                                             ->placeholder('Phạm Thị D'),
                                     ]),
-                                    
+
                                 Section::make('Lễ Vu Quy (Nhà gái)')
                                     ->columns(2)
                                     ->description('Lễ gả con gái tại nhà gái')
@@ -310,11 +322,17 @@ class WeddingForm
                                         TimePicker::make('bride_ceremony_time')
                                             ->label('Giờ làm lễ')
                                             ->seconds(false),
-                                        
+
                                         DatePicker::make('bride_ceremony_date')
                                             ->label('Ngày')
                                             ->helperText('Nếu khác ngày cưới chính'),
-                                        
+
+                                        TextInput::make('bride_ceremony_venue')
+                                            ->label('Tên địa điểm tổ chức lễ vu quy')
+                                            ->placeholder('VD: Tư gia nhà gái')
+                                            ->maxLength(255)
+                                            ->columnSpanFull(),
+
                                         Textarea::make('bride_address')
                                             ->label('Địa chỉ hôn lễ')
                                             ->columnSpanFull(),
@@ -325,21 +343,21 @@ class WeddingForm
                                             ->columnSpanFull(),
 
                                     ]),
-                                
+
                                 Section::make('Tiệc cưới nhà gái')
                                     ->columns(2)
                                     ->schema([
                                         TimePicker::make('bride_reception_time')
                                             ->label('Giờ tiệc')
                                             ->seconds(false),
-                                        
+
                                         DatePicker::make('bride_reception_date')
                                             ->label('Ngày tiệc (Nếu khác ngày cưới)')
                                             ->displayFormat('d/m/Y'),
-                                        
+
                                         TextInput::make('bride_reception_venue')
                                             ->label('Tên nhà hàng/địa điểm'),
-                                        
+
                                         Textarea::make('bride_reception_address')
                                             ->label('Địa chỉ tiệc')
                                             ->columnSpanFull()
@@ -349,6 +367,7 @@ class WeddingForm
                                                     ->icon('heroicon-o-clipboard-document')
                                                     ->action(function (\Filament\Forms\Set $set, \Filament\Forms\Get $get) {
                                                         $set('bride_reception_address', $get('bride_address'));
+                                                        $set('bride_reception_venue', $get('bride_ceremony_venue') ?: '');
                                                         $set('bride_map_url', $get('bride_ceremony_map_url'));
                                                         $set('bride_map_embed', $get('bride_ceremony_map_embed'));
                                                     })
@@ -360,7 +379,7 @@ class WeddingForm
                                             ->columnSpanFull(),
 
                                     ]),
-                                    
+
                                 Section::make('QR Mừng cưới nhà gái')
                                     ->schema([
                                         SpatieMediaLibraryFileUpload::make('bride_qr')
@@ -368,7 +387,7 @@ class WeddingForm
                                             ->collection('bride_qr')
                                             ->disk('public')
                                             ->image(),
-                                        
+
                                         Textarea::make('bride_qr_info')
                                             ->label('Thông tin tài khoản')
                                             ->placeholder("Ngân hàng: ...\nSố TK: ...\nChủ TK: ..."),
@@ -399,7 +418,7 @@ class WeddingForm
                                             ->maxSize(10240)
                                             ->helperText('Tối đa 10MB. Ưu tiên thư viện nhạc ở trên'),
                                     ]),
-                                    
+
                                 Section::make('Ảnh đại diện')
                                     ->columns(3)
                                     ->schema([
@@ -411,7 +430,7 @@ class WeddingForm
                                             ->imageEditor()
                                             ->imageCropAspectRatio('1.91:1')
                                             ->helperText('Ảnh hiện khi chia sẻ link lên Facebook/Zalo'),
-                                        
+
                                         SpatieMediaLibraryFileUpload::make('hero')
                                             ->label('Ảnh Hero Section (9:16)')
                                             ->collection('hero')
@@ -420,7 +439,7 @@ class WeddingForm
                                             ->imageEditor()
                                             ->imageCropAspectRatio('9:16')
                                             ->helperText('Ảnh lớn đầu trang web (dọc)'),
-                                        
+
                                         SpatieMediaLibraryFileUpload::make('groom_photo')
                                             ->label('Ảnh chú rể (3:4)')
                                             ->visible(fn (Get $get) => $get('type') === 'wedding')
@@ -429,7 +448,7 @@ class WeddingForm
                                             ->image()
                                             ->imageEditor()
                                             ->imageCropAspectRatio('3:4'),
-                                        
+
                                         SpatieMediaLibraryFileUpload::make('bride_photo')
                                             ->label('Ảnh cô dâu (3:4)')
                                             ->visible(fn (Get $get) => $get('type') === 'wedding')
@@ -453,6 +472,8 @@ class WeddingForm
                                             ->maxFiles(100),
                                     ]),
 
+                                ...TemplateMediaSchema::sections(),
+
                                 Section::make('Ảnh Film Strip (ngang)')
                                     ->description('Ảnh landscape riêng cho thanh cuộn phía trên album. Nên dùng ảnh ngang tỉ lệ 3:2 hoặc 16:9.')
                                     ->collapsed()
@@ -468,7 +489,7 @@ class WeddingForm
                                             ->maxFiles(10),
                                     ]),
                             ]),
-                        
+
                         // === TAB 5: PRO FEATURES (admin only) ===
                         Tab::make('Pro Features')
                             ->icon('heroicon-o-sparkles')
@@ -486,20 +507,20 @@ class WeddingForm
                                             ->searchable()
                                             ->placeholder('Chọn hoặc tạo mới bên dưới')
                                             ->helperText('Để trống nếu muốn tạo tài khoản mới'),
-                                        
+
                                         TextInput::make('customer_email')
                                             ->label('Email khách hàng mới')
                                             ->email()
                                             ->placeholder('email@example.com')
                                             ->helperText('Nhập email để tạo tài khoản mới (nếu không chọn ở trên)')
-                                            ->visible(fn (Get $get) => !$get('user_id')),
-                                        
+                                            ->visible(fn (Get $get) => ! $get('user_id')),
+
                                         TextInput::make('customer_password')
                                             ->label('Mật khẩu')
                                             ->password()
                                             ->default('12345678')
                                             ->helperText('Mặc định: 12345678')
-                                            ->visible(fn (Get $get) => !$get('user_id')),
+                                            ->visible(fn (Get $get) => ! $get('user_id')),
                                     ]),
 
                                 Section::make('Cài đặt gói dịch vụ')
@@ -511,30 +532,30 @@ class WeddingForm
                                             ->default(WeddingTier::STANDARD->value)
                                             ->required()
                                             ->live(),
-                                        
+
                                         Toggle::make('is_demo')
                                             ->label('Đây là Demo')
                                             ->helperText('Thiệp demo sẽ có watermark "DEMO"')
                                             ->default(false),
-                                        
+
                                         Toggle::make('can_share')
                                             ->label('Cho phép Share Public')
                                             ->helperText('Bật = ai có link xem được. Tắt = chỉ chủ sở hữu xem')
                                             ->default(true),
-                                        
+
                                         Select::make('agent_id')
                                             ->label('Đại lý tạo')
                                             ->options(fn () => Agent::where('is_active', true)
                                                 ->pluck('business_name', 'id'))
                                             ->searchable()
                                             ->placeholder('Chọn đại lý (nếu có)'),
-                                        
+
                                         DatePicker::make('expires_at')
                                             ->label('Ngày hết hạn')
                                             ->helperText('Standard: 1 năm, Pro: để trống (vĩnh viễn)')
                                             ->visible(fn (Get $get) => $get('tier') === 'standard'),
                                     ]),
-                                
+
                                 Section::make('Hiệu ứng Premium')
                                     ->columns(2)
                                     ->description('Chỉ áp dụng cho gói Pro')
@@ -553,24 +574,25 @@ class WeddingForm
                                             ->onColor('success')
                                             ->offColor('danger')
                                             ->columnSpan('full'),
-                                        
+
                                         Select::make('preload_variant')
                                             ->label('Kiểu Preload')
                                             ->options([
                                                 'traditional' => 'Truyền thống (Song Hỷ)',
                                                 'heartbeat' => 'Hiện đại (Nhịp tim)',
                                                 'rings' => 'Sang trọng (Nhẫn cưới)',
+                                                'split_botanical' => 'Mở đôi Botanical (ảnh trái/phải)',
                                             ])
                                             ->default('heartbeat')
                                             ->visible(fn (Get $get) => $get('show_preload'))
                                             ->required(fn (Get $get) => $get('show_preload')),
-                                        
+
                                         Select::make('falling_effect')
                                             ->label('Hiệu ứng rơi')
                                             ->options(FallingEffect::options())
                                             ->default(FallingEffect::HEARTS->value),
                                     ]),
-                                
+
                                 Section::make('Custom Domain')
                                     ->description('Gói Pro hỗ trợ domain riêng')
                                     ->schema([
@@ -581,7 +603,7 @@ class WeddingForm
                                             ->url(false),
                                     ]),
                             ]),
-                        
+
                         // === TAB 6: LỜI MỜI & LỜI CHÚC ===
                         Tab::make('Lời mời & Lời chúc')
                             ->icon('heroicon-o-chat-bubble-bottom-center-text')
@@ -608,7 +630,7 @@ class WeddingForm
                                             ->label('Nội dung')
                                             ->placeholder('Gặp gỡ, yêu và cưới...'),
                                     ]),
-                                
+
                                 Section::make('Xác nhận tham dự (RSVP)')
                                     ->columns(1)
                                     ->schema([
@@ -656,7 +678,7 @@ class WeddingForm
                                             ->cloneable()
                                             ->defaultItems(0)
                                             ->addActionLabel('+ Thêm mốc thời gian')
-                                            ->itemLabel(fn (array $state): ?string => ($state['year'] ?? '') . ' - ' . ($state['title'] ?? 'Mốc mới')),
+                                            ->itemLabel(fn (array $state): ?string => ($state['year'] ?? '').' - '.($state['title'] ?? 'Mốc mới')),
                                     ]),
                             ]),
                     ]),

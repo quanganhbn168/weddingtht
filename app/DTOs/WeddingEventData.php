@@ -1,0 +1,56 @@
+<?php
+
+namespace App\DTOs;
+
+use Carbon\Carbon;
+
+final readonly class WeddingEventData
+{
+    private const DAY_LABELS = [
+        0 => 'Chủ Nhật',
+        1 => 'Thứ Hai',
+        2 => 'Thứ Ba',
+        3 => 'Thứ Tư',
+        4 => 'Thứ Năm',
+        5 => 'Thứ Sáu',
+        6 => 'Thứ Bảy',
+    ];
+
+    public function __construct(
+        public string $side,
+        public string $receptionTitle,
+        public Carbon $receptionDate,
+        public ?Carbon $receptionTime,
+        public string $receptionVenue,
+        public ?string $receptionAddress,
+        public ?string $receptionMapUrl,
+        public ?string $receptionMapEmbed,
+        public string $ceremonyTitle,
+        public Carbon $ceremonyDate,
+        public ?Carbon $ceremonyTime,
+        public string $ceremonyVenue,
+        public ?string $ceremonyAddress,
+        public ?string $ceremonyMapUrl,
+        public ?string $ceremonyMapEmbed,
+    ) {}
+
+    public function receptionDayLabel(): string
+    {
+        return self::DAY_LABELS[$this->receptionDate->dayOfWeek];
+    }
+
+    public function ceremonyDayLabel(): string
+    {
+        return self::DAY_LABELS[$this->ceremonyDate->dayOfWeek];
+    }
+
+    public function receptionTimeLabel(): string
+    {
+        return $this->receptionTime?->format('H:i') ?? '00:00';
+    }
+
+    public function ceremonyTimeLabel(): string
+    {
+        return $this->ceremonyTime?->format('H:i') ?? '00:00';
+    }
+}

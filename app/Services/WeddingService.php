@@ -33,6 +33,8 @@ class WeddingService
             'bride_mother' => 'nullable|string|max:255',
             'groom_address' => 'nullable|string|max:1000',
             'bride_address' => 'nullable|string|max:1000',
+            'groom_ceremony_venue' => 'nullable|string|max:255',
+            'bride_ceremony_venue' => 'nullable|string|max:255',
             'groom_map_url' => 'nullable|url|max:500',
             'bride_map_url' => 'nullable|url|max:500',
             'groom_reception_venue' => 'nullable|string|max:255',

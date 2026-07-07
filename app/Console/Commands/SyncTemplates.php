@@ -79,7 +79,7 @@ class SyncTemplates extends Command
         $name = str_replace('_', ' ', ucwords($filename, '_'));
         
         // Try to extract name from: {{-- Template Name: Name Here --}}
-        if (preg_match('/{{--\s*Template Name:\s*([^-]+)\s*--}}/i', $content, $matches)) {
+        if (preg_match('/{{--\s*Template Name:\s*(.*?)\s*--}}/i', $content, $matches)) {
             $name = trim($matches[1]);
         }
         

@@ -11,6 +11,7 @@ class Template extends Model
         'name',
         'view_path',
         'type',
+        'required_tier',
         'thumbnail_url',
         'is_active',
     ];

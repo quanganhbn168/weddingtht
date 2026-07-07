@@ -1,24 +1,35 @@
-{{-- 
+{{--
     Preload Animation Component
-    Supports variants: 'traditional' (Song Hy), 'heartbeat' (Modern), 'rings' (Elegant)
+    Supports variants: 'traditional', 'heartbeat', 'rings', 'split_botanical'
     Usage: @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'heartbeat'])
 --}}
 
-@php
-    $tierValue = is_object($wedding->tier) ? $wedding->tier->value : (string)($wedding->tier ?? 'basic');
-    $tierEnum = \App\Enums\WeddingTier::tryFrom($tierValue) ?? \App\Enums\WeddingTier::BASIC;
-@endphp
-
-@if($wedding->show_preload && $tierEnum->hasPreload())
+@if($wedding->show_preload && \App\Services\FeatureGate::can($wedding, 'preload'))
 @php
     // Determine variant based on input or default to 'heartbeat' for modern feel if not specified
     // Ideally this could come from $wedding->preload_style if added to DB
     // Determine variant based on DB setting, then input, then default
-    $variant = $wedding->preload_variant ?? $variant ?? 'heartbeat'; 
+    $variant = $wedding->preload_variant ?? $variant ?? 'heartbeat';
 @endphp
 
 <div class="preload-container" id="preloadContainer">
-    
+
+    {{-- VARIANT: SPLIT BOTANICAL (two distinct image doors, click to open) --}}
+    @if($variant === 'split_botanical')
+        <div class="preload-split-stage">
+            <div class="preload-split-panel preload-split-panel--left">
+                <img src="{{ asset('images/preload/left.png') }}" alt="" aria-hidden="true">
+            </div>
+            <div class="preload-split-panel preload-split-panel--right">
+                <img src="{{ asset('images/preload/right.png') }}" alt="" aria-hidden="true">
+            </div>
+
+            <button class="preload-split-trigger" type="button" aria-label="Mở thiệp cưới">
+                <span>Chạm để mở thiệp</span>
+            </button>
+        </div>
+    @endif
+
     {{-- VARIANT: TRADITIONAL (Sliding Doors) --}}
     @if($variant === 'traditional')
         <!-- Decorative Ornaments -->
@@ -26,12 +37,12 @@
         <div class="preload-ornament preload-tr">❀</div>
         <div class="preload-ornament preload-bl">❀</div>
         <div class="preload-ornament preload-br">❀</div>
-        
+
         <!-- Left Door -->
         <div class="preload-door-left">
             <span class="song-hy song-hy-left">囍</span>
         </div>
-        
+
         <!-- Right Door -->
         <div class="preload-door-right">
             <span class="song-hy song-hy-right">囍</span>
@@ -59,15 +70,15 @@
                 <!-- Ring 1 -->
                 <div class="absolute inset-0 border-[6px] border-[#d4af37] rounded-full shadow-[0_4px_10px_rgba(212,175,55,0.4)] animate-[spin_3s_linear_infinite]"
                      style="border-right-color: transparent; transform: rotate(-45deg);"></div>
-                
+
                 <!-- Ring 2 (Interlocked) -->
                 <div class="absolute inset-0 border-[6px] border-[#f3e5ab] rounded-full shadow-[0_4px_10px_rgba(212,175,55,0.2)] animate-[spin_4s_reverse_infinite]"
                      style="border-left-color: transparent; width: 80%; height: 80%; top: 10%; left: 10%;"></div>
-                
+
                 <!-- Diamond Shine -->
                 <div class="absolute top-0 right-0 w-4 h-4 bg-white rotate-45 animate-ping opacity-75 shadow-[0_0_15px_#d4af37]"></div>
             </div>
-            
+
             <div class="text-center space-y-2">
                 <p class="text-[#d4af37] font-serif text-2xl tracking-widest uppercase">Wedding</p>
                 <div class="w-12 h-[1px] bg-[#d4af37]/50 mx-auto"></div>
@@ -104,15 +115,38 @@
         align-items: center;
         justify-content: center;
     }
-    
+
     /* Animations */
     @keyframes slideLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
     @keyframes slideRight { 0% { transform: translateX(0); } 100% { transform: translateX(100%); } }
     @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
     @keyframes spin-reverse { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
-    
+
     .animate-heartbeat { animation: heartbeat 1.5s ease-in-out infinite; }
     .animate-spin-reverse { animation: spin-reverse 3s linear infinite; }
+
+    /* Split Botanical: left.png and right.png are intentionally different assets. */
+    .preload-split-stage { position: absolute; inset: 0; height: 100dvh; overflow: hidden; background: #273d2f; }
+    .preload-split-panel { position: absolute; top: 0; bottom: 0; height: 100%; min-height: 100dvh; overflow: hidden; transition: transform 1.15s cubic-bezier(.76, 0, .24, 1); will-change: transform; }
+    .preload-split-panel img { display: block; width: 100%; height: 100%; max-width: none; object-fit: fill; }
+    .preload-split-panel--left { left: 0; z-index: 3; }
+    .preload-split-panel--left img { object-position: right top; }
+    .preload-split-panel--right { right: 0; z-index: 1; }
+    .preload-split-panel--right img { object-position: left top; }
+    .preload-split-trigger { position: absolute; z-index: 3; inset: 0; display: flex; align-items: flex-end; justify-content: center; padding: 0 20px 8vh; border: 0; color: #fff; background: transparent; cursor: pointer; }
+    .preload-split-trigger span { padding: 11px 20px; border: 1px solid rgba(255,255,255,.72); border-radius: 999px; background: rgba(25,45,32,.62); box-shadow: 0 8px 26px rgba(0,0,0,.18); backdrop-filter: blur(5px); font: 500 11px/1.2 sans-serif; letter-spacing: .18em; text-transform: uppercase; transition: opacity .3s, transform .3s; }
+    .preload-container.is-opening .preload-split-panel--left { transform: translate3d(-101%, 0, 0); }
+    .preload-container.is-opening .preload-split-panel--right { transform: translate3d(101%, 0, 0); }
+    .preload-container.is-opening .preload-split-trigger { pointer-events: none; }
+    .preload-container.is-opening .preload-split-trigger span { opacity: 0; transform: translateY(10px); }
+
+    @media (prefers-reduced-motion: reduce) {
+        .preload-split-panel { transition-duration: .3s; }
+    }
+
+    @media (orientation: portrait) {
+        .preload-split-panel img { object-fit: cover; }
+    }
 
     /* Traditional Styles (Scoped) */
     .preload-door-left { width: 50%; height: 100%; position: absolute; left:0; background: linear-gradient(135deg, #8b0000 0%, #cc0033 50%, #8b0000 100%); display: flex; justify-content: flex-end; align-items: center; animation: slideLeft 1.5s ease-in-out 2.5s forwards; z-index: 10; }
@@ -121,7 +155,7 @@
     .song-hy-left { padding-right: 10px; }
     .song-hy-right { padding-left: 10px; }
     .preload-names { position: relative; z-index: 20; text-align: center; color: #ffd700; opacity: 0; animation: fadeNamesIn 1s ease-out 0.5s forwards, fadeNamesOut 0.5s ease-out 2s forwards; }
-    
+
     @keyframes fadeNamesIn { to { opacity: 1; } }
     @keyframes fadeNamesOut { to { opacity: 0; } }
     @keyframes fadeHy { to { opacity: 0; } }
@@ -131,11 +165,32 @@
 </style>
 
 <script>
-    setTimeout(function() {
+    (function () {
         const container = document.getElementById('preloadContainer');
-        if (container) {
-            container.classList.add('hidden');
-        }
-    }, 4000); // Adjust timing based on animation
+        if (!container) return;
+
+        @if($variant === 'split_botanical')
+            const trigger = container.querySelector('.preload-split-trigger');
+            let isOpening = false;
+
+            document.documentElement.style.overflow = 'hidden';
+
+            trigger?.addEventListener('click', function () {
+                if (isOpening) return;
+                isOpening = true;
+                container.classList.add('is-opening');
+                document.documentElement.style.overflow = '';
+                window.dispatchEvent(new CustomEvent('wedding-opened'));
+
+                window.setTimeout(function () {
+                    container.classList.add('hidden');
+                }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 350 : 1200);
+            });
+        @else
+            window.setTimeout(function () {
+                container.classList.add('hidden');
+            }, 4000);
+        @endif
+    })();
 </script>
 @endif

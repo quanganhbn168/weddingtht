@@ -28,6 +28,7 @@ class WeddingDataService
     {
         $solar = $wedding->event_date ?? now();
         $lunarStr = $wedding->event_date_lunar;
+        $lunarDisplay = $wedding->formattedLunarDate();
 
         // Gallery images + placeholders
         $galleryImages = $wedding->gallery_images;
@@ -42,6 +43,11 @@ class WeddingDataService
         $imgs = $galleryImages->isNotEmpty()
             ? $galleryImages->map(fn ($m) => $m->getUrl())->toArray()
             : $placeholders;
+        $albumImages = collect($imgs)->filter()->values();
+        $thankYouImage = $albumImages->last() ?: $wedding->getHeroUrl();
+        $guestName = $wedding->getGuestName()
+            ? urldecode($wedding->getGuestName())
+            : 'Bạn và người thương';
 
         // Groom ceremony
         $groomCeremonyCarbon = self::parseTime($wedding->groom_ceremony_time, $wedding->groom_ceremony_date, $solar);
@@ -90,8 +96,8 @@ class WeddingDataService
         $dowLabels = self::DOW_LABELS;
 
         return compact(
-            'solar', 'lunarStr', 'dayOfWeek', 'dowLabels',
-            'galleryImages', 'imgs', 'placeholders',
+            'solar', 'lunarStr', 'lunarDisplay', 'dayOfWeek', 'dowLabels',
+            'galleryImages', 'imgs', 'placeholders', 'albumImages', 'thankYouImage', 'guestName',
             'groomCeremonyCarbon', 'groomCeremonyTime', 'groomDow',
             'brideCeremonyCarbon', 'brideCeremonyTime', 'brideDow',
             'groomReceptionCarbon', 'groomReceptionTime', 'groomReceptionDow',

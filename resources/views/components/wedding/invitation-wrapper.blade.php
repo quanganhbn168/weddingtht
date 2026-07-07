@@ -22,7 +22,7 @@
             }, 1200); // FASTER: 1.2s allows card to fly out partially then zoom
         }
     }" 
-    x-init="setTimeout(() => isReady = true, 500)"
+    x-init="setTimeout(() => isReady = true, 500); window.addEventListener('wedding-opened', () => openInvitation())"
     class="fixed inset-0 z-[100] flex items-center justify-center transition-all duration-700 ease-in-out"
     :class="{ 'pointer-events-none': isFinished, 'pointer-events-auto': !isFinished }"
     style="font-family: 'Dancing Script', cursive;"

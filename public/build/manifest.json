@@ -16,14 +16,63 @@
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-BWhxYh2E.css",
+    "file": "assets/app-DO9CYN_6.css",
     "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/templates/tht-e-wedding-16.css": {
+    "file": "assets/tht-e-wedding-16-Dbkq5ZKi.css",
+    "src": "resources/css/templates/tht-e-wedding-16.css",
     "isEntry": true
   },
   "resources/css/wedding.css": {
     "file": "assets/wedding-BGvw3ojI.css",
     "src": "resources/css/wedding.css",
     "isEntry": true
+  },
+  "resources/fonts/Cormorant_Garamond/CormorantGaramond-VariableFont_wght.ttf": {
+    "file": "assets/CormorantGaramond-VariableFont_wght-B4Q5m-X8.ttf",
+    "src": "resources/fonts/Cormorant_Garamond/CormorantGaramond-VariableFont_wght.ttf"
+  },
+  "resources/fonts/Luxurious_Script/LuxuriousScript-Regular.ttf": {
+    "file": "assets/LuxuriousScript-Regular-BfZlJept.ttf",
+    "src": "resources/fonts/Luxurious_Script/LuxuriousScript-Regular.ttf"
+  },
+  "resources/fonts/Pinyon_Script/PinyonScript-Regular.ttf": {
+    "file": "assets/PinyonScript-Regular-D0mG6oOT.ttf",
+    "src": "resources/fonts/Pinyon_Script/PinyonScript-Regular.ttf"
+  },
+  "resources/fonts/STIX_Two_Text/STIXTwoText-VariableFont_wght.ttf": {
+    "file": "assets/STIXTwoText-VariableFont_wght-BfOVXfTi.ttf",
+    "src": "resources/fonts/STIX_Two_Text/STIXTwoText-VariableFont_wght.ttf"
+  },
+  "resources/fonts/Taviraj/Taviraj-Bold.ttf": {
+    "file": "assets/Taviraj-Bold-Fbu6jdJz.ttf",
+    "src": "resources/fonts/Taviraj/Taviraj-Bold.ttf"
+  },
+  "resources/fonts/Taviraj/Taviraj-Italic.ttf": {
+    "file": "assets/Taviraj-Italic-BX62YWrc.ttf",
+    "src": "resources/fonts/Taviraj/Taviraj-Italic.ttf"
+  },
+  "resources/fonts/Taviraj/Taviraj-Medium.ttf": {
+    "file": "assets/Taviraj-Medium-olgbojLd.ttf",
+    "src": "resources/fonts/Taviraj/Taviraj-Medium.ttf"
+  },
+  "resources/fonts/Taviraj/Taviraj-Regular.ttf": {
+    "file": "assets/Taviraj-Regular-B3KyoFyG.ttf",
+    "src": "resources/fonts/Taviraj/Taviraj-Regular.ttf"
+  },
+  "resources/fonts/Taviraj/Taviraj-SemiBold.ttf": {
+    "file": "assets/Taviraj-SemiBold-DMr5jGn5.ttf",
+    "src": "resources/fonts/Taviraj/Taviraj-SemiBold.ttf"
+  },
+  "resources/fonts/UVNHoaTay1.TTF": {
+    "file": "assets/UVNHoaTay1-DVyORMBx.TTF",
+    "src": "resources/fonts/UVNHoaTay1.TTF"
+  },
+  "resources/fonts/alfa-slab-one/AlfaSlabOne-Regular.ttf": {
+    "file": "assets/AlfaSlabOne-Regular-Daylbb1f.ttf",
+    "src": "resources/fonts/alfa-slab-one/AlfaSlabOne-Regular.ttf"
   },
   "resources/js/app.js": {
     "file": "assets/app-CAiCLEjY.js",

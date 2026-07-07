@@ -70,4 +70,49 @@ class LunarHelper
         
         return self::$thienCan[$canIndex] . ' ' . self::$diaChi[$chiIndex];
     }
+
+    /**
+     * Format a stored lunar date as: "ngày DD tháng MM năm Can Chi".
+     */
+    public static function formatLong(?string $lunarDate): ?string
+    {
+        $value = trim((string) $lunarDate);
+
+        if ($value === '') {
+            return null;
+        }
+
+        $value = preg_replace('/^tức\s+/iu', '', $value);
+
+        if (preg_match('/^ngày\s+/iu', $value)) {
+            return $value;
+        }
+
+        if (!preg_match('/^(\d{1,2})[\/-](\d{1,2})(?:[\/-](\d{4}))?\s*(?:\(([^)]+)\)|(.+))?$/u', $value, $matches)) {
+            return $value;
+        }
+
+        $year = trim($matches[4] ?? '') ?: trim($matches[5] ?? '') ?: trim($matches[3] ?? '');
+        $formatted = "ngày {$matches[1]} tháng {$matches[2]}";
+
+        return $year !== '' ? "{$formatted} năm {$year}" : $formatted;
+    }
+
+    /**
+     * Format a stored lunar date as a compact day/month value.
+     */
+    public static function formatShort(?string $lunarDate): ?string
+    {
+        $value = trim((string) $lunarDate);
+
+        if ($value === '') {
+            return null;
+        }
+
+        if (!preg_match('/(\d{1,2})[\/-](\d{1,2})/u', $value, $matches)) {
+            return $value;
+        }
+
+        return ((int) $matches[1]) . '/' . ((int) $matches[2]);
+    }
 }

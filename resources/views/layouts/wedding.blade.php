@@ -23,8 +23,8 @@
     <link href="{{ $theme['font_url'] }}" rel="stylesheet">
     @endif
 
-    {{-- Wedding bundle CSS: AOS, Swiper, GLightbox, FontAwesome --}}
-    @vite(['resources/css/wedding.css'])
+    {{-- Shared application styles + wedding bundle: AOS, Swiper, GLightbox, FontAwesome --}}
+    @vite(['resources/css/app.css', 'resources/css/wedding.css'])
 
     {{-- Shared animations & CSS variables --}}
     <link href="{{ asset('css/wedding-animations.css') }}" rel="stylesheet">
@@ -43,8 +43,8 @@
 
     @yield('content')
 
-    {{-- Wedding JS bundle: must load BEFORE Alpine starts (deferred) --}}
-    @vite(['resources/js/wedding.js'])
+    {{-- Shared application JS + wedding bundle --}}
+    @vite(['resources/js/app.js', 'resources/js/wedding.js'])
 
     @stack('scripts')
 </body>
