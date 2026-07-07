@@ -168,7 +168,6 @@
 
     {{-- ALBUM OF LOVE: MAIN SLIDER + THUMBNAILS --}}
     <section class="tht16-album">
-        <img class="tht16-flower-left" src="{{ asset('images/6.png') }}" alt="" aria-hidden="true">
         <div class="tht16-album-heading" data-aos="fade-right">
             <h2>Album <span>Of</span></h2>
         </div>
