@@ -188,7 +188,7 @@ body { margin: 0; background: #e8ebe4; color: var(--tht16-ink); font-family: var
 .tht16 .tht16-collage-seal { display: block; width: 125px; max-width: none; height: auto; object-fit: initial; transform: translate(-28%, -54%) rotate(18deg); transform-origin: 50% 64%; filter: drop-shadow(0 6px 8px rgba(48, 56, 41, .2)); }
 
 /* Album */
-.tht16-album { padding: 70px 16px 76px; background: url('/images/background-3.jpg') no-repeat center top; background-size: cover; }
+.tht16-album {background: url('/images/background-3.jpg') no-repeat center top; background-size: cover; }
 .tht16-album-heading { padding: 0 22px; text-align: left; }
 .tht16-album-heading h2 { margin: 0; font: 600 clamp(51px, 14vw, 74px)/.85 var(--font-display); letter-spacing: .025em; text-transform: uppercase; }
 .tht16-album-heading h2 span { font: 400 1.05em/1 var(--font-hoatay); text-transform: none; }
