@@ -19,6 +19,7 @@
             ?? $albumImages->get(1)
             ?? $albumImages->get(0)
             ?? $heroUrl;
+        $heroReceptionDate = $sideData->events->first()?->receptionDate ?? $solar;
     @endphp
 <main class="tht16 wedding-container">
     @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'swirl'])
@@ -39,7 +40,7 @@
                 <span class="tht16-hero__amp">and</span>
                 {{ $sideData->secondName }}
             </h1>
-            <p class="tht16-hero__date" data-aos="fade-up" data-aos-delay="180">{{ $solar->format('d.m.Y') }}</p>
+            <p class="tht16-hero__date" data-aos="fade-up" data-aos-delay="180">{{ $heroReceptionDate->format('d.m.Y') }}</p>
         </div>
     </section>
 
@@ -60,7 +61,7 @@
 
         <div data-aos="fade-up">
             <p class="tht16-invite-title">Trân trọng kính mời</p>
-            <p class="tht16-guest">{{ $wedding->getGuestName() ? $guestName : 'Bạn + người thương' }}</p>
+            <p class="tht16-guest">{{ $wedding->getGuestName() ? $guestName : 'Bạn & người thương' }}</p>
             <p class="tht16-copy">Tới dự tiệc cưới thân mật<br>của gia đình chúng tôi</p>
         </div>
 
@@ -71,6 +72,9 @@
         </div>
 
         @foreach($sideData->events as $event)
+            @php
+                $receptionLunarDisplay = $wedding->formattedLunarDateFor($event->receptionDate);
+            @endphp
             <div class="tht16-event-block" data-aos="fade-up">
                 <div class="tht16-invite-date" aria-label="{{ $event->receptionDate->format('d m Y') }}">
                     <span>{{ $event->receptionDate->format('d') }}</span>
@@ -78,7 +82,7 @@
                     <span>{{ $event->receptionDate->format('Y') }}</span>
                 </div>
                 <p class="tht16-event-time__main">Lúc {{ $event->receptionTimeLabel() }}, {{ $event->receptionDayLabel() }}</p>
-                @if($lunarDisplay)<p class="tht16-lunar">( {{ $lunarDisplay }} )</p>@endif
+                @if($receptionLunarDisplay)<p class="tht16-lunar">( {{ $receptionLunarDisplay }} )</p>@endif
 
                 <h3 class="tht16-venue">Tại {{ $event->receptionVenue }}</h3>
                 @if($event->receptionAddress)<p class="tht16-address">{{ $event->receptionAddress }}</p>@endif
@@ -108,6 +112,9 @@
             <img class="tht16-wedding-stem" src="{{ asset('images/3.png') }}" alt="" aria-hidden="true">
             <h2 class="tht16-wedding-day__heading">Wedding<span>Day</span></h2>
             @foreach($sideData->events as $event)
+                @php
+                    $ceremonyLunarDisplay = $wedding->formattedLunarDateFor($event->ceremonyDate);
+                @endphp
                 <div class="tht16-ceremony-block">
                     <p class="tht16-ceremony-label">{{ $event->ceremonyTitle }}</p>
                     <div class="tht16-big-date" aria-label="{{ $event->ceremonyDate->format('d m Y') }}">
@@ -116,7 +123,7 @@
                         <span>{{ $event->ceremonyDate->format('Y') }}</span>
                     </div>
                     <p class="tht16-wedding-meta">Vào lúc {{ $event->ceremonyTimeLabel() }}, {{ $event->ceremonyDayLabel() }}</p>
-                    @if($lunarDisplay)<p class="tht16-wedding-lunar">({{ $lunarDisplay }})</p>@endif
+                    @if($ceremonyLunarDisplay)<p class="tht16-wedding-lunar">({{ $ceremonyLunarDisplay }})</p>@endif
                     <p class="tht16-wedding-venue">Tại {{ $event->ceremonyVenue }}</p>
                     @if($event->ceremonyAddress)<p class="tht16-address">{{ $event->ceremonyAddress }}</p>@endif
 

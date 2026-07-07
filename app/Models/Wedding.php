@@ -188,13 +188,23 @@ class Wedding extends Model implements HasMedia
 
     public function formattedLunarDate(): ?string
     {
+        return $this->formatLunarDate($this->event_date_lunar);
+    }
+
+    public function formattedLunarDateFor(mixed $solarDate): ?string
+    {
+        return $this->formatLunarDate(LunarHelper::solarToLunar($solarDate));
+    }
+
+    private function formatLunarDate(?string $lunarDate): ?string
+    {
         $format = $this->lunar_date_format ?? LunarDateFormat::SHORT;
 
         return match ($format) {
-            LunarDateFormat::FULL => ($long = LunarHelper::formatLong($this->event_date_lunar))
+            LunarDateFormat::FULL => ($long = LunarHelper::formatLong($lunarDate))
                 ? 'Tức '.$long
                 : null,
-            LunarDateFormat::SHORT => LunarHelper::formatShort($this->event_date_lunar),
+            LunarDateFormat::SHORT => LunarHelper::formatShort($lunarDate),
         };
     }
 
