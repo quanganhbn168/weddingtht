@@ -86,17 +86,22 @@ class WeddingSideResolver
 
     private static function groomEvent(Wedding $wedding): WeddingEventData
     {
+        $receptionDate = self::date($wedding->groom_reception_date, $wedding);
+        $ceremonyDate = self::date($wedding->groom_ceremony_date, $wedding);
+
         return new WeddingEventData(
             side: 'groom',
             receptionTitle: 'Bữa cơm thân mật nhà trai',
-            receptionDate: self::date($wedding->groom_reception_date ?? $wedding->groom_ceremony_date, $wedding),
+            receptionDate: $receptionDate,
+            receptionLunarDisplay: $wedding->formattedLunarDateFor($receptionDate),
             receptionTime: self::time($wedding->groom_reception_time ?? $wedding->groom_ceremony_time),
             receptionVenue: $wedding->groom_reception_venue ?: 'Tư gia nhà trai',
             receptionAddress: $wedding->groom_reception_address ?: $wedding->groom_address,
             receptionMapUrl: $wedding->groom_map_url,
             receptionMapEmbed: $wedding->groom_map_embed,
             ceremonyTitle: 'Lễ Thành Hôn',
-            ceremonyDate: self::date($wedding->groom_ceremony_date, $wedding),
+            ceremonyDate: $ceremonyDate,
+            ceremonyLunarDisplay: $wedding->formattedLunarDateFor($ceremonyDate),
             ceremonyTime: self::time($wedding->groom_ceremony_time),
             ceremonyVenue: $wedding->groom_ceremony_venue ?: 'Tư gia nhà trai',
             ceremonyAddress: $wedding->groom_address,
@@ -107,17 +112,22 @@ class WeddingSideResolver
 
     private static function brideEvent(Wedding $wedding): WeddingEventData
     {
+        $receptionDate = self::date($wedding->bride_reception_date, $wedding);
+        $ceremonyDate = self::date($wedding->bride_ceremony_date, $wedding);
+
         return new WeddingEventData(
             side: 'bride',
             receptionTitle: 'Bữa cơm thân mật nhà gái',
-            receptionDate: self::date($wedding->bride_reception_date ?? $wedding->bride_ceremony_date, $wedding),
+            receptionDate: $receptionDate,
+            receptionLunarDisplay: $wedding->formattedLunarDateFor($receptionDate),
             receptionTime: self::time($wedding->bride_reception_time ?? $wedding->bride_ceremony_time),
             receptionVenue: $wedding->bride_reception_venue ?: 'Tư gia nhà gái',
             receptionAddress: $wedding->bride_reception_address ?: $wedding->bride_address,
             receptionMapUrl: $wedding->bride_map_url,
             receptionMapEmbed: $wedding->bride_map_embed,
             ceremonyTitle: 'Lễ Vu Quy',
-            ceremonyDate: self::date($wedding->bride_ceremony_date, $wedding),
+            ceremonyDate: $ceremonyDate,
+            ceremonyLunarDisplay: $wedding->formattedLunarDateFor($ceremonyDate),
             ceremonyTime: self::time($wedding->bride_ceremony_time),
             ceremonyVenue: $wedding->bride_ceremony_venue ?: 'Tư gia nhà gái',
             ceremonyAddress: $wedding->bride_address,
@@ -128,7 +138,7 @@ class WeddingSideResolver
 
     private static function date(mixed $date, Wedding $wedding): Carbon
     {
-        return Carbon::parse($date ?? $wedding->event_date ?? now());
+        return Carbon::parse($date ?? $wedding->event_date);
     }
 
     private static function time(mixed $time): ?Carbon

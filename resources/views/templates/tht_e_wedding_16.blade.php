@@ -11,16 +11,6 @@
 @push('styles')
 @vite(['resources/css/templates/tht-e-wedding-16.css'])
 @endpush
-@php
-        $tornPhoto = $wedding->getTemplateMediaUrl('tht16_torn_photo')
-            ?? $albumImages->get(0)
-            ?? $heroUrl;
-        $foreverAnchorPhoto = $wedding->getTemplateMediaUrl('tht16_forever_anchor')
-            ?? $albumImages->get(1)
-            ?? $albumImages->get(0)
-            ?? $heroUrl;
-        $heroReceptionDate = $sideData->events->first()?->receptionDate ?? $solar;
-    @endphp
 <main class="tht16 wedding-container">
     @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'swirl'])
     @if($wedding->show_invitation_wrapper)
@@ -40,7 +30,7 @@
                 <span class="tht16-hero__amp">and</span>
                 {{ $sideData->secondName }}
             </h1>
-            <p class="tht16-hero__date" data-aos="fade-up" data-aos-delay="180">{{ $heroReceptionDate->format('d.m.Y') }}</p>
+            <p class="tht16-hero__date" data-aos="fade-up" data-aos-delay="180">{{ $wedding->event_date->format('d.m.Y') }}</p>
         </div>
     </section>
 
@@ -72,9 +62,6 @@
         </div>
 
         @foreach($sideData->events as $event)
-            @php
-                $receptionLunarDisplay = $wedding->formattedLunarDateFor($event->receptionDate);
-            @endphp
             <div class="tht16-event-block" data-aos="fade-up">
                 <div class="tht16-invite-date" aria-label="{{ $event->receptionDate->format('d m Y') }}">
                     <span>{{ $event->receptionDate->format('d') }}</span>
@@ -82,7 +69,7 @@
                     <span>{{ $event->receptionDate->format('Y') }}</span>
                 </div>
                 <p class="tht16-event-time__main">Lúc {{ $event->receptionTimeLabel() }}, {{ $event->receptionDayLabel() }}</p>
-                @if($receptionLunarDisplay)<p class="tht16-lunar">( {{ $receptionLunarDisplay }} )</p>@endif
+                @if($event->receptionLunarDisplay)<p class="tht16-lunar">( {{ $event->receptionLunarDisplay }} )</p>@endif
 
                 <h3 class="tht16-venue">Tại {{ $event->receptionVenue }}</h3>
                 @if($event->receptionAddress)<p class="tht16-address">{{ $event->receptionAddress }}</p>@endif
@@ -105,16 +92,15 @@
 
     {{-- WEDDING DAY --}}
     <section class="tht16-wedding-day" data-aos="fade-up">
-        <figure class="" data-aos="fade-up">
-            <img src="{{ $tornPhoto }}" alt="Khoảnh khắc của {{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy">
-        </figure>
+        @if($wedding->getTemplateMediaUrl('tht16_torn_photo'))
+            <figure class="tht16-torn-photo" data-aos="fade-up">
+                <img src="{{ $wedding->getTemplateMediaUrl('tht16_torn_photo') }}" alt="Khoảnh khắc của {{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy">
+            </figure>
+        @endif
         <section class="tht16-wedding-day__content">
             <img class="tht16-wedding-stem" src="{{ asset('images/3.png') }}" alt="" aria-hidden="true">
             <h2 class="tht16-wedding-day__heading">Wedding<span>Day</span></h2>
             @foreach($sideData->events as $event)
-                @php
-                    $ceremonyLunarDisplay = $wedding->formattedLunarDateFor($event->ceremonyDate);
-                @endphp
                 <div class="tht16-ceremony-block">
                     <p class="tht16-ceremony-label">{{ $event->ceremonyTitle }}</p>
                     <div class="tht16-big-date" aria-label="{{ $event->ceremonyDate->format('d m Y') }}">
@@ -123,7 +109,7 @@
                         <span>{{ $event->ceremonyDate->format('Y') }}</span>
                     </div>
                     <p class="tht16-wedding-meta">Vào lúc {{ $event->ceremonyTimeLabel() }}, {{ $event->ceremonyDayLabel() }}</p>
-                    @if($ceremonyLunarDisplay)<p class="tht16-wedding-lunar">({{ $ceremonyLunarDisplay }})</p>@endif
+                    @if($event->ceremonyLunarDisplay)<p class="tht16-wedding-lunar">({{ $event->ceremonyLunarDisplay }})</p>@endif
                     <p class="tht16-wedding-venue">Tại {{ $event->ceremonyVenue }}</p>
                     @if($event->ceremonyAddress)<p class="tht16-address">{{ $event->ceremonyAddress }}</p>@endif
 
@@ -141,13 +127,15 @@
             @endforeach
         </section>
     </section>
-<figure class="tht16-anchor-photo" data-aos="fade-up">
-            <img src="{{ $foreverAnchorPhoto }}" alt="Our Forever Anchor" loading="lazy">
+    @if($wedding->getTemplateMediaUrl('tht16_forever_anchor'))
+        <figure class="tht16-anchor-photo" data-aos="fade-up">
+            <img src="{{ $wedding->getTemplateMediaUrl('tht16_forever_anchor') }}" alt="Our Forever Anchor" loading="lazy">
             <figcaption class="tht16-anchor-photo__caption">
                 <span>Our</span>
                 <strong>Forever Anchor</strong>
             </figcaption>
         </figure>
+    @endif
     {{-- BRIDE & GROOM COLLAGE --}}
     <section class="tht16-paper tht16-couple-collage" aria-label="Cô dâu và chú rể">
         <div class="tht16-collage-photo tht16-collage-photo--bride">
@@ -178,11 +166,8 @@
         <div class="tht16-album-heading" data-aos="fade-right">
             <h2>Album <span>Of</span></h2>
         </div>
-        <div class="tht16-love-mask" data-aos="fade-up">
-            @php
-                $loveFocus = $wedding->albumLoveFocalPoint();
-                $loveImage = $wedding->albumLoveImageUrl() ?? $albumImages->first();
-            @endphp
+        @if($wedding->albumLoveImageUrl())
+            <div class="tht16-love-mask" data-aos="fade-up">
             <svg class="tht16-love-mask__word" viewBox="0 0 1000 300" role="img" aria-label="LOVE">
                 <defs>
                     <mask id="tht16-love-image-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="300">
@@ -190,16 +175,17 @@
                         <ellipse class="tht16-love-mask__o-fill" cx="365" cy="158" rx="72" ry="88" />
                     </mask>
                 </defs>
-                <image href="{{ $loveImage }}" x="0" y="0" width="1000" height="300" preserveAspectRatio="xMidYMin slice" mask="url(#tht16-love-image-mask)" />
+                <image href="{{ $wedding->albumLoveImageUrl() }}" x="0" y="0" width="1000" height="300" preserveAspectRatio="xMidYMin slice" mask="url(#tht16-love-image-mask)" />
                 <foreignObject x="0" y="0" width="1000" height="300" mask="url(#tht16-love-image-mask)">
                     <div
                         xmlns="http://www.w3.org/1999/xhtml"
                         class="tht16-love-mask__image"
-                        style="background-image: url('{{ $loveImage }}'); background-position: {{ $loveFocus['x'] }}% {{ $loveFocus['y'] }}%;"
+                        style="background-image: url('{{ $wedding->albumLoveImageUrl() }}'); background-position: {{ $wedding->albumLoveFocalPoint()['x'] }}% {{ $wedding->albumLoveFocalPoint()['y'] }}%;"
                     ></div>
                 </foreignObject>
             </svg>
-        </div>
+            </div>
+        @endif
 
         <div class="swiper tht16-album-main" data-aos="fade-up">
             <div class="swiper-wrapper">
@@ -248,7 +234,7 @@
         <div class="tht16-thankyou__content" data-aos="zoom-in">
             <p class="tht16-thankyou__title">Thank You</p>
             <p class="tht16-thankyou__names">{{ $sideData->firstName }} &amp; {{ $sideData->secondName }}</p>
-            <p class="tht16-thankyou__date">{{ $solar->format('d.m.Y') }}</p>
+            <p class="tht16-thankyou__date">{{ $wedding->event_date->format('d.m.Y') }}</p>
         </div>
         <p class="tht16-credit">THT E-Wedding · Made with love</p>
     </footer>

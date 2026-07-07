@@ -3,7 +3,7 @@
 return [
     'templates.tht_e_wedding_16' => [
         'label' => 'Ảnh riêng của THT E-Wedding 16',
-        'description' => 'Các ảnh này chỉ được dùng bởi mẫu THT E-Wedding 16. Nếu bỏ trống, mẫu sẽ tự lấy ảnh phù hợp trong Gallery.',
+        'description' => 'Các ảnh này chỉ được dùng bởi mẫu THT E-Wedding 16. Vị trí chưa có ảnh sẽ không hiển thị.',
         'columns' => 3,
         'fields' => [
             [

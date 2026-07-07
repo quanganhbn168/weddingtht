@@ -74,6 +74,10 @@ npm run dev
 php artisan serve
 ```
 
+### Tạo hoặc chỉnh sửa wedding template
+
+Đọc [Quy ước dữ liệu cho Wedding Template](docs/WEDDING_TEMPLATE_DATA_CONTRACT.md) trước khi làm template mới. Tài liệu quy định nguồn dữ liệu, ngày cưới chính, ngày âm, `side`, media collection và các fallback được phép.
+
 ## 📁 Cấu trúc thư mục chính
 
 ```

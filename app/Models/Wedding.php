@@ -257,12 +257,13 @@ class Wedding extends Model implements HasMedia
             return $loveImage;
         }
 
-        $images = $this->gallery_images;
-        $selected = $this->album_love_media_id
-            ? $images->firstWhere('id', (int) $this->album_love_media_id)
-            : null;
+        if (! $this->album_love_media_id) {
+            return null;
+        }
 
-        return ($selected ?? $images->first())?->getUrl();
+        return $this->gallery_images
+            ->firstWhere('id', (int) $this->album_love_media_id)
+            ?->getUrl();
     }
 
     public function getStatusLabel(): string
