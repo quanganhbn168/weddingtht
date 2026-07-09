@@ -612,7 +612,6 @@ class WeddingForm
                             ->schema([
                                 Section::make('Khách mời riêng cho THT 16')
                                     ->description('Nhập mã và tên khách để tạo link riêng. Khi khách mở đúng mã, thiệp và meta description sẽ hiện tên khách đó.')
-                                    ->visible(fn (Get $get, ?Wedding $record): bool => self::isTht16TemplateSelected($get, $record))
                                     ->schema([
                                         Repeater::make('content.invited_guests')
                                             ->label('Danh sách khách mời')
