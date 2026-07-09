@@ -45,9 +45,7 @@ class WeddingDataService
             : $placeholders;
         $albumImages = collect($imgs)->filter()->values();
         $thankYouImage = $albumImages->last() ?: $wedding->getHeroUrl();
-        $guestName = $wedding->getGuestName()
-            ? urldecode($wedding->getGuestName())
-            : 'Bạn và người thương';
+        $guestName = $wedding->getGuestName();
 
         // Groom ceremony
         $groomCeremonyCarbon = self::parseTime($wedding->groom_ceremony_time, $wedding->groom_ceremony_date, $solar);

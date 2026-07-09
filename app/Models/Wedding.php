@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -444,9 +445,84 @@ class Wedding extends Model implements HasMedia
         return $this->content[$key] ?? $default;
     }
 
+    public static function normalizeGuestCode(?string $code): ?string
+    {
+        $normalized = Str::of((string) $code)
+            ->trim()
+            ->lower()
+            ->replaceMatches('/[^a-z0-9_-]+/', '-')
+            ->trim('-_')
+            ->toString();
+
+        return $normalized !== '' ? $normalized : null;
+    }
+
+    public function guestInvites(): array
+    {
+        $guests = $this->getContentValue('invited_guests', []);
+
+        return is_array($guests) ? $guests : [];
+    }
+
+    public function hasGuestInvites(): bool
+    {
+        return collect($this->guestInvites())->contains(
+            fn (mixed $guest): bool => is_array($guest)
+                && filled($guest['code'] ?? null)
+                && filled($guest['name'] ?? null)
+        );
+    }
+
+    public function guestNameForCode(?string $code): ?string
+    {
+        $normalizedCode = self::normalizeGuestCode($code);
+
+        if (! $normalizedCode) {
+            return null;
+        }
+
+        foreach ($this->guestInvites() as $guest) {
+            if (! is_array($guest)) {
+                continue;
+            }
+
+            if (self::normalizeGuestCode($guest['code'] ?? null) !== $normalizedCode) {
+                continue;
+            }
+
+            $name = trim(strip_tags((string) ($guest['name'] ?? '')));
+
+            return $name !== '' ? $name : null;
+        }
+
+        return null;
+    }
+
+    public function guestInvitationUrl(string $code): string
+    {
+        return route('wedding.short.guest', [
+            'slug' => $this->slug,
+            'guestCode' => self::normalizeGuestCode($code) ?: $code,
+        ]);
+    }
+
     public function getGuestName(): ?string
     {
-        return request()->query('guest');
+        $requestedGuest = $this->requestedGuestValue();
+
+        if (! $requestedGuest) {
+            return null;
+        }
+
+        if ($name = $this->guestNameForCode($requestedGuest)) {
+            return $name;
+        }
+
+        if ($this->hasGuestInvites()) {
+            return null;
+        }
+
+        return trim(strip_tags($requestedGuest)) ?: null;
     }
 
     // ==========================================
@@ -520,5 +596,20 @@ class Wedding extends Model implements HasMedia
         }
 
         return $this->getFirstMediaUrl($collection, $conversion);
+    }
+
+    private function requestedGuestValue(): ?string
+    {
+        $guest = request()->route('guestCode')
+            ?? request()->query('guest_code')
+            ?? request()->query('guest');
+
+        if (! is_string($guest)) {
+            return null;
+        }
+
+        $guest = trim(urldecode($guest));
+
+        return $guest !== '' ? $guest : null;
     }
 }

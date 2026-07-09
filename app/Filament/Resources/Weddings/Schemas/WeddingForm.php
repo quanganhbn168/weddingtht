@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\Wedding;
 use Carbon\Carbon;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
@@ -30,6 +31,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Illuminate\Support\Js;
 use Illuminate\Support\Str;
 
 class WeddingForm
@@ -608,6 +610,65 @@ class WeddingForm
                         Tab::make('Lời mời & Lời chúc')
                             ->icon('heroicon-o-chat-bubble-bottom-center-text')
                             ->schema([
+                                Section::make('Khách mời riêng cho THT 16')
+                                    ->description('Nhập mã và tên khách để tạo link riêng. Khi khách mở đúng mã, thiệp và meta description sẽ hiện tên khách đó.')
+                                    ->visible(fn (Get $get, ?Wedding $record): bool => self::isTht16TemplateSelected($get, $record))
+                                    ->schema([
+                                        Repeater::make('content.invited_guests')
+                                            ->label('Danh sách khách mời')
+                                            ->schema([
+                                                TextInput::make('code')
+                                                    ->label('Mã khách')
+                                                    ->placeholder('km001')
+                                                    ->required()
+                                                    ->maxLength(50)
+                                                    ->rules(['alpha_dash'])
+                                                    ->distinct()
+                                                    ->live(debounce: 500)
+                                                    ->afterStateUpdated(function (Get $get, Set $set, ?string $state, ?Wedding $record) {
+                                                        $code = Wedding::normalizeGuestCode($state);
+
+                                                        if (($state ?? '') !== ($code ?? '')) {
+                                                            $set('code', $code);
+                                                        }
+
+                                                        $set('link', self::guestLinkForForm($get, $record, $code));
+                                                    })
+                                                    ->helperText('Dùng chữ, số, gạch ngang hoặc gạch dưới. Ví dụ: km001.'),
+
+                                                TextInput::make('name')
+                                                    ->label('Tên khách mời')
+                                                    ->placeholder('Gia đình anh Nguyễn Văn A')
+                                                    ->required()
+                                                    ->maxLength(255),
+
+                                                TextInput::make('link')
+                                                    ->label('Link riêng để copy')
+                                                    ->placeholder('Nhập mã khách để tạo link')
+                                                    ->readOnly()
+                                                    ->dehydrated(false)
+                                                    ->afterStateHydrated(fn (TextInput $component, Get $get, ?Wedding $record) => $component->state(
+                                                        self::guestLinkForForm($get, $record, $get('code'))
+                                                    ))
+                                                    ->suffixAction(self::copyGuestLinkAction())
+                                                    ->columnSpanFull(),
+                                            ])
+                                            ->columns(2)
+                                            ->collapsible()
+                                            ->cloneable()
+                                            ->defaultItems(0)
+                                            ->addActionLabel('+ Thêm khách mời')
+                                            ->itemLabel(fn (array $state): ?string => trim(($state['code'] ?? 'Mã mới').' - '.($state['name'] ?? 'Khách mới')))
+                                            ->mutateDehydratedStateUsing(fn (?array $state): array => collect($state ?? [])
+                                                ->map(fn (array $guest): array => [
+                                                    'code' => Wedding::normalizeGuestCode($guest['code'] ?? null),
+                                                    'name' => trim(strip_tags((string) ($guest['name'] ?? ''))),
+                                                ])
+                                                ->filter(fn (array $guest): bool => filled($guest['code']) && filled($guest['name']))
+                                                ->values()
+                                                ->all()),
+                                    ]),
+
                                 Section::make('Lời chúc phúc (Blessing)')
                                     ->description('Hiển thị ở phần Mừng cưới')
                                     ->columns(1)
@@ -683,5 +744,43 @@ class WeddingForm
                             ]),
                     ]),
             ]);
+    }
+
+    private static function isTht16TemplateSelected(Get $get, ?Wedding $record): bool
+    {
+        $templateView = $get('template_view');
+
+        if (! $templateView && ($templateId = $get('template_id') ?: $record?->template_id)) {
+            $templateView = Template::query()->whereKey($templateId)->value('view_path');
+        }
+
+        return $templateView === 'templates.tht_e_wedding_16';
+    }
+
+    private static function guestLinkForForm(Get $get, ?Wedding $record, ?string $code): string
+    {
+        $code = Wedding::normalizeGuestCode($code);
+        $slug = $get('../../slug') ?: $record?->slug;
+
+        if (! $slug || ! $code) {
+            return '';
+        }
+
+        return route('wedding.short.guest', [
+            'slug' => $slug,
+            'guestCode' => $code,
+        ]);
+    }
+
+    private static function copyGuestLinkAction(): Action
+    {
+        return Action::make('copy_guest_link')
+            ->icon('heroicon-o-clipboard-document')
+            ->tooltip('Copy link')
+            ->color('gray')
+            ->disabled(fn (?string $state): bool => blank($state))
+            ->alpineClickHandler(fn (?string $state): string => blank($state)
+                ? ''
+                : 'navigator.clipboard.writeText('.Js::from($state)->toHtml().").then(() => { \$tooltip('Đã copy link', { timeout: 1500 }) })");
     }
 }

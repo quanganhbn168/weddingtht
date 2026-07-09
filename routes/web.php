@@ -38,6 +38,11 @@ use App\Http\Controllers\RsvpController;
 use App\Http\Controllers\WishController;
 
 // Wedding invitation pages
+Route::get('/w/{slug}/{guestCode}', [WeddingController::class, 'show'])
+    ->where('guestCode', '[A-Za-z0-9_-]+')
+    ->name('wedding.show.guest');
+Route::post('/w/{slug}/{guestCode}', [WeddingController::class, 'show'])
+    ->where('guestCode', '[A-Za-z0-9_-]+');
 Route::get('/w/{slug}', [WeddingController::class, 'show'])->name('wedding.show');
 Route::post('/w/{slug}', [WeddingController::class, 'show']); // For password form
 
@@ -47,6 +52,14 @@ Route::post('/w/{wedding:slug}/wish', [WishController::class, 'store'])->name('w
 Route::get('/api/w/{wedding:slug}/wishes', [WishController::class, 'index'])->name('wedding.wishes.api');
 
 // Business card routes - REMOVED
+
+Route::get('/{slug}/{guestCode}', [WeddingController::class, 'show'])
+    ->where('slug', '^(?!admin|dashboard|login|register|profile|payment|api|w$)[A-Za-z0-9_-]+$')
+    ->where('guestCode', '[A-Za-z0-9_-]+')
+    ->name('wedding.short.guest');
+Route::post('/{slug}/{guestCode}', [WeddingController::class, 'show'])
+    ->where('slug', '^(?!admin|dashboard|login|register|profile|payment|api|w$)[A-Za-z0-9_-]+$')
+    ->where('guestCode', '[A-Za-z0-9_-]+');
 
 // Fallback: /{slug} can be wedding OR card (check wedding first)
 Route::get('/{slug}', [\App\Http\Controllers\HomeController::class, 'resolveSlug'])

@@ -3,8 +3,12 @@
 {{-- Type: wedding --}}
 {{-- Tier: pro --}}
 
+@php
+    $tht16GuestName = $guestName ?? $wedding->getGuestName();
+@endphp
+
 @section('title', $sideData->firstName . ' & ' . $sideData->secondName . ' | THT E-Wedding')
-@section('description', 'Trân trọng kính mời bạn đến chung vui cùng ' . $sideData->firstName . ' và ' . $sideData->secondName)
+@section('description', 'Trân trọng kính mời ' . ($tht16GuestName ?: 'bạn') . ' đến chung vui cùng ' . $sideData->firstName . ' và ' . $sideData->secondName)
 @section('og_image', $shareUrl)
 
 @section('content')
@@ -51,7 +55,7 @@
 
         <div data-aos="fade-up">
             <p class="tht16-invite-title">Trân trọng kính mời</p>
-            <p class="tht16-guest">{{ $wedding->getGuestName() ? $guestName : 'Bạn & người thương' }}</p>
+            <p class="tht16-guest">{{ $tht16GuestName ?: 'Bạn & người thương' }}</p>
             <p class="tht16-copy">Tới dự tiệc cưới thân mật<br>của gia đình chúng tôi</p>
         </div>
 
