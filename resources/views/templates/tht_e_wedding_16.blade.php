@@ -248,6 +248,36 @@
 <x-wedding.countdown-script />
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const fitGuestNames = function () {
+        document.querySelectorAll('.tht16-guest').forEach(function (guestName) {
+            guestName.style.fontSize = '';
+            guestName.style.letterSpacing = '';
+
+            const baseFontSize = parseFloat(window.getComputedStyle(guestName).fontSize);
+            const minFontSize = 20;
+            let nextFontSize = baseFontSize;
+
+            guestName.style.fontSize = nextFontSize + 'px';
+
+            while (guestName.scrollWidth > guestName.clientWidth && nextFontSize > minFontSize) {
+                nextFontSize -= 1;
+                guestName.style.fontSize = nextFontSize + 'px';
+            }
+
+            if (guestName.scrollWidth > guestName.clientWidth) {
+                guestName.style.letterSpacing = '-0.01em';
+            }
+        });
+    };
+
+    fitGuestNames();
+
+    if (document.fonts) {
+        document.fonts.ready.then(fitGuestNames);
+    }
+
+    window.addEventListener('resize', fitGuestNames);
+
     const thumbsElement = document.querySelector('.tht16-album-thumbs');
     const mainElement = document.querySelector('.tht16-album-main');
 
