@@ -457,6 +457,83 @@ class Wedding extends Model implements HasMedia
         return $normalized !== '' ? $normalized : null;
     }
 
+    public static function nextGuestCode(iterable $guests, string $prefix = 'km'): string
+    {
+        $prefix = Str::of($prefix)
+            ->trim()
+            ->lower()
+            ->replaceMatches('/[^a-z0-9]+/', '')
+            ->toString() ?: 'km';
+
+        $highestNumber = 0;
+        $padding = 3;
+        $usedCodes = [];
+
+        foreach ($guests as $guest) {
+            if (! is_array($guest)) {
+                continue;
+            }
+
+            $code = self::normalizeGuestCode($guest['code'] ?? null);
+
+            if (! $code) {
+                continue;
+            }
+
+            $usedCodes[$code] = true;
+
+            if (! preg_match('/^'.preg_quote($prefix, '/').'(\d+)$/', $code, $matches)) {
+                continue;
+            }
+
+            $highestNumber = max($highestNumber, (int) $matches[1]);
+            $padding = max($padding, strlen($matches[1]));
+        }
+
+        do {
+            $highestNumber++;
+            $nextCode = $prefix.str_pad((string) $highestNumber, $padding, '0', STR_PAD_LEFT);
+        } while (isset($usedCodes[$nextCode]));
+
+        return $nextCode;
+    }
+
+    public static function appendGuestNames(array $existingGuests, string $guestNames): array
+    {
+        $guests = array_values($existingGuests);
+        $knownNames = [];
+
+        foreach ($guests as $guest) {
+            if (! is_array($guest)) {
+                continue;
+            }
+
+            $nameKey = self::guestNameKey($guest['name'] ?? null);
+
+            if ($nameKey !== '') {
+                $knownNames[$nameKey] = true;
+            }
+        }
+
+        foreach (preg_split('/\R/u', $guestNames) ?: [] as $line) {
+            $name = preg_replace('/^\s*(?:(?:[-*•▪◦]+)|(?:\d+[.)]))\s*/u', '', $line);
+            $name = trim(strip_tags((string) $name));
+            $nameKey = self::guestNameKey($name);
+
+            if ($nameKey === '' || isset($knownNames[$nameKey])) {
+                continue;
+            }
+
+            $guests[] = [
+                'code' => self::nextGuestCode($guests),
+                'name' => $name,
+            ];
+            $knownNames[$nameKey] = true;
+        }
+
+        return $guests;
+    }
+
     public function guestInvites(): array
     {
         $guests = $this->getContentValue('invited_guests', []);
@@ -611,5 +688,13 @@ class Wedding extends Model implements HasMedia
         $guest = trim(urldecode($guest));
 
         return $guest !== '' ? $guest : null;
+    }
+
+    private static function guestNameKey(mixed $name): string
+    {
+        return Str::of(strip_tags((string) $name))
+            ->squish()
+            ->lower()
+            ->toString();
     }
 }

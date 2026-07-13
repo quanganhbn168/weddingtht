@@ -31,6 +31,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Illuminate\Support\Js;
 use Illuminate\Support\Str;
 
@@ -656,6 +657,28 @@ class WeddingForm
                                             ->collapsible()
                                             ->cloneable()
                                             ->defaultItems(0)
+                                            ->hintAction(self::importGuestListAction())
+                                            ->addAction(fn (Action $action): Action => $action
+                                                ->action(function (Repeater $component): void {
+                                                    $items = $component->getState() ?? [];
+                                                    $guest = [
+                                                        'code' => Wedding::nextGuestCode(array_values($items)),
+                                                        'name' => '',
+                                                    ];
+                                                    $newKey = $component->generateUuid();
+
+                                                    if ($newKey) {
+                                                        $items[$newKey] = $guest;
+                                                    } else {
+                                                        $items[] = $guest;
+                                                        $newKey = array_key_last($items);
+                                                    }
+
+                                                    $component->state($items);
+                                                    $component->getChildComponentContainer($newKey)->fill();
+                                                    $component->collapsed(false, shouldMakeComponentCollapsible: false);
+                                                    $component->callAfterStateUpdated();
+                                                }))
                                             ->addActionLabel('+ Thêm khách mời')
                                             ->itemLabel(fn (array $state): ?string => trim(($state['code'] ?? 'Mã mới').' - '.($state['name'] ?? 'Khách mới')))
                                             ->mutateDehydratedStateUsing(fn (?array $state): array => collect($state ?? [])
@@ -781,5 +804,48 @@ class WeddingForm
             ->alpineClickHandler(fn (?string $state): string => blank($state)
                 ? ''
                 : 'navigator.clipboard.writeText('.Js::from($state)->toHtml().").then(() => { \$tooltip('Đã copy link', { timeout: 1500 }) })");
+    }
+
+    private static function importGuestListAction(): Action
+    {
+        return Action::make('import_guest_list')
+            ->label('Nhập nhanh danh sách')
+            ->icon('heroicon-o-document-plus')
+            ->modalHeading('Nhập nhanh danh sách khách mời')
+            ->modalDescription('Mỗi khách một dòng. Danh sách hiện tại được giữ nguyên; tên trùng sẽ được bỏ qua và mã khách mới được tạo tự động.')
+            ->modalSubmitActionLabel('Thêm vào danh sách')
+            ->form([
+                Textarea::make('guest_names')
+                    ->label('Tên khách mời')
+                    ->placeholder("Bạn Phương và NT\nBạn Thanh và NT\nVợ chồng bạn Ly")
+                    ->helperText('Có thể dán danh sách bắt đầu bằng dấu gạch đầu dòng.')
+                    ->rows(12)
+                    ->required(),
+            ])
+            ->action(function (array $data, Repeater $component): void {
+                $items = $component->getState() ?? [];
+                $existingGuests = array_values($items);
+                $mergedGuests = Wedding::appendGuestNames($existingGuests, $data['guest_names']);
+                $newGuests = array_slice($mergedGuests, count($existingGuests));
+
+                foreach ($newGuests as $guest) {
+                    if ($newKey = $component->generateUuid()) {
+                        $items[$newKey] = $guest;
+                    } else {
+                        $items[] = $guest;
+                    }
+                }
+
+                $component->state($items);
+                $component->collapsed(false, shouldMakeComponentCollapsible: false);
+                $component->callAfterStateUpdated();
+
+                Notification::make()
+                    ->title(count($newGuests) > 0
+                        ? 'Đã thêm '.count($newGuests).' khách mời'
+                        : 'Không có khách mới để thêm')
+                    ->color(count($newGuests) > 0 ? 'success' : 'warning')
+                    ->send();
+            });
     }
 }
