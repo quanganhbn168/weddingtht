@@ -12,6 +12,7 @@ use App\Models\SharedMusic;
 use App\Models\Template;
 use App\Models\User;
 use App\Models\Wedding;
+use App\Services\GuestInviteExportService;
 use Carbon\Carbon;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Actions\Action;
@@ -657,7 +658,10 @@ class WeddingForm
                                             ->collapsible()
                                             ->cloneable()
                                             ->defaultItems(0)
-                                            ->hintAction(self::importGuestListAction())
+                                            ->hintActions([
+                                                self::importGuestListAction(),
+                                                self::exportGuestListAction(),
+                                            ])
                                             ->addAction(fn (Action $action): Action => $action
                                                 ->action(function (Repeater $component): void {
                                                     $items = $component->getState() ?? [];
@@ -846,6 +850,29 @@ class WeddingForm
                         : 'Không có khách mới để thêm')
                     ->color(count($newGuests) > 0 ? 'success' : 'warning')
                     ->send();
+            });
+    }
+
+    private static function exportGuestListAction(): Action
+    {
+        return Action::make('export_guest_list')
+            ->label('Xuất danh sách & link')
+            ->icon('heroicon-o-arrow-down-tray')
+            ->color('success')
+            ->visible(fn (?Wedding $record): bool => filled($record?->slug))
+            ->action(function (Repeater $component, ?Wedding $record) {
+                if (! $record) {
+                    return null;
+                }
+
+                return response()->streamDownload(
+                    GuestInviteExportService::txtCallback(
+                        $record,
+                        array_values($component->getState() ?? []),
+                    ),
+                    GuestInviteExportService::filename($record),
+                    ['Content-Type' => 'text/plain; charset=UTF-8'],
+                );
             });
     }
 }
