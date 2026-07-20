@@ -68,12 +68,6 @@ class TemplateResource extends Resource
                     ])
                     ->default('wedding')
                     ->required(),
-                Forms\Components\Select::make('required_tier')
-                    ->label('Gói yêu cầu')
-                    ->options(\App\Enums\WeddingTier::optionsWithPrice())
-                    ->default('basic')
-                    ->required()
-                    ->helperText('Khách hàng phải mua gói này hoặc cao hơn để sử dụng mẫu'),
                 Forms\Components\FileUpload::make('thumbnail_url')
                     ->label('Ảnh đại diện')
                     ->image()
@@ -106,14 +100,6 @@ class TemplateResource extends Resource
                         'business' => 'info',
                         default => 'gray',
                     }),
-                Tables\Columns\TextColumn::make('tier')
-                    ->label('Gói')
-                    ->badge()
-                    ->color(fn (?string $state): string => match ($state) {
-                        \App\Enums\WeddingTier::PRO->value => 'warning',
-                        default => 'gray', // Standard
-                    })
-                    ->formatStateUsing(fn (?string $state): string => \App\Enums\WeddingTier::tryFrom($state)?->label() ?? strtoupper($state)),
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->label('Bật/Tắt'),
                 Tables\Columns\TextColumn::make('created_at')
@@ -127,9 +113,6 @@ class TemplateResource extends Resource
                         'wedding' => 'Wedding',
                         'business' => 'Business',
                     ]),
-                Tables\Filters\SelectFilter::make('tier')
-                    ->label('Gói dịch vụ')
-                    ->options(\App\Enums\WeddingTier::options()),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

@@ -13,12 +13,14 @@ use App\Models\Template;
 use App\Models\User;
 use App\Models\Wedding;
 use App\Services\GuestInviteExportService;
+use App\Services\VietQrService;
 use Carbon\Carbon;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -35,6 +37,7 @@ use Filament\Forms\Set;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Js;
 use Illuminate\Support\Str;
+use Illuminate\Support\HtmlString;
 
 class WeddingForm
 {
@@ -290,16 +293,78 @@ class WeddingForm
                                     ]),
 
                                 Section::make('QR Mừng cưới nhà trai')
+                                    ->description('Chỉ cần chọn ngân hàng và nhập số tài khoản, ảnh QR VietQR sẽ tự tạo khi lưu thiệp.')
+                                    ->columns(2)
                                     ->schema([
-                                        SpatieMediaLibraryFileUpload::make('groom_qr')
-                                            ->label('Ảnh QR Code')
-                                            ->collection('groom_qr')
-                                            ->disk('public')
-                                            ->image(),
+                                        Select::make('groom_qr_bank_id')
+                                            ->label('Ngân hàng nhận tiền')
+                                            ->options(VietQrService::bankOptions())
+                                            ->searchable()
+                                            ->native(false)
+                                            ->live(),
 
-                                        Textarea::make('groom_qr_info')
-                                            ->label('Thông tin tài khoản')
-                                            ->placeholder("Ngân hàng: ...\nSố TK: ...\nChủ TK: ..."),
+                                        TextInput::make('groom_qr_account_number')
+                                            ->label('Số tài khoản')
+                                            ->placeholder('Ví dụ: 0123456789')
+                                            ->inputMode('numeric')
+                                            ->maxLength(19)
+                                            ->regex('/^[0-9]{6,19}$/')
+                                            ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? preg_replace('/\D+/', '', $state) : null)
+                                            ->live(),
+
+                                        TextInput::make('groom_qr_account_name')
+                                            ->label('Tên chủ tài khoản')
+                                            ->placeholder('Ví dụ: NGUYEN VAN A')
+                                            ->maxLength(255)
+                                            ->live(),
+
+                                        TextInput::make('groom_qr_amount')
+                                            ->label('Số tiền cố định (không bắt buộc)')
+                                            ->numeric()
+                                            ->minValue(0)
+                                            ->helperText('Để trống để khách tự nhập số tiền.')
+                                            ->live(),
+
+                                        TextInput::make('groom_qr_add_info')
+                                            ->label('Nội dung chuyển khoản (không bắt buộc)')
+                                            ->placeholder('MUNG CUOI')
+                                            ->maxLength(25)
+                                            ->columnSpanFull()
+                                            ->live(),
+
+                                        Placeholder::make('groom_qr_preview')
+                                            ->label('Xem trước QR tự tạo')
+                                            ->content(function (Get $get): HtmlString|string {
+                                                $url = VietQrService::quickLink(
+                                                    $get('groom_qr_bank_id'),
+                                                    $get('groom_qr_account_number'),
+                                                    $get('groom_qr_account_name'),
+                                                    $get('groom_qr_amount'),
+                                                    $get('groom_qr_add_info'),
+                                                );
+
+                                                return $url
+                                                    ? new HtmlString('<img src="'.e($url).'" alt="Xem trước QR nhà trai" class="w-52 max-w-full rounded-lg border bg-white p-2">')
+                                                    : 'Chọn ngân hàng và nhập số tài khoản để xem QR.';
+                                            })
+                                            ->columnSpanFull(),
+
+                                        Section::make('Ảnh QR thủ công (dự phòng)')
+                                            ->description('Chỉ dùng nếu chưa nhập thông tin tự tạo QR ở trên.')
+                                            ->collapsible()
+                                            ->collapsed()
+                                            ->schema([
+                                                SpatieMediaLibraryFileUpload::make('groom_qr')
+                                                    ->label('Ảnh QR Code')
+                                                    ->collection('groom_qr')
+                                                    ->disk('public')
+                                                    ->image(),
+
+                                                Textarea::make('groom_qr_info')
+                                                    ->label('Thông tin khi dùng ảnh QR thủ công')
+                                                    ->placeholder("Ngân hàng: ...\nSố TK: ...\nChủ TK: ..."),
+                                            ])
+                                            ->columnSpanFull(),
                                     ]),
                             ]),
 
@@ -385,16 +450,78 @@ class WeddingForm
                                     ]),
 
                                 Section::make('QR Mừng cưới nhà gái')
+                                    ->description('Chỉ cần chọn ngân hàng và nhập số tài khoản, ảnh QR VietQR sẽ tự tạo khi lưu thiệp.')
+                                    ->columns(2)
                                     ->schema([
-                                        SpatieMediaLibraryFileUpload::make('bride_qr')
-                                            ->label('Ảnh QR Code')
-                                            ->collection('bride_qr')
-                                            ->disk('public')
-                                            ->image(),
+                                        Select::make('bride_qr_bank_id')
+                                            ->label('Ngân hàng nhận tiền')
+                                            ->options(VietQrService::bankOptions())
+                                            ->searchable()
+                                            ->native(false)
+                                            ->live(),
 
-                                        Textarea::make('bride_qr_info')
-                                            ->label('Thông tin tài khoản')
-                                            ->placeholder("Ngân hàng: ...\nSố TK: ...\nChủ TK: ..."),
+                                        TextInput::make('bride_qr_account_number')
+                                            ->label('Số tài khoản')
+                                            ->placeholder('Ví dụ: 0123456789')
+                                            ->inputMode('numeric')
+                                            ->maxLength(19)
+                                            ->regex('/^[0-9]{6,19}$/')
+                                            ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? preg_replace('/\D+/', '', $state) : null)
+                                            ->live(),
+
+                                        TextInput::make('bride_qr_account_name')
+                                            ->label('Tên chủ tài khoản')
+                                            ->placeholder('Ví dụ: NGUYEN VAN A')
+                                            ->maxLength(255)
+                                            ->live(),
+
+                                        TextInput::make('bride_qr_amount')
+                                            ->label('Số tiền cố định (không bắt buộc)')
+                                            ->numeric()
+                                            ->minValue(0)
+                                            ->helperText('Để trống để khách tự nhập số tiền.')
+                                            ->live(),
+
+                                        TextInput::make('bride_qr_add_info')
+                                            ->label('Nội dung chuyển khoản (không bắt buộc)')
+                                            ->placeholder('MUNG CUOI')
+                                            ->maxLength(25)
+                                            ->columnSpanFull()
+                                            ->live(),
+
+                                        Placeholder::make('bride_qr_preview')
+                                            ->label('Xem trước QR tự tạo')
+                                            ->content(function (Get $get): HtmlString|string {
+                                                $url = VietQrService::quickLink(
+                                                    $get('bride_qr_bank_id'),
+                                                    $get('bride_qr_account_number'),
+                                                    $get('bride_qr_account_name'),
+                                                    $get('bride_qr_amount'),
+                                                    $get('bride_qr_add_info'),
+                                                );
+
+                                                return $url
+                                                    ? new HtmlString('<img src="'.e($url).'" alt="Xem trước QR nhà gái" class="w-52 max-w-full rounded-lg border bg-white p-2">')
+                                                    : 'Chọn ngân hàng và nhập số tài khoản để xem QR.';
+                                            })
+                                            ->columnSpanFull(),
+
+                                        Section::make('Ảnh QR thủ công (dự phòng)')
+                                            ->description('Chỉ dùng nếu chưa nhập thông tin tự tạo QR ở trên.')
+                                            ->collapsible()
+                                            ->collapsed()
+                                            ->schema([
+                                                SpatieMediaLibraryFileUpload::make('bride_qr')
+                                                    ->label('Ảnh QR Code')
+                                                    ->collection('bride_qr')
+                                                    ->disk('public')
+                                                    ->image(),
+
+                                                Textarea::make('bride_qr_info')
+                                                    ->label('Thông tin khi dùng ảnh QR thủ công')
+                                                    ->placeholder("Ngân hàng: ...\nSố TK: ...\nChủ TK: ..."),
+                                            ])
+                                            ->columnSpanFull(),
                                     ]),
                             ]),
 

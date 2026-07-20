@@ -37,7 +37,7 @@
                         <img src="{{ $wedding->getGroomQrUrl() }}" class="w-full h-auto object-contain mx-auto mb-4 border border-gray-100 p-1 rounded-lg">
                         
                         <div class="space-y-2 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-                            <p class="whitespace-pre-line">{{ $wedding->groom_qr_info }}</p>
+                            <p class="whitespace-pre-line">{{ $wedding->getQrPaymentInfo('groom') }}</p>
                         </div>
                     </div>
                 </template>
@@ -47,7 +47,7 @@
                         <img src="{{ $wedding->getBrideQrUrl() }}" class="w-full h-auto object-contain mx-auto mb-4 border border-gray-100 p-1 rounded-lg">
 
                          <div class="space-y-2 text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-                            <p class="whitespace-pre-line">{{ $wedding->bride_qr_info }}</p>
+                            <p class="whitespace-pre-line">{{ $wedding->getQrPaymentInfo('bride') }}</p>
                         </div>
                     </div>
                 </template>

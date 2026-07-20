@@ -16,7 +16,17 @@ class WeddingController extends Controller
     public function show(string $slug, Request $request)
     {
         /** @var Wedding $wedding */
-        $wedding = Wedding::with('template')->where('slug', $slug)->firstOrFail();
+        $wedding = Wedding::with('template')->where('slug', $slug)->first();
+
+        if (! $wedding) {
+            $wedding = Wedding::query()
+                ->get()
+                ->first(fn (Wedding $candidate): bool => $candidate->matchesInvitationSlug($slug));
+
+            abort_unless($wedding, 404, 'Không tìm thấy thiệp cưới.');
+            $wedding->load('template');
+        }
+
         $user = Auth::user();
 
         // Check edit permission via secret key FIRST
@@ -53,8 +63,9 @@ class WeddingController extends Controller
             }
         }
 
-        // Resolve side data
-        $side = $request->get('side', 'both');
+        // Thứ tự tên trên slug quyết định thiệp nhà gái/nhà trai.
+        // Slug không theo cấu trúc tên đôi là thiệp chung.
+        $side = $wedding->invitationSideForSlug($slug);
         $sideData = WeddingSideResolver::resolve($wedding, $side);
 
         // Resolve theme from config
@@ -71,6 +82,7 @@ class WeddingController extends Controller
             'groomPhoto' => $wedding->getGroomPhotoUrl(),
             'bridePhoto' => $wedding->getBridePhotoUrl(),
             'musicUrl'   => $wedding->music_url,
+            'beforeSliderImages' => $wedding->getMedia('before_slider')->take(5),
         ];
 
         // Prepare template data (ceremony times, DOW labels, calendar, gallery...)

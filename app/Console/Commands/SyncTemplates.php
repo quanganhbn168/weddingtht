@@ -41,7 +41,6 @@ class SyncTemplates extends Command
                     $template->update([
                         'name' => $metadata['name'],
                         'type' => 'wedding',
-                        'required_tier' => $metadata['tier'],
                     ]);
                     $this->line("✏️  Updated: {$metadata['name']}");
                     $updated++;
@@ -53,7 +52,6 @@ class SyncTemplates extends Command
                     'name' => $metadata['name'],
                     'view_path' => $viewPath,
                     'type' => 'wedding',
-                    'required_tier' => $metadata['tier'],
                     'is_active' => true,
                 ]);
                 $this->line("✅ Created: {$metadata['name']}");
@@ -83,36 +81,8 @@ class SyncTemplates extends Command
             $name = trim($matches[1]);
         }
         
-        // Try to extract tier from: {{-- Tier: pro --}} or similar
-        $tier = 'standard'; // default
-        if (preg_match('/{{--\s*Tier:\s*(basic|standard|pro)\s*--}}/i', $content, $matches)) {
-            $tier = strtolower(trim($matches[1]));
-        } else {
-            // Auto-detect tier based on keywords in filename or content
-            $lowerFilename = strtolower($filename);
-            $lowerContent = strtolower($content);
-            
-            // Pro tier indicators
-            if (str_contains($lowerFilename, 'galaxy') || 
-                str_contains($lowerFilename, 'cinematic') || 
-                str_contains($lowerFilename, 'cherry') ||
-                str_contains($lowerFilename, 'mewedding') ||
-                str_contains($lowerFilename, 'luxury') ||
-                str_contains($lowerContent, 'preload') && str_contains($lowerContent, 'variant')) {
-                $tier = 'pro';
-            }
-            // Basic tier indicators
-            elseif (str_contains($lowerFilename, 'minimal') || 
-                    str_contains($lowerFilename, 'simple') ||
-                    str_contains($lowerFilename, 'modern') ||
-                    str_contains($lowerFilename, 'elegant')) {
-                $tier = 'basic';
-            }
-        }
-        
         return [
             'name' => $name,
-            'tier' => $tier,
         ];
     }
 }

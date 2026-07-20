@@ -39,13 +39,13 @@
                 <p class="font-display text-xl text-gold font-bold mb-1">Mừng Cưới Chú Rể</p>
                 <p class="text-sm text-gray-500 mb-4">{{ $wedding->groom_name }}</p>
                 <div class="bg-gray-50 p-4 rounded-2xl inline-block mb-4"><img src="{{ $wedding->getGroomQrUrl() }}" class="w-48 h-48 object-contain"></div>
-                @if($wedding->groom_qr_info)<p class="text-xs text-gray-500 whitespace-pre-line">{{ $wedding->groom_qr_info }}</p>@endif
+                @if($wedding->getQrPaymentInfo('groom'))<p class="text-xs text-gray-500 whitespace-pre-line">{{ $wedding->getQrPaymentInfo('groom') }}</p>@endif
             </div>
             <div x-show="activeQr === 'bride'">
                 <p class="font-display text-xl text-rose font-bold mb-1">Mừng Cưới Cô Dâu</p>
                 <p class="text-sm text-gray-500 mb-4">{{ $wedding->bride_name }}</p>
                 <div class="bg-gray-50 p-4 rounded-2xl inline-block mb-4"><img src="{{ $wedding->getBrideQrUrl() }}" class="w-48 h-48 object-contain"></div>
-                @if($wedding->bride_qr_info)<p class="text-xs text-gray-500 whitespace-pre-line">{{ $wedding->bride_qr_info }}</p>@endif
+                @if($wedding->getQrPaymentInfo('bride'))<p class="text-xs text-gray-500 whitespace-pre-line">{{ $wedding->getQrPaymentInfo('bride') }}</p>@endif
             </div>
         </div>
     </div>

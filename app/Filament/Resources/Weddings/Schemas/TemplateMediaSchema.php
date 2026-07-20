@@ -52,6 +52,18 @@ class TemplateMediaSchema
             $upload->imageCropAspectRatio($field['aspect_ratio']);
         }
 
+        if (! empty($field['multiple'])) {
+            $upload->multiple();
+        }
+
+        if (! empty($field['reorderable'])) {
+            $upload->reorderable();
+        }
+
+        if (! empty($field['max_files'])) {
+            $upload->maxFiles((int) $field['max_files']);
+        }
+
         return $upload;
     }
 

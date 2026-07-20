@@ -110,8 +110,6 @@ class DemoWeddingResource extends Resource
                                     $template = \App\Models\Template::find($state);
                                     if ($template) {
                                         $set('template_view', $template->view_path);
-                                        // Pro templates get pro tier
-                                        $set('tier', $template->tier ?? 'standard');
                                     }
                                 }
                             }),

@@ -8,6 +8,23 @@
  */
 
 return [
+    'tht_e_wedding_17' => [
+        'primary'      => '#705746',
+        'primary_dark' => '#4E392C',
+        'accent'       => '#D8C5B2',
+        'bg'           => '#F7F2EB',
+        'card_bg'      => 'rgba(255,255,255,0.9)',
+        'text'         => '#3D3028',
+        'text_muted'   => '#7A6A60',
+        'font_display' => "'Cormorant Garamond', serif",
+        'font_script'  => "'Great Vibes', cursive",
+        'font_body'    => "'Lora', serif",
+        'font_url'     => 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap&subset=vietnamese',
+        'radius'       => '4px',
+        'btn_style'    => 'square',
+        'card_style'   => 'paper',
+    ],
+
     'tht_e_wedding_16' => [
         'primary'      => '#667856',
         'primary_dark' => '#46563B',

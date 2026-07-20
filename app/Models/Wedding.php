@@ -8,6 +8,7 @@ use App\Enums\WeddingStatus;
 use App\Enums\WeddingTier;
 use App\Helpers\LunarHelper;
 use App\Observers\WeddingObserver;
+use App\Services\VietQrService;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -65,6 +66,18 @@ class Wedding extends Model implements HasMedia
         'bride_reception_time',
         'bride_reception_venue',
         'bride_reception_address',
+        'groom_qr_info',
+        'groom_qr_bank_id',
+        'groom_qr_account_number',
+        'groom_qr_account_name',
+        'groom_qr_amount',
+        'groom_qr_add_info',
+        'bride_qr_info',
+        'bride_qr_bank_id',
+        'bride_qr_account_number',
+        'bride_qr_account_name',
+        'bride_qr_amount',
+        'bride_qr_add_info',
         'content',
         'background_music',
         'shared_music_id',
@@ -197,6 +210,19 @@ class Wedding extends Model implements HasMedia
         return $this->formatLunarDate(LunarHelper::solarToLunar($solarDate));
     }
 
+    public function eventDayLabel(): string
+    {
+        return match ($this->event_date->dayOfWeek) {
+            0 => 'Chủ Nhật',
+            1 => 'Thứ Hai',
+            2 => 'Thứ Ba',
+            3 => 'Thứ Tư',
+            4 => 'Thứ Năm',
+            5 => 'Thứ Sáu',
+            6 => 'Thứ Bảy',
+        };
+    }
+
     private function formatLunarDate(?string $lunarDate): ?string
     {
         $format = $this->lunar_date_format ?? LunarDateFormat::SHORT;
@@ -288,10 +314,18 @@ class Wedding extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $templateCollections = collect(config('wedding-template-media', []))
+        $templateMediaFields = collect(config('wedding-template-media', []))
             ->flatMap(fn (array $template): array => $template['fields'] ?? [])
+            ->filter(fn (array $field): bool => ! empty($field['collection']));
+
+        $templateSingleCollections = $templateMediaFields
+            ->reject(fn (array $field): bool => ! empty($field['multiple']))
             ->pluck('collection')
-            ->filter()
+            ->all();
+
+        $templateMultipleCollections = $templateMediaFields
+            ->filter(fn (array $field): bool => ! empty($field['multiple']))
+            ->pluck('collection')
             ->all();
 
         $singleCollections = array_unique([
@@ -302,23 +336,31 @@ class Wedding extends Model implements HasMedia
             'groom_qr',
             'bride_qr',
             'demo_thumbnail',
-            ...$templateCollections,
+            ...$templateSingleCollections,
         ]);
 
         foreach ($singleCollections as $collection) {
             $this->addMediaCollection($collection)->singleFile();
         }
 
-        $this->addMediaCollection('gallery');
-        $this->addMediaCollection('film_gallery');
+        foreach (array_unique(['gallery', 'film_gallery', ...$templateMultipleCollections]) as $collection) {
+            $this->addMediaCollection($collection);
+        }
     }
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        $templateCollections = collect(config('wedding-template-media', []))
+        $templateMediaFields = collect(config('wedding-template-media', []))
             ->flatMap(fn (array $template): array => $template['fields'] ?? [])
+            ->filter(fn (array $field): bool => ! empty($field['collection']));
+
+        $templateCollections = $templateMediaFields
             ->pluck('collection')
-            ->filter()
+            ->all();
+
+        $templateMultipleCollections = $templateMediaFields
+            ->filter(fn (array $field): bool => ! empty($field['multiple']))
+            ->pluck('collection')
             ->all();
 
         $this->addMediaConversion('share')
@@ -341,7 +383,7 @@ class Wedding extends Model implements HasMedia
         $this->addMediaConversion('gallery_web')
             ->width(1200)
             ->format('webp')->quality(82)
-            ->performOnCollections('gallery')
+            ->performOnCollections('gallery', ...$templateMultipleCollections)
             ->nonQueued();
 
         $this->addMediaConversion('thumb')
@@ -381,14 +423,40 @@ class Wedding extends Model implements HasMedia
 
     public function getGroomQrUrl(): string
     {
-        return $this->getMediaUrlWithDemoFallback('groom_qr')
+        return $this->getGeneratedQrUrl('groom')
+            ?: $this->getMediaUrlWithDemoFallback('groom_qr')
             ?: asset('images/qr-placeholder.png');
     }
 
     public function getBrideQrUrl(): string
     {
-        return $this->getMediaUrlWithDemoFallback('bride_qr')
+        return $this->getGeneratedQrUrl('bride')
+            ?: $this->getMediaUrlWithDemoFallback('bride_qr')
             ?: asset('images/qr-placeholder.png');
+    }
+
+    public function getGeneratedQrUrl(string $side): ?string
+    {
+        $prefix = $side === 'groom' ? 'groom' : 'bride';
+
+        return VietQrService::quickLink(
+            $this->getAttribute("{$prefix}_qr_bank_id"),
+            $this->getAttribute("{$prefix}_qr_account_number"),
+            $this->getAttribute("{$prefix}_qr_account_name"),
+            $this->getAttribute("{$prefix}_qr_amount"),
+            $this->getAttribute("{$prefix}_qr_add_info"),
+        );
+    }
+
+    public function getQrPaymentInfo(string $side): ?string
+    {
+        $prefix = $side === 'groom' ? 'groom' : 'bride';
+
+        return VietQrService::accountInfo(
+            $this->getAttribute("{$prefix}_qr_bank_id"),
+            $this->getAttribute("{$prefix}_qr_account_number"),
+            $this->getAttribute("{$prefix}_qr_account_name"),
+        ) ?: $this->getAttribute("{$prefix}_qr_info");
     }
 
     public function getTemplateMediaUrl(string $collection): ?string
@@ -581,6 +649,65 @@ class Wedding extends Model implements HasMedia
             'slug' => $this->slug,
             'guestCode' => self::normalizeGuestCode($code) ?: $code,
         ]);
+    }
+
+    /**
+     * URL thiệp theo thứ tự tên: cô dâu trước là thiệp nhà gái,
+     * chú rể trước là thiệp nhà trai.
+     */
+    public function brideInvitationSlug(): string
+    {
+        return Str::slug(($this->bride_name ?? 'bride') . '-va-' . ($this->groom_name ?? 'groom'))
+            . $this->invitationSlugSuffix();
+    }
+
+    public function groomInvitationSlug(): string
+    {
+        return Str::slug(($this->groom_name ?? 'groom') . '-va-' . ($this->bride_name ?? 'bride'))
+            . $this->invitationSlugSuffix();
+    }
+
+    public function matchesInvitationSlug(string $slug): bool
+    {
+        $slug = Str::lower($slug);
+
+        return in_array($slug, [
+            Str::lower((string) $this->slug),
+            $this->brideInvitationSlug(),
+            $this->groomInvitationSlug(),
+        ], true);
+    }
+
+    public function invitationSideForSlug(string $slug): string
+    {
+        $slug = Str::lower($slug);
+
+        return match ($slug) {
+            $this->brideInvitationSlug() => 'bride',
+            $this->groomInvitationSlug() => 'groom',
+            default => 'both',
+        };
+    }
+
+    private function invitationSlugSuffix(): string
+    {
+        foreach ([$this->groomInvitationSlugBase(), $this->brideInvitationSlugBase()] as $baseSlug) {
+            if (Str::startsWith((string) $this->slug, $baseSlug)) {
+                return Str::after((string) $this->slug, $baseSlug);
+            }
+        }
+
+        return '';
+    }
+
+    private function brideInvitationSlugBase(): string
+    {
+        return Str::slug(($this->bride_name ?? 'bride') . '-va-' . ($this->groom_name ?? 'groom'));
+    }
+
+    private function groomInvitationSlugBase(): string
+    {
+        return Str::slug(($this->groom_name ?? 'groom') . '-va-' . ($this->bride_name ?? 'bride'));
     }
 
     public function getGuestName(): ?string

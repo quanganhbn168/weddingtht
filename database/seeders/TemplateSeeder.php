@@ -14,6 +14,12 @@ class TemplateSeeder extends Seeder
     {
         $templates = [
             [
+                'name' => 'THT E-Wedding 17',
+                'view_path' => 'templates.tht_e_wedding_17',
+                'type' => 'wedding',
+                'is_active' => true,
+            ],
+            [
                 'name' => 'Modern 01',
                 'view_path' => 'templates.modern_01',
                 'type' => 'wedding',

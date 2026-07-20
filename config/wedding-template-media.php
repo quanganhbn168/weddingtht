@@ -1,6 +1,23 @@
 <?php
 
 return [
+    'templates.tht_e_wedding_17' => [
+        'label' => 'Ảnh riêng của THT E-Wedding 17',
+        'description' => 'Cụm album tối đa 5 ảnh hiển thị trước Gallery slider mặc định của mẫu THT E-Wedding 17.',
+        'columns' => 1,
+        'fields' => [
+            [
+                'name' => 'before_slider',
+                'collection' => 'before_slider',
+                'label' => 'Wedding Album trước Slider',
+                'helper_text' => 'Tối đa 5 ảnh. Có thể kéo thả để sắp xếp thứ tự hiển thị trước Gallery slider mặc định.',
+                'multiple' => true,
+                'reorderable' => true,
+                'max_files' => 5,
+            ],
+        ],
+    ],
+
     'templates.tht_e_wedding_16' => [
         'label' => 'Ảnh riêng của THT E-Wedding 16',
         'description' => 'Các ảnh này chỉ được dùng bởi mẫu THT E-Wedding 16. Vị trí chưa có ảnh sẽ không hiển thị.',

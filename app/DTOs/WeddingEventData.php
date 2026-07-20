@@ -55,4 +55,22 @@ final readonly class WeddingEventData
     {
         return $this->ceremonyTime?->format('H:i') ?? '00:00';
     }
+
+    public function receptionMapFrameUrl(): ?string
+    {
+        if ($embedUrl = trim((string) $this->receptionMapEmbed)) {
+            return $embedUrl;
+        }
+
+        $address = trim((string) $this->receptionAddress);
+
+        if ($address === '') {
+            return null;
+        }
+
+        return 'https://www.google.com/maps?'.http_build_query([
+            'q' => $address,
+            'output' => 'embed',
+        ], '', '&', PHP_QUERY_RFC3986);
+    }
 }

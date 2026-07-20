@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Wedding;
 use App\Http\Controllers\WeddingController;
 
 class HomeController extends Controller
@@ -13,12 +12,7 @@ class HomeController extends Controller
      */
     public function resolveSlug($slug)
     {
-        $wedding = Wedding::where('slug', $slug)->first();
-        if ($wedding) {
-            return app(WeddingController::class)->show($slug, request());
-        }
-        
-        abort(404);
+        return app(WeddingController::class)->show($slug, request());
     }
 
     /**

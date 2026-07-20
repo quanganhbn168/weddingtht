@@ -4,9 +4,10 @@ namespace App\Filament\Resources\Weddings\Tables;
 
 use App\Enums\WeddingStatus;
 use App\Enums\WeddingTier;
-use App\Models\Template;
 use App\Models\Wedding;
+use App\Services\WeddingArchiveService;
 use BackedEnum;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -86,12 +87,8 @@ class WeddingsTable
                     }),
                 
                 // Template
-                TextColumn::make('template_view')
+                TextColumn::make('template.name')
                     ->label('Template')
-                    ->formatStateUsing(function ($state) {
-                        $template = Template::where('view_path', (string) $state)->first();
-                        return $template?->name ?? str_replace('templates.', '', (string) $state);
-                    })
                     ->badge()
                     ->color('info'),
                 
@@ -118,13 +115,22 @@ class WeddingsTable
                 SelectFilter::make('status')
                     ->label('Trạng thái')
                     ->options(WeddingStatus::options()),
-                SelectFilter::make('template_view')
+                SelectFilter::make('template_id')
                     ->label('Template')
-                    ->options(fn () => Template::where('is_active', true)
-                        ->pluck('name', 'view_path')
-                        ->toArray()),
+                    ->relationship('template', 'name'),
             ])
             ->actions([
+                Action::make('export_archive')
+                    ->label('Xuất ZIP')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('gray')
+                    ->action(function (Wedding $record) {
+                        $archive = app(WeddingArchiveService::class)->export($record);
+
+                        return response()
+                            ->download($archive['path'], $archive['filename'], ['Content-Type' => 'application/zip'])
+                            ->deleteFileAfterSend(true);
+                    }),
                 ViewAction::make()
                     ->label('Xem')
                     ->url(fn (Wedding $record): string => url($record->slug))
@@ -143,4 +149,3 @@ class WeddingsTable
             ->paginated([10, 25, 50]);
     }
 }
-

@@ -107,9 +107,8 @@
                                 <select wire:model="template_id" 
                                     class="w-full border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
                                     @foreach($templates as $template)
-                                        @php $tTier = \App\Enums\WeddingTier::tryFrom($template->tier) ?? \App\Enums\WeddingTier::STANDARD; @endphp
                                         <option value="{{ $template->id }}">
-                                            [{{ $tTier->label() }}] {{ $template->name }}
+                                            {{ $template->name }}
                                         </option>
                                     @endforeach
                                 </select>
