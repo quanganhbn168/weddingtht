@@ -551,7 +551,7 @@ class WeddingForm
                                     ]),
 
                                 Section::make('Ảnh đại diện')
-                                    ->columns(3)
+                                    ->columns(4)
                                     ->schema([
                                         SpatieMediaLibraryFileUpload::make('cover')
                                             ->label('Ảnh chia sẻ (OG Image - 1200x630)')
@@ -570,6 +570,15 @@ class WeddingForm
                                             ->imageEditor()
                                             ->imageCropAspectRatio('9:16')
                                             ->helperText('Ảnh lớn đầu trang web (dọc)'),
+
+                                        SpatieMediaLibraryFileUpload::make('thank_you')
+                                            ->label('Ảnh Thank You (9:16)')
+                                            ->collection('thank_you')
+                                            ->disk('public')
+                                            ->image()
+                                            ->imageEditor()
+                                            ->imageCropAspectRatio('9:16')
+                                            ->helperText('Ảnh riêng hiển thị ở phần Thank You cuối thiệp'),
 
                                         SpatieMediaLibraryFileUpload::make('groom_photo')
                                             ->label('Ảnh chú rể (3:4)')

@@ -283,7 +283,9 @@
 
     <footer class="tht17-footer">
         <figure class="tht17-footer__arch" data-aos="zoom-in">
-            <img src="{{ $heroUrl }}" alt="{{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy">
+            @if($thankYouImage)
+                <img src="{{ $thankYouImage }}" alt="{{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy">
+            @endif
             <figcaption>
                 <h2>Thank You!</h2>
                 <p>{{ $wedding->getContentValue('rsvp_desc', 'Sự hiện diện của bạn là niềm vinh hạnh cho gia đình chúng tôi.') }}</p>

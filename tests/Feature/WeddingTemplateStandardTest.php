@@ -73,4 +73,12 @@ class WeddingTemplateStandardTest extends TestCase
         $this->assertTrue($beforeSlider['reorderable']);
         $this->assertSame(5, $beforeSlider['max_files']);
     }
+
+    public function test_v17_footer_uses_the_dedicated_thank_you_image(): void
+    {
+        $contents = file_get_contents(resource_path('views/templates/tht_e_wedding_17.blade.php'));
+
+        $this->assertStringContainsString('@if($thankYouImage)', $contents);
+        $this->assertStringContainsString('<img src="{{ $thankYouImage }}"', $contents);
+    }
 }

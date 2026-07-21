@@ -44,7 +44,7 @@ class WeddingDataService
             ? $galleryImages->map(fn ($m) => $m->getUrl())->toArray()
             : $placeholders;
         $albumImages = collect($imgs)->filter()->values();
-        $thankYouImage = $albumImages->last() ?: $wedding->getHeroUrl();
+        $thankYouImage = $wedding->getThankYouUrl();
         $guestName = $wedding->getGuestName();
 
         // Groom ceremony

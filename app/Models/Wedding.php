@@ -331,6 +331,7 @@ class Wedding extends Model implements HasMedia
         $singleCollections = array_unique([
             'cover',
             'hero',
+            'thank_you',
             'groom_photo',
             'bride_photo',
             'groom_qr',
@@ -374,6 +375,7 @@ class Wedding extends Model implements HasMedia
             ->format('webp')->quality(85)
             ->performOnCollections(
                 'hero',
+                'thank_you',
                 'groom_photo',
                 'bride_photo',
                 ...$templateCollections,
@@ -407,6 +409,11 @@ class Wedding extends Model implements HasMedia
     {
         return $this->getMediaUrlWithDemoFallback('hero')
             ?: asset('images/default-hero.jpg');
+    }
+
+    public function getThankYouUrl(): ?string
+    {
+        return $this->getMediaUrlWithDemoFallback('thank_you') ?: null;
     }
 
     public function getGroomPhotoUrl(): string

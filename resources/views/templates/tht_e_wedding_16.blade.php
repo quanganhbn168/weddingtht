@@ -233,7 +233,7 @@
 
     {{-- THANK YOU --}}
     <footer class="tht16-thankyou">
-        <img class="tht16-thankyou__bg" src="{{ $thankYouImage }}" alt="">
+        <img class="tht16-thankyou__bg" src="{{ $thankYouImage ?: ($albumImages->last() ?: $heroUrl) }}" alt="">
         <div class="tht16-thankyou__shade"></div>
         <div class="tht16-thankyou__content" data-aos="zoom-in">
             <p class="tht16-thankyou__title">Thank You</p>

@@ -44,7 +44,7 @@ class WeddingObserver
      */
     public function deleted(Wedding $wedding): void
     {
-        $collections = ['cover', 'hero', 'gallery', 'groom_photo', 'bride_photo', 'groom_qr', 'bride_qr'];
+        $collections = ['cover', 'hero', 'thank_you', 'gallery', 'groom_photo', 'bride_photo', 'groom_qr', 'bride_qr'];
 
         foreach ($collections as $collection) {
             $wedding->clearMediaCollection($collection);
