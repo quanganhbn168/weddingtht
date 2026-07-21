@@ -231,20 +231,28 @@
             }
         }">
             <h2>Xác nhận và gửi lời chúc</h2>
-            <form @submit.prevent="submitRsvp" x-show="!success">
+            @if(session('success'))
+                <p class="tht17-response__success">{{ session('success') }}</p>
+            @endif
+            @if(session('error'))
+                <p class="tht17-response__error">{{ session('error') }}</p>
+            @endif
+            <form action="{{ route('wedding.rsvp.store', $wedding->slug) }}" method="POST" @submit.prevent="submitRsvp" x-show="!success">
+                @csrf
                 <p class="tht17-response__error" x-show="error" x-text="error" style="display: none"></p>
-                <input type="text" x-model="formData.name" placeholder="Tên của bạn là gì?" required>
-                <select x-model="formData.side" aria-label="Bạn là khách của bên nào?">
+                <input type="text" name="name" x-model="formData.name" placeholder="Tên của bạn là gì?" required>
+                <select name="side" x-model="formData.side" aria-label="Bạn là khách của bên nào?">
                     <option value="both">Bạn là gì của Dâu Rể nhỉ?</option>
                     <option value="groom">Khách nhà trai</option>
                     <option value="bride">Khách nhà gái</option>
                 </select>
-                <select x-model="formData.attendance" aria-label="Bạn sẽ tham dự chứ?">
-                    <option value="yes">Bạn sẽ tham dự chứ?</option>
-                    <option value="maybe">Chắc chắn rồi</option>
+                <select name="attendance" x-model="formData.attendance" aria-label="Bạn sẽ tham dự chứ?">
+                    <option value="yes">Chắc chắn rồi</option>
+                    <option value="maybe">Chưa chắc chắn</option>
                     <option value="no">Rất tiếc, không thể tham dự</option>
                 </select>
-                <textarea x-model="formData.note" placeholder="Gửi lời chúc đến Dâu Rể nhé!" rows="3"></textarea>
+                <input type="hidden" name="guests" value="1">
+                <textarea name="note" x-model="formData.note" placeholder="Gửi lời chúc đến Dâu Rể nhé!" rows="3"></textarea>
                 <button type="submit" :disabled="submitting"><span x-show="!submitting">Xác nhận</span><span x-show="submitting">Đang gửi...</span></button>
             </form>
             <p class="tht17-response__success" x-show="success" style="display: none">Cảm ơn bạn đã xác nhận!</p>

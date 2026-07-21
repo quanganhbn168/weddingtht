@@ -37,6 +37,12 @@ use App\Http\Controllers\WeddingController;
 use App\Http\Controllers\RsvpController;
 use App\Http\Controllers\WishController;
 
+// RSVP & Guestbook routes must be registered before the generic guest-code
+// invitation route, otherwise `/rsvp` and `/wish` are treated as guest codes.
+Route::post('/w/{wedding:slug}/rsvp', [RsvpController::class, 'store'])->name('wedding.rsvp.store');
+Route::post('/w/{wedding:slug}/wish', [WishController::class, 'store'])->name('wedding.wish.store');
+Route::get('/api/w/{wedding:slug}/wishes', [WishController::class, 'index'])->name('wedding.wishes.api');
+
 // Wedding invitation pages
 Route::get('/w/{slug}/{guestCode}', [WeddingController::class, 'show'])
     ->where('guestCode', '[A-Za-z0-9_-]+')
@@ -45,11 +51,6 @@ Route::post('/w/{slug}/{guestCode}', [WeddingController::class, 'show'])
     ->where('guestCode', '[A-Za-z0-9_-]+');
 Route::get('/w/{slug}', [WeddingController::class, 'show'])->name('wedding.show');
 Route::post('/w/{slug}', [WeddingController::class, 'show']); // For password form
-
-// RSVP & Guestbook routes
-Route::post('/w/{wedding:slug}/rsvp', [RsvpController::class, 'store'])->name('wedding.rsvp.store');
-Route::post('/w/{wedding:slug}/wish', [WishController::class, 'store'])->name('wedding.wish.store');
-Route::get('/api/w/{wedding:slug}/wishes', [WishController::class, 'index'])->name('wedding.wishes.api');
 
 // Business card routes - REMOVED
 

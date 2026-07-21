@@ -15,7 +15,9 @@ class WeddingWishPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_wedding::wish');
+        // Customer accounts use the `role` column as their source of truth for
+        // dashboard access. The resource query limits wishes to their weddings.
+        return $user->isCustomer() || $user->can('view_any_wedding::wish');
     }
 
     /**
@@ -23,6 +25,10 @@ class WeddingWishPolicy
      */
     public function view(User $user, WeddingWish $weddingWish): bool
     {
+        if ($user->isCustomer()) {
+            return $weddingWish->wedding?->user_id === $user->id;
+        }
+
         return $user->can('view_wedding::wish');
     }
 
