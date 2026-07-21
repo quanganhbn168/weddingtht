@@ -15,6 +15,13 @@ return [
                 'reorderable' => true,
                 'max_files' => 5,
             ],
+            [
+                'name' => 'celebration_photo',
+                'collection' => 'tht17_celebration_photo',
+                'label' => 'Ảnh dưới phần Thiệp mời',
+                'aspect_ratio' => '6:7',
+                'helper_text' => 'Ảnh hiển thị trong phần lịch trình, ngay dưới Thiệp mời. Nếu chưa tải ảnh này, hệ thống sẽ dùng ảnh Hero.',
+            ],
         ],
     ],
 

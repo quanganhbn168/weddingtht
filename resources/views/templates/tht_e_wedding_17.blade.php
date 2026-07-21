@@ -127,7 +127,7 @@
         </div>
 
         <figure class="tht17-celebration__photo" data-aos="zoom-in">
-            <img src="{{ $heroUrl }}" alt="{{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy">
+            <img src="{{ $wedding->getTemplateMediaUrl('tht17_celebration_photo') ?? $heroUrl }}" alt="{{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy">
         </figure>
 
         <div class="tht17-celebration__events">

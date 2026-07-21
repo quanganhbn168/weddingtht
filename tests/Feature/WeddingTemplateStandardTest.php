@@ -74,6 +74,18 @@ class WeddingTemplateStandardTest extends TestCase
         $this->assertSame(5, $beforeSlider['max_files']);
     }
 
+    public function test_v17_has_a_dedicated_photo_upload_below_the_invitation(): void
+    {
+        $mediaSchemas = config('wedding-template-media', []);
+        $fields = collect($mediaSchemas['templates.tht_e_wedding_17']['fields'] ?? []);
+        $celebrationPhoto = $fields->firstWhere('collection', 'tht17_celebration_photo');
+        $template = file_get_contents(resource_path('views/templates/tht_e_wedding_17.blade.php'));
+
+        $this->assertNotNull($celebrationPhoto);
+        $this->assertSame('6:7', $celebrationPhoto['aspect_ratio']);
+        $this->assertStringContainsString("getTemplateMediaUrl('tht17_celebration_photo')", $template);
+    }
+
     public function test_v17_footer_uses_the_dedicated_thank_you_image(): void
     {
         $contents = file_get_contents(resource_path('views/templates/tht_e_wedding_17.blade.php'));
