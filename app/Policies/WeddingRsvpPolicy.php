@@ -15,7 +15,10 @@ class WeddingRsvpPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_wedding::rsvp');
+        // Customer accounts use the `role` column as their source of truth for
+        // dashboard access. They may view RSVP responses, while the resource
+        // query limits those responses to weddings they own.
+        return $user->isCustomer() || $user->can('view_any_wedding::rsvp');
     }
 
     /**
@@ -23,6 +26,10 @@ class WeddingRsvpPolicy
      */
     public function view(User $user, WeddingRsvp $weddingRsvp): bool
     {
+        if ($user->isCustomer()) {
+            return $weddingRsvp->wedding?->user_id === $user->id;
+        }
+
         return $user->can('view_wedding::rsvp');
     }
 
