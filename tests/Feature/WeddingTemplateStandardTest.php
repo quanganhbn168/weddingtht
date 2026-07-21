@@ -80,10 +80,12 @@ class WeddingTemplateStandardTest extends TestCase
         $fields = collect($mediaSchemas['templates.tht_e_wedding_17']['fields'] ?? []);
         $celebrationPhoto = $fields->firstWhere('collection', 'tht17_celebration_photo');
         $template = file_get_contents(resource_path('views/templates/tht_e_wedding_17.blade.php'));
+        $stylesheet = file_get_contents(resource_path('css/templates/tht-e-wedding-17.css'));
 
         $this->assertNotNull($celebrationPhoto);
         $this->assertSame('6:7', $celebrationPhoto['aspect_ratio']);
         $this->assertStringContainsString("getTemplateMediaUrl('tht17_celebration_photo')", $template);
+        $this->assertStringContainsString('.tht17-celebration__photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }', $stylesheet);
     }
 
     public function test_v17_footer_uses_the_dedicated_thank_you_image(): void
