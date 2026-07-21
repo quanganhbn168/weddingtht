@@ -241,7 +241,7 @@
                 </select>
                 <select x-model="formData.attendance" aria-label="Bạn sẽ tham dự chứ?">
                     <option value="yes">Bạn sẽ tham dự chứ?</option>
-                    <option value="maybe">Chưa chắc chắn</option>
+                    <option value="maybe">Chắc chắn rồi</option>
                     <option value="no">Rất tiếc, không thể tham dự</option>
                 </select>
                 <textarea x-model="formData.note" placeholder="Gửi lời chúc đến Dâu Rể nhé!" rows="3"></textarea>
