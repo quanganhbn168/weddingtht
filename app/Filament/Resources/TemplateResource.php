@@ -76,6 +76,88 @@ class TemplateResource extends Resource
                 Forms\Components\Toggle::make('is_active')
                     ->label('Kích hoạt')
                     ->required(),
+
+                Forms\Components\Section::make('Schema dữ liệu riêng')
+                    ->description('Chỉ khai báo nội dung riêng của mẫu này. Không thêm tên đôi, gia đình, lịch tiệc/lễ, Album tình yêu, RSVP, QR, khách mời riêng hay Thank You vì chúng là dữ liệu dùng chung.')
+                    ->schema([
+                        Forms\Components\Repeater::make('content_schema')
+                            ->label('Các trường nhập riêng')
+                            ->schema([
+                                Forms\Components\TextInput::make('section')
+                                    ->label('Nhóm hiển thị trong form thiệp')
+                                    ->maxLength(100)
+                                    ->placeholder('Ví dụ: Câu chuyện'),
+                                Forms\Components\TextInput::make('key')
+                                    ->label('Mã field')
+                                    ->required()
+                                    ->maxLength(80)
+                                    ->regex('/^[a-z][a-z0-9_]*$/')
+                                    ->helperText('Chỉ dùng chữ thường, số và dấu gạch dưới; ví dụ: couple_quote.'),
+                                Forms\Components\TextInput::make('label')
+                                    ->label('Nhãn hiển thị')
+                                    ->required()
+                                    ->maxLength(160)
+                                    ->placeholder('Ví dụ: Câu trích dẫn'),
+                                Forms\Components\Select::make('type')
+                                    ->label('Kiểu nhập')
+                                    ->options([
+                                        'text' => 'Một dòng',
+                                        'textarea' => 'Nhiều dòng',
+                                        'select' => 'Danh sách chọn',
+                                        'toggle' => 'Bật / tắt',
+                                        'number' => 'Số',
+                                        'url' => 'Đường dẫn',
+                                        'date' => 'Ngày',
+                                        'image' => 'Một ảnh',
+                                        'images' => 'Nhiều ảnh',
+                                    ])
+                                    ->default('text')
+                                    ->required()
+                                    ->native(false),
+                                Forms\Components\Textarea::make('helper_text')
+                                    ->label('Gợi ý nhập liệu')
+                                    ->rows(2)
+                                    ->maxLength(500)
+                                    ->columnSpanFull(),
+                                Forms\Components\Textarea::make('options')
+                                    ->label('Lựa chọn')
+                                    ->rows(3)
+                                    ->helperText('Mỗi dòng: ma|Nhãn hiển thị. Chỉ dùng khi kiểu là Danh sách chọn.')
+                                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'select')
+                                    ->columnSpanFull(),
+                                Forms\Components\TextInput::make('max_length')
+                                    ->label('Độ dài tối đa')
+                                    ->numeric()
+                                    ->minValue(1)
+                                    ->visible(fn (Forms\Get $get): bool => in_array($get('type'), ['text', 'textarea'], true)),
+                                Forms\Components\TextInput::make('rows')
+                                    ->label('Số dòng')
+                                    ->numeric()
+                                    ->minValue(2)
+                                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'textarea'),
+                                Forms\Components\TextInput::make('aspect_ratio')
+                                    ->label('Tỉ lệ gợi ý (không crop ảnh)')
+                                    ->maxLength(20)
+                                    ->placeholder('Ví dụ: 4:5')
+                                    ->helperText('Chỉ để người nhập tham khảo; hệ thống luôn giữ nguyên ảnh gốc.')
+                                    ->visible(fn (Forms\Get $get): bool => in_array($get('type'), ['image', 'images'], true)),
+                                Forms\Components\TextInput::make('max_files')
+                                    ->label('Số ảnh tối đa')
+                                    ->numeric()
+                                    ->minValue(1)
+                                    ->visible(fn (Forms\Get $get): bool => $get('type') === 'images'),
+                                Forms\Components\Toggle::make('required')
+                                    ->label('Bắt buộc nhập'),
+                            ])
+                            ->columns(2)
+                            ->collapsible()
+                            ->cloneable()
+                            ->reorderable()
+                            ->defaultItems(0)
+                            ->addActionLabel('+ Thêm field riêng')
+                            ->itemLabel(fn (array $state): ?string => $state['label'] ?? $state['key'] ?? 'Field mới'),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 

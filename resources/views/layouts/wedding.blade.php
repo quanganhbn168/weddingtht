@@ -6,12 +6,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
 
-    <title>@yield('title', config('app.name', 'E-Wedding'))</title>
-    <meta name="description" content="@yield('description', 'Thiệp cưới online')">
+    <title>@if(!empty($guestName))Trân trọng kính mời {{ $guestName }} | @endif@yield('title', config('app.name', 'E-Wedding'))</title>
+    <meta name="description" content="@if(!empty($guestName))Trân trọng kính mời {{ $guestName }} đến chung vui cùng {{ $sideData->firstName }} và {{ $sideData->secondName }}.@else@yield('description', 'Thiệp cưới online')@endif">
 
     {{-- OG Tags for Social Sharing --}}
-    <meta property="og:title" content="@yield('title', config('app.name'))">
-    <meta property="og:description" content="@yield('description', 'Thiệp cưới online')">
+    <meta property="og:title" content="@if(!empty($guestName))Trân trọng kính mời {{ $guestName }} | @endif@yield('title', config('app.name'))">
+    <meta property="og:description" content="@if(!empty($guestName))Trân trọng kính mời {{ $guestName }} đến chung vui cùng {{ $sideData->firstName }} và {{ $sideData->secondName }}.@else@yield('description', 'Thiệp cưới online')@endif">
     <meta property="og:image" content="@yield('og_image', asset('images/og-default.jpg'))">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">

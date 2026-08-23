@@ -14,6 +14,36 @@ class TemplateSeeder extends Seeder
     {
         $templates = [
             [
+                'name' => 'THT E-Wedding 18 (Linen Editorial)',
+                'view_path' => 'templates.tht_e_wedding_18',
+                'type' => 'wedding',
+                'is_active' => true,
+                'content_schema' => [
+                    [
+                        'section' => 'Love Story',
+                        'key' => 'love_story_main_image',
+                        'label' => 'Ảnh Love Story lớn',
+                        'type' => 'image',
+                        'helper_text' => 'Ảnh lớn ở đầu phần Love Story, giữ nguyên tỷ lệ gốc.',
+                    ],
+                    [
+                        'section' => 'Love Story',
+                        'key' => 'love_story_detail_images',
+                        'label' => '4 ảnh nhỏ Love Story',
+                        'type' => 'images',
+                        'max_files' => 4,
+                    ],
+                    [
+                        'section' => 'Lịch cưới',
+                        'key' => 'calendar_background',
+                        'label' => 'Ảnh nền dưới lịch',
+                        'type' => 'image',
+                        'aspect_ratio' => '4:3',
+                        'helper_text' => 'Ảnh nền của lịch; hai ngày tiệc lấy từ dữ liệu nhà gái và nhà trai sẽ tự đánh dấu bằng tim.',
+                    ],
+                ],
+            ],
+            [
                 'name' => 'THT E-Wedding 17',
                 'view_path' => 'templates.tht_e_wedding_17',
                 'type' => 'wedding',

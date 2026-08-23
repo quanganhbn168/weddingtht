@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\Wedding;
 use App\Services\GuestInviteExportService;
 use App\Services\VietQrService;
+use App\Services\WeddingTemplateSchemaRegistry;
 use Carbon\Carbon;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Actions\Action;
@@ -196,11 +197,6 @@ class WeddingForm
                                             ->label('Tự động duyệt lời chúc')
                                             ->default(false)
                                             ->helperText('Nếu bật, lời chúc sẽ hiện ngay lập tức không cần duyệt'),
-
-                                        Toggle::make('show_love_story')
-                                            ->label('Hiển thị Love Story')
-                                            ->default(true)
-                                            ->helperText('Bật/tắt phần câu chuyện tình yêu trên thiệp'),
 
                                         TextInput::make('password')
                                             ->label('Mật khẩu xem thiệp')
@@ -563,13 +559,13 @@ class WeddingForm
                                             ->helperText('Ảnh hiện khi chia sẻ link lên Facebook/Zalo'),
 
                                         SpatieMediaLibraryFileUpload::make('hero')
-                                            ->label('Ảnh Hero Section (9:16)')
+                                            ->label('Ảnh mở đầu thiệp (Hero · 9:16)')
                                             ->collection('hero')
                                             ->disk('public')
                                             ->image()
                                             ->imageEditor()
                                             ->imageCropAspectRatio('9:16')
-                                            ->helperText('Ảnh lớn đầu trang web (dọc)'),
+                                            ->helperText('Hero chính là ảnh lớn đầu tiên của thiệp, không phải ảnh chèn thêm trên Hero.'),
 
                                         SpatieMediaLibraryFileUpload::make('thank_you')
                                             ->label('Ảnh Thank You (9:16)')
@@ -748,8 +744,8 @@ class WeddingForm
                         Tab::make('Lời mời & Lời chúc')
                             ->icon('heroicon-o-chat-bubble-bottom-center-text')
                             ->schema([
-                                Section::make('Khách mời riêng cho THT 16')
-                                    ->description('Nhập mã và tên khách để tạo link riêng. Khi khách mở đúng mã, thiệp và meta description sẽ hiện tên khách đó.')
+                                Section::make('Khách mời riêng')
+                                    ->description('Dùng cho mọi mẫu thiệp. Nhập mã và tên khách để tạo link riêng; khách mở đúng mã sẽ được nhận diện trên thiệp và khi chia sẻ link.')
                                     ->schema([
                                         Repeater::make('content.invited_guests')
                                             ->label('Danh sách khách mời')
@@ -903,20 +899,11 @@ class WeddingForm
                                             ->addActionLabel('+ Thêm mốc thời gian')
                                             ->itemLabel(fn (array $state): ?string => ($state['year'] ?? '').' - '.($state['title'] ?? 'Mốc mới')),
                                     ]),
+
+                                ...WeddingTemplateSchemaRegistry::formSections(),
                             ]),
                     ]),
             ]);
-    }
-
-    private static function isTht16TemplateSelected(Get $get, ?Wedding $record): bool
-    {
-        $templateView = $get('template_view');
-
-        if (! $templateView && ($templateId = $get('template_id') ?: $record?->template_id)) {
-            $templateView = Template::query()->whereKey($templateId)->value('view_path');
-        }
-
-        return $templateView === 'templates.tht_e_wedding_16';
     }
 
     private static function guestLinkForForm(Get $get, ?Wedding $record, ?string $code): string

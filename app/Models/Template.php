@@ -14,10 +14,12 @@ class Template extends Model
         'required_tier',
         'thumbnail_url',
         'is_active',
+        'content_schema',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'content_schema' => 'array',
     ];
 
     /**

@@ -1,0 +1,197 @@
+@font-face {
+    font-family: 'THT18 Script';
+    src: url('/images/templates/tht-e-wedding-18/hero-script.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'THT18 Script Alt';
+    src: url('/images/templates/tht-e-wedding-18/ampersand-script.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'THT18 Title';
+    src: url('/fonts/title-section.otf') format('opentype');
+    font-display: swap;
+}
+
+:root {
+    --tht18-ink: #2e2723;
+    --tht18-muted: #756860;
+    --tht18-paper: #f6f1ea;
+    --tht18-soft: #efe5db;
+    --tht18-red: rgb(80 8 8);
+    --tht18-clay: var(--tht18-red);
+    --tht18-line: rgba(74, 48, 36, .2);
+    --tht18-font-title: 'THT18 Title', cursive;
+}
+
+.tht18 {
+    overflow: hidden;
+    color: var(--tht18-ink);
+    background: var(--tht18-paper) url('/images/templates/tht-e-wedding-18/background-paper.webp') repeat;
+    font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+.tht18 *, .tht18 *::before, .tht18 *::after { box-sizing: border-box; }
+.tht18 img { display: block; max-width: 100%; }
+.tht18 h1, .tht18 h2, .tht18 h3, .tht18 p { margin: 0; }
+.tht18 h1, .tht18 h2, .tht18 h3 { font-family: 'DM Serif Display', serif; font-weight: 400; }
+
+.tht18-section { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+.tht18-kicker { color: var(--tht18-clay); font-size: 10px; font-weight: 600; letter-spacing: .22em; line-height: 1.4; }
+
+.tht18-hero { isolation: isolate; overflow: hidden; position: relative; }
+.tht18-hero__frame { color: #fff; isolation: isolate; position: relative; width: 100%; }
+.tht18-hero__media { margin: 0; position: relative; z-index: -2; }
+.tht18-hero__media img { display: block; height: auto; width: 100%; }
+.tht18-hero__veil { background: linear-gradient(180deg, rgba(37, 16, 14, 0) 28%, rgba(37, 16, 14, .34) 52%, rgba(37, 16, 14, .84) 100%); inset: 0; position: absolute; z-index: -1; }
+.tht18-hero__content { bottom: 0; left: 0; padding: 34px 28px 30px; position: absolute; right: 0; text-align: center; }
+.tht18-hero h1 { color: #fff; display: grid; font-family: 'THT18 Script', cursive; font-size: clamp(56px, 13vw, 92px); font-weight: 400; letter-spacing: -.055em; line-height: .58; margin: 0 auto 22px; text-shadow: 0 2px 10px rgba(0, 0, 0, .26); }
+.tht18-hero h1 span { display: block; }
+.tht18-hero h1 b { color: #f4ddd4; font-family: 'THT18 Script Alt', cursive; font-size: .5em; font-weight: 400; line-height: .52; margin: .08em 0; }
+.tht18-hero__guest { font-size: 12px; letter-spacing: .035em; line-height: 1.6; margin: 0 auto 16px; text-shadow: 0 1px 5px rgba(0, 0, 0, .3); }
+.tht18-hero__guest strong { color: #f6d8cb; font-weight: 600; }
+.tht18-hero__date { display: grid; gap: 3px; justify-items: center; }
+.tht18-hero__date > span { font: 600 10px 'Be Vietnam Pro', sans-serif; letter-spacing: .16em; }
+.tht18-hero__date time { font: 700 17px 'Be Vietnam Pro', sans-serif; letter-spacing: .06em; }
+.tht18-hero__date small { font: 400 10px 'Be Vietnam Pro', sans-serif; letter-spacing: .08em; opacity: .86; text-transform: uppercase; }
+
+.tht18-invitation { background: rgba(255, 255, 255, .66) url('/images/templates/tht-e-wedding-18/background-paper.webp') repeat; padding: 72px max(20px, calc((100% - 660px) / 2)) 66px; position: relative; text-align: center; }
+.tht18-invitation::before, .tht18-invitation::after { border: 1px solid rgba(126, 52, 46, .14); content: ''; height: 72px; position: absolute; top: 22px; width: 72px; }
+.tht18-invitation::before { border-bottom: 0; border-right: 0; left: 20px; }
+.tht18-invitation::after { border-bottom: 0; border-left: 0; right: 20px; }
+.tht18-invitation h2 { color: var(--tht18-red); font: 400 clamp(16px, 3.5vw, 22px) 'DM Serif Display', serif; letter-spacing: -.015em; line-height: 1.42; text-transform: uppercase; }
+.tht18-invitation__families { display: grid; gap: 24px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 46px auto 26px; max-width: 560px; }
+.tht18-family { min-width: 0; }
+.tht18-family p { color: var(--tht18-red); font: 600 12px 'Be Vietnam Pro', sans-serif; letter-spacing: .1em; margin-bottom: 9px; text-transform: uppercase; }
+.tht18-family span { color: var(--tht18-muted); display: block; font-size: 12px; line-height: 1.7; }
+.tht18-invitation__monogram { align-items: center; display: grid; height: 88px; justify-content: center; margin: 12px auto 20px; position: relative; width: 88px; }
+.tht18-invitation__monogram::before, .tht18-invitation__monogram::after { border: 1px solid var(--tht18-red); content: ''; inset: 8px; position: absolute; transform: rotate(45deg); }
+.tht18-invitation__monogram::after { inset: 14px; opacity: .45; }
+.tht18-invitation__monogram span { color: var(--tht18-red); font: 400 34px/1 'THT18 Script Alt', cursive; letter-spacing: -.05em; max-width: 82px; overflow: hidden; position: relative; text-overflow: ellipsis; white-space: nowrap; z-index: 1; }
+.tht18-invitation__line { color: var(--tht18-red); font: 400 clamp(18px, 4vw, 26px)/1.15 'THT18 Script Alt', cursive; margin: 8px auto 29px; }
+.tht18-invitation__album { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 auto 33px; max-width: 495px; }
+.tht18-invitation__album figure { border: 1px solid rgba(126, 52, 46, .18); border-radius: 16px; margin: 0; overflow: hidden; padding: 3px; }
+.tht18-invitation__album img { border-radius: 12px; display: block; height: auto; width: 100%; }
+.tht18-invitation__names { align-items: center; color: var(--tht18-red); display: grid; font: 400 clamp(16px, 3vw, 22px)/1 'DM Serif Display', serif; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); letter-spacing: .06em; margin: 0 auto; max-width: 495px; position: relative; text-transform: uppercase; }
+.tht18-invitation__names > span { text-align: center; }
+.tht18-invitation__names i { left: 50%; position: absolute; top: 50%; transform: translate(-50%, -50%); }
+.tht18-invitation__names i, .tht18-closing i { color: var(--tht18-red); font-family: 'THT18 Script Alt', cursive; font-size: .58em; font-style: normal; letter-spacing: 0; padding: 0 .14em; text-transform: none; }
+.tht18-invitation__names i { font-size: 1.25em; }
+.tht18-receptions, .tht18-story, .tht18-ceremonies, .tht18-calendar, .tht18-album, .tht18-response, .tht18-countdown, .tht18-guestbook, .tht18-thank-you { margin-left: auto; margin-right: auto; max-width: 620px; }
+
+.tht18-receptions { padding: 66px 28px 32px; position: relative; text-align: center; }
+.tht18-receptions::before, .tht18-receptions::after { background: url('/images/templates/tht-e-wedding-18/floral-frame.webp') center / contain no-repeat; content: ''; height: 135px; opacity: .32; pointer-events: none; position: absolute; width: 135px; }
+.tht18-receptions::before { left: -52px; top: 15px; transform: rotate(-28deg); }
+.tht18-receptions::after { bottom: -8px; right: -58px; transform: rotate(156deg); }
+.tht18-reception { padding: 0 0 54px; position: relative; z-index: 1; }
+.tht18-reception + .tht18-reception { border-top: 1px solid rgba(126, 52, 46, .2); padding-top: 50px; }
+.tht18-reception > p, .tht18-ceremony > p { color: var(--tht18-red); font: 400 clamp(14px, 3.2vw, 18px)/1.42 'DM Serif Display', serif; text-transform: uppercase; }
+.tht18-reception > span, .tht18-ceremony > span { color: var(--tht18-red); display: block; font: 400 clamp(14px, 3.2vw, 18px)/1.42 'DM Serif Display', serif; margin-top: 9px; text-transform: uppercase; }
+.tht18-reception time, .tht18-ceremony time { color: var(--tht18-red); display: block; font: 700 clamp(29px, 7vw, 43px)/1 'DM Serif Display', serif; letter-spacing: .015em; margin: 7px 0; }
+.tht18-reception em, .tht18-ceremony em { color: var(--tht18-red); display: block; font: 400 clamp(17px, 4vw, 27px)/1.14 'THT18 Script Alt', cursive; margin: 4px auto 21px; }
+.tht18-reception small, .tht18-ceremony small { color: var(--tht18-red); display: block; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.tht18-reception h2 { color: var(--tht18-red); font: 600 15px/1.35 'DM Serif Display', serif; letter-spacing: .035em; margin: 6px 0 3px; text-transform: uppercase; }
+.tht18-reception address { color: var(--tht18-red); font: 400 clamp(14px, 3.2vw, 18px)/1.42 'DM Serif Display', serif; font-style: normal; margin: 0 auto; max-width: 400px; }
+.tht18-reception a { color: var(--tht18-red); display: inline-flex; font-size: 12px; font-weight: 600; gap: 7px; letter-spacing: .08em; margin-top: 16px; text-decoration: none; text-transform: uppercase; }
+.tht18-reception a span { font-size: 10px; }
+
+.tht18-story { background: var(--tht18-red); color: #fff; padding: 22px 22px 30px; }
+.tht18-story__hero { margin: 0; position: relative; }
+.tht18-story__hero::after { background: linear-gradient(180deg, transparent 44%, rgba(255,255,255,.85) 100%); content: ''; inset: 0; position: absolute; }
+.tht18-story__hero img { display: block; height: auto; width: 100%; }
+.tht18-story__copy { background: #fff; color: var(--tht18-ink); margin: -86px 0 14px; padding: 50px 22px 20px; position: relative; text-align: center; }
+.tht18-story__copy h2 { color: var(--tht18-red); font: 400 clamp(46px, 11vw, 72px)/.8 var(--tht18-font-title); letter-spacing: -.04em; margin-bottom: 24px; }
+.tht18-story__copy p { font: 400 13px/1.8 'DM Serif Display', serif; margin: 0 auto; max-width: 470px; }
+.tht18-story__gallery { column-count: 2; column-gap: 4px; }
+.tht18-story__gallery figure { break-inside: avoid; display: block; margin: 0 0 4px; }
+.tht18-story__gallery img { display: block; height: auto; width: 100%; }
+
+.tht18-ceremonies { padding: 68px 28px 12px; position: relative; text-align: center; }
+.tht18-ceremonies > h2 { color: var(--tht18-red); font: 400 clamp(42px, 10vw, 66px)/.9 var(--tht18-font-title); margin-bottom: 37px; }
+.tht18-ceremony { padding: 0 0 48px; }
+.tht18-ceremony + .tht18-ceremony { border-top: 1px solid rgba(126, 52, 46, .22); padding-top: 40px; }
+.tht18-ceremony small { margin: 11px auto 0; }
+
+.tht18-calendar { padding: 23px 22px 58px; }
+.tht18-calendar__card { aspect-ratio: 1.31; background: #a88b8b; color: #fff; overflow: hidden; position: relative; }
+.tht18-calendar__card > img { height: 100%; object-fit: cover; position: absolute; width: 100%; }
+.tht18-calendar__card::after { background: rgba(53, 22, 24, .36); content: ''; inset: 0; position: absolute; }
+.tht18-calendar__content { inset: 0; padding: 22px 18px 17px; position: relative; text-align: left; z-index: 1; }
+.tht18-calendar h2 { color: #fff; font: 400 clamp(31px, 8vw, 50px)/.92 var(--tht18-font-title); margin-bottom: 17px; }
+.tht18-calendar__days, .tht18-calendar__dates { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
+.tht18-calendar__days { color: rgba(255,255,255,.82); font-size: 10px; font-weight: 600; margin-bottom: 7px; }
+.tht18-calendar__dates { row-gap: 4px; }
+.tht18-calendar__dates time, .tht18-calendar__dates > span { align-items: center; color: #fff; display: flex; font-size: 12px; height: 27px; justify-content: center; position: relative; text-decoration: none; }
+.tht18-calendar__dates time.is-heart::before { color: var(--tht18-red); content: '♥'; font-size: 31px; left: 50%; line-height: 1; position: absolute; top: 50%; transform: translate(-50%, -48%); }
+.tht18-calendar__dates time.is-heart span { position: relative; z-index: 1; }
+
+.tht18-album { padding: 0 22px 64px; text-align: center; }
+.tht18-album h2 { color: var(--tht18-red); font: 400 clamp(42px, 10vw, 62px)/.86 var(--tht18-font-title); letter-spacing: -.04em; margin: 0 0 28px; text-transform: none; }
+.tht18-album__grid { column-count: 3; column-gap: 4px; }
+.tht18-album__grid a { break-inside: avoid; display: block; margin-bottom: 4px; }
+.tht18-album__grid img { display: block; height: auto; transition: transform .35s ease; width: 100%; }
+.tht18-album__grid a:hover img { transform: scale(1.04); }
+
+.tht18-response { padding: 0 22px 58px; text-align: center; }
+.tht18-response__rsvp { background: rgba(255,255,255,.75); border-top: 5px solid var(--tht18-red); padding: 24px 18px 20px; }
+.tht18-response__rsvp > p:first-child { color: var(--tht18-red); font: 400 14px/1.55 'DM Serif Display', serif; margin: 0 auto 20px; max-width: 480px; }
+.tht18-response form { display: grid; gap: 11px; }
+.tht18-response input, .tht18-response select, .tht18-guestbook input, .tht18-guestbook textarea { background: rgba(255,255,255,.7); border: 1px solid rgba(80, 8, 8, .58); border-radius: 999px; color: var(--tht18-ink); font: 13px 'Be Vietnam Pro', sans-serif; min-height: 39px; outline-color: var(--tht18-red); padding: 8px 13px; width: 100%; }
+.tht18-response button, .tht18-gift button, .tht18-guestbook button { background: var(--tht18-red); border: 0; border-radius: 999px; color: #fff; cursor: pointer; font: 600 12px 'DM Serif Display', serif; letter-spacing: .06em; min-height: 42px; padding: 10px 18px; text-transform: uppercase; }
+.tht18-response button:disabled, .tht18-guestbook button:disabled { cursor: wait; opacity: .65; }
+.tht18-response__error, .tht18-guestbook__error { background: #fff1ef; color: #a94231; font-size: 12px; margin: 0; padding: 9px; }
+.tht18-response__success, .tht18-guestbook__success { color: var(--tht18-red); font: 400 18px/1.4 'DM Serif Display', serif; margin: 17px 0 0; }
+.tht18-gift { background: #f8f1ed; border-bottom: 1px solid rgba(80, 8, 8, .22); padding: 23px 18px 27px; }
+.tht18-gift > p { color: var(--tht18-muted); font-size: 12px; line-height: 1.65; margin: 0 auto 15px; max-width: 450px; }
+.tht18-gift__actions { display: grid; gap: 9px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.tht18-gift button { font-size: 10px; padding: 9px 7px; }
+
+.tht18-countdown { padding: 17px 22px 58px; text-align: center; }
+.tht18-countdown h2, .tht18-guestbook h2 { color: var(--tht18-red); font: 400 clamp(40px, 9vw, 61px)/.9 var(--tht18-font-title); margin-bottom: 23px; }
+.tht18-countdown__numbers { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0 auto; max-width: 450px; }
+.tht18-countdown__numbers div { border-right: 1px solid rgba(126,52,46,.25); display: grid; gap: 5px; }
+.tht18-countdown__numbers div:last-child { border-right: 0; }
+.tht18-countdown strong { color: var(--tht18-red); font: 400 clamp(24px, 6vw, 36px)/1 'DM Serif Display', serif; }
+.tht18-countdown span { color: var(--tht18-muted); font-size: 10px; }
+
+.tht18-guestbook { padding: 0 22px 64px; text-align: center; }
+.tht18-guestbook > p { color: var(--tht18-muted); font-size: 12px; line-height: 1.65; margin: 0 auto 16px; max-width: 465px; }
+.tht18-guestbook form { background: #b28c8d; display: grid; gap: 9px; padding: 14px; }
+.tht18-guestbook input, .tht18-guestbook textarea { border: 0; border-radius: 3px; min-height: 38px; }
+.tht18-guestbook textarea { border-radius: 3px; resize: vertical; }
+.tht18-guestbook button { border-radius: 3px; justify-self: center; min-width: 130px; }
+.tht18-guestbook__wishes { border: 1px solid rgba(126,52,46,.18); border-top: 0; box-shadow: 0 7px 13px rgba(48,24,20,.08); padding: 0 14px; text-align: left; }
+.tht18-guestbook__wishes article { border-bottom: 1px dashed rgba(126,52,46,.27); padding: 15px 0; }
+.tht18-guestbook__wishes article:last-child { border-bottom: 0; }
+.tht18-guestbook__wishes h3 { color: #3f2925; font: 600 14px 'DM Serif Display', serif; margin-bottom: 6px; }
+.tht18-guestbook__wishes p { color: var(--tht18-muted); font: italic 12px/1.55 'DM Serif Display', serif; }
+.tht18-guestbook__empty { padding: 20px 0; text-align: center; }
+
+.tht18-thank-you { background: #fff; border-top: 4px solid var(--tht18-red); text-align: center; }
+.tht18-thank-you figure { margin: 0 auto; max-width: 430px; }
+.tht18-thank-you figure img { display: block; height: auto; width: 100%; }
+.tht18-thank-you > div { padding: 21px 28px 36px; }
+.tht18-thank-you p { color: var(--tht18-red); font: 400 13px/1.6 'DM Serif Display', serif; margin: 0 auto 11px; max-width: 480px; }
+.tht18-thank-you h2 { color: var(--tht18-red); font: 400 clamp(42px, 10vw, 65px)/.9 var(--tht18-font-title); }
+
+@media (max-width: 720px) {
+    .tht18-section { width: min(100% - 28px, 560px); }
+    .tht18-hero__content { padding: 30px 22px 26px; }
+    .tht18-invitation { padding: 62px 20px 56px; }
+    .tht18-invitation::before, .tht18-invitation::after { height: 52px; width: 52px; }
+    .tht18-invitation__families { gap: 16px; margin-top: 38px; }
+    .tht18-family span { font-size: 11px; }
+    .tht18-invitation__album { gap: 9px; }
+    .tht18-receptions { padding-left: 22px; padding-right: 22px; }
+    .tht18-story { padding-left: 12px; padding-right: 12px; }
+    .tht18-story__copy { padding-left: 16px; padding-right: 16px; }
+    .tht18-calendar { padding-left: 16px; padding-right: 16px; }
+}
+
+@media (max-width: 430px) {
+    .tht18-invitation__monogram { transform: scale(.9); }
+    .tht18-gift__actions { grid-template-columns: 1fr; }
+}

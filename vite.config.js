@@ -11,6 +11,7 @@ export default defineConfig({
                 'resources/js/wedding.js',
                 'resources/css/templates/tht-e-wedding-16.css',
                 'resources/css/templates/tht-e-wedding-17.css',
+                'resources/css/templates/tht-e-wedding-18.css',
             ],
             refresh: true,
         }),

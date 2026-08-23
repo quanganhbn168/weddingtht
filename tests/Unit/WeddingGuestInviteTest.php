@@ -3,7 +3,8 @@
 namespace Tests\Unit;
 
 use App\Models\Wedding;
-use PHPUnit\Framework\TestCase;
+use Illuminate\Http\Request;
+use Tests\TestCase;
 
 class WeddingGuestInviteTest extends TestCase
 {
@@ -46,5 +47,24 @@ class WeddingGuestInviteTest extends TestCase
 
         $this->assertCount(2, $guests);
         $this->assertSame(['code' => 'km002', 'name' => 'Vợ chồng bạn Ly'], $guests[1]);
+    }
+
+    public function test_personalized_guest_links_are_not_bound_to_a_template(): void
+    {
+        $wedding = new Wedding([
+            'content' => [
+                'invited_guests' => [
+                    ['code' => 'KM001', 'name' => 'Gia đình anh Minh'],
+                ],
+            ],
+        ]);
+
+        app()->instance('request', Request::create('/demo', 'GET', ['guest_code' => 'km001']));
+
+        foreach (['templates.tht_e_wedding_16', 'templates.tht_e_wedding_17', 'templates.tht_e_wedding_18'] as $templateView) {
+            $wedding->template_view = $templateView;
+
+            $this->assertSame('Gia đình anh Minh', $wedding->getGuestName());
+        }
     }
 }

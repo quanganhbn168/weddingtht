@@ -210,6 +210,13 @@ class Wedding extends Model implements HasMedia
         return $this->formatLunarDate(LunarHelper::solarToLunar($solarDate));
     }
 
+    public function fullLunarDateFor(mixed $solarDate): ?string
+    {
+        $long = LunarHelper::formatLong(LunarHelper::solarToLunar($solarDate));
+
+        return $long ? 'Nhằm '.$long : null;
+    }
+
     public function eventDayLabel(): string
     {
         return match ($this->event_date->dayOfWeek) {

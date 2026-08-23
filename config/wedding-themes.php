@@ -8,6 +8,23 @@
  */
 
 return [
+    'tht_e_wedding_18' => [
+        'primary'      => '#500808',
+        'primary_dark' => '#500808',
+        'accent'       => '#E5C9C3',
+        'bg'           => '#F6F1EA',
+        'card_bg'      => 'rgba(255, 252, 247, 0.94)',
+        'text'         => '#2E2723',
+        'text_muted'   => '#756860',
+        'font_display' => "'DM Serif Display', serif",
+        'font_script'  => "'Parisienne', cursive",
+        'font_body'    => "'Be Vietnam Pro', sans-serif",
+        'font_url'     => 'https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&family=Parisienne&display=swap&subset=vietnamese',
+        'radius'       => '0px',
+        'btn_style'    => 'square',
+        'card_style'   => 'paper',
+    ],
+
     'tht_e_wedding_17' => [
         'primary'      => '#705746',
         'primary_dark' => '#4E392C',

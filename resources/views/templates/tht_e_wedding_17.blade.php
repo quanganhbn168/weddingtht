@@ -206,7 +206,7 @@
                 attendance: 'yes',
                 guests: '1',
                 side: '{{ $side }}',
-                note: ''
+                wish: ''
             },
             async submitRsvp() {
                 this.submitting = true;
@@ -252,7 +252,7 @@
                     <option value="no">Rất tiếc, không thể tham dự</option>
                 </select>
                 <input type="hidden" name="guests" value="1">
-                <textarea name="note" x-model="formData.note" placeholder="Gửi lời chúc đến Dâu Rể nhé!" rows="3"></textarea>
+                <textarea name="wish" x-model="formData.wish" placeholder="Gửi lời chúc đến Dâu Rể nhé!" rows="3" maxlength="1000"></textarea>
                 <button type="submit" :disabled="submitting"><span x-show="!submitting">Xác nhận</span><span x-show="submitting">Đang gửi...</span></button>
             </form>
             <p class="tht17-response__success" x-show="success" style="display: none">Cảm ơn bạn đã xác nhận!</p>

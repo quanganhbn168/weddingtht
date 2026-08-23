@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Wedding;
 use App\Services\WeddingDataService;
 use App\Services\WeddingSideResolver;
+use App\Services\WeddingTemplateContentService;
+use App\Services\WeddingTemplateSchemaRegistry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class WeddingController extends Controller
 {
@@ -63,15 +66,20 @@ class WeddingController extends Controller
             }
         }
 
-        // Thứ tự tên trên slug quyết định thiệp nhà gái/nhà trai.
-        // Slug không theo cấu trúc tên đôi là thiệp chung.
+        // Thứ tự tên trên slug chỉ chọn sẵn phía trong RSVP.
+        // Nội dung thiệp luôn hiển thị đầy đủ nhà gái trước, rồi nhà trai.
         $side = $wedding->invitationSideForSlug($slug);
-        $sideData = WeddingSideResolver::resolve($wedding, $side);
+        $sideData = WeddingSideResolver::resolve($wedding, 'both');
+        $invitationMonogram = collect([$sideData->firstName, $sideData->secondName])
+            ->map(fn (string $name): string => Str::upper(Str::substr(Str::ascii($name), 0, 1)))
+            ->implode(' & ');
 
         // Resolve theme from config
         $template = $wedding->template;
-        $templateSlug = $template?->view_path
-            ? str_replace('templates.', '', $template->view_path)
+        $viewPath = $template?->view_path ?? $wedding->template_view;
+        $schemaTemplate = WeddingTemplateSchemaRegistry::forViewPath($viewPath, $template);
+        $templateSlug = $viewPath
+            ? str_replace('templates.', '', $viewPath)
             : 'default';
         $theme = config("wedding-themes.{$templateSlug}", config('wedding-themes.default'));
 
@@ -83,16 +91,19 @@ class WeddingController extends Controller
             'bridePhoto' => $wedding->getBridePhotoUrl(),
             'musicUrl'   => $wedding->music_url,
             'beforeSliderImages' => $wedding->getMedia('before_slider')->take(5),
+            'templateSchemaMedia' => WeddingTemplateSchemaRegistry::mediaForWedding($schemaTemplate, $wedding),
         ];
 
         // Prepare template data (ceremony times, DOW labels, calendar, gallery...)
         $templateData = WeddingDataService::prepare($wedding);
-
-        // Determine View Path
-        $viewPath = $template?->view_path ?? $wedding->template_view;
+        $templateData = array_merge($templateData, [
+            'heroDates' => WeddingDataService::heroDates($wedding, $sideData),
+        ]);
+        $templateContent = WeddingTemplateContentService::for($wedding);
+        $approvedWishes = $wedding->approvedWishes()->latest()->take(10)->get();
 
         return view($viewPath, array_merge(
-            compact('wedding', 'isEditable', 'sideData', 'theme', 'side'),
+            compact('wedding', 'isEditable', 'sideData', 'theme', 'side', 'templateContent', 'invitationMonogram', 'approvedWishes'),
             $mediaData,
             $templateData,
         ));

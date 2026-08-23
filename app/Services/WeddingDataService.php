@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\DTOs\WeddingSideData;
 use App\Models\Wedding;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 class WeddingDataService
 {
@@ -19,6 +21,27 @@ class WeddingDataService
         5 => 'Thứ Sáu',
         6 => 'Thứ Bảy',
     ];
+
+    /**
+     * Ngày hiển thị ở Hero: các ngày diễn ra tiệc và ngày cưới chính.
+     * Các section bên dưới vẫn tách riêng tiệc nhà gái/nhà trai và từng lễ.
+     *
+     * @return Collection<int, Carbon>
+     */
+    public static function heroDates(Wedding $wedding, WeddingSideData $sideData): Collection
+    {
+        $dates = $sideData->events
+            ->map(fn ($event): Carbon => $event->receptionDate->copy()->timezone(config('app.timezone')));
+
+        if ($wedding->event_date) {
+            $dates->push($wedding->event_date->copy()->timezone(config('app.timezone')));
+        }
+
+        return $dates
+            ->unique(fn (Carbon $date): string => $date->toDateString())
+            ->sortBy(fn (Carbon $date): int => $date->getTimestamp())
+            ->values();
+    }
 
     /**
      * Chuan bi toan bo data can thiet cho templates.
@@ -93,6 +116,34 @@ class WeddingDataService
 
         $dowLabels = self::DOW_LABELS;
 
+        $calendarDate = $solar->copy();
+        $calendarLeadingDays = $calendarDate->copy()->startOfMonth()->isoWeekday() - 1;
+        $calendarHighlightedDates = collect([
+            $wedding->bride_reception_date,
+            $wedding->groom_reception_date,
+            $wedding->bride_ceremony_date,
+            $wedding->groom_ceremony_date,
+            $calendarDate,
+        ])
+            ->filter()
+            ->map(fn (mixed $date): Carbon => Carbon::parse($date))
+            ->filter(fn (Carbon $date): bool => $date->isSameMonth($calendarDate))
+            ->map(fn (Carbon $date): string => $date->toDateString())
+            ->unique()
+            ->take(2)
+            ->values()
+            ->all();
+        $calendarCells = collect(array_fill(0, $calendarLeadingDays, null))
+            ->concat(collect(range(1, $calendarDate->daysInMonth))->map(fn (int $day): array => [
+                'day' => $day,
+                'date' => $calendarDate->copy()->day($day)->toDateString(),
+            ]));
+        $calendarWeeks = $calendarCells
+            ->pad((int) (ceil($calendarCells->count() / 7) * 7), null)
+            ->chunk(7)
+            ->values();
+        $calendarMonthLabel = $calendarDate->format('F Y');
+
         return compact(
             'solar', 'lunarStr', 'lunarDisplay', 'dayOfWeek', 'dowLabels',
             'galleryImages', 'imgs', 'placeholders', 'albumImages', 'thankYouImage', 'guestName',
@@ -102,7 +153,8 @@ class WeddingDataService
             'groomReceptionTime2', 'groomReceptionDay2',
             'brideReceptionCarbon', 'brideReceptionTime', 'brideReceptionDow',
             'brideReceptionTime2', 'brideReceptionDay2',
-            'firstOfMonth', 'daysInMonth', 'eventDay', 'eventDay2'
+            'firstOfMonth', 'daysInMonth', 'eventDay', 'eventDay2',
+            'calendarHighlightedDates', 'calendarMonthLabel', 'calendarWeeks'
         );
     }
 

@@ -15,12 +15,21 @@ Mỗi template mới phải tự sở hữu phần giao diện của mình, như
 3. Một theme riêng trong `config/wedding-themes.php`.
 4. Một bản ghi trong `TemplateSeeder` để môi trường mới có thể chọn được mẫu. Với môi trường đang vận hành, chỉ chạy `templates:sync` khi mẫu đã được duyệt giao diện.
 5. Không dùng media riêng ở bản chuẩn. Nếu thiết kế thực sự cần ảnh riêng, mới thêm collection vào `config/wedding-template-media.php`; ảnh thiếu phải ẩn cả block, không thay bằng hero/gallery.
+6. Nếu template có lời dẫn, bố cục hoặc nội dung riêng, khai báo các field đó trong mục **Schema dữ liệu riêng** khi sửa Template ở Admin. Không cần tạo class hay sửa config PHP.
 
 Template chuẩn luôn có: hero, thông tin gia đình/lời mời, lịch tiệc và lễ theo `$sideData->events`, ảnh cô dâu/chú rể, RSVP, đếm ngược và footer. Album chỉ hiện khi có ảnh gallery thật.
 
 Template và gói dịch vụ là hai khái niệm độc lập: mọi template đang bật đều có thể được chọn. `Wedding::$tier` chỉ quyết định các quyền/tính năng của thiệp (Standard hoặc Pro), không quyết định chất lượng hay khả năng chọn mẫu giao diện.
 
 `tests/Feature/WeddingTemplateStandardTest.php` tự kiểm tra các điều bắt buộc cho mọi Blade có marker `Contract: v17`; template mới phải giữ marker này để không bỏ qua kiểm tra.
+
+### Schema riêng của template
+
+Nội dung dùng chung vẫn giữ trên các cột chuẩn của `weddings` (tên, gia đình, lịch tiệc/lễ, QR, nhạc và gallery). Những nội dung chỉ có ý nghĩa với một giao diện phải đặt trong đường dẫn riêng dưới cột JSON `weddings.content`.
+
+Schema nằm tại cột JSON `templates.content_schema`. Trong Admin, mỗi field có: nhóm hiển thị, mã field, nhãn, kiểu nhập, gợi ý, lựa chọn (nếu là select), độ dài và trạng thái bắt buộc. Kiểu `Một ảnh` và `Nhiều ảnh` là media riêng của template; các kiểu còn lại được lưu tại `weddings.content.templates.<template_key>`. Khi một Wedding chọn template đó, các field tự hiện trong form Wedding.
+
+Không đặt dữ liệu dùng chung hoặc câu chữ mặc định của sản phẩm trong schema: tên đôi, ngày, gia đình, lịch, QR, nhạc, gallery, RSVP, danh sách `invited_guests` và Thank You vẫn thuộc dữ liệu dùng chung hoặc bố cục cố định của template. `invited_guests` là tính năng cấp thiệp, dùng cùng một URL mời riêng cho mọi template. `WeddingTemplateContentService` chỉ chuẩn hoá các key riêng rồi truyền `$templateContent` vào Blade. Vì vậy Blade chỉ đọc dữ liệu đã chuẩn bị; đổi sang template khác không làm mất phần nội dung đã nhập của mẫu trước đó.
 
 ## 1. Luồng dữ liệu chuẩn
 

@@ -21,6 +21,7 @@ final readonly class WeddingEventData
         public string $receptionTitle,
         public Carbon $receptionDate,
         public ?string $receptionLunarDisplay,
+        public ?string $receptionLunarInWords,
         public ?Carbon $receptionTime,
         public string $receptionVenue,
         public ?string $receptionAddress,
@@ -29,6 +30,7 @@ final readonly class WeddingEventData
         public string $ceremonyTitle,
         public Carbon $ceremonyDate,
         public ?string $ceremonyLunarDisplay,
+        public ?string $ceremonyLunarInWords,
         public ?Carbon $ceremonyTime,
         public string $ceremonyVenue,
         public ?string $ceremonyAddress,
@@ -51,9 +53,19 @@ final readonly class WeddingEventData
         return $this->receptionTime?->format('H:i') ?? '00:00';
     }
 
+    public function receptionTimeVietnameseLabel(): string
+    {
+        return $this->receptionTime?->format('H\\Hi') ?? '00H00';
+    }
+
     public function ceremonyTimeLabel(): string
     {
         return $this->ceremonyTime?->format('H:i') ?? '00:00';
+    }
+
+    public function ceremonyTimeVietnameseLabel(): string
+    {
+        return $this->ceremonyTime?->format('H\\Hi') ?? '00H00';
     }
 
     public function receptionMapFrameUrl(): ?string
