@@ -6,24 +6,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
 
-    @php
-        $pageTitle = html_entity_decode(trim($__env->yieldContent('title', config('app.name', 'E-Wedding'))), ENT_QUOTES, 'UTF-8');
-        $pageDescription = html_entity_decode(trim($__env->yieldContent('description', 'Thiệp cưới online')), ENT_QUOTES, 'UTF-8');
-        $pageOgImage = html_entity_decode(trim($__env->yieldContent('og_image', asset('images/og-default.jpg'))), ENT_QUOTES, 'UTF-8');
-
-        if (! empty($guestName)) {
-            $pageTitle = "Trân trọng kính mời {$guestName} | {$pageTitle}";
-            $pageDescription = "Trân trọng kính mời {$guestName} đến chung vui cùng {$sideData->firstName} và {$sideData->secondName}.";
-        }
-    @endphp
-
-    <title>{{ $pageTitle }}</title>
-    <meta name="description" content="{{ $pageDescription }}">
+    <title>@yield('title', config('app.name', 'E-Wedding'))</title>
+    <meta name="description" content="@yield('description', 'Thiệp cưới online')">
 
     {{-- OG Tags for Social Sharing --}}
-    <meta property="og:title" content="{{ $pageTitle }}">
-    <meta property="og:description" content="{{ $pageDescription }}">
-    <meta property="og:image" content="{{ $pageOgImage }}">
+    <meta property="og:title" content="@yield('title', config('app.name'))">
+    <meta property="og:description" content="@yield('description', 'Thiệp cưới online')">
+    <meta property="og:image" content="@yield('og_image', asset('images/og-default.jpg'))">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
 
