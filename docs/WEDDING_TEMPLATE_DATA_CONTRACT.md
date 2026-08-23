@@ -29,6 +29,10 @@ Nội dung dùng chung vẫn giữ trên các cột chuẩn của `weddings` (t�
 
 Schema nằm tại cột JSON `templates.content_schema`. Trong Admin, mỗi field có: nhóm hiển thị, mã field, nhãn, kiểu nhập, gợi ý, lựa chọn (nếu là select), độ dài và trạng thái bắt buộc. Kiểu `Một ảnh` và `Nhiều ảnh` là media riêng của template; các kiểu còn lại được lưu tại `weddings.content.templates.<template_key>`. Khi một Wedding chọn template đó, các field tự hiện trong form Wedding.
 
+### Chuyển schema từ local lên production
+
+Không tạo lại từng field ở production. Tại **Cài đặt → Kho Giao diện** ở local, bấm **Xuất schema JSON**; sau khi deploy code có các Blade tương ứng, mở đúng màn hình trên production và bấm **Nhập schema JSON** để tải file đó lên. Thao tác nhập cập nhật schema của mọi mẫu có trong file (và chỉ tạo bản ghi mẫu nếu Blade của mẫu đã có trên máy chủ); schema của các mẫu trong file sẽ được thay thế đồng bộ.
+
 Không đặt dữ liệu dùng chung hoặc câu chữ mặc định của sản phẩm trong schema: tên đôi, ngày, gia đình, lịch, QR, nhạc, gallery, RSVP, danh sách `invited_guests` và Thank You vẫn thuộc dữ liệu dùng chung hoặc bố cục cố định của template. `invited_guests` là tính năng cấp thiệp, dùng cùng một URL mời riêng cho mọi template. `WeddingTemplateContentService` chỉ chuẩn hoá các key riêng rồi truyền `$templateContent` vào Blade. Vì vậy Blade chỉ đọc dữ liệu đã chuẩn bị; đổi sang template khác không làm mất phần nội dung đã nhập của mẫu trước đó.
 
 ## 1. Luồng dữ liệu chuẩn
