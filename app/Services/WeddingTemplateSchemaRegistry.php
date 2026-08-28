@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Filament\Forms\Components\GalleryMediaUpload;
 use App\Models\Template;
 use App\Models\Wedding;
 use Filament\Forms\Components\Component;
@@ -146,7 +147,7 @@ class WeddingTemplateSchemaRegistry
     private static function formComponent(Template $template, array $field): Component
     {
         if (self::isMediaField($field)) {
-            $upload = SpatieMediaLibraryFileUpload::make($field['key'])
+            $upload = ($field['type'] === 'images' ? GalleryMediaUpload::make($field['key']) : SpatieMediaLibraryFileUpload::make($field['key']))
                 ->label($field['label'])
                 ->collection($field['collection'])
                 ->disk('public')

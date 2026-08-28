@@ -6,6 +6,7 @@ use App\Enums\FallingEffect;
 use App\Enums\LunarDateFormat;
 use App\Enums\WeddingStatus;
 use App\Enums\WeddingTier;
+use App\Filament\Forms\Components\GalleryMediaUpload;
 use App\Helpers\LunarHelper;
 use App\Models\Agent;
 use App\Models\SharedMusic;
@@ -597,7 +598,7 @@ class WeddingForm
 
                                 Section::make('Album ảnh')
                                     ->schema([
-                                        SpatieMediaLibraryFileUpload::make('gallery')
+                                        GalleryMediaUpload::make('gallery')
                                             ->label('Gallery')
                                             ->collection('gallery')
                                             ->disk('public')
@@ -614,7 +615,7 @@ class WeddingForm
                                     ->description('Ảnh landscape riêng cho thanh cuộn phía trên album. Nên dùng ảnh ngang tỉ lệ 3:2 hoặc 16:9.')
                                     ->collapsed()
                                     ->schema([
-                                        SpatieMediaLibraryFileUpload::make('film_gallery')
+                                        GalleryMediaUpload::make('film_gallery')
                                             ->label('Ảnh Film Strip')
                                             ->collection('film_gallery')
                                             ->disk('public')

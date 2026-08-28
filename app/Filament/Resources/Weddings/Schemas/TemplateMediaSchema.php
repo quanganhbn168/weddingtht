@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Weddings\Schemas;
 
 use App\Filament\Forms\Components\ImageFocalPointPicker;
+use App\Filament\Forms\Components\GalleryMediaUpload;
 use App\Models\Template;
 use App\Models\Wedding;
 use Filament\Forms\Components\Section;
@@ -40,7 +41,7 @@ class TemplateMediaSchema
     /** @param array<string, mixed> $field */
     private static function imageUpload(array $field): SpatieMediaLibraryFileUpload
     {
-        $upload = SpatieMediaLibraryFileUpload::make($field['name'])
+        $upload = (! empty($field['multiple']) ? GalleryMediaUpload::make($field['name']) : SpatieMediaLibraryFileUpload::make($field['name']))
             ->label($field['label'])
             ->collection($field['collection'])
             ->disk('public')

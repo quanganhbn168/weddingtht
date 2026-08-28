@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Forms\Components\GalleryMediaUpload;
 use App\Filament\Resources\DemoContentResource\Pages;
 use App\Filament\Resources\DemoContentResource\RelationManagers;
 use App\Models\DemoContent;
@@ -79,11 +80,9 @@ class DemoContentResource extends Resource
                                 ->image(),
                         ]),
 
-                        Forms\Components\SpatieMediaLibraryFileUpload::make('demo_gallery')
+                        GalleryMediaUpload::make('demo_gallery')
                             ->label('Album Ảnh Demo Chung')
                             ->collection('demo_gallery')
-                            ->multiple()
-                            ->reorderable()
                             ->columnSpanFull(),
                             
                         Forms\Components\Toggle::make('is_active')
