@@ -70,6 +70,16 @@ class WeddingController extends Controller
         // Nội dung thiệp luôn hiển thị đầy đủ nhà gái trước, rồi nhà trai.
         $side = $wedding->invitationSideForSlug($slug);
         $sideData = WeddingSideResolver::resolve($wedding, 'both');
+        $givenNameInitial = static function (?string $fullName): string {
+            $parts = preg_split('/\s+/u', trim((string) $fullName), -1, PREG_SPLIT_NO_EMPTY);
+            $givenName = $parts ? end($parts) : '';
+
+            return $givenName !== ''
+                ? mb_strtoupper(mb_substr($givenName, 0, 1, 'UTF-8'), 'UTF-8')
+                : '';
+        };
+        $groomInitial = $givenNameInitial($wedding->groom_name);
+        $brideInitial = $givenNameInitial($wedding->bride_name);
         $invitationMonogram = collect([$sideData->firstName, $sideData->secondName])
             ->map(fn (string $name): string => Str::upper(Str::substr(Str::ascii($name), 0, 1)))
             ->implode(' & ');
@@ -103,7 +113,7 @@ class WeddingController extends Controller
         $approvedWishes = $wedding->approvedWishes()->latest()->take(10)->get();
 
         return view($viewPath, array_merge(
-            compact('wedding', 'isEditable', 'sideData', 'theme', 'side', 'templateContent', 'invitationMonogram', 'approvedWishes'),
+            compact('wedding', 'isEditable', 'sideData', 'theme', 'side', 'templateContent', 'invitationMonogram', 'groomInitial', 'brideInitial', 'approvedWishes'),
             $mediaData,
             $templateData,
         ));

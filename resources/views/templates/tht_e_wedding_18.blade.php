@@ -27,7 +27,7 @@
             </figure>
             <div class="tht18-hero__veil" aria-hidden="true"></div>
             <div class="tht18-hero__content">
-                <h1><span>{{ $sideData->firstName }}</span><b>&amp;</b><span>{{ $sideData->secondName }}</span></h1>
+                <h1><span>{{ $sideData->firstName }}</span><span>{{ $sideData->secondName }}</span></h1>
                 @if($guestName)
                     <p class="tht18-hero__guest">Trân trọng kính mời <strong>{{ $guestName }}</strong></p>
                 @endif
@@ -42,6 +42,8 @@
     </section>
 
     <section class="tht18-invitation" aria-label="Lời mời cưới">
+        <img class="tht18-invitation__flower tht18-invitation__flower--left" src="{{ asset('images/templates/tht-e-wedding-18/hoa-goc-1.svg') }}" alt="" aria-hidden="true">
+        <img class="tht18-invitation__flower tht18-invitation__flower--right" src="{{ asset('images/templates/tht-e-wedding-18/hoa-goc-3.svg') }}" alt="" aria-hidden="true">
         <h2 data-aos="fade-up">Kính mời tham dự tiệc cưới thân mật<br>của gia đình chúng tôi</h2>
         <div class="tht18-invitation__families" data-aos="fade-up">
             @foreach($sideData->families as $family)
@@ -52,7 +54,11 @@
                 </article>
             @endforeach
         </div>
-        <div class="tht18-invitation__monogram" data-aos="zoom-in"><span>{{ $invitationMonogram }}</span></div>
+        <div class="tht18-invitation__monogram" data-aos="zoom-in">
+            <img class="tht18-invitation__monogram-frame" src="{{ asset('images/templates/tht-e-wedding-18/khungchu.svg') }}" alt="" aria-hidden="true">
+            <span class="tht18-invitation__initial tht18-invitation__initial--groom">{{ $groomInitial }}</span>
+            <span class="tht18-invitation__initial tht18-invitation__initial--bride">{{ $brideInitial }}</span>
+        </div>
         <p class="tht18-invitation__line" data-aos="fade-up">Our Wedding Day. Our Forever Day</p>
         <div class="tht18-invitation__album" data-aos="fade-up">
             <figure><img src="{{ $groomPhoto }}" alt="{{ $wedding->groom_name }}" loading="lazy"></figure>
@@ -66,6 +72,8 @@
     </section>
 
     <section class="tht18-receptions" id="schedule" aria-label="Lịch tiệc cưới">
+        <img class="tht18-receptions__flower tht18-receptions__flower--left" src="{{ asset('images/templates/tht-e-wedding-18/hoa-goc.svg') }}" alt="" aria-hidden="true">
+        <img class="tht18-receptions__flower tht18-receptions__flower--right" src="{{ asset('images/templates/tht-e-wedding-18/hoa-goc.svg') }}" alt="" aria-hidden="true">
         @foreach($sideData->events as $event)
             <article class="tht18-reception" data-aos="fade-up">
                 <p>Tiệc cưới nhà {{ $event->side === 'bride' ? 'gái' : 'trai' }} được tổ chức</p>
@@ -75,18 +83,20 @@
                 <small>Tại</small>
                 <h2>{{ $event->receptionVenue }}</h2>
                 @if($event->receptionAddress)<address>{{ $event->receptionAddress }}</address>@endif
-                @if($event->receptionMapUrl)<a href="{{ $event->receptionMapUrl }}" target="_blank" rel="noopener"><span aria-hidden="true">♥</span> Chỉ đường</a>@endif
+                @if(filled($event->receptionMapUrl))<a href="{{ $event->receptionMapUrl }}" target="_blank" rel="noopener"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Chỉ đường</a>@endif
             </article>
         @endforeach
     </section>
 
     @if(isset($templateSchemaMedia['love_story_main_image'], $templateSchemaMedia['love_story_detail_images']) && $templateSchemaMedia['love_story_main_image'])
         <section class="tht18-story" aria-label="Love Story">
-            <figure class="tht18-story__hero" data-aos="zoom-in"><img src="{{ $templateSchemaMedia['love_story_main_image']->getUrl() }}" alt="Love story của {{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy"></figure>
-            <div class="tht18-story__copy" data-aos="fade-up">
-                <h2>{{ $wedding->getContentValue('prologue_title', 'Love Story') }}</h2>
-                <p>{{ $wedding->getContentValue('prologue_desc', 'Tình yêu chúng ta là một hành trình đẹp, bắt đầu từ hôm nay và mãi về sau.') }}</p>
-            </div>
+            <figure class="tht18-story__hero" data-aos="zoom-in">
+                <img src="{{ $templateSchemaMedia['love_story_main_image']->getUrl() }}" alt="Love story của {{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy">
+                <div class="tht18-story__copy" data-aos="fade-up">
+                    <h2>{{ $wedding->getContentValue('prologue_title', 'Love Story') }}</h2>
+                    <p>{{ $wedding->getContentValue('prologue_desc', 'Tình yêu chúng ta là một hành trình đẹp, bắt đầu từ hôm nay và mãi về sau.') }}</p>
+                </div>
+            </figure>
             @if($templateSchemaMedia['love_story_detail_images']->isNotEmpty())
                 <div class="tht18-story__gallery" data-aos="fade-up">
                     @foreach($templateSchemaMedia['love_story_detail_images']->take(4) as $image)
@@ -98,6 +108,8 @@
     @endif
 
     <section class="tht18-ceremonies" aria-label="Lễ cưới">
+        <img class="tht18-ceremonies__flower tht18-ceremonies__flower--top-left" src="{{ asset('images/templates/tht-e-wedding-18/hoa-goc-1.svg') }}" alt="" aria-hidden="true">
+        <img class="tht18-ceremonies__flower tht18-ceremonies__flower--bottom-right" src="{{ asset('images/templates/tht-e-wedding-18/hoa-goc-3.svg') }}" alt="" aria-hidden="true">
         <h2 data-aos="fade-up">Lễ Cưới</h2>
         @foreach($sideData->events as $event)
             <article class="tht18-ceremony" data-aos="fade-up">
@@ -106,6 +118,7 @@
                 <time datetime="{{ $event->ceremonyDate->toDateString() }}">{{ $event->ceremonyDate->format('d.m.Y') }}</time>
                 @if($event->ceremonyLunarInWords)<em>{{ $event->ceremonyLunarInWords }}</em>@endif
                 <small>Tại: {{ $event->ceremonyVenue }}</small>
+                @if(filled($event->ceremonyMapUrl))<a href="{{ $event->ceremonyMapUrl }}" target="_blank" rel="noopener"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Chỉ đường</a>@endif
             </article>
         @endforeach
     </section>
@@ -133,7 +146,11 @@
 
     @if($galleryImages->isNotEmpty())
         <section class="tht18-album" aria-label="Our Love Album">
-            <h2 data-aos="fade-up">Our Love<br>Album</h2>
+            <section class="tht18-album__heading" aria-label="Our Love Album">
+                <img class="tht18-album__flower tht18-album__flower--top-left" src="{{ asset('images/templates/tht-e-wedding-18/hoa-goc-1.svg') }}" alt="" aria-hidden="true">
+                <img class="tht18-album__flower tht18-album__flower--bottom-right" src="{{ asset('images/templates/tht-e-wedding-18/hoa-goc.svg') }}" alt="" aria-hidden="true">
+                <h2 data-aos="fade-up">Our Love<br>Album</h2>
+            </section>
             <div class="tht18-album__grid" data-aos="fade-up">
                 @foreach($galleryImages->take(9) as $image)
                     <a class="glightbox" href="{{ $image->getUrl() }}" data-gallery="tht-e-wedding-18-album"><img src="{{ $image->getUrl('gallery_web') ?: $image->getUrl() }}" alt="Album tình yêu của {{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy"></a>
