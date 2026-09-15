@@ -40,6 +40,7 @@ class WeddingTemplateContentServiceTest extends TestCase
         $fields = WeddingTemplateSchemaRegistry::fieldsForTemplate($template);
 
         $this->assertSame('templates.tht_e_wedding_19', WeddingTemplateSchemaRegistry::contentPath($template));
+        $this->assertSame('content.templates.tht_e_wedding_19.couple_quote', WeddingTemplateSchemaRegistry::contentFormPath($template, 'couple_quote'));
         $this->assertSame(['couple_quote', 'guest_tone'], array_column($fields, 'key'));
         $this->assertSame(['than_mat' => 'Thân mật', 'trang_trong' => 'Trang trọng'], $fields[1]['options']);
     }
@@ -52,8 +53,8 @@ class WeddingTemplateContentServiceTest extends TestCase
         $this->assertStringContainsString('class="tht18-hero__media"', $template);
         $this->assertStringContainsString('src="{{ $heroUrl }}"', $template);
         $this->assertStringNotContainsString('tht18-hero__floral', $template);
-        $this->assertStringContainsString("url('/images/templates/tht-e-wedding-18/hero-script.ttf')", $stylesheet);
-        $this->assertStringContainsString("url('/images/templates/tht-e-wedding-18/ampersand-script.ttf')", $stylesheet);
+        $this->assertStringContainsString("url('../../fonts/wedding/tht18-hero-script.ttf')", $stylesheet);
+        $this->assertStringContainsString("url('../../fonts/wedding/tht18-ampersand-script.ttf')", $stylesheet);
         $this->assertStringContainsString('--tht18-red: rgb(80 8 8)', $stylesheet);
     }
 
@@ -84,6 +85,32 @@ class WeddingTemplateContentServiceTest extends TestCase
         $this->assertArrayNotHasKey('hero_kicker', $content);
         $this->assertArrayNotHasKey('hero_layout', $content);
         $this->assertNull($content['guest_tone']);
+    }
+
+    public function test_template_content_uses_selected_template_relation_when_template_view_is_stale(): void
+    {
+        $wedding = new Wedding;
+        $wedding->template_view = 'templates.modern_01';
+        $wedding->setRelation('template', new Template([
+            'view_path' => 'templates.tht_e_wedding_19',
+            'content_schema' => [
+                ['key' => 'groom_portrait_note', 'label' => 'Dòng phụ dưới tên chú rể', 'type' => 'text'],
+                ['key' => 'album_note', 'label' => 'Lời dẫn cho bố cục Our memories', 'type' => 'textarea'],
+            ],
+        ]));
+        $wedding->content = [
+            'templates' => [
+                'tht_e_wedding_19' => [
+                    'groom_portrait_note' => 'Nhà trai trân trọng kính mời',
+                    'album_note' => 'Những khoảnh khắc của chúng mình',
+                ],
+            ],
+        ];
+
+        $content = WeddingTemplateContentService::for($wedding);
+
+        $this->assertSame('Nhà trai trân trọng kính mời', $content['groom_portrait_note']);
+        $this->assertSame('Những khoảnh khắc của chúng mình', $content['album_note']);
     }
 
     public function test_image_fields_are_template_schema_media_not_wedding_content(): void

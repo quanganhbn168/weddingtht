@@ -1,18 +1,18 @@
 @font-face {
     font-family: 'THT18 Script';
-    src: url('/images/templates/tht-e-wedding-18/hero-script.ttf') format('truetype');
+    src: url('../../fonts/wedding/tht18-hero-script.ttf') format('truetype');
     font-display: swap;
 }
 
 @font-face {
     font-family: 'THT18 Script Alt';
-    src: url('/images/templates/tht-e-wedding-18/ampersand-script.ttf') format('truetype');
+    src: url('../../fonts/wedding/tht18-ampersand-script.ttf') format('truetype');
     font-display: swap;
 }
 
 @font-face {
     font-family: 'THT18 Title';
-    src: url('/fonts/title-section.otf') format('opentype');
+    src: url('../../fonts/wedding/title-section.otf') format('opentype');
     font-display: swap;
 }
 

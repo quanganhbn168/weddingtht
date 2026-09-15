@@ -75,6 +75,11 @@ class WeddingTemplateSchemaRegistry
         return "templates.{$templateKey}";
     }
 
+    public static function contentFormPath(Template $template, string $fieldKey): string
+    {
+        return 'content.'.self::contentPath($template).'.'.$fieldKey;
+    }
+
     public static function mediaCollection(Template $template, string $fieldKey): string
     {
         $templateKey = Str::of($template->view_path)
@@ -168,7 +173,7 @@ class WeddingTemplateSchemaRegistry
             return $upload;
         }
 
-        $path = self::contentPath($template).'.'.$field['key'];
+        $path = self::contentFormPath($template, $field['key']);
 
         $component = match ($field['type']) {
             'textarea' => Textarea::make($path)->rows($field['rows']),

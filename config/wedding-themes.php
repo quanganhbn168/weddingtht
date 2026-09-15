@@ -8,6 +8,22 @@
  */
 
 return [
+    'tht_e_wedding_19' => [
+        'primary'      => '#736845',
+        'primary_dark' => '#51482f',
+        'accent'       => '#c6b889',
+        'bg'           => '#faf8f0',
+        'card_bg'      => 'rgba(255, 255, 255, 0.88)',
+        'text'         => '#49432f',
+        'text_muted'   => '#756f5c',
+        'font_display' => "'MTD Bigilla', serif",
+        'font_script'  => "'FZ Mr Dakota', cursive",
+        'font_body'    => "'Be Vietnam Pro', Arial, sans-serif",
+        'radius'       => '20px',
+        'btn_style'    => 'rounded',
+        'card_style'   => 'paper',
+    ],
+
     'tht_e_wedding_18' => [
         'primary'      => '#500808',
         'primary_dark' => '#500808',

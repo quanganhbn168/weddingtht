@@ -9,10 +9,10 @@ class WeddingTemplateContentService
     /** @return array<string, mixed> */
     public static function for(Wedding $wedding): array
     {
-        // template_view is stored alongside template_id and is the render source of truth.
-        // Prefer it so a preview or a just-switched form never reads stale relation data.
-        $viewPath = $wedding->template_view ?: $wedding->template?->view_path;
-        $template = WeddingTemplateSchemaRegistry::forViewPath($viewPath, $wedding->template);
+        // Match WeddingController: the selected Template relation owns the rendered view.
+        // Fall back to the legacy template_view column for older records without template_id.
+        $template = $wedding->template
+            ?: WeddingTemplateSchemaRegistry::forViewPath($wedding->template_view);
 
         if (! $template) {
             return [];

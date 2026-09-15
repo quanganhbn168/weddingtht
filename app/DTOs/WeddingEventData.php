@@ -68,6 +68,27 @@ final readonly class WeddingEventData
         return $this->ceremonyTime?->format('H\\Hi') ?? '00H00';
     }
 
+    public function ceremonyTimeLongLabel(): string
+    {
+        if (! $this->ceremonyTime) {
+            return '';
+        }
+
+        return (int) $this->ceremonyTime->format('H')
+            .' giờ '.$this->ceremonyTime->format('i').' phút';
+    }
+
+    public function ceremonyLunarFullLabel(): ?string
+    {
+        $value = trim((string) $this->ceremonyLunarInWords);
+
+        if ($value === '') {
+            return null;
+        }
+
+        return preg_replace('/^Nhằm\\s+/iu', 'Tức ', $value) ?: $value;
+    }
+
     public function receptionMapFrameUrl(): ?string
     {
         if ($embedUrl = trim((string) $this->receptionMapEmbed)) {

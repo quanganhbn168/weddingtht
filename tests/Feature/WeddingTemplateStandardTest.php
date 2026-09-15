@@ -88,6 +88,21 @@ class WeddingTemplateStandardTest extends TestCase
         $this->assertStringContainsString('.tht17-celebration__photo img { display: block; width: 100%; height: auto; }', $stylesheet);
     }
 
+    public function test_tht19_uses_shared_name_font_and_ceremony_only_details(): void
+    {
+        $template = file_get_contents(resource_path('views/templates/tht_e_wedding_19.blade.php'));
+        $stylesheet = file_get_contents(resource_path('css/templates/tht-e-wedding-19.css'));
+        $fonts = file_get_contents(resource_path('css/wedding-fonts.css'));
+
+        $this->assertStringContainsString('var(--tht19-name)', $stylesheet);
+        $this->assertStringContainsString('class="tht19-invitation__connector">and</span>', $template);
+        $this->assertStringContainsString('double-bo-cau.png', $template);
+        $this->assertStringContainsString('ceremonyTimeLongLabel()', $template);
+        $this->assertStringContainsString('Tại địa chỉ:', $template);
+        $this->assertStringNotContainsString('Khai tiệc', $template);
+        $this->assertStringContainsString("font-family: 'MTD Feliz en Vista'", $fonts);
+    }
+
     public function test_v17_footer_uses_the_dedicated_thank_you_image(): void
     {
         $contents = file_get_contents(resource_path('views/templates/tht_e_wedding_17.blade.php'));
