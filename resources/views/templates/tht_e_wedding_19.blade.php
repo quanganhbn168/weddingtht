@@ -5,7 +5,7 @@
 {{-- THT19: presentation only. The controller owns wedding/side/content/media resolution. --}}
 
 @section('title', e($sideData->firstName . ' và ' . $sideData->secondName . ' | Wedding Invitation'))
-@section('description', e('Trân trọng kính mời ' . $guestName . 'đến chung vui cùng ' . $sideData->firstName . ' và ' . $sideData->secondName))
+@section('description', e('Trân trọng kính mời ' . $guestName . ' đến chung vui cùng đám cưới của ' . $sideData->firstName . ' và ' . $sideData->secondName))
 @section('og_image', e($shareUrl))
 
 @push('styles')
