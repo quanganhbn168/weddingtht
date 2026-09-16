@@ -161,7 +161,7 @@
     .tht19-album__photo:nth-child(3n) img { aspect-ratio: 4/5; }
     .tht19-album__photo:nth-child(4n) img { aspect-ratio: 1; }
     .tht19-album__photo--cover { column-span: all; }
-    .tht19-album__photo--cover img { aspect-ratio: 3/2; }
+    .tht19-album__photo--cover img { aspect-ratio: 3/2; object-position: center top;}
     .tht19-album__photo:only-child img { aspect-ratio: auto; }
     .tht19-album__photo:hover img { transform: scale(1.035); }
     .tht19 .tht19-album__signature { font: 400 26px/1.5 var(--tht19-script); text-align: right; margin: 16px 4px 0; }
