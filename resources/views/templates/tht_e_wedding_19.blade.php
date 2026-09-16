@@ -155,52 +155,119 @@
         @endforeach
     </section>
 
-    {{-- 05. Optional welcome slot and the ceremony timeline for each side. --}}
-    <section class="tht19-timeline" aria-labelledby="tht19-timeline-title">
-        <header @class(['tht19-timeline__heading', 'tht19-timeline__heading--photo' => !empty($templateSchemaMedia['timeline_image'])])>
-            @if(!empty($templateSchemaMedia['timeline_image']))
-                <img src="{{ $templateSchemaMedia['timeline_image']->getUrl() }}" alt="Ngày vui của {{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy" decoding="async">
-            @endif
-            <h2 class="tht19-script" id="tht19-timeline-title">Timeline</h2>
-        </header>
-        @foreach($sideData->events as $event)
-            <article class="tht19-timeline__group" data-aos="fade-up">
-                <h3>Chương trình nhà {{ $event->side === 'bride' ? 'gái' : 'trai' }}</h3>
-                <ol class="tht19-timeline__list">
-                    @if(filled(data_get($templateContent, $event->side . '_welcome_time')))
-                        <li>
-                            <i class="fa-regular fa-face-smile" aria-hidden="true"></i>
-                            <div class="tht19-timeline__when">
-                                <strong>{{ data_get($templateContent, $event->side . '_welcome_time') }}</strong>
-                                <time datetime="{{ $event->receptionDate->toDateString() }}">
-                                    {{ $event->receptionDate->format('d.m.Y') }}
-                                </time>
-                            </div>
-                            <div class="tht19-timeline__what">
-                                <h4>Đón khách</h4>
-                                <p>{{ $event->receptionVenue }}</p>
-                            </div>
-                        </li>
-                    @endif
+    {{-- 05. Timeline --}}
+<section class="tht19-timeline" aria-labelledby="tht19-timeline-title">
+    <header @class([
+        'tht19-timeline__heading',
+        'tht19-timeline__heading--photo' => !empty($templateSchemaMedia['timeline_image'])
+    ])>
+        @if(!empty($templateSchemaMedia['timeline_image']))
+            <img
+                src="{{ $templateSchemaMedia['timeline_image']->getUrl() }}"
+                alt="Ngày vui của {{ $sideData->firstName }} và {{ $sideData->secondName }}"
+                loading="lazy"
+                decoding="async"
+            >
+        @endif
+
+        <h2 class="tht19-script" id="tht19-timeline-title">
+            Timeline
+        </h2>
+    </header>
+
+    @foreach($sideData->events as $event)
+        <article class="tht19-timeline__group" data-aos="fade-up">
+
+            <h3>
+                Chương trình nhà {{ $event->side === 'bride' ? 'gái' : 'trai' }}
+            </h3>
+
+            <ol class="tht19-timeline__list">
+
+                {{-- ĐÓN KHÁCH --}}
+                @if(filled(data_get($templateContent, $event->side . '_welcome_time')))
+                    <li>
+                        <i class="fa-regular fa-face-smile" aria-hidden="true"></i>
+
+                        <div class="tht19-timeline__when">
+                            <strong>
+                                {{ data_get($templateContent, $event->side . '_welcome_time') }}
+                            </strong>
+
+                            <time datetime="{{ $event->receptionDate->toDateString() }}">
+                                {{ $event->receptionDate->format('d.m.Y') }}
+                            </time>
+                        </div>
+
+                        <div class="tht19-timeline__what">
+                            <h4>Đón khách</h4>
+
+                            <p>
+                                {{ $event->receptionVenue }}
+                            </p>
+                        </div>
+                    </li>
+                @endif
+                {{-- KHAI TIỆC --}}
+                @if($event->receptionTime)
+                    <li>
+                        <i class="fa-solid fa-utensils" aria-hidden="true"></i>
+
+                        <div class="tht19-timeline__when">
+                            <strong>
+                                {{ $event->receptionTimeLabel() }}
+                            </strong>
+
+                            <time datetime="{{ $event->receptionDate->toDateString() }}">
+                                {{ $event->receptionDate->format('d.m.Y') }}
+                            </time>
+                        </div>
+
+                        <div class="tht19-timeline__what">
+                            <h4>Khai tiệc</h4>
+
+                            <p>
+                                {{ $event->receptionVenue }}
+                            </p>
+                        </div>
+                    </li>
+
+                {{-- LỄ THÀNH HÔN / VU QUY --}}
+                @if($event->ceremonyTime)
                     <li>
                         <i class="fa-regular fa-heart" aria-hidden="true"></i>
+
                         <div class="tht19-timeline__when">
-                            @if($event->ceremonyTime)
-                            <strong>{{ $event->ceremonyTimeLabel() }}</strong>
-                            @endif
+                            <strong>
+                                {{ $event->ceremonyTimeLabel() }}
+                            </strong>
+
                             <time datetime="{{ $event->ceremonyDate->toDateString() }}">
                                 {{ $event->ceremonyDate->format('d.m.Y') }}
                             </time>
                         </div>
+
                         <div class="tht19-timeline__what">
-                            <h4>{{ $event->ceremonyTitle }}</h4>
-                            <p>{{ $event->ceremonyVenue }}</p>
+                            <h4>
+                                {{ $event->ceremonyTitle }}
+                            </h4>
+
+                            <p>
+                                {{ $event->ceremonyVenue }}
+                            </p>
                         </div>
                     </li>
-                </ol>
-            </article>
-        @endforeach
-    </section>
+                @endif
+
+
+                
+                @endif
+
+            </ol>
+
+        </article>
+    @endforeach
+</section>
 
     {{-- 06. Real gallery only; CSS masonry handles any number of images. --}}
     @if($galleryImages->isNotEmpty())

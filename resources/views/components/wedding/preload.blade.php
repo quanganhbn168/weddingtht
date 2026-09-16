@@ -102,27 +102,65 @@
         <h1>{{ $wedding->bride_name }}</h1>
     </div>
     @endif
-    @if($variant === 'envelope-2')
-        <div class="preload-envelope-2">
-            @php $guestName = $wedding->getGuestName(); @endphp
-                @if($guestName)
-                <div class="preload-envelope">
-                    <div class="envelope-label">Trân trọng kính mời</div>
-                    <div class="envelope-name">{{ urldecode($guestName) }}</div>
-                </div>
-                <p>Đến tham dự lễ cưới</p>
-                @endif
-            <h1>{{ $wedding->groom_name }} </br> & </br> {{$wedding->bride_name}}</h1>
-            <div class="envelope-image">
-                <div class="envelope-image__img">
-                    <img src="{{asset("images/templates/tht-e-wedding-19/envelope.png")}}" alt="Thư mời {{ urldecode($guestName) }}">
-                </div>
-                <div class="envelop-image__hand">
-                    <img src="{{asset("images/templates/tht-e-wedding-19/hand.png")}}" alt="Thư mời {{ urldecode($guestName) }}">
-                </div>
+    {{-- VARIANT: ENVELOPE 2 - PREMIUM INVITATION --}}
+@if($variant === 'envelope-2')
+    @php
+        $guestName = $wedding->getGuestName();
+    @endphp
+
+    <div class="preload-envelope-2">
+
+        {{-- Couple --}}
+        <div class="preload-envelope-2__heading">
+            <div class="preload-envelope-2__name">
+                {{ $wedding->groom_name }}
             </div>
+
+            <div class="preload-envelope-2__ampersand">
+                &
+            </div>
+
+            <div class="preload-envelope-2__name">
+                {{ $wedding->bride_name }}
+            </div>
+
+            @if($guestName)
+                <div class="preload-envelope-2__guest">
+                    <span>Trân trọng kính mời</span>
+                    <strong>{{ urldecode($guestName) }}</strong>
+                </div>
+            @endif
         </div>
-    @endif
+
+        {{-- Envelope --}}
+        <button
+            type="button"
+            class="envelope-image"
+            aria-label="Mở thiệp cưới"
+        >
+            <img
+                class="envelope-image__img"
+                src="{{ asset('images/templates/tht-e-wedding-19/envelope.png') }}"
+                alt="Thiệp cưới {{ $wedding->groom_name }} và {{ $wedding->bride_name }}"
+            >
+
+            <img
+                class="envelope-image__hand"
+                src="{{ asset('images/templates/tht-e-wedding-19/hand.png') }}"
+                alt=""
+                aria-hidden="true"
+            >
+        </button>
+
+        {{-- Wedding date --}}
+        @if($wedding->event_date)
+            <div class="preload-envelope-2__date">
+                {{ $wedding->event_date->format('d.m.Y') }}
+            </div>
+        @endif
+
+    </div>
+@endif
 </div>
 
 <style>
@@ -179,7 +217,441 @@
     @keyframes fadeNamesIn { to { opacity: 1; } }
     @keyframes fadeNamesOut { to { opacity: 0; } }
     @keyframes fadeHy { to { opacity: 0; } }
+    /* =========================================================
+   ENVELOPE 2 - PREMIUM WEDDING INVITATION
+   ========================================================= */
 
+.preload-envelope-2 {
+    --envelope-ink: #776e50;
+    --envelope-bg: #faf9f4;
+
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+
+    padding:
+        clamp(58px, 9vh, 105px)
+        20px
+        clamp(55px, 8vh, 90px);
+
+    overflow: hidden;
+
+    text-align: center;
+    color: var(--envelope-ink);
+
+    /*
+     * Paper-like background.
+     * Không cần thêm ảnh texture.
+     */
+    background:
+        radial-gradient(
+            circle at 20% 30%,
+            rgba(120, 108, 75, 0.022) 0,
+            rgba(120, 108, 75, 0.022) 1px,
+            transparent 1.4px
+        ) 0 0 / 5px 5px,
+        radial-gradient(
+            circle at 70% 60%,
+            rgba(100, 90, 65, 0.018) 0,
+            rgba(100, 90, 65, 0.018) 1px,
+            transparent 1.5px
+        ) 2px 2px / 7px 7px,
+        linear-gradient(
+            180deg,
+            #fdfcf9 0%,
+            #faf9f4 50%,
+            #f9f8f2 100%
+        );
+
+    transition:
+        opacity .8s ease,
+        transform 1s cubic-bezier(.22, 1, .36, 1);
+}
+
+
+/* =========================
+   Couple names
+   ========================= */
+
+.preload-envelope-2__heading {
+    position: relative;
+    z-index: 5;
+
+    transition:
+        opacity .5s ease,
+        transform .7s cubic-bezier(.22, 1, .36, 1);
+}
+
+.preload-envelope-2__name {
+    font-family:
+        "SVN Saudagar",
+        Arial,
+        sans-serif;
+
+    font-size: clamp(31px, 8vw, 54px);
+    font-weight: 600;
+    line-height: 1.06;
+
+    letter-spacing: -0.035em;
+
+    text-transform: uppercase;
+
+    color: var(--envelope-ink);
+}
+
+.preload-envelope-2__ampersand {
+    margin:
+        clamp(18px, 2.6vh, 30px)
+        0
+        clamp(20px, 3vh, 34px);
+
+    font-family:
+        "SVN Saudagar",
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: clamp(40px, 9vw, 65px);
+    font-weight: 600;
+    font-style: italic;
+    line-height: .75;
+
+    color: var(--envelope-ink);
+}
+
+
+/* =========================
+   Guest
+   ========================= */
+
+.preload-envelope-2__guest {
+    margin-top: 16px;
+
+    font-family: "Montserrat", Arial, sans-serif;
+
+    color: var(--envelope-ink);
+
+    animation: envelopeGuestFade 1s ease .4s both;
+}
+
+.preload-envelope-2__guest span {
+    display: block;
+
+    font-size: 9px;
+    font-weight: 400;
+
+    letter-spacing: .2em;
+    text-transform: uppercase;
+
+    opacity: .68;
+}
+
+.preload-envelope-2__guest strong {
+    display: block;
+
+    margin-top: 5px;
+
+    font-family:
+        "SVN-Glamour",
+        Georgia,
+        serif;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    letter-spacing: .03em;
+}
+
+
+/* =========================
+   Envelope
+   ========================= */
+
+.envelope-image {
+    position: relative;
+
+    align-self: center;
+    justify-self: center;
+
+    display: block;
+
+    width: min(82vw, 510px);
+
+    margin: clamp(15px, 3vh, 35px) auto;
+
+    padding: 0;
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    -webkit-tap-highlight-color: transparent;
+    appearance: none;
+
+    animation:
+        envelopeAppear 1.1s cubic-bezier(.22, 1, .36, 1) both,
+        envelopeFloat 4s ease-in-out 1.1s infinite;
+
+    transform-origin: center center;
+
+    transition:
+        opacity .65s ease,
+        transform .95s cubic-bezier(.22, 1, .36, 1);
+}
+
+.envelope-image__img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    pointer-events: none;
+    user-select: none;
+
+    filter:
+        drop-shadow(0 18px 18px rgba(64, 53, 33, .16))
+        drop-shadow(0 5px 5px rgba(64, 53, 33, .10));
+}
+
+
+/* =========================
+   Hand click icon
+   ========================= */
+
+.envelope-image__hand {
+    position: absolute;
+
+    /*
+     * Đặt tay đúng vị trí seal.
+     * Nếu PNG envelope sau này đổi crop,
+     * chỉ cần chỉnh left/top ở đây.
+     */
+    left: 49%;
+    top: 53%;
+
+    width: clamp(58px, 15vw, 92px);
+    height: auto;
+
+    z-index: 10;
+
+    pointer-events: none;
+    user-select: none;
+    transform: rotate(18deg);
+    transform-origin: 30% 20%;
+
+    filter:
+        drop-shadow(0 2px 5px rgba(0, 0, 0, .18));
+
+    animation: envelopeHandTap 1.6s ease-in-out infinite;
+}
+
+
+/* =========================
+   Wedding date
+   ========================= */
+
+.preload-envelope-2__date {
+    position: relative;
+    z-index: 4;
+
+    font-family:
+        "SVN-Glamour",
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: clamp(29px, 7vw, 46px);
+    font-weight: 400;
+    line-height: 1;
+
+    letter-spacing: -.025em;
+
+    color: var(--envelope-ink);
+
+    transition:
+        opacity .45s ease,
+        transform .7s cubic-bezier(.22, 1, .36, 1);
+
+    animation: envelopeDateFade 1s ease .65s both;
+}
+
+
+/* =========================================================
+   OPENING STATE
+   ========================================================= */
+
+.preload-container.is-opening .preload-envelope-2__heading {
+    opacity: 0;
+    transform: translateY(-18px);
+}
+
+.preload-container.is-opening .preload-envelope-2__date {
+    opacity: 0;
+    transform: translateY(18px);
+}
+
+.preload-container.is-opening .envelope-image {
+    animation: none;
+
+    opacity: 0;
+
+    transform:
+        translateY(-10px)
+        scale(1.16)
+        rotate(-1deg);
+}
+
+.preload-container.is-opening .envelope-image__hand {
+    animation: none;
+    opacity: 0;
+}
+
+.preload-container.is-opening .preload-envelope-2 {
+    opacity: 0;
+    transform: scale(1.025);
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes envelopeAppear {
+    from {
+        opacity: 0;
+        transform: translateY(25px) scale(.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes envelopeFloat {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-7px);
+    }
+}
+
+@keyframes envelopeHandTap {
+    0%,
+    100% {
+        transform:
+            translate(-8%, -5%)
+            rotate(-30deg)
+            scale(1);
+    }
+
+    32% {
+        transform:
+            translate(-8%, -5%)
+            rotate(-30deg)
+            scale(1);
+    }
+
+    46% {
+        transform:
+            translate(-8%, -5%)
+            rotate(-30deg)
+            scale(.87);
+    }
+
+    62% {
+        transform:
+            translate(-8%, -5%)
+            rotate(-30deg)
+            scale(1.06);
+    }
+
+    75% {
+        transform:
+            translate(-8%, -5%)
+            rotate(-30deg)
+            scale(1);
+    }
+}
+
+@keyframes envelopeGuestFade {
+    from {
+        opacity: 0;
+        transform: translateY(7px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes envelopeDateFade {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .preload-envelope-2 {
+        padding:
+            clamp(55px, 8vh, 80px)
+            16px
+            clamp(48px, 7vh, 70px);
+    }
+
+    .envelope-image {
+        width: min(91vw, 440px);
+    }
+
+    .envelope-image__hand {
+        left: 49%;
+        top: 53%;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .envelope-image,
+    .envelope-image__hand,
+    .preload-envelope-2__guest,
+    .preload-envelope-2__date {
+        animation: none !important;
+    }
+
+    .preload-envelope-2,
+    .envelope-image,
+    .preload-envelope-2__heading,
+    .preload-envelope-2__date {
+        transition-duration: .2s !important;
+    }
+}
     /* Hide Helper */
     .preload-container.hidden { display: none !important; }
 </style>
@@ -187,30 +659,134 @@
 <script>
     (function () {
         const container = document.getElementById('preloadContainer');
-        if (!container) return;
 
-        @if($variant === 'split_botanical')
-            const trigger = container.querySelector('.preload-split-trigger');
-            let isOpening = false;
+        if (!container) {
+            return;
+        }
 
+        const lockScroll = function () {
             document.documentElement.style.overflow = 'hidden';
 
+            if (document.body) {
+                document.body.style.overflow = 'hidden';
+            }
+        };
+
+        const unlockScroll = function () {
+            document.documentElement.style.overflow = '';
+
+            if (document.body) {
+                document.body.style.overflow = '';
+            }
+        };
+
+
+        /*
+         |--------------------------------------------------------------------------
+         | Split Botanical
+         |--------------------------------------------------------------------------
+         */
+        @if($variant === 'split_botanical')
+
+            const trigger = container.querySelector('.preload-split-trigger');
+
+            let isOpening = false;
+
+            lockScroll();
+
             trigger?.addEventListener('click', function () {
-                if (isOpening) return;
+                if (isOpening) {
+                    return;
+                }
+
                 isOpening = true;
+
                 container.classList.add('is-opening');
-                document.documentElement.style.overflow = '';
-                window.dispatchEvent(new CustomEvent('wedding-opened'));
+
+                unlockScroll();
+
+                window.dispatchEvent(
+                    new CustomEvent('wedding-opened')
+                );
 
                 window.setTimeout(function () {
                     container.classList.add('hidden');
-                }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 350 : 1200);
+                }, window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                    ? 350
+                    : 1200
+                );
             });
+
+
+        /*
+         |--------------------------------------------------------------------------
+         | Envelope 2
+         |--------------------------------------------------------------------------
+         */
+        @elseif($variant === 'envelope-2')
+
+            const trigger = container.querySelector('.envelope-image');
+
+            let isOpening = false;
+
+            lockScroll();
+
+            const openWedding = function () {
+                if (isOpening) {
+                    return;
+                }
+
+                isOpening = true;
+
+                /*
+                 * Trigger CSS animation.
+                 */
+                container.classList.add('is-opening');
+
+                /*
+                 * Cho phép scroll website trở lại.
+                 */
+                unlockScroll();
+
+                /*
+                 * Hook để music / animation / tracking
+                 * có thể nghe event này sau này.
+                 */
+                window.dispatchEvent(
+                    new CustomEvent('wedding-opened')
+                );
+
+                /*
+                 * Đợi animation hoàn tất rồi xoá preload.
+                 */
+                window.setTimeout(function () {
+                    container.classList.add('hidden');
+                }, window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                    ? 250
+                    : 950
+                );
+            };
+
+            trigger?.addEventListener(
+                'click',
+                openWedding,
+                { once: true }
+            );
+
+
+        /*
+         |--------------------------------------------------------------------------
+         | Other preload variants
+         |--------------------------------------------------------------------------
+         */
         @else
+
             window.setTimeout(function () {
                 container.classList.add('hidden');
             }, 4000);
+
         @endif
+
     })();
 </script>
 @endif
