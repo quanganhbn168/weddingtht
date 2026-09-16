@@ -17,6 +17,13 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
+use Filament\Facades\Filament;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Get;
+use Filament\Notifications\Notification;
 use Filament\Tables\Table;
 
 class WeddingsTable
@@ -131,6 +138,144 @@ class WeddingsTable
                             ->download($archive['path'], $archive['filename'], ['Content-Type' => 'application/zip'])
                             ->deleteFileAfterSend(true);
                     }),
+                Action::make('guests')
+    ->label('Khách mời')
+    ->icon('heroicon-o-user-group')
+    ->color('success')
+    ->visible(
+        fn (): bool =>
+            Filament::getCurrentPanel()?->getId() === 'app'
+    )
+    ->modalHeading(
+        fn (Wedding $record): string =>
+            'Khách mời · '.$record->groom_name.' & '.$record->bride_name
+    )
+    ->modalDescription(
+        'Nhập khách mời và chọn khách thuộc nhà trai hoặc nhà gái. '
+        .'Sau khi lưu, hệ thống sẽ tạo link thiệp riêng cho từng người.'
+    )
+    ->modalWidth('5xl')
+    ->fillForm(
+        fn (Wedding $record): array => [
+            'guests' => $record->guestInvites(),
+        ]
+    )
+    ->form([
+        Repeater::make('guests')
+            ->label('Danh sách khách mời')
+            ->schema([
+
+                TextInput::make('name')
+                    ->label('Tên khách mời')
+                    ->placeholder('VD: Gia đình anh Nguyễn Văn A')
+                    ->required()
+                    ->maxLength(255),
+
+                Select::make('side')
+                    ->label('Khách của')
+                    ->options([
+                        'groom' => 'Nhà trai',
+                        'bride' => 'Nhà gái',
+                        'both' => 'Khách chung',
+                    ])
+                    ->default('both')
+                    ->required()
+                    ->native(false)
+                    ->live(),
+
+                TextInput::make('code')
+                    ->label('Mã khách')
+                    ->disabled()
+                    ->dehydrated(),
+
+                Placeholder::make('invite_link')
+                    ->label('Link thiệp riêng')
+                    ->content(function (
+                        Get $get,
+                        ?Wedding $record
+                    ): string {
+                        if (! $record) {
+                            return 'Lưu khách mời để tạo link.';
+                        }
+
+                        $code = Wedding::normalizeGuestCode(
+                            $get('code')
+                        );
+
+                        if (! $code) {
+                            return 'Lưu khách mời để tạo link.';
+                        }
+
+                        return $record->guestInvitationUrl(
+                            $code,
+                            $get('side') ?: 'both',
+                        );
+                    })
+                    ->columnSpanFull(),
+            ])
+            ->columns(3)
+            ->defaultItems(0)
+            ->reorderable()
+            ->collapsible()
+            ->cloneable()
+            ->addActionLabel('+ Thêm khách mời')
+            ->itemLabel(
+                fn (array $state): string =>
+                    $state['name'] ?? 'Khách mới'
+            ),
+    ])
+    ->action(function (
+        array $data,
+        Wedding $record
+    ): void {
+        $guests = [];
+
+        foreach ($data['guests'] ?? [] as $guest) {
+            $name = trim(
+                strip_tags((string) ($guest['name'] ?? ''))
+            );
+
+            if ($name === '') {
+                continue;
+            }
+
+            $code = Wedding::normalizeGuestCode(
+                $guest['code'] ?? null
+            );
+
+            if (! $code) {
+                $code = Wedding::nextGuestCode($guests);
+            }
+
+            $side = in_array(
+                $guest['side'] ?? null,
+                ['groom', 'bride', 'both'],
+                true
+            )
+                ? $guest['side']
+                : 'both';
+
+            $guests[] = [
+                'code' => $code,
+                'name' => $name,
+                'side' => $side,
+            ];
+        }
+
+        $content = $record->content ?? [];
+
+        $content['invited_guests'] = $guests;
+
+        $record->update([
+            'content' => $content,
+        ]);
+
+        Notification::make()
+            ->title('Đã lưu khách mời')
+            ->body('Hiện có '.count($guests).' khách mời.')
+            ->success()
+            ->send();
+    }),
                 ViewAction::make()
                     ->label('Xem')
                     ->url(fn (Wedding $record): string => url($record->slug))

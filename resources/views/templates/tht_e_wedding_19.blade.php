@@ -33,12 +33,27 @@
             <img class="tht19-hero__image"
                  src="{{ $heroUrl }}"
                  data-position="{{ data_get($templateContent, 'hero_position') }}"
+                 data-aos="zoom-out"
+                 data-aos-duration="1800"
+                 data-aos-easing="ease-out-cubic"
+                 data-aos-offset="0"
+                 data-aos-once="true"
                  alt="{{ $sideData->firstName }} và {{ $sideData->secondName }}"
                  fetchpriority="high" decoding="async">
         @endif
         <div class="tht19-hero__veil" aria-hidden="true"></div>
-        <p class="tht19-hero__script" data-aos="fade-down">We're getting married!</p>
-        <div class="tht19-hero__caption" data-aos="fade-up">
+        <p class="tht19-hero__script"
+           data-aos="fade-down"
+           data-aos-duration="1450"
+           data-aos-delay="200"
+           data-aos-easing="ease-out-cubic"
+           data-aos-once="true">We're getting married!</p>
+        <div class="tht19-hero__caption"
+             data-aos="fade-up"
+             data-aos-duration="1650"
+             data-aos-delay="400"
+             data-aos-easing="ease-out-cubic"
+             data-aos-once="true">
             <h1 id="tht19-couple-title">
                 {{ $sideData->firstName }}
                 &
@@ -52,10 +67,18 @@
 
     {{-- 02. Two portrait cards, with optional template-specific captions. --}}
     <section class="tht19-portraits" aria-labelledby="tht19-invitation-title">
-        <header class="tht19-section-heading" data-aos="fade-up">
+        <header class="tht19-section-heading"
+                data-aos="fade-up"
+                data-aos-duration="1500"
+                data-aos-easing="ease-out-cubic"
+                data-aos-once="true">
             <h2 id="tht19-invitation-title">Wedding Invitation</h2>
         </header>
-        <article @class(['tht19-portrait gold-bottom-overlay', 'tht19-portrait--text-only' => !$bridePhoto]) data-aos="fade-up">
+        <article @class(['tht19-portrait gold-bottom-overlay', 'tht19-portrait--text-only' => !$bridePhoto])
+                 data-aos="fade-up"
+                 data-aos-duration="1700"
+                 data-aos-easing="ease-out-cubic"
+                 data-aos-once="true">
             @if($bridePhoto)
                 <img src="{{ $bridePhoto }}" data-position="{{ data_get($templateContent, 'bride_position') }}" alt="Cô dâu {{ $wedding->bride_name }}" loading="lazy" decoding="async">
             @endif
@@ -68,7 +91,12 @@
             </div>
         </article>
         <div class="tht19-heart-divider" aria-hidden="true"><i class="fa-regular fa-heart"></i></div>
-        <article @class(['tht19-portrait gold-bottom-overlay', 'tht19-portrait--text-only' => !$groomPhoto]) data-aos="fade-up">
+        <article @class(['tht19-portrait gold-bottom-overlay', 'tht19-portrait--text-only' => !$groomPhoto])
+                 data-aos="fade-up"
+                 data-aos-duration="1700"
+                 data-aos-delay="150"
+                 data-aos-easing="ease-out-cubic"
+                 data-aos-once="true">
             @if($groomPhoto)
                 <img src="{{ $groomPhoto }}" data-position="{{ data_get($templateContent, 'groom_position') }}" alt="Chú rể {{ $wedding->groom_name }}" loading="lazy" decoding="async">
             @endif
@@ -85,8 +113,17 @@
              alt=""
              aria-hidden="true"
              loading="lazy"
-             decoding="async">
-        <div class="tht19-invitation__copy" data-aos="fade-up">
+             decoding="async"
+             data-aos="zoom-in"
+             data-aos-duration="1500"
+             data-aos-easing="ease-out-cubic"
+             data-aos-once="true">
+        <div class="tht19-invitation__copy"
+             data-aos="fade-up"
+             data-aos-duration="1700"
+             data-aos-delay="100"
+             data-aos-easing="ease-out-cubic"
+             data-aos-once="true">
             <p class="tht19-invitation__intro">Thân mời tới dự lễ cưới thân mật<br>của chúng tôi</p>
             @if($guestName)
                 <p class="tht19-invitation__guest">{{ $guestName }}</p>
@@ -94,7 +131,11 @@
             <h2 class="tht19-invitation__names"><span>{{ $sideData->firstName }}</span><span class="tht19-invitation__connector">and</span><span>{{ $sideData->secondName }}</span></h2>
         </div>
         @if(!empty($templateSchemaMedia['save_the_date_image']))
-            <figure class="tht19-save-date" data-aos="fade-up">
+            <figure class="tht19-save-date"
+                    data-aos="zoom-in"
+                    data-aos-duration="1800"
+                    data-aos-easing="ease-out-cubic"
+                    data-aos-once="true">
                 <img src="{{ $templateSchemaMedia['save_the_date_image']->getUrl() }}" alt="Khoảnh khắc của {{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy" decoding="async">
                 <figcaption><span>Save</span><span><i>the</i> Date</span></figcaption>
             </figure>
@@ -107,7 +148,11 @@
 
     {{-- 04. Ceremony details for both sides. --}}
     <section class="tht19-events" id="schedule" aria-label="Thời gian và địa điểm lễ cưới">
-        <div class="tht19-families" data-aos="fade-up">
+        <div class="tht19-families"
+             data-aos="fade-up"
+             data-aos-duration="1650"
+             data-aos-easing="ease-out-cubic"
+             data-aos-once="true">
             @foreach($sideData->families as $family)
                 <article class="tht19-family">
                     <h3>{{ $family->label }}</h3>
@@ -117,11 +162,23 @@
             @endforeach
         </div>
         <div class="">
-            <img src="{{ asset("images/templates/tht-e-wedding-19/ring.png")}}" class="inline-block mx-auto" width="58" height="58" alt="Nhẫn của thtmedia-19">
+            <img src="{{ asset("images/templates/tht-e-wedding-19/ring.png")}}"
+                 class="inline-block mx-auto"
+                 width="58"
+                 height="58"
+                 alt="Nhẫn của thtmedia-19"
+                 data-aos="zoom-in"
+                 data-aos-duration="1500"
+                 data-aos-easing="ease-out-cubic"
+                 data-aos-once="true">
         </div>
         @foreach($sideData->events as $event)
             <!-- Each side shows its ceremony only; reception rows stay out of this section. -->
-            <article class="tht19-event" data-aos="fade-up">
+            <article class="tht19-event"
+                     data-aos="fade-up"
+                     data-aos-duration="1750"
+                     data-aos-easing="ease-out-cubic"
+                     data-aos-once="true">
                 <h2>{{ $event->ceremonyTitle }} được tổ chức</h2>
                 @if($event->ceremonyTime)
                     <p class="tht19-event__time"><strong>vào lúc {{ $event->ceremonyTimeLongLabel() }}</strong></p>
@@ -157,10 +214,16 @@
 
     {{-- 05. Timeline --}}
 <section class="tht19-timeline" aria-labelledby="tht19-timeline-title">
-    <header @class([
-        'tht19-timeline__heading',
-        'tht19-timeline__heading--photo' => !empty($templateSchemaMedia['timeline_image'])
-    ])>
+    <header
+        @class([
+            'tht19-timeline__heading',
+            'tht19-timeline__heading--photo' => !empty($templateSchemaMedia['timeline_image'])
+        ])
+        data-aos="fade-up"
+        data-aos-duration="1700"
+        data-aos-easing="ease-out-cubic"
+        data-aos-once="true"
+    >
         @if(!empty($templateSchemaMedia['timeline_image']))
             <img
                 src="{{ $templateSchemaMedia['timeline_image']->getUrl() }}"
@@ -176,7 +239,11 @@
     </header>
 
     @foreach($sideData->events as $event)
-        <article class="tht19-timeline__group" data-aos="fade-up">
+        <article class="tht19-timeline__group"
+                 data-aos="fade-up"
+                 data-aos-duration="1750"
+                 data-aos-easing="ease-out-cubic"
+                 data-aos-once="true">
 
             <h3>
                 Chương trình nhà {{ $event->side === 'bride' ? 'gái' : 'trai' }}
@@ -278,20 +345,42 @@
     {{-- 06. Real gallery only; CSS masonry handles any number of images. --}}
     @if($galleryImages->isNotEmpty())
         <section class="tht19-album" id="album" aria-labelledby="tht19-album-title">
-            <header class="tht19-album__heading" data-aos="fade-up"><h2 id="tht19-album-title">Our memories</h2><span aria-hidden="true"></span></header>
+            <header class="tht19-album__heading"
+                    data-aos="fade-right"
+                    data-aos-duration="1500"
+                    data-aos-easing="ease-out-cubic"
+                    data-aos-once="true">
+                <h2 id="tht19-album-title">Our memories</h2>
+                <span aria-hidden="true"></span>
+            </header>
             @if(filled(data_get($templateContent, 'album_note')))
-                <p class="tht19-album__note" data-aos="fade-up">{{ data_get($templateContent, 'album_note') }}</p>
+                <p class="tht19-album__note"
+                   data-aos="fade-up"
+                   data-aos-duration="1450"
+                   data-aos-delay="100"
+                   data-aos-easing="ease-out-cubic"
+                   data-aos-once="true">{{ data_get($templateContent, 'album_note') }}</p>
             @endif
             <div class="tht19-album__grid">
                 @foreach($galleryImages as $image)
                     <a @class(['tht19-album__photo', 'glightbox', 'tht19-album__photo--cover' => $loop->first])
-                       href="{{ $image->getUrl() }}" data-gallery="tht19-memories"
+                       href="{{ $image->getUrl() }}"
+                       data-gallery="tht19-memories"
+                       data-aos="zoom-in"
+                       data-aos-duration="1600"
+                       data-aos-delay="{{ ($loop->index % 4) * 100 }}"
+                       data-aos-easing="ease-out-cubic"
+                       data-aos-once="true"
                        aria-label="Xem ảnh cưới {{ $loop->iteration }} của {{ $sideData->firstName }} và {{ $sideData->secondName }}">
                         <img src="{{ $image->getUrl('gallery_web') ?: $image->getUrl() }}" alt="Ảnh cưới {{ $loop->iteration }} · {{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy" decoding="async">
                     </a>
                 @endforeach
             </div>
-            <p class="tht19-album__signature">Every moment, forever.</p>
+            <p class="tht19-album__signature"
+               data-aos="fade-left"
+               data-aos-duration="1500"
+               data-aos-easing="ease-out-cubic"
+               data-aos-once="true">Every moment, forever.</p>
         </section>
     @endif
 
@@ -344,13 +433,27 @@
                      } finally { clearTimeout(timeout); this.submitting = false; }
                  }
              }">
-            <header data-aos="fade-up">
+            <header
+                data-aos="fade-up"
+                data-aos-duration="1500"
+                data-aos-easing="ease-out-cubic"
+                data-aos-once="true">
                 <p class="tht19-response__intro">{{ $wedding->getContentValue('rsvp_desc', 'Hãy xác nhận sự có mặt của bạn để chúng mình chuẩn bị đón tiếp một cách chu đáo nhất. Trân trọng!') }}</p>
             </header>
             @if(session('success'))<p class="tht19-notice tht19-notice--success" role="status">{{ session('success') }}</p>@endif
             @if(session('error'))<p class="tht19-notice tht19-notice--error" role="alert">{{ session('error') }}</p>@endif
             @if($errors->any())<div class="tht19-notice tht19-notice--error" role="alert">@foreach($errors->all() as $error)<p>{{ $error }}</p>@endforeach</div>@endif
-            <form class="tht19-form" action="{{ route('wedding.rsvp.store', $wedding->slug) }}" method="POST" @submit.prevent="submitRsvp" x-show="!success" :aria-busy="submitting">
+            <form class="tht19-form"
+                  action="{{ route('wedding.rsvp.store', $wedding->slug) }}"
+                  method="POST"
+                  @submit.prevent="submitRsvp"
+                  x-show="!success"
+                  :aria-busy="submitting"
+                  data-aos="fade-up"
+                  data-aos-duration="1650"
+                  data-aos-delay="150"
+                  data-aos-easing="ease-out-cubic"
+                  data-aos-once="true">
                 @csrf
                 <p class="tht19-notice tht19-notice--error" x-cloak x-show="error" x-text="error" role="alert"></p>
                 <div class="tht19-field">
@@ -415,7 +518,12 @@
 
     {{-- 08. Reuse the shared countdown; ISO timestamp keeps its server timezone. --}}
     @if($wedding->event_date)
-        <section class="tht19-countdown" aria-labelledby="tht19-countdown-title" data-aos="fade-up">
+        <section class="tht19-countdown"
+                 aria-labelledby="tht19-countdown-title"
+                 data-aos="fade-up"
+                 data-aos-duration="1750"
+                 data-aos-easing="ease-out-cubic"
+                 data-aos-once="true">
             <h2 class="tht19-script" id="tht19-countdown-title">Countdown</h2>
             <p class="tht19-countdown__caption">Cùng đếm ngược tới ngày cưới</p>
             <div class="tht19-countdown__grid" x-data="countdown(@js($wedding->event_date->toIso8601String()))">
@@ -429,9 +537,20 @@
     {{-- 10. The existing thank-you media is not replaced by another collection. --}}
     <footer class="tht19-thank-you">
         @if($thankYouImage)
-            <figure><img src="{{ $thankYouImage }}" alt="{{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy" decoding="async"></figure>
+            <figure
+                data-aos="zoom-in"
+                data-aos-duration="1800"
+                data-aos-easing="ease-out-cubic"
+                data-aos-once="true">
+                <img src="{{ $thankYouImage }}" alt="{{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy" decoding="async">
+            </figure>
         @endif
-        <div class="tht19-thank-you__copy" data-aos="fade-up">
+        <div class="tht19-thank-you__copy"
+             data-aos="fade-up"
+             data-aos-duration="1700"
+             data-aos-delay="150"
+             data-aos-easing="ease-out-cubic"
+             data-aos-once="true">
             <p>Cảm ơn bạn đã dành tình cảm cho chúng mình! Sự hiện diện của bạn chính là món quà ý nghĩa nhất. Chúng mình vô cùng trân quý khi được cùng bạn chia sẻ niềm hạnh phúc trong ngày trọng đại này.</p>
             <h2 class="tht19-script">Thank you!</h2>
             <p class="tht19-thank-you__signature">{{ $sideData->firstName }} &amp; {{ $sideData->secondName }}</p>
@@ -443,4 +562,44 @@
 
 @push('scripts')
     <x-wedding.countdown-script />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const root = document.getElementById('tht19-top');
+            const preload = document.getElementById('preloadContainer');
+
+            if (!root || !preload) {
+                return;
+            }
+
+            /*
+             * AOS được khởi tạo toàn cục khi DOM ready. Vì preload đang phủ màn hình,
+             * các phần tử đầu trang có thể đã chạy xong animation trước khi khách mở thiệp.
+             * Khi wedding-opened được phát ra, reset các phần tử đang nằm trong viewport
+             * rồi kích hoạt lại scroll để AOS chạy một lần nữa trước mắt người xem.
+             */
+            window.addEventListener('wedding-opened', () => {
+                const replayDelay = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                    ? 100
+                    : 1050;
+
+                window.setTimeout(() => {
+                    root.querySelectorAll('[data-aos].aos-animate').forEach((element) => {
+                        const rect = element.getBoundingClientRect();
+                        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+
+                        if (isInViewport) {
+                            element.classList.remove('aos-animate');
+                        }
+                    });
+
+                    window.requestAnimationFrame(() => {
+                        window.requestAnimationFrame(() => {
+                            window.dispatchEvent(new Event('scroll'));
+                        });
+                    });
+                }, replayDelay);
+            }, { once: true });
+        });
+    </script>
 @endpush

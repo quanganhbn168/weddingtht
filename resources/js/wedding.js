@@ -15,13 +15,34 @@ window.Swiper = Swiper;
 window.GLightbox = GLightbox;
 
 // Initialize AOS
-document.addEventListener('DOMContentLoaded', () => {
+const initWeddingAOS = () => {
     AOS.init({
-        duration: 1000,
+        duration: 1500,
+        easing: 'ease-out-cubic',
         once: true,
-        offset: 50,
+        offset: 70,
+        anchorPlacement: 'top-bottom',
     });
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const preload = document.getElementById('preloadContainer');
+
+    // Không có preload thì chạy luôn.
+    if (!preload) {
+        initWeddingAOS();
+    }
 });
+
+window.addEventListener(
+    'wedding-content-visible',
+    () => {
+        requestAnimationFrame(() => {
+            initWeddingAOS();
+        });
+    },
+    { once: true }
+);
 
 // Alpine.js countdown component
 document.addEventListener('alpine:init', () => {

@@ -97,9 +97,11 @@
             <div class="envelope-name">{{ urldecode($guestName) }}</div>
         </div>
         @endif
-        <h1>{{ $wedding->groom_name }}</h1>
-        <div class="ampersand">&</div>
-        <h1>{{ $wedding->bride_name }}</h1>
+        <h1>{{ $sideData->firstName }}</h1>
+
+<div class="ampersand">&</div>
+
+<h1>{{ $sideData->secondName }}</h1>
     </div>
     @endif
     {{-- VARIANT: ENVELOPE 2 - PREMIUM INVITATION --}}
@@ -113,16 +115,16 @@
         {{-- Couple --}}
         <div class="preload-envelope-2__heading">
             <div class="preload-envelope-2__name">
-                {{ $wedding->groom_name }}
-            </div>
+        {{ $sideData->firstName }}
+    </div>
 
-            <div class="preload-envelope-2__ampersand">
-                &
-            </div>
+    <div class="preload-envelope-2__ampersand">
+        &
+    </div>
 
-            <div class="preload-envelope-2__name">
-                {{ $wedding->bride_name }}
-            </div>
+    <div class="preload-envelope-2__name">
+        {{ $sideData->secondName }}
+    </div>
 
             @if($guestName)
                 <div class="preload-envelope-2__guest">
@@ -710,11 +712,15 @@
                 );
 
                 window.setTimeout(function () {
-                    container.classList.add('hidden');
-                }, window.matchMedia('(prefers-reduced-motion: reduce)').matches
-                    ? 350
-                    : 1200
-                );
+    container.classList.add('hidden');
+
+    window.dispatchEvent(
+        new CustomEvent('wedding-content-visible')
+    );
+}, window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ? 350
+    : 1200
+);
             });
 
 
@@ -760,11 +766,15 @@
                  * Đợi animation hoàn tất rồi xoá preload.
                  */
                 window.setTimeout(function () {
-                    container.classList.add('hidden');
-                }, window.matchMedia('(prefers-reduced-motion: reduce)').matches
-                    ? 250
-                    : 950
-                );
+    container.classList.add('hidden');
+
+    window.dispatchEvent(
+        new CustomEvent('wedding-content-visible')
+    );
+}, window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ? 250
+    : 950
+);
             };
 
             trigger?.addEventListener(
@@ -781,11 +791,15 @@
          */
         @else
 
-            window.setTimeout(function () {
-                container.classList.add('hidden');
-            }, 4000);
+    window.setTimeout(function () {
+        container.classList.add('hidden');
 
-        @endif
+        window.dispatchEvent(
+            new CustomEvent('wedding-content-visible')
+        );
+    }, 4000);
+
+@endif
 
     })();
 </script>

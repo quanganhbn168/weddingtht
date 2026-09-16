@@ -69,7 +69,11 @@ class WeddingController extends Controller
         // Thứ tự tên trên slug chỉ chọn sẵn phía trong RSVP.
         // Nội dung thiệp luôn hiển thị đầy đủ nhà gái trước, rồi nhà trai.
         $side = $wedding->invitationSideForSlug($slug);
-        $sideData = WeddingSideResolver::resolve($wedding, 'both');
+
+$sideData = WeddingSideResolver::resolve(
+    $wedding,
+    $side === 'both' ? 'groom' : $side
+);
         $givenNameInitial = static function (?string $fullName): string {
             $parts = preg_split('/\s+/u', trim((string) $fullName), -1, PREG_SPLIT_NO_EMPTY);
             $givenName = $parts ? end($parts) : '';

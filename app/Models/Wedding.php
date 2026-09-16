@@ -657,10 +657,18 @@ class Wedding extends Model implements HasMedia
         return null;
     }
 
-    public function guestInvitationUrl(string $code): string
-    {
+    public function guestInvitationUrl(
+        string $code,
+        string $side = 'both',
+    ): string {
+        $slug = match ($side) {
+            'groom' => $this->groomInvitationSlug(),
+            'bride' => $this->brideInvitationSlug(),
+            default => $this->slug,
+        };
+
         return route('wedding.short.guest', [
-            'slug' => $this->slug,
+            'slug' => $slug,
             'guestCode' => self::normalizeGuestCode($code) ?: $code,
         ]);
     }
