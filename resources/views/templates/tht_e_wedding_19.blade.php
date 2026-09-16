@@ -564,42 +564,105 @@
     <x-wedding.countdown-script />
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const root = document.getElementById('tht19-top');
-            const preload = document.getElementById('preloadContainer');
+        document.addEventListener('DOMContentLoaded', function () {
+            const balanceAlbum = () => {
+                const grid = document.querySelector('.tht19-album__grid');
 
-            if (!root || !preload) {
-                return;
-            }
+                if (!grid) return;
 
-            /*
-             * AOS được khởi tạo toàn cục khi DOM ready. Vì preload đang phủ màn hình,
-             * các phần tử đầu trang có thể đã chạy xong animation trước khi khách mở thiệp.
-             * Khi wedding-opened được phát ra, reset các phần tử đang nằm trong viewport
-             * rồi kích hoạt lại scroll để AOS chạy một lần nữa trước mắt người xem.
-             */
-            window.addEventListener('wedding-opened', () => {
-                const replayDelay = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-                    ? 100
-                    : 1050;
+                const photos = [...grid.querySelectorAll('.tht19-album__photo')];
 
-                window.setTimeout(() => {
-                    root.querySelectorAll('[data-aos].aos-animate').forEach((element) => {
-                        const rect = element.getBoundingClientRect();
-                        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+                if (photos.length < 2) return;
 
-                        if (isInViewport) {
-                            element.classList.remove('aos-animate');
+                // Reset trước khi tính lại
+                photos.forEach(photo => {
+                    const img = photo.querySelector('img');
+
+                    if (img) {
+                        img.style.height = '';
+                        img.style.aspectRatio = '';
+                    }
+                });
+
+                requestAnimationFrame(() => {
+                    /*
+                     * Tìm ảnh cuối cùng ở từng cột dựa theo vị trí left.
+                     */
+                    const columns = {};
+
+                    photos.forEach(photo => {
+                        const rect = photo.getBoundingClientRect();
+                        const key = Math.round(rect.left);
+
+                        if (!columns[key]) {
+                            columns[key] = [];
                         }
+
+                        columns[key].push(photo);
                     });
 
-                    window.requestAnimationFrame(() => {
-                        window.requestAnimationFrame(() => {
-                            window.dispatchEvent(new Event('scroll'));
-                        });
-                    });
-                }, replayDelay);
-            }, { once: true });
+                    const columnList = Object.values(columns);
+
+                    if (columnList.length !== 2) return;
+
+                    const leftLast = columnList[0].at(-1);
+                    const rightLast = columnList[1].at(-1);
+
+                    const leftBottom = leftLast.getBoundingClientRect().bottom;
+                    const rightBottom = rightLast.getBoundingClientRect().bottom;
+
+                    const diff = Math.abs(leftBottom - rightBottom);
+
+                    if (diff < 2) return;
+
+                    const shorter =
+                        leftBottom < rightBottom
+                            ? leftLast
+                            : rightLast;
+
+                    const img = shorter.querySelector('img');
+
+                    if (!img) return;
+
+                    const currentHeight = img.getBoundingClientRect().height;
+
+                    img.style.aspectRatio = 'auto';
+                    img.style.height = `${currentHeight + diff}px`;
+                    img.style.objectFit = 'cover';
+                });
+            };
+
+            const images = document.querySelectorAll(
+                '.tht19-album__grid img'
+            );
+
+            let loaded = 0;
+
+            const ready = () => {
+                loaded++;
+
+                if (loaded >= images.length) {
+                    balanceAlbum();
+                }
+            };
+
+            images.forEach(img => {
+                if (img.complete) {
+                    ready();
+                } else {
+                    img.addEventListener('load', ready, { once: true });
+                    img.addEventListener('error', ready, { once: true });
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                clearTimeout(window.__tht19AlbumResize);
+
+                window.__tht19AlbumResize = setTimeout(
+                    balanceAlbum,
+                    150
+                );
+            });
         });
     </script>
 @endpush
