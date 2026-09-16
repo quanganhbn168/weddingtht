@@ -155,15 +155,87 @@
     .tht19-album__heading h2 { font: 500 32px/1.2 var(--tht19-title); flex-shrink: 0; }
     .tht19-album__heading > span { flex: 1; height: 1px; background: rgba(255, 253, 245, .6); }
     .tht19 .tht19-album__note { font-size: 11px; font-weight: 300; line-height: 1.9; margin: 0 0 24px; white-space: pre-line; overflow-wrap: anywhere; }
-    .tht19-album__grid { columns: 2; column-gap: 7px; }
-    .tht19-album__photo { display: block; break-inside: avoid; margin-bottom: 7px; overflow: hidden; text-decoration: none; background: rgba(255, 255, 255, .09); }
-    .tht19-album__photo img { width: 100%; height: auto; aspect-ratio: 2/3; object-fit: cover; transition: transform .55s ease; }
-    .tht19-album__photo:nth-child(3n) img { aspect-ratio: 4/5; }
-    .tht19-album__photo:nth-child(4n) img { aspect-ratio: 1; }
-    .tht19-album__photo--cover { column-span: all; }
-    .tht19-album__photo--cover img { aspect-ratio: 3/2; object-position: center top;}
-    .tht19-album__photo:only-child img { aspect-ratio: auto; }
-    .tht19-album__photo:hover img { transform: scale(1.035); }
+.tht19-album__grid {
+    display: block;
+}
+
+.tht19-album__columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+    align-items: stretch;
+}
+
+.tht19-album__column {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+/*
+ * Các ảnh bình thường.
+ */
+.tht19-album__photo {
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    background: rgba(255, 255, 255, .09);
+}
+
+.tht19-album__photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    object-position: center 20%;
+    transition: transform .55s ease;
+}
+
+/*
+ * Thay đổi nhẹ tỷ lệ để vẫn giữ cảm giác masonry.
+ */
+.tht19-album__column .tht19-album__photo:nth-child(3n) img {
+    aspect-ratio: 4 / 5;
+}
+
+.tht19-album__column .tht19-album__photo:nth-child(4n) img {
+    aspect-ratio: 1;
+}
+
+/*
+ * Hai column trong grid luôn cao bằng nhau.
+ * Ảnh cuối của cột ngắn tự giãn để lấp phần thiếu.
+ */
+.tht19-album__column .tht19-album__photo:last-child {
+    flex-grow: 1;
+}
+
+.tht19-album__column .tht19-album__photo:last-child img {
+    height: 100%;
+    min-height: 100%;
+    aspect-ratio: auto;
+    object-fit: cover;
+}
+
+/*
+ * Cover.
+ */
+.tht19-album__photo--cover {
+    width: 100%;
+    margin-bottom: 7px;
+}
+
+.tht19-album__photo--cover img {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+}
+
+.tht19-album__photo:hover img {
+    transform: scale(1.035);
+}
     .tht19 .tht19-album__signature { font: 400 26px/1.5 var(--tht19-script); text-align: right; margin: 16px 4px 0; }
 
     /* 07 · RSVP. Inputs are 16px to avoid iOS form zoom. */

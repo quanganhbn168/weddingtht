@@ -361,21 +361,88 @@
                    data-aos-easing="ease-out-cubic"
                    data-aos-once="true">{{ data_get($templateContent, 'album_note') }}</p>
             @endif
-            <div class="tht19-album__grid">
-                @foreach($galleryImages as $image)
-                    <a @class(['tht19-album__photo', 'glightbox', 'tht19-album__photo--cover' => $loop->first])
-                       href="{{ $image->getUrl() }}"
-                       data-gallery="tht19-memories"
-                       data-aos="zoom-in"
-                       data-aos-duration="1600"
-                       data-aos-delay="{{ ($loop->index % 4) * 100 }}"
-                       data-aos-easing="ease-out-cubic"
-                       data-aos-once="true"
-                       aria-label="Xem ảnh cưới {{ $loop->iteration }} của {{ $sideData->firstName }} và {{ $sideData->secondName }}">
-                        <img src="{{ $image->getUrl('gallery_web') ?: $image->getUrl() }}" alt="Ảnh cưới {{ $loop->iteration }} · {{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy" decoding="async">
-                    </a>
-                @endforeach
-            </div>
+            @php
+    $albumImages = $galleryImages->values();
+
+    $coverImage = $albumImages->first();
+    $restImages = $albumImages->slice(1)->values();
+
+    $leftImages = $restImages->filter(
+        fn ($image, $index) => $index % 2 === 0
+    );
+
+    $rightImages = $restImages->filter(
+        fn ($image, $index) => $index % 2 === 1
+    );
+@endphp
+
+<div class="tht19-album__grid">
+
+    {{-- Ảnh cover full width --}}
+    @if($coverImage)
+        <a
+            class="tht19-album__photo tht19-album__photo--cover glightbox"
+            href="{{ $coverImage->getUrl() }}"
+            data-gallery="tht19-memories"
+            data-aos="zoom-in"
+            data-aos-duration="1600"
+            aria-label="Xem ảnh cưới của {{ $sideData->firstName }} và {{ $sideData->secondName }}"
+        >
+            <img
+                src="{{ $coverImage->getUrl('gallery_web') ?: $coverImage->getUrl() }}"
+                alt="Ảnh cưới {{ $sideData->firstName }} và {{ $sideData->secondName }}"
+                loading="lazy"
+                decoding="async"
+            >
+        </a>
+    @endif
+
+    <div class="tht19-album__columns">
+
+        {{-- CỘT TRÁI --}}
+        <div class="tht19-album__column">
+            @foreach($leftImages as $image)
+                <a
+                    class="tht19-album__photo glightbox"
+                    href="{{ $image->getUrl() }}"
+                    data-gallery="tht19-memories"
+                    data-aos="fade-up"
+                    data-aos-duration="1500"
+                    data-aos-delay="{{ ($loop->index % 3) * 100 }}"
+                >
+                    <img
+                        src="{{ $image->getUrl('gallery_web') ?: $image->getUrl() }}"
+                        alt="Ảnh cưới {{ $sideData->firstName }} và {{ $sideData->secondName }}"
+                        loading="lazy"
+                        decoding="async"
+                    >
+                </a>
+            @endforeach
+        </div>
+
+        {{-- CỘT PHẢI --}}
+        <div class="tht19-album__column">
+            @foreach($rightImages as $image)
+                <a
+                    class="tht19-album__photo glightbox"
+                    href="{{ $image->getUrl() }}"
+                    data-gallery="tht19-memories"
+                    data-aos="fade-up"
+                    data-aos-duration="1500"
+                    data-aos-delay="{{ ($loop->index % 3) * 100 }}"
+                >
+                    <img
+                        src="{{ $image->getUrl('gallery_web') ?: $image->getUrl() }}"
+                        alt="Ảnh cưới {{ $sideData->firstName }} và {{ $sideData->secondName }}"
+                        loading="lazy"
+                        decoding="async"
+                    >
+                </a>
+            @endforeach
+        </div>
+
+    </div>
+</div>
             <p class="tht19-album__signature"
                data-aos="fade-left"
                data-aos-duration="1500"
