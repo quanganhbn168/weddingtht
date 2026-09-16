@@ -116,12 +116,15 @@
                 </article>
             @endforeach
         </div>
+        <div class="">
+            <img src="{{ asset("images/templates/tht-e-wedding-19/ring.png")}}" class="inline-block mx-auto" width="58" height="58" alt="Nhẫn của thtmedia-19">
+        </div>
         @foreach($sideData->events as $event)
             <!-- Each side shows its ceremony only; reception rows stay out of this section. -->
             <article class="tht19-event" data-aos="fade-up">
                 <h2>{{ $event->ceremonyTitle }} được tổ chức</h2>
                 @if($event->ceremonyTime)
-                    <p class="tht19-event__time">vào lúc <strong>{{ $event->ceremonyTimeLongLabel() }}</strong></p>
+                    <p class="tht19-event__time"><strong>vào lúc {{ $event->ceremonyTimeLongLabel() }}</strong></p>
                 @endif
                 <p class="tht19-event__weekday">{{ $event->ceremonyDayLabel() }}</p>
                 <time class="tht19-date" datetime="{{ $event->ceremonyDate->toDateString() }}">
@@ -130,7 +133,7 @@
                     <span class="tht19-date__side">{{ $event->ceremonyDate->format('Y') }}</span>
                 </time>
                 @if($event->ceremonyLunarFullLabel())
-                    <p class="tht19-event__lunar">({{ $event->ceremonyLunarFullLabel() }})</p>
+                    <p class="tht19-event__lunar"><strong>({{ $event->ceremonyLunarFullLabel() }})</strong></p>
                 @endif
                 <img class="tht19-event__doves"
                      src="{{ asset('images/templates/tht-e-wedding-19/double-bo-cau.png') }}"
@@ -141,9 +144,9 @@
                      width="96"
                      height="96">
                 <div class="tht19-event__venue">
-                    <p class="tht19-event__venue-label">Tại địa chỉ:</p>
-                    <h3>{{ $event->ceremonyVenue }}</h3>
-                    @if($event->ceremonyAddress)<address>{{ $event->ceremonyAddress }}</address>@endif
+                    <h3><strong>Tại {{ $event->ceremonyVenue }}</strong></h3>
+                    @if($event->ceremonyAddress)
+                    <address>Địa chỉ: {{ $event->ceremonyAddress }}</address>@endif
                     @if(filled($event->ceremonyMapUrl))
                         <a class="tht19-map-link" href="{{ $event->ceremonyMapUrl }}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-route" aria-hidden="true"></i> Chỉ đường tới lễ</a>
                     @endif
@@ -167,14 +170,32 @@
                     @if(filled(data_get($templateContent, $event->side . '_welcome_time')))
                         <li>
                             <i class="fa-regular fa-face-smile" aria-hidden="true"></i>
-                            <div class="tht19-timeline__when"><strong>{{ data_get($templateContent, $event->side . '_welcome_time') }}</strong><time datetime="{{ $event->receptionDate->toDateString() }}">{{ $event->receptionDate->format('d.m.Y') }}</time></div>
-                            <div class="tht19-timeline__what"><h4>Đón khách</h4><p>{{ $event->receptionVenue }}</p></div>
+                            <div class="tht19-timeline__when">
+                                <strong>{{ data_get($templateContent, $event->side . '_welcome_time') }}</strong>
+                                <time datetime="{{ $event->receptionDate->toDateString() }}">
+                                    {{ $event->receptionDate->format('d.m.Y') }}
+                                </time>
+                            </div>
+                            <div class="tht19-timeline__what">
+                                <h4>Đón khách</h4>
+                                <p>{{ $event->receptionVenue }}</p>
+                            </div>
                         </li>
                     @endif
                     <li>
                         <i class="fa-regular fa-heart" aria-hidden="true"></i>
-                        <div class="tht19-timeline__when">@if($event->ceremonyTime)<strong>{{ $event->ceremonyTimeLabel() }}</strong>@endif<time datetime="{{ $event->ceremonyDate->toDateString() }}">{{ $event->ceremonyDate->format('d.m.Y') }}</time></div>
-                        <div class="tht19-timeline__what"><h4>{{ $event->ceremonyTitle }}</h4><p>{{ $event->ceremonyVenue }}</p></div>
+                        <div class="tht19-timeline__when">
+                            @if($event->ceremonyTime)
+                            <strong>{{ $event->ceremonyTimeLabel() }}</strong>
+                            @endif
+                            <time datetime="{{ $event->ceremonyDate->toDateString() }}">
+                                {{ $event->ceremonyDate->format('d.m.Y') }}
+                            </time>
+                        </div>
+                        <div class="tht19-timeline__what">
+                            <h4>{{ $event->ceremonyTitle }}</h4>
+                            <p>{{ $event->ceremonyVenue }}</p>
+                        </div>
                     </li>
                 </ol>
             </article>
@@ -251,8 +272,6 @@
                  }
              }">
             <header data-aos="fade-up">
-                <p class="tht19-eyebrow">HẸN GẶP BẠN TRONG NGÀY VUI</p>
-                <h2 class="tht19-script" id="tht19-rsvp-title">Are you attending?</h2>
                 <p class="tht19-response__intro">{{ $wedding->getContentValue('rsvp_desc', 'Hãy xác nhận sự có mặt của bạn để chúng mình chuẩn bị đón tiếp một cách chu đáo nhất. Trân trọng!') }}</p>
             </header>
             @if(session('success'))<p class="tht19-notice tht19-notice--success" role="status">{{ session('success') }}</p>@endif
@@ -262,38 +281,25 @@
                 @csrf
                 <p class="tht19-notice tht19-notice--error" x-cloak x-show="error" x-text="error" role="alert"></p>
                 <div class="tht19-field">
-                    <label for="tht19-name">Tên của bạn <span aria-hidden="true">*</span></label>
                     <input id="tht19-name" name="name" type="text" autocomplete="name" maxlength="255" value="{{ old('name', $guestName) }}" x-model="formData.name" placeholder="Tên của bạn là gì?" required>
                 </div>
+                
                 <div class="tht19-field">
-                    <label for="tht19-phone">Số điện thoại <span class="tht19-optional">(không bắt buộc)</span></label>
-                    <input id="tht19-phone" name="phone" type="tel" autocomplete="tel" maxlength="20" value="{{ old('phone') }}" x-model="formData.phone" placeholder="Để chúng mình tiện liên hệ">
-                </div>
-                <div class="tht19-field">
-                    <label for="tht19-attendance">Bạn sẽ tham dự chứ? <span aria-hidden="true">*</span></label>
                     <select id="tht19-attendance" name="attendance" x-model="formData.attendance" required>
-                        <option value="" disabled @selected(!old('attendance'))>Vui lòng chọn</option>
+                        <option value="" disabled @selected(!old('attendance'))>Bạn sẽ tham dự chứ?</option>
                         <option value="yes" @selected(old('attendance') === 'yes')>Có, chắc chắn mình sẽ đến</option>
                         <option value="maybe" @selected(old('attendance') === 'maybe')>Mình sẽ xác nhận lại sau</option>
                         <option value="no" @selected(old('attendance') === 'no')>Rất tiếc, mình không thể tham dự</option>
                     </select>
                 </div>
-                <div class="tht19-form__row">
                     <div class="tht19-field">
-                        <label for="tht19-side">Khách mời của</label>
                         <select id="tht19-side" name="side" x-model="formData.side">
                             <option value="bride" @selected(old('side', $side) === 'bride')>Nhà gái</option>
                             <option value="groom" @selected(old('side', $side) === 'groom')>Nhà trai</option>
                             <option value="both" @selected(old('side', $side) === 'both')>Cả hai gia đình</option>
                         </select>
                     </div>
-                    <div class="tht19-field">
-                        <label for="tht19-guests">Số người tham dự</label>
-                        <input id="tht19-guests" name="guests" type="number" inputmode="numeric" min="1" max="20" step="1" value="{{ old('guests', 1) }}" x-model.number="formData.guests" required>
-                    </div>
-                </div>
                 <div class="tht19-field">
-                    <label for="tht19-wish">Lời chúc gửi tới chúng mình</label>
                     <textarea id="tht19-wish" name="wish" rows="4" maxlength="1000" x-model="formData.wish" placeholder="Gửi một lời chúc thật dễ thương…">{{ old('wish') }}</textarea>
                     <small>Lời chúc có thể được hiển thị trong sổ lưu bút sau khi được duyệt.</small>
                 </div>
@@ -314,7 +320,7 @@
                 <i class="fa-regular fa-circle-check" aria-hidden="true"></i>
                 <h3>Thank you!</h3>
                 <p x-text="successMessage"></p>
-                <p>Lời chúc sẽ xuất hiện khi được duyệt. Cảm ơn tình cảm của bạn dành cho chúng mình.</p>
+                <p> Cảm ơn tình cảm của bạn dành cho chúng mình.</p>
             </div>
         </div>
 
@@ -322,7 +328,6 @@
         @if($wedding->getBrideQrUrl() || $wedding->getGroomQrUrl())
             <x-wedding.gift-box :wedding="$wedding" class="tht19-gift">
                 <div class="tht19-gift__body" @keydown.escape.window="showQr = null" x-effect="document.documentElement.classList.toggle('tht19-gift-open', !!showQr)">
-                    <i class="fa-solid fa-gift tht19-gift__icon" aria-hidden="true"></i>
                     <h2>Hộp mừng cưới</h2>
                     <p>{{ $wedding->getContentValue('blessing_desc', 'Sự hiện diện của bạn là món quà ý nghĩa nhất. Cảm ơn bạn đã dành tình cảm cho chúng mình.') }}</p>
                     <div class="tht19-gift__actions">
@@ -347,23 +352,6 @@
             </div>
         </section>
     @endif
-
-    {{-- 09. Only approved wishes are displayed. Writing uses the RSVP's wish field above. --}}
-    <section class="tht19-guestbook" id="guestbook" aria-labelledby="tht19-guestbook-title">
-        <header data-aos="fade-up">
-            <p class="tht19-eyebrow">WITH LOVE</p>
-            <h2 class="tht19-script" id="tht19-guestbook-title">{{ $wedding->getContentValue('guestbook_title', 'Sổ lưu bút') }}</h2>
-            <p>{{ $wedding->getContentValue('guestbook_desc', 'Cảm ơn những lời chúc tốt đẹp bạn đã gửi tới chúng mình!') }}</p>
-        </header>
-        <div class="tht19-guestbook__wishes">
-            @forelse($approvedWishes as $wish)
-                <article class="tht19-wish" data-aos="fade-up"><i class="fa-solid fa-quote-left" aria-hidden="true"></i><h3>{{ $wish->name }}</h3><p>{{ $wish->message }}</p></article>
-            @empty
-                <p class="tht19-guestbook__empty">Hãy là người đầu tiên gửi lời chúc cho chúng mình nhé.</p>
-            @endforelse
-        </div>
-        <a class="tht19-text-link" href="#rsvp">Gửi lời chúc <i class="fa-regular fa-heart" aria-hidden="true"></i></a>
-    </section>
 
     {{-- 10. The existing thank-you media is not replaced by another collection. --}}
     <footer class="tht19-thank-you">

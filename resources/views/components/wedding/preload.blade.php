@@ -102,7 +102,27 @@
         <h1>{{ $wedding->bride_name }}</h1>
     </div>
     @endif
-
+    @if($variant === 'envelope-2')
+        <div class="preload-envelope-2">
+            @php $guestName = $wedding->getGuestName(); @endphp
+                @if($guestName)
+                <div class="preload-envelope">
+                    <div class="envelope-label">Trân trọng kính mời</div>
+                    <div class="envelope-name">{{ urldecode($guestName) }}</div>
+                </div>
+                <p>Đến tham dự lễ cưới</p>
+                @endif
+            <h1>{{ $wedding->groom_name }} </br> & </br> {{$wedding->bride_name}}</h1>
+            <div class="envelope-image">
+                <div class="envelope-image__img">
+                    <img src="{{asset("images/templates/tht-e-wedding-19/envelope.png")}}" alt="Thư mời {{ urldecode($guestName) }}">
+                </div>
+                <div class="envelop-image__hand">
+                    <img src="{{asset("images/templates/tht-e-wedding-19/hand.png")}}" alt="Thư mời {{ urldecode($guestName) }}">
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
 
 <style>

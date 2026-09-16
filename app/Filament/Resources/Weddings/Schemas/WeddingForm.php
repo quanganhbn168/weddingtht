@@ -716,6 +716,7 @@ class WeddingForm
                                             ->label('Kiểu Preload')
                                             ->options([
                                                 'traditional' => 'Truyền thống (Song Hỷ)',
+                                                'envelope-2' => 'Phong bì 2',
                                                 'heartbeat' => 'Hiện đại (Nhịp tim)',
                                                 'rings' => 'Sang trọng (Nhẫn cưới)',
                                                 'split_botanical' => 'Mở đôi Botanical (ảnh trái/phải)',

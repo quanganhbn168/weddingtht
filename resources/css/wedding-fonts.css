@@ -34,3 +34,20 @@
     src: url('../fonts/wedding/svn-rushtick.otf') format('opentype');
     font-display: swap;
 }
+@font-face {
+    font-family: 'KS Single All';
+    src: url('../fonts/wedding/ks-single-all.ttf') format('opentype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'forest';
+    src: url('../fonts/wedding/forest.ttf') format('opentype');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'MTD Hello Paris Serif';
+    src: url('../fonts/wedding/MTD-Hello-Paris-Serif.ttf') format('opentype');
+    font-display: swap;
+}
+
