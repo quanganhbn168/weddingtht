@@ -187,7 +187,9 @@
                 {{-- ĐÓN KHÁCH --}}
                 @if(filled(data_get($templateContent, $event->side . '_welcome_time')))
                     <li>
-                        <i class="fa-regular fa-face-smile" aria-hidden="true"></i>
+                        <div>
+                            <img src="{{asset("images/templates/tht-e-wedding-19/gate.webp")}}" alt="Hân hạnh đón tiếp">
+                        </div>
 
                         <div class="tht19-timeline__when">
                             <strong>
@@ -211,7 +213,9 @@
                 {{-- KHAI TIỆC --}}
                 @if($event->receptionTime)
                     <li>
-                        <i class="fa-solid fa-utensils" aria-hidden="true"></i>
+                        <div>
+                            <img src="{{asset("images/templates/tht-e-wedding-19/dinner.png")}}" alt="Hân hạnh đón tiếp">
+                        </div>
 
                         <div class="tht19-timeline__when">
                             <strong>
@@ -235,7 +239,9 @@
                 {{-- LỄ THÀNH HÔN / VU QUY --}}
                 @if($event->ceremonyTime)
                     <li>
-                        <i class="fa-regular fa-heart" aria-hidden="true"></i>
+                        <div>
+                            <img src="{{asset("images/templates/tht-e-wedding-19/ring2.png")}}" alt="Hân hạnh đón tiếp">
+                        </div>
 
                         <div class="tht19-timeline__when">
                             <strong>
@@ -260,7 +266,7 @@
                 @endif
 
 
-                
+
                 @endif
 
             </ol>
