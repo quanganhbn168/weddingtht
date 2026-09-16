@@ -267,3 +267,27 @@
         .tht19-response, .tht19-countdown, .tht19-hero__scroll { display: none !important; }
         .tht19-event, .tht19-wish { break-inside: avoid; }
     }
+    .gold-bottom-overlay::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        height: 35%;
+
+        z-index: 1;
+        pointer-events: none;
+
+        background: linear-gradient(
+            to top,
+            rgba(150, 112, 45, 0.95) 0%,
+            rgba(190, 150, 70, 0.68) 35%,
+            rgba(212, 175, 55, 0.28) 68%,
+            transparent 100%
+        );
+    }
+    .gold-bottom-overlay > *:not(img) {
+        position: relative;
+        z-index: 2;
+    }

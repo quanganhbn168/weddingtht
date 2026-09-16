@@ -28,7 +28,7 @@
     <x-wedding.music-player :wedding="$wedding" />
 
     {{-- 01. Full-bleed portrait cover; the primary wedding date stays primary. --}}
-    <section class="tht19-hero" aria-labelledby="tht19-couple-title">
+    <section class="tht19-hero gold-bottom-overlay" aria-labelledby="tht19-couple-title">
         @if($heroUrl)
             <img class="tht19-hero__image"
                  src="{{ $heroUrl }}"
@@ -55,7 +55,7 @@
         <header class="tht19-section-heading" data-aos="fade-up">
             <h2 id="tht19-invitation-title">Wedding Invitation</h2>
         </header>
-        <article @class(['tht19-portrait', 'tht19-portrait--text-only' => !$bridePhoto]) data-aos="fade-up">
+        <article @class(['tht19-portrait gold-bottom-overlay', 'tht19-portrait--text-only' => !$bridePhoto]) data-aos="fade-up">
             @if($bridePhoto)
                 <img src="{{ $bridePhoto }}" data-position="{{ data_get($templateContent, 'bride_position') }}" alt="Cô dâu {{ $wedding->bride_name }}" loading="lazy" decoding="async">
             @endif
@@ -68,7 +68,7 @@
             </div>
         </article>
         <div class="tht19-heart-divider" aria-hidden="true"><i class="fa-regular fa-heart"></i></div>
-        <article @class(['tht19-portrait', 'tht19-portrait--text-only' => !$groomPhoto]) data-aos="fade-up">
+        <article @class(['tht19-portrait gold-bottom-overlay', 'tht19-portrait--text-only' => !$groomPhoto]) data-aos="fade-up">
             @if($groomPhoto)
                 <img src="{{ $groomPhoto }}" data-position="{{ data_get($templateContent, 'groom_position') }}" alt="Chú rể {{ $wedding->groom_name }}" loading="lazy" decoding="async">
             @endif
