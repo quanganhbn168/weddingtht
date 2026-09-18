@@ -941,41 +941,60 @@ class WeddingForm
             ->label('Nhập nhanh danh sách')
             ->icon('heroicon-o-document-plus')
             ->modalHeading('Nhập nhanh danh sách khách mời')
-            ->modalDescription('Mỗi khách một dòng. Danh sách hiện tại được giữ nguyên; tên trùng sẽ được bỏ qua và mã khách mới được tạo tự động.')
+            ->modalDescription(
+    'Mỗi khách một dòng. Danh sách hiện tại được giữ nguyên; kể cả trùng tên vẫn được thêm thành khách riêng và mã khách mới được tạo tự động.'
+)
             ->modalSubmitActionLabel('Thêm vào danh sách')
             ->form([
                 Textarea::make('guest_names')
-                    ->label('Tên khách mời')
-                    ->placeholder("Bạn Phương và NT\nBạn Thanh và NT\nVợ chồng bạn Ly")
-                    ->helperText('Có thể dán danh sách bắt đầu bằng dấu gạch đầu dòng.')
-                    ->rows(12)
-                    ->required(),
+    ->label('Tên khách mời')
+    ->placeholder("Bạn Phương và NT\nBạn Thanh và NT\nVợ chồng bạn Ly")
+    ->helperText('Có thể dán danh sách bắt đầu bằng dấu gạch đầu dòng. Mỗi dòng được tính là một khách riêng, kể cả trùng tên.')
+    ->rows(12)
+    ->required(),
             ])
             ->action(function (array $data, Repeater $component): void {
-                $items = $component->getState() ?? [];
-                $existingGuests = array_values($items);
-                $mergedGuests = Wedding::appendGuestNames($existingGuests, $data['guest_names']);
-                $newGuests = array_slice($mergedGuests, count($existingGuests));
+    $items = $component->getState() ?? [];
+    $existingGuests = array_values($items);
 
-                foreach ($newGuests as $guest) {
-                    if ($newKey = $component->generateUuid()) {
-                        $items[$newKey] = $guest;
-                    } else {
-                        $items[] = $guest;
-                    }
-                }
+    $mergedGuests = Wedding::appendGuestNames(
+        $existingGuests,
+        $data['guest_names']
+    );
 
-                $component->state($items);
-                $component->collapsed(false, shouldMakeComponentCollapsible: false);
-                $component->callAfterStateUpdated();
+    $newGuests = array_slice(
+        $mergedGuests,
+        count($existingGuests)
+    );
 
-                Notification::make()
-                    ->title(count($newGuests) > 0
-                        ? 'Đã thêm '.count($newGuests).' khách mời'
-                        : 'Không có khách mới để thêm')
-                    ->color(count($newGuests) > 0 ? 'success' : 'warning')
-                    ->send();
-            });
+    foreach ($newGuests as $guest) {
+        if ($newKey = $component->generateUuid()) {
+            $items[$newKey] = $guest;
+        } else {
+            $items[] = $guest;
+        }
+    }
+
+    $component->state($items);
+    $component->collapsed(
+        false,
+        shouldMakeComponentCollapsible: false
+    );
+    $component->callAfterStateUpdated();
+
+    Notification::make()
+        ->title(
+            count($newGuests) > 0
+                ? 'Đã thêm '.count($newGuests).' khách mời'
+                : 'Không có khách mới để thêm'
+        )
+        ->color(
+            count($newGuests) > 0
+                ? 'success'
+                : 'warning'
+        )
+        ->send();
+});
     }
 
     private static function exportGuestListAction(): Action

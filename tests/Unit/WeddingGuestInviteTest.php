@@ -34,20 +34,47 @@ class WeddingGuestInviteTest extends TestCase
         ], array_slice($guests, 1));
     }
 
-    public function test_it_ignores_blank_and_duplicate_guest_names(): void
-    {
-        $existing = [
-            ['code' => 'km001', 'name' => 'Bạn Phương và NT'],
-        ];
+    public function test_it_keeps_duplicate_guest_names_as_separate_guests(): void
+{
+    $existing = [
+        [
+            'code' => 'km001',
+            'name' => 'Kim Chi',
+        ],
+    ];
 
-        $guests = Wedding::appendGuestNames(
-            $existing,
-            "Bạn Phương và NT\n  bạn phương VÀ nt  \n\n1. Vợ chồng bạn Ly\n- Vợ chồng bạn Ly",
-        );
+    $guests = Wedding::appendGuestNames(
+        $existing,
+        "Kim Chi\nKim Chi\n\n- Bạn Dũng\n- Bạn Dũng"
+    );
 
-        $this->assertCount(2, $guests);
-        $this->assertSame(['code' => 'km002', 'name' => 'Vợ chồng bạn Ly'], $guests[1]);
-    }
+    $this->assertCount(5, $guests);
+
+    $this->assertSame([
+        'code' => 'km001',
+        'name' => 'Kim Chi',
+    ], $guests[0]);
+
+    $this->assertSame([
+        'code' => 'km002',
+        'name' => 'Kim Chi',
+    ], $guests[1]);
+
+    $this->assertSame([
+        'code' => 'km003',
+        'name' => 'Kim Chi',
+    ], $guests[2]);
+
+    $this->assertSame([
+        'code' => 'km004',
+        'name' => 'Bạn Dũng',
+    ], $guests[3]);
+
+    $this->assertSame([
+        'code' => 'km005',
+        'name' => 'Bạn Dũng',
+    ], $guests[4]);
+}
 
     public function test_personalized_guest_links_are_not_bound_to_a_template(): void
     {

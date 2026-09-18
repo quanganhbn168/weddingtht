@@ -214,7 +214,7 @@ class Wedding extends Model implements HasMedia
     {
         $long = LunarHelper::formatLong(LunarHelper::solarToLunar($solarDate));
 
-        return $long ? 'Nhằm '.$long : null;
+        return $long ? 'Nhằm ' . $long : null;
     }
 
     public function eventDayLabel(): string
@@ -236,7 +236,7 @@ class Wedding extends Model implements HasMedia
 
         return match ($format) {
             LunarDateFormat::FULL => ($long = LunarHelper::formatLong($lunarDate))
-                ? 'Tức '.$long
+                ? 'Tức ' . $long
                 : null,
             LunarDateFormat::SHORT => LunarHelper::formatShort($lunarDate),
         };
@@ -322,16 +322,16 @@ class Wedding extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $templateMediaFields = collect(config('wedding-template-media', []))
-            ->flatMap(fn (array $template): array => $template['fields'] ?? [])
-            ->filter(fn (array $field): bool => ! empty($field['collection']));
+            ->flatMap(fn(array $template): array => $template['fields'] ?? [])
+            ->filter(fn(array $field): bool => ! empty($field['collection']));
 
         $templateSingleCollections = $templateMediaFields
-            ->reject(fn (array $field): bool => ! empty($field['multiple']))
+            ->reject(fn(array $field): bool => ! empty($field['multiple']))
             ->pluck('collection')
             ->all();
 
         $templateMultipleCollections = $templateMediaFields
-            ->filter(fn (array $field): bool => ! empty($field['multiple']))
+            ->filter(fn(array $field): bool => ! empty($field['multiple']))
             ->pluck('collection')
             ->all();
 
@@ -359,15 +359,15 @@ class Wedding extends Model implements HasMedia
     public function registerMediaConversions(?Media $media = null): void
     {
         $templateMediaFields = collect(config('wedding-template-media', []))
-            ->flatMap(fn (array $template): array => $template['fields'] ?? [])
-            ->filter(fn (array $field): bool => ! empty($field['collection']));
+            ->flatMap(fn(array $template): array => $template['fields'] ?? [])
+            ->filter(fn(array $field): bool => ! empty($field['collection']));
 
         $templateCollections = $templateMediaFields
             ->pluck('collection')
             ->all();
 
         $templateMultipleCollections = $templateMediaFields
-            ->filter(fn (array $field): bool => ! empty($field['multiple']))
+            ->filter(fn(array $field): bool => ! empty($field['multiple']))
             ->pluck('collection')
             ->all();
 
@@ -503,7 +503,7 @@ class Wedding extends Model implements HasMedia
             return $this->background_music;
         }
 
-        return asset('storage/'.$this->background_music);
+        return asset('storage/' . $this->background_music);
     }
 
     public function getGalleryImagesAttribute()
@@ -564,7 +564,7 @@ class Wedding extends Model implements HasMedia
 
             $usedCodes[$code] = true;
 
-            if (! preg_match('/^'.preg_quote($prefix, '/').'(\d+)$/', $code, $matches)) {
+            if (! preg_match('/^' . preg_quote($prefix, '/') . '(\d+)$/', $code, $matches)) {
                 continue;
             }
 
@@ -574,7 +574,7 @@ class Wedding extends Model implements HasMedia
 
         do {
             $highestNumber++;
-            $nextCode = $prefix.str_pad((string) $highestNumber, $padding, '0', STR_PAD_LEFT);
+            $nextCode = $prefix . str_pad((string) $highestNumber, $padding, '0', STR_PAD_LEFT);
         } while (isset($usedCodes[$nextCode]));
 
         return $nextCode;
@@ -583,26 +583,20 @@ class Wedding extends Model implements HasMedia
     public static function appendGuestNames(array $existingGuests, string $guestNames): array
     {
         $guests = array_values($existingGuests);
-        $knownNames = [];
-
-        foreach ($guests as $guest) {
-            if (! is_array($guest)) {
-                continue;
-            }
-
-            $nameKey = self::guestNameKey($guest['name'] ?? null);
-
-            if ($nameKey !== '') {
-                $knownNames[$nameKey] = true;
-            }
-        }
 
         foreach (preg_split('/\R/u', $guestNames) ?: [] as $line) {
-            $name = preg_replace('/^\s*(?:(?:[-*•▪◦]+)|(?:\d+[.)]))\s*/u', '', $line);
-            $name = trim(strip_tags((string) $name));
-            $nameKey = self::guestNameKey($name);
+            // Bỏ bullet, dấu -, *, • hoặc số thứ tự 1. / 1)
+            $name = preg_replace(
+                '/^\s*(?:(?:[-*•▪◦]+)|(?:\d+[.)]))\s*/u',
+                '',
+                $line
+            );
 
-            if ($nameKey === '' || isset($knownNames[$nameKey])) {
+            $name = trim(strip_tags((string) $name));
+
+            // Chỉ bỏ dòng rỗng.
+            // KHÔNG loại khách trùng tên vì mỗi dòng là một thiệp riêng.
+            if ($name === '') {
                 continue;
             }
 
@@ -610,7 +604,6 @@ class Wedding extends Model implements HasMedia
                 'code' => self::nextGuestCode($guests),
                 'name' => $name,
             ];
-            $knownNames[$nameKey] = true;
         }
 
         return $guests;
@@ -626,7 +619,7 @@ class Wedding extends Model implements HasMedia
     public function hasGuestInvites(): bool
     {
         return collect($this->guestInvites())->contains(
-            fn (mixed $guest): bool => is_array($guest)
+            fn(mixed $guest): bool => is_array($guest)
                 && filled($guest['code'] ?? null)
                 && filled($guest['name'] ?? null)
         );
@@ -839,11 +832,4 @@ class Wedding extends Model implements HasMedia
         return $guest !== '' ? $guest : null;
     }
 
-    private static function guestNameKey(mixed $name): string
-    {
-        return Str::of(strip_tags((string) $name))
-            ->squish()
-            ->lower()
-            ->toString();
-    }
 }
