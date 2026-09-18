@@ -71,11 +71,11 @@ class WeddingForm
                                                 $dateSuffix = $eventDate ? Carbon::parse($eventDate)->format('d-m-Y') : now()->year;
 
                                                 if ($state && $brideName) {
-                                                    $baseSlug = Str::slug("$state-va-$brideName-".$dateSuffix);
+                                                    $baseSlug = Str::slug("$state-va-$brideName-" . $dateSuffix);
                                                     $newSlug = $baseSlug;
 
                                                     while (Wedding::where('slug', $newSlug)->where('id', '!=', $get('id'))->exists()) {
-                                                        $newSlug = $baseSlug.'-'.Str::lower(Str::random(4));
+                                                        $newSlug = $baseSlug . '-' . Str::lower(Str::random(4));
                                                     }
 
                                                     if (blank($currentSlug) || str_contains($currentSlug, '-va-')) {
@@ -96,11 +96,11 @@ class WeddingForm
                                                 $dateSuffix = $eventDate ? Carbon::parse($eventDate)->format('d-m-Y') : now()->year;
 
                                                 if ($state && $groomName) {
-                                                    $baseSlug = Str::slug("$groomName-va-$state-".$dateSuffix);
+                                                    $baseSlug = Str::slug("$groomName-va-$state-" . $dateSuffix);
                                                     $newSlug = $baseSlug;
 
                                                     while (Wedding::where('slug', $newSlug)->where('id', '!=', $get('id'))->exists()) {
-                                                        $newSlug = $baseSlug.'-'.Str::lower(Str::random(4));
+                                                        $newSlug = $baseSlug . '-' . Str::lower(Str::random(4));
                                                     }
 
                                                     if (blank($currentSlug) || str_contains($currentSlug, '-va-')) {
@@ -128,11 +128,11 @@ class WeddingForm
 
                                                 if ($groomName && $brideName && $state) {
                                                     $dateSuffix = Carbon::parse($state)->format('d-m-Y');
-                                                    $baseSlug = Str::slug("$groomName-va-$brideName-".$dateSuffix);
+                                                    $baseSlug = Str::slug("$groomName-va-$brideName-" . $dateSuffix);
                                                     $newSlug = $baseSlug;
 
                                                     while (Wedding::where('slug', $newSlug)->where('id', '!=', $get('id'))->exists()) {
-                                                        $newSlug = $baseSlug.'-'.Str::lower(Str::random(4));
+                                                        $newSlug = $baseSlug . '-' . Str::lower(Str::random(4));
                                                     }
 
                                                     $currentSlug = $get('slug');
@@ -163,7 +163,7 @@ class WeddingForm
 
                                         Select::make('template_id')
                                             ->label('Chọn Mẫu Giao Diện')
-                                            ->options(fn () => Template::where('type', 'wedding')
+                                            ->options(fn() => Template::where('type', 'wedding')
                                                 ->where('is_active', true)
                                                 ->pluck('name', 'id'))
                                             ->required()
@@ -211,7 +211,7 @@ class WeddingForm
                         // === TAB 2: NHÀ TRAI ===
                         Tab::make('Nhà Trai')
                             ->icon('heroicon-o-user')
-                            ->visible(fn (Get $get) => $get('type') === 'wedding')
+                            ->visible(fn(Get $get) => $get('type') === 'wedding')
                             ->schema([
                                 Section::make('Thông tin gia đình nhà trai')
                                     ->columns(2)
@@ -306,7 +306,7 @@ class WeddingForm
                                             ->inputMode('numeric')
                                             ->maxLength(19)
                                             ->regex('/^[0-9]{6,19}$/')
-                                            ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? preg_replace('/\D+/', '', $state) : null)
+                                            ->dehydrateStateUsing(fn(?string $state): ?string => filled($state) ? preg_replace('/\D+/', '', $state) : null)
                                             ->live(),
 
                                         TextInput::make('groom_qr_account_name')
@@ -341,7 +341,7 @@ class WeddingForm
                                                 );
 
                                                 return $url
-                                                    ? new HtmlString('<img src="'.e($url).'" alt="Xem trước QR nhà trai" class="w-52 max-w-full rounded-lg border bg-white p-2">')
+                                                    ? new HtmlString('<img src="' . e($url) . '" alt="Xem trước QR nhà trai" class="w-52 max-w-full rounded-lg border bg-white p-2">')
                                                     : 'Chọn ngân hàng và nhập số tài khoản để xem QR.';
                                             })
                                             ->columnSpanFull(),
@@ -368,7 +368,7 @@ class WeddingForm
                         // === TAB 3: NHÀ GÁI ===
                         Tab::make('Nhà Gái')
                             ->icon('heroicon-o-heart')
-                            ->visible(fn (Get $get) => $get('type') === 'wedding')
+                            ->visible(fn(Get $get) => $get('type') === 'wedding')
                             ->schema([
                                 Section::make('Thông tin gia đình nhà gái')
                                     ->columns(2)
@@ -463,7 +463,7 @@ class WeddingForm
                                             ->inputMode('numeric')
                                             ->maxLength(19)
                                             ->regex('/^[0-9]{6,19}$/')
-                                            ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? preg_replace('/\D+/', '', $state) : null)
+                                            ->dehydrateStateUsing(fn(?string $state): ?string => filled($state) ? preg_replace('/\D+/', '', $state) : null)
                                             ->live(),
 
                                         TextInput::make('bride_qr_account_name')
@@ -498,7 +498,7 @@ class WeddingForm
                                                 );
 
                                                 return $url
-                                                    ? new HtmlString('<img src="'.e($url).'" alt="Xem trước QR nhà gái" class="w-52 max-w-full rounded-lg border bg-white p-2">')
+                                                    ? new HtmlString('<img src="' . e($url) . '" alt="Xem trước QR nhà gái" class="w-52 max-w-full rounded-lg border bg-white p-2">')
                                                     : 'Chọn ngân hàng và nhập số tài khoản để xem QR.';
                                             })
                                             ->columnSpanFull(),
@@ -531,9 +531,9 @@ class WeddingForm
                                     ->schema([
                                         Select::make('shared_music_id')
                                             ->label('Chọn từ thư viện nhạc')
-                                            ->options(fn () => SharedMusic::active()
+                                            ->options(fn() => SharedMusic::active()
                                                 ->get()
-                                                ->mapWithKeys(fn ($m) => [$m->id => $m->getLabel()]))
+                                                ->mapWithKeys(fn($m) => [$m->id => $m->getLabel()]))
                                             ->searchable()
                                             ->placeholder('Chọn bài hát...')
                                             ->helperText('Nhạc dùng chung, không tốn dung lượng'),
@@ -579,7 +579,7 @@ class WeddingForm
 
                                         SpatieMediaLibraryFileUpload::make('groom_photo')
                                             ->label('Ảnh chú rể (3:4)')
-                                            ->visible(fn (Get $get) => $get('type') === 'wedding')
+                                            ->visible(fn(Get $get) => $get('type') === 'wedding')
                                             ->collection('groom_photo')
                                             ->disk('public')
                                             ->image()
@@ -588,7 +588,7 @@ class WeddingForm
 
                                         SpatieMediaLibraryFileUpload::make('bride_photo')
                                             ->label('Ảnh cô dâu (3:4)')
-                                            ->visible(fn (Get $get) => $get('type') === 'wedding')
+                                            ->visible(fn(Get $get) => $get('type') === 'wedding')
                                             ->collection('bride_photo')
                                             ->disk('public')
                                             ->image()
@@ -631,7 +631,7 @@ class WeddingForm
                         Tab::make('Pro Features')
                             ->icon('heroicon-o-sparkles')
                             ->badge('PRO')
-                            ->visible(fn () => Filament::getCurrentPanel()?->getId() === 'admin')
+                            ->visible(fn() => Filament::getCurrentPanel()?->getId() === 'admin')
                             ->schema([
                                 Section::make('Tài khoản khách hàng')
                                     ->columns(2)
@@ -639,7 +639,7 @@ class WeddingForm
                                     ->schema([
                                         Select::make('user_id')
                                             ->label('Chọn khách hàng hiện có')
-                                            ->options(fn () => User::where('role', User::ROLE_CUSTOMER)
+                                            ->options(fn() => User::where('role', User::ROLE_CUSTOMER)
                                                 ->pluck('name', 'id'))
                                             ->searchable()
                                             ->placeholder('Chọn hoặc tạo mới bên dưới')
@@ -650,14 +650,14 @@ class WeddingForm
                                             ->email()
                                             ->placeholder('email@example.com')
                                             ->helperText('Nhập email để tạo tài khoản mới (nếu không chọn ở trên)')
-                                            ->visible(fn (Get $get) => ! $get('user_id')),
+                                            ->visible(fn(Get $get) => ! $get('user_id')),
 
                                         TextInput::make('customer_password')
                                             ->label('Mật khẩu')
                                             ->password()
                                             ->default('12345678')
                                             ->helperText('Mặc định: 12345678')
-                                            ->visible(fn (Get $get) => ! $get('user_id')),
+                                            ->visible(fn(Get $get) => ! $get('user_id')),
                                     ]),
 
                                 Section::make('Cài đặt gói dịch vụ')
@@ -682,7 +682,7 @@ class WeddingForm
 
                                         Select::make('agent_id')
                                             ->label('Đại lý tạo')
-                                            ->options(fn () => Agent::where('is_active', true)
+                                            ->options(fn() => Agent::where('is_active', true)
                                                 ->pluck('business_name', 'id'))
                                             ->searchable()
                                             ->placeholder('Chọn đại lý (nếu có)'),
@@ -690,7 +690,7 @@ class WeddingForm
                                         DatePicker::make('expires_at')
                                             ->label('Ngày hết hạn')
                                             ->helperText('Standard: 1 năm, Pro: để trống (vĩnh viễn)')
-                                            ->visible(fn (Get $get) => $get('tier') === 'standard'),
+                                            ->visible(fn(Get $get) => $get('tier') === 'standard'),
                                     ]),
 
                                 Section::make('Hiệu ứng Premium')
@@ -722,8 +722,8 @@ class WeddingForm
                                                 'split_botanical' => 'Mở đôi Botanical (ảnh trái/phải)',
                                             ])
                                             ->default('heartbeat')
-                                            ->visible(fn (Get $get) => $get('show_preload'))
-                                            ->required(fn (Get $get) => $get('show_preload')),
+                                            ->visible(fn(Get $get) => $get('show_preload'))
+                                            ->required(fn(Get $get) => $get('show_preload')),
 
                                         Select::make('falling_effect')
                                             ->label('Hiệu ứng rơi')
@@ -782,7 +782,7 @@ class WeddingForm
                                                     ->placeholder('Nhập mã khách để tạo link')
                                                     ->readOnly()
                                                     ->dehydrated(false)
-                                                    ->afterStateHydrated(fn (TextInput $component, Get $get, ?Wedding $record) => $component->state(
+                                                    ->afterStateHydrated(fn(TextInput $component, Get $get, ?Wedding $record) => $component->state(
                                                         self::guestLinkForForm($get, $record, $get('code'))
                                                     ))
                                                     ->suffixAction(self::copyGuestLinkAction())
@@ -795,8 +795,10 @@ class WeddingForm
                                             ->hintActions([
                                                 self::importGuestListAction(),
                                                 self::exportGuestListAction(),
+                                                self::clearGuestListAction(),
+
                                             ])
-                                            ->addAction(fn (Action $action): Action => $action
+                                            ->addAction(fn(Action $action): Action => $action
                                                 ->action(function (Repeater $component): void {
                                                     $items = $component->getState() ?? [];
                                                     $guest = [
@@ -818,13 +820,13 @@ class WeddingForm
                                                     $component->callAfterStateUpdated();
                                                 }))
                                             ->addActionLabel('+ Thêm khách mời')
-                                            ->itemLabel(fn (array $state): ?string => trim(($state['code'] ?? 'Mã mới').' - '.($state['name'] ?? 'Khách mới')))
-                                            ->mutateDehydratedStateUsing(fn (?array $state): array => collect($state ?? [])
-                                                ->map(fn (array $guest): array => [
+                                            ->itemLabel(fn(array $state): ?string => trim(($state['code'] ?? 'Mã mới') . ' - ' . ($state['name'] ?? 'Khách mới')))
+                                            ->mutateDehydratedStateUsing(fn(?array $state): array => collect($state ?? [])
+                                                ->map(fn(array $guest): array => [
                                                     'code' => Wedding::normalizeGuestCode($guest['code'] ?? null),
                                                     'name' => trim(strip_tags((string) ($guest['name'] ?? ''))),
                                                 ])
-                                                ->filter(fn (array $guest): bool => filled($guest['code']) && filled($guest['name']))
+                                                ->filter(fn(array $guest): bool => filled($guest['code']) && filled($guest['name']))
                                                 ->values()
                                                 ->all()),
                                     ]),
@@ -899,7 +901,7 @@ class WeddingForm
                                             ->cloneable()
                                             ->defaultItems(0)
                                             ->addActionLabel('+ Thêm mốc thời gian')
-                                            ->itemLabel(fn (array $state): ?string => ($state['year'] ?? '').' - '.($state['title'] ?? 'Mốc mới')),
+                                            ->itemLabel(fn(array $state): ?string => ($state['year'] ?? '') . ' - ' . ($state['title'] ?? 'Mốc mới')),
                                     ]),
 
                                 ...WeddingTemplateSchemaRegistry::formSections(),
@@ -929,10 +931,10 @@ class WeddingForm
             ->icon('heroicon-o-clipboard-document')
             ->tooltip('Copy link')
             ->color('gray')
-            ->disabled(fn (?string $state): bool => blank($state))
-            ->alpineClickHandler(fn (?string $state): string => blank($state)
+            ->disabled(fn(?string $state): bool => blank($state))
+            ->alpineClickHandler(fn(?string $state): string => blank($state)
                 ? ''
-                : 'navigator.clipboard.writeText('.Js::from($state)->toHtml().").then(() => { \$tooltip('Đã copy link', { timeout: 1500 }) })");
+                : 'navigator.clipboard.writeText(' . Js::from($state)->toHtml() . ").then(() => { \$tooltip('Đã copy link', { timeout: 1500 }) })");
     }
 
     private static function importGuestListAction(): Action
@@ -942,59 +944,59 @@ class WeddingForm
             ->icon('heroicon-o-document-plus')
             ->modalHeading('Nhập nhanh danh sách khách mời')
             ->modalDescription(
-    'Mỗi khách một dòng. Danh sách hiện tại được giữ nguyên; kể cả trùng tên vẫn được thêm thành khách riêng và mã khách mới được tạo tự động.'
-)
+                'Mỗi khách một dòng. Danh sách hiện tại được giữ nguyên; kể cả trùng tên vẫn được thêm thành khách riêng và mã khách mới được tạo tự động.'
+            )
             ->modalSubmitActionLabel('Thêm vào danh sách')
             ->form([
                 Textarea::make('guest_names')
-    ->label('Tên khách mời')
-    ->placeholder("Bạn Phương và NT\nBạn Thanh và NT\nVợ chồng bạn Ly")
-    ->helperText('Có thể dán danh sách bắt đầu bằng dấu gạch đầu dòng. Mỗi dòng được tính là một khách riêng, kể cả trùng tên.')
-    ->rows(12)
-    ->required(),
+                    ->label('Tên khách mời')
+                    ->placeholder("Bạn Phương và NT\nBạn Thanh và NT\nVợ chồng bạn Ly")
+                    ->helperText('Có thể dán danh sách bắt đầu bằng dấu gạch đầu dòng. Mỗi dòng được tính là một khách riêng, kể cả trùng tên.')
+                    ->rows(12)
+                    ->required(),
             ])
             ->action(function (array $data, Repeater $component): void {
-    $items = $component->getState() ?? [];
-    $existingGuests = array_values($items);
+                $items = $component->getState() ?? [];
+                $existingGuests = array_values($items);
 
-    $mergedGuests = Wedding::appendGuestNames(
-        $existingGuests,
-        $data['guest_names']
-    );
+                $mergedGuests = Wedding::appendGuestNames(
+                    $existingGuests,
+                    $data['guest_names']
+                );
 
-    $newGuests = array_slice(
-        $mergedGuests,
-        count($existingGuests)
-    );
+                $newGuests = array_slice(
+                    $mergedGuests,
+                    count($existingGuests)
+                );
 
-    foreach ($newGuests as $guest) {
-        if ($newKey = $component->generateUuid()) {
-            $items[$newKey] = $guest;
-        } else {
-            $items[] = $guest;
-        }
-    }
+                foreach ($newGuests as $guest) {
+                    if ($newKey = $component->generateUuid()) {
+                        $items[$newKey] = $guest;
+                    } else {
+                        $items[] = $guest;
+                    }
+                }
 
-    $component->state($items);
-    $component->collapsed(
-        false,
-        shouldMakeComponentCollapsible: false
-    );
-    $component->callAfterStateUpdated();
+                $component->state($items);
+                $component->collapsed(
+                    false,
+                    shouldMakeComponentCollapsible: false
+                );
+                $component->callAfterStateUpdated();
 
-    Notification::make()
-        ->title(
-            count($newGuests) > 0
-                ? 'Đã thêm '.count($newGuests).' khách mời'
-                : 'Không có khách mới để thêm'
-        )
-        ->color(
-            count($newGuests) > 0
-                ? 'success'
-                : 'warning'
-        )
-        ->send();
-});
+                Notification::make()
+                    ->title(
+                        count($newGuests) > 0
+                            ? 'Đã thêm ' . count($newGuests) . ' khách mời'
+                            : 'Không có khách mới để thêm'
+                    )
+                    ->color(
+                        count($newGuests) > 0
+                            ? 'success'
+                            : 'warning'
+                    )
+                    ->send();
+            });
     }
 
     private static function exportGuestListAction(): Action
@@ -1003,7 +1005,7 @@ class WeddingForm
             ->label('Xuất danh sách & link')
             ->icon('heroicon-o-arrow-down-tray')
             ->color('success')
-            ->visible(fn (?Wedding $record): bool => filled($record?->slug))
+            ->visible(fn(?Wedding $record): bool => filled($record?->slug))
             ->action(function (Repeater $component, ?Wedding $record) {
                 if (! $record) {
                     return null;
@@ -1017,6 +1019,31 @@ class WeddingForm
                     GuestInviteExportService::filename($record),
                     ['Content-Type' => 'text/plain; charset=UTF-8'],
                 );
+            });
+    }
+
+    private static function clearGuestListAction(): Action
+    {
+        return Action::make('clear_guest_list')
+            ->label('Xóa toàn bộ khách')
+            ->icon('heroicon-o-trash')
+            ->color('danger')
+            ->requiresConfirmation()
+            ->modalHeading('Xóa toàn bộ khách mời?')
+            ->modalDescription(
+                'Toàn bộ danh sách khách mời và mã khách hiện tại sẽ bị xóa khỏi biểu mẫu. Hành động này không thể hoàn tác sau khi bạn bấm Lưu.'
+            )
+            ->modalSubmitActionLabel('Xóa toàn bộ')
+            ->action(function (Repeater $component): void {
+                $component->state([]);
+
+                $component->callAfterStateUpdated();
+
+                Notification::make()
+                    ->title('Đã xóa toàn bộ khách mời')
+                    ->body('Hãy bấm Lưu để cập nhật thay đổi.')
+                    ->success()
+                    ->send();
             });
     }
 }
