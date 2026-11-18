@@ -220,7 +220,7 @@
         @endif
     </section>
 
-    {{-- 08. Real gallery only: first photo full width, the rest in a 1 tall + 2 short rhythm. --}}
+    {{-- 08. Real gallery only: first photo full width, the rest as a 2-column masonry at natural aspect ratios. --}}
     @if($galleryImages->isNotEmpty())
         <section class="tht20-album" id="album" aria-labelledby="tht20-album-title">
             <h2 class="tht20-script" id="tht20-album-title" data-aos="fade-right" data-aos-duration="1500" data-aos-once="true">Our memories</h2>
