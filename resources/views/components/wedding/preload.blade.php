@@ -727,8 +727,8 @@
     .preload-emerald__back, .preload-emerald__pocket { position: absolute; left: 0; right: 0; top: 24%; bottom: 0; border-radius: 4px; }
     .preload-emerald__back { background: #0f5530; }
     .preload-emerald__flap { position: absolute; left: 0; right: 0; top: 0; height: 24.5%; background: #17683c; clip-path: polygon(0 100%, 50% 0, 100% 100%); }
-    .preload-emerald__card { position: absolute; left: 7%; right: 7%; top: 14%; height: 62%; padding: 9px; background: #fbfbf8; box-shadow: 0 6px 18px rgba(0,0,0,.2); transition: transform 1.2s cubic-bezier(.2,.8,.2,1) .25s; }
-    .preload-emerald__card img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center top; }
+    .preload-emerald__card { position: absolute; left: 0; right: 0; margin: 0 auto; width: fit-content; max-width: 86%; top: 14%; height: 62%; padding: 9px; background: #fbfbf8; box-shadow: 0 6px 18px rgba(0,0,0,.2); transition: transform 1.2s cubic-bezier(.2,.8,.2,1) .25s; }
+    .preload-emerald__card img { display: block; width: auto; max-width: 100%; height: 100%; object-fit: contain; object-position: center top; }
     .preload-emerald__monogram { display: grid; place-items: start center; height: 100%; padding-top: 14%; border: 1px solid rgba(47,74,38,.6); font: 400 38px/1 'THT20 Chu Cung', serif; letter-spacing: .08em; color: #2f4a26; }
     .preload-emerald__pocket {
         background: linear-gradient(160deg, #1d7a47, #17683c 55%, #12603a);
@@ -740,14 +740,18 @@
     .preload-emerald__hand { position: absolute; right: -42%; bottom: -46%; width: 70%; height: auto; filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); animation: preload-emerald-tap 1.6s ease-in-out infinite; }
 
     .preload-container.is-opening .preload-emerald__seal { transform: translate(-50%, -50%) scale(.5); opacity: 0; }
-    .preload-container.is-opening .preload-emerald__card { transform: translateY(-62%) scale(1.06); }
+    .preload-container.is-opening .preload-emerald__card { transform: translateY(-48%) scale(1.04); }
     .preload-container.is-opening .preload-emerald { opacity: 0; transform: scale(1.06); }
 
     @keyframes preload-emerald-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
     @keyframes preload-emerald-tap { 0%, 100% { transform: translate(0, 0) scale(1); } 45% { transform: translate(-8%, -8%) scale(.9); } }
 
     @media (prefers-reduced-motion: reduce) {
-        .preload-emerald, .preload-emerald * { animation: none !important; transition-duration: .2s !important; transition-delay: 0s !important; }
+        /* Keep a short, calm rise so the opening still reads; only drop the looping/entrance motion. */
+        .preload-emerald, .preload-emerald * { animation: none !important; }
+        .preload-emerald__card { transition: transform .7s ease 0s !important; }
+        .preload-emerald { transition: opacity .4s ease .8s, transform .4s ease .8s !important; }
+        .preload-emerald__seal { transition: transform .3s ease, opacity .3s ease !important; }
     }
 
     /* Hide Helper */
@@ -899,7 +903,7 @@
                 window.setTimeout(function () {
                     container.classList.add('hidden');
                     window.dispatchEvent(new CustomEvent('wedding-content-visible'));
-                }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 300 : 2300);
+                }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 1300 : 2300);
             }, { once: true });
 
 
