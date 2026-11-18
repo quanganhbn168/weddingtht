@@ -556,8 +556,8 @@ class WeddingForm
                                             ->disk('public')
                                             ->image()
                                             ->imageEditor()
-                                            ->imageCropAspectRatio('1.91:1')
-                                            ->helperText('Ảnh hiện khi chia sẻ link lên Facebook/Zalo'),
+                                            ->imageEditorAspectRatios(['1.91:1', null])
+                                            ->helperText('Ảnh hiện khi chia sẻ link lên Facebook/Zalo. Nên dùng ảnh ngang; bấm biểu tượng bút chì để tự chọn vùng cắt 1.91:1.'),
 
                                         SpatieMediaLibraryFileUpload::make('hero')
                                             ->label('Ảnh mở đầu thiệp (Hero · 9:16)')
