@@ -2,14 +2,16 @@
     Preload Animation Component
     Supports variants: 'traditional', 'heartbeat', 'rings', 'split_botanical', 'emerald_envelope'
     Usage: @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'heartbeat'])
+    Pass 'lockVariant' => true when a template owns its preload design (e.g. THT20):
+    the given variant then wins over the wedding's saved preload_variant.
 --}}
 
 @if($wedding->show_preload && \App\Services\FeatureGate::can($wedding, 'preload'))
 @php
-    // Determine variant based on input or default to 'heartbeat' for modern feel if not specified
-    // Ideally this could come from $wedding->preload_style if added to DB
-    // Determine variant based on DB setting, then input, then default
-    $variant = $wedding->preload_variant ?? $variant ?? 'heartbeat';
+    // Template-locked variant first; otherwise DB setting, then input, then default.
+    $variant = ($lockVariant ?? false) && filled($variant ?? null)
+        ? $variant
+        : ($wedding->preload_variant ?? $variant ?? 'heartbeat');
 @endphp
 
 <div class="preload-container" id="preloadContainer">

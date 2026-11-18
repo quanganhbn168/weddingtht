@@ -108,7 +108,7 @@ class WeddingTemplateStandardTest extends TestCase
 
         $preload = file_get_contents(resource_path('views/components/wedding/preload.blade.php'));
 
-        $this->assertStringContainsString("'variant' => 'emerald_envelope'", $template);
+        $this->assertStringContainsString("'variant' => 'emerald_envelope', 'lockVariant' => true", $template);
         $this->assertStringContainsString("'envelopeMedia' => \$templateSchemaMedia['envelope_image'] ?? null", $template);
         $this->assertStringContainsString("@if(\$variant === 'emerald_envelope')", $preload);
         $this->assertStringNotContainsString('$heroUrl ??', $template, 'Envelope photo must not fall back to the hero.');

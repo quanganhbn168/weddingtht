@@ -19,7 +19,7 @@
 <main class="tht20 wedding-container" id="tht20-top">
     {{-- Shared opening screen, envelope wrapper, effects and music stay available. --}}
     {{-- Opening screen: the green envelope lives in the shared preload (variant emerald_envelope). --}}
-    @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'emerald_envelope', 'envelopeMedia' => $templateSchemaMedia['envelope_image'] ?? null])
+    @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'emerald_envelope', 'lockVariant' => true, 'envelopeMedia' => $templateSchemaMedia['envelope_image'] ?? null])
     @if($wedding->show_invitation_wrapper)
         <x-wedding.invitation-wrapper :wedding="$wedding" />
     @endif
