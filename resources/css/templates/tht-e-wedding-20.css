@@ -94,10 +94,11 @@
 .tht20-invitation__amp { position: static; justify-self: center; margin: .06em 0 .02em; font: 400 1.25em/1 var(--tht20-script); color: rgba(47, 74, 38, .55); text-transform: none; pointer-events: none; }
 
 .tht20-polaroids { position: relative; height: 380px; margin: 36px -6px 20px; }
-.tht20-polaroid { position: absolute; width: 56%; padding: 10px 10px 50px; background: #fdfdfb; box-shadow: 0 10px 24px rgba(30, 40, 25, .16); }
+.tht20-polaroid { position: absolute; width: 56%; padding: 7px 7px 56px; background: #e9eae8; border: 1px solid #f6f6f4; box-shadow: 0 10px 24px rgba(30, 40, 25, .16); }
 .tht20-polaroid img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: center 25%; }
-.tht20-polaroid--first { left: 0; top: 42px; transform: rotate(-6deg); }
-.tht20-polaroid--second { right: 0; top: 0; transform: rotate(5deg); }
+/* `rotate` (not transform) so AOS's own transform on [data-aos] cannot cancel the tilt. */
+.tht20-polaroid--first { left: 0; top: 42px; rotate: -6deg; }
+.tht20-polaroid--second { right: 0; top: 0; rotate: 5deg; }
 
 .tht20-families { display: flex; justify-content: center; }
 .tht20-families { margin: 0 -8px; }
