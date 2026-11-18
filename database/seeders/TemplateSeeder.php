@@ -28,10 +28,10 @@ class TemplateSeeder extends Seeder
                     [
                         'key' => 'envelope_image',
                         'type' => 'image',
-                        'label' => 'Ảnh trong phong bì (màn hình đầu)',
+                        'label' => 'Ảnh trong phong bì (Preload Phong bì xanh)',
                         'section' => 'Ảnh riêng của THT20',
                         'required' => false,
-                        'helper_text' => 'Ảnh ngang nằm trong phong bì xanh. Để trống sẽ hiện chữ cái đầu tên cô dâu chú rể; không lấy ảnh hero thay thế.',
+                        'helper_text' => 'Hiện ở màn hình chờ khi bật Preload và chọn kiểu "Phong bì xanh Emerald". Để trống sẽ hiện chữ cái đầu tên; không lấy ảnh hero thay thế.',
                         'aspect_ratio' => '4:3',
                     ],
                     [

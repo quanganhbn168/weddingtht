@@ -720,6 +720,7 @@ class WeddingForm
                                                 'heartbeat' => 'Hiện đại (Nhịp tim)',
                                                 'rings' => 'Sang trọng (Nhẫn cưới)',
                                                 'split_botanical' => 'Mở đôi Botanical (ảnh trái/phải)',
+                                                'emerald_envelope' => 'Phong bì xanh Emerald (THT20)',
                                             ])
                                             ->default('heartbeat')
                                             ->visible(fn(Get $get) => $get('show_preload'))

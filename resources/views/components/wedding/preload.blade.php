@@ -1,6 +1,6 @@
 {{--
     Preload Animation Component
-    Supports variants: 'traditional', 'heartbeat', 'rings', 'split_botanical'
+    Supports variants: 'traditional', 'heartbeat', 'rings', 'split_botanical', 'emerald_envelope'
     Usage: @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'heartbeat'])
 --}}
 
@@ -163,6 +163,44 @@
 
     </div>
 @endif
+
+    {{-- VARIANT: EMERALD ENVELOPE (THT20) - green envelope, wax seal, tap to open.
+         Optional $envelopeMedia (Spatie media) fills the card; without it the card shows the monogram. --}}
+    @if($variant === 'emerald_envelope')
+        <div class="preload-emerald">
+            <img class="preload-emerald__floral preload-emerald__floral--tl" src="{{ asset('images/templates/tht-e-wedding-20/top-left.png') }}" alt="" aria-hidden="true">
+            <img class="preload-emerald__floral preload-emerald__floral--br" src="{{ asset('images/templates/tht-e-wedding-20/bot-right.png') }}" alt="" aria-hidden="true">
+
+            <div class="preload-emerald__heading">
+                <p class="preload-emerald__script">Save the date</p>
+                <h1 class="preload-emerald__names">{{ $sideData->firstName }} &amp; {{ $sideData->secondName }}</h1>
+            </div>
+
+            <button type="button" class="preload-emerald__envelope" aria-label="Mở thiệp cưới">
+                <span class="preload-emerald__back" aria-hidden="true"></span>
+                <span class="preload-emerald__flap" aria-hidden="true"></span>
+                <span class="preload-emerald__card">
+                    @if(!empty($envelopeMedia))
+                        <img src="{{ $envelopeMedia->getUrl() }}" alt="{{ $sideData->firstName }} và {{ $sideData->secondName }}" fetchpriority="high">
+                    @else
+                        <span class="preload-emerald__monogram">{{ $sideData->firstInitial() }} &amp; {{ $sideData->secondInitial() }}</span>
+                    @endif
+                </span>
+                <span class="preload-emerald__pocket" aria-hidden="true"></span>
+                <span class="preload-emerald__seal" aria-hidden="true">
+                    <img src="{{ asset('images/templates/tht-e-wedding-20/wax-seal.svg') }}" alt="">
+                    <img class="preload-emerald__hand" src="{{ asset('images/templates/tht-e-wedding-19/hand.png') }}" alt="">
+                </span>
+            </button>
+
+            @if($wedding->getGuestName())
+                <p class="preload-emerald__guest">Trân trọng kính mời <strong>{{ $wedding->getGuestName() }}</strong></p>
+            @endif
+            @if($wedding->event_date)
+                <time class="preload-emerald__date" datetime="{{ $wedding->event_date->toDateString() }}">{{ $wedding->event_date->format('d.m.Y') }}</time>
+            @endif
+        </div>
+    @endif
 </div>
 
 <style>
@@ -654,6 +692,62 @@
         transition-duration: .2s !important;
     }
 }
+    /* =========================================================
+       Emerald Envelope (THT20)
+       ========================================================= */
+    @font-face { font-family: 'THT20 Chu Mem'; src: url('{{ asset('images/templates/tht-e-wedding-20/chu-mem.otf') }}') format('opentype'); font-display: swap; }
+    @font-face { font-family: 'THT20 Chu Cung'; src: url('{{ asset('images/templates/tht-e-wedding-20/chu-cung.ttf') }}') format('truetype'); font-display: swap; }
+
+    .preload-emerald {
+        position: absolute; inset: 0; height: 100dvh; overflow: hidden;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(18px, 3.4vh, 30px);
+        padding: 28px 18px; color: #2f4a26; text-align: center;
+        background-color: #f4f3ef;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .44 0 0 0 0 .4 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        transition: opacity .8s ease .75s, transform .8s ease .75s;
+    }
+    .preload-emerald__floral { position: absolute; z-index: 0; width: min(90vw, 470px); height: auto; pointer-events: none; }
+    .preload-emerald__floral--tl { top: 0; left: 0; }
+    .preload-emerald__floral--br { right: 0; bottom: 0; }
+    .preload-emerald > *:not(.preload-emerald__floral) { position: relative; z-index: 1; }
+    .preload-emerald__heading { animation: preload-emerald-in 1.2s ease-out both; }
+    .preload-emerald__script { margin: 0; font: 400 clamp(40px, 11.5vw, 54px)/1.1 'THT20 Chu Mem', 'Great Vibes', cursive; }
+    .preload-emerald__names { margin: 6px 0 0; font: 400 clamp(22px, 6.6vw, 32px)/1.25 'THT20 Chu Cung', 'Cormorant Garamond', serif; text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
+    .preload-emerald__date { font: 400 clamp(22px, 6.4vw, 28px)/1 'THT20 Chu Cung', 'EB Garamond', serif; letter-spacing: .14em; animation: preload-emerald-in 1.2s ease-out .35s both; }
+    .preload-emerald__guest { margin: -6px 0 0; font: 400 15px/1.5 'EB Garamond', serif; animation: preload-emerald-in 1.2s ease-out .3s both; }
+    .preload-emerald__guest strong { display: block; font: 400 20px/1.3 'THT20 Chu Cung', serif; }
+
+    .preload-emerald__envelope {
+        position: relative; display: block; width: min(92vw, 400px, 52dvh); aspect-ratio: 400 / 360;
+        padding: 0; border: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
+        animation: preload-emerald-in 1.2s ease-out .15s both;
+    }
+    .preload-emerald__back, .preload-emerald__pocket { position: absolute; left: 0; right: 0; top: 24%; bottom: 0; border-radius: 4px; }
+    .preload-emerald__back { background: #0f5530; }
+    .preload-emerald__flap { position: absolute; left: 0; right: 0; top: 0; height: 24.5%; background: #17683c; clip-path: polygon(0 100%, 50% 0, 100% 100%); }
+    .preload-emerald__card { position: absolute; left: 7%; right: 7%; top: 14%; height: 62%; padding: 9px; background: #fbfbf8; box-shadow: 0 6px 18px rgba(0,0,0,.2); transition: transform .9s cubic-bezier(.2,.8,.2,1); }
+    .preload-emerald__card img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+    .preload-emerald__monogram { display: grid; place-items: start center; height: 100%; padding-top: 14%; border: 1px solid rgba(47,74,38,.6); font: 400 38px/1 'THT20 Chu Cung', serif; letter-spacing: .08em; color: #2f4a26; }
+    .preload-emerald__pocket {
+        background: linear-gradient(160deg, #1d7a47, #17683c 55%, #12603a);
+        clip-path: polygon(0 0, 50% 52%, 100% 0, 100% 100%, 0 100%);
+        filter: drop-shadow(0 -2px 3px rgba(0,0,0,.18));
+    }
+    .preload-emerald__seal { position: absolute; left: 50%; top: 62%; width: 23%; aspect-ratio: 1; transform: translate(-50%, -50%); filter: drop-shadow(0 4px 6px rgba(0,0,0,.3)); transition: transform .45s ease, opacity .45s ease; }
+    .preload-emerald__seal > img:first-child { display: block; width: 100%; height: 100%; }
+    .preload-emerald__hand { position: absolute; right: -42%; bottom: -46%; width: 70%; height: auto; filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); animation: preload-emerald-tap 1.6s ease-in-out infinite; }
+
+    .preload-container.is-opening .preload-emerald__seal { transform: translate(-50%, -50%) scale(.5); opacity: 0; }
+    .preload-container.is-opening .preload-emerald__card { transform: translateY(-38%); }
+    .preload-container.is-opening .preload-emerald { opacity: 0; transform: scale(1.06); }
+
+    @keyframes preload-emerald-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    @keyframes preload-emerald-tap { 0%, 100% { transform: translate(0, 0) scale(1); } 45% { transform: translate(-8%, -8%) scale(.9); } }
+
+    @media (prefers-reduced-motion: reduce) {
+        .preload-emerald, .preload-emerald * { animation: none !important; transition-duration: .2s !important; transition-delay: 0s !important; }
+    }
+
     /* Hide Helper */
     .preload-container.hidden { display: none !important; }
 </style>
@@ -782,6 +876,29 @@
                 openWedding,
                 { once: true }
             );
+
+
+        /*
+         |--------------------------------------------------------------------------
+         | Emerald Envelope (THT20): card rises, then the whole stage fades out.
+         |--------------------------------------------------------------------------
+         */
+        @elseif($variant === 'emerald_envelope')
+
+            const trigger = container.querySelector('.preload-emerald__envelope');
+
+            lockScroll();
+
+            trigger?.addEventListener('click', function () {
+                container.classList.add('is-opening');
+                unlockScroll();
+                window.dispatchEvent(new CustomEvent('wedding-opened'));
+
+                window.setTimeout(function () {
+                    container.classList.add('hidden');
+                    window.dispatchEvent(new CustomEvent('wedding-content-visible'));
+                }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 300 : 1600);
+            }, { once: true });
 
 
         /*

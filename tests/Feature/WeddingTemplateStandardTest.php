@@ -102,16 +102,20 @@ class WeddingTemplateStandardTest extends TestCase
         $this->assertStringContainsString("font-family: 'MTD Feliz en Vista'", $fonts);
     }
 
-    public function test_tht20_envelope_uses_its_own_media_and_bundled_ornaments(): void
+    public function test_tht20_envelope_preload_uses_its_own_media_and_bundled_ornaments(): void
     {
         $template = file_get_contents(resource_path('views/templates/tht_e_wedding_20.blade.php'));
 
-        $this->assertStringContainsString("\$templateSchemaMedia['envelope_image']", $template);
+        $preload = file_get_contents(resource_path('views/components/wedding/preload.blade.php'));
+
+        $this->assertStringContainsString("'variant' => 'emerald_envelope'", $template);
+        $this->assertStringContainsString("'envelopeMedia' => \$templateSchemaMedia['envelope_image'] ?? null", $template);
+        $this->assertStringContainsString("@if(\$variant === 'emerald_envelope')", $preload);
         $this->assertStringNotContainsString('$heroUrl ??', $template, 'Envelope photo must not fall back to the hero.');
         $this->assertStringContainsString('$sideData->firstGivenName()', $template);
         $this->assertStringContainsString('$calendarWeeks', $template);
 
-        foreach (['botanical.svg', 'heart.svg', 'wax-seal.svg'] as $asset) {
+        foreach (['heart.svg', 'wax-seal.svg', 'top-left.png', 'bot-right.png', 'chu-mem.otf', 'chu-cung.ttf'] as $asset) {
             $this->assertFileExists(public_path("images/templates/tht-e-wedding-20/{$asset}"));
         }
     }

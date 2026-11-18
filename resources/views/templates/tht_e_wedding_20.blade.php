@@ -11,58 +11,22 @@
 @push('styles')
     @vite(['resources/css/templates/tht-e-wedding-20.css'])
     <style>
-        .tht20 { --tht20-botanical: url('{{ asset('images/templates/tht-e-wedding-20/botanical.svg') }}'); --tht20-heart: url('{{ asset('images/templates/tht-e-wedding-20/heart.svg') }}'); }
+        .tht20 { --tht20-heart: url('{{ asset('images/templates/tht-e-wedding-20/heart.svg') }}'); }
     </style>
 @endpush
 
 @section('content')
 <main class="tht20 wedding-container" id="tht20-top">
     {{-- Shared opening screen, envelope wrapper, effects and music stay available. --}}
-    @include('components.wedding.preload', ['wedding' => $wedding])
+    {{-- Opening screen: the green envelope lives in the shared preload (variant emerald_envelope). --}}
+    @include('components.wedding.preload', ['wedding' => $wedding, 'variant' => 'emerald_envelope', 'envelopeMedia' => $templateSchemaMedia['envelope_image'] ?? null])
     @if($wedding->show_invitation_wrapper)
         <x-wedding.invitation-wrapper :wedding="$wedding" />
     @endif
     @include('components.wedding.falling-effects', ['wedding' => $wedding])
     <x-wedding.music-player :wedding="$wedding" />
 
-    {{-- 01. Green envelope cover: tapping the seal lifts the card and scrolls to the hero. --}}
-    <section class="tht20-cover tht20-paper"
-             aria-labelledby="tht20-cover-title"
-             x-data="{ opened: false, open() { if (this.opened) return; this.opened = true; setTimeout(() => document.getElementById('tht20-hero')?.scrollIntoView({ behavior: 'smooth' }), 1100); } }"
-             :class="{ 'is-open': opened }">
-        <span class="tht20-botanical tht20-botanical--top-left" aria-hidden="true"></span>
-        <span class="tht20-botanical tht20-botanical--bottom-right" aria-hidden="true"></span>
-        <header class="tht20-cover__heading" data-aos="fade-down" data-aos-duration="1400" data-aos-once="true">
-            <p class="tht20-script">Save the date</p>
-            <h1 id="tht20-cover-title">{{ $sideData->firstName }} &amp; {{ $sideData->secondName }}</h1>
-        </header>
-
-        <div class="tht20-envelope" data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="150" data-aos-once="true">
-            <span class="tht20-envelope__back" aria-hidden="true"></span>
-            <span class="tht20-envelope__flap" aria-hidden="true"></span>
-            <figure class="tht20-envelope__card">
-                @if(!empty($templateSchemaMedia['envelope_image']))
-                    <img src="{{ $templateSchemaMedia['envelope_image']->getUrl() }}"
-                         data-position="{{ data_get($templateContent, 'envelope_position') }}"
-                         alt="{{ $sideData->firstName }} và {{ $sideData->secondName }}"
-                         fetchpriority="high" decoding="async">
-                @else
-                    <figcaption class="tht20-envelope__monogram">{{ $invitationMonogram }}</figcaption>
-                @endif
-            </figure>
-            <span class="tht20-envelope__pocket" aria-hidden="true"></span>
-            <button class="tht20-envelope__seal" type="button" @click="open()" aria-label="Mở thiệp cưới">
-                <img src="{{ asset('images/templates/tht-e-wedding-20/wax-seal.svg') }}" alt="" width="84" height="84">
-                <i class="fa-regular fa-hand-pointer tht20-envelope__hand" aria-hidden="true"></i>
-            </button>
-        </div>
-
-        @if($wedding->event_date)
-            <time class="tht20-cover__date" datetime="{{ $wedding->event_date->toDateString() }}" data-aos="fade-up" data-aos-duration="1400" data-aos-delay="300" data-aos-once="true">{{ $wedding->event_date->format('d.m.Y') }}</time>
-        @endif
-    </section>
-
-    {{-- 02. Full-bleed hero with large serif names. --}}
+    {{-- 01. Full-bleed hero with large serif names. --}}
     <section class="tht20-hero" id="tht20-hero" aria-label="{{ $sideData->firstName }} và {{ $sideData->secondName }}">
         @if($heroUrl)
             <img class="tht20-hero__image"
@@ -81,7 +45,7 @@
 
     {{-- 03. Promise line, primary date and the optional save-the-date photo. --}}
     <section class="tht20-promise tht20-paper" aria-labelledby="tht20-promise-title">
-        <span class="tht20-botanical tht20-botanical--left" aria-hidden="true"></span>
+        <img class="tht20-floral tht20-floral--left" src="{{ asset('images/templates/tht-e-wedding-20/top-left.png') }}" alt="" aria-hidden="true" loading="lazy">
         <h2 id="tht20-promise-title" data-aos="fade-up" data-aos-duration="1500" data-aos-once="true">Quyết định bên nhau<br>trọn đời.</h2>
         <p class="tht20-script" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="100" data-aos-once="true">Save the date</p>
         @if($wedding->event_date)
@@ -279,7 +243,7 @@
 
     {{-- 09. RSVP + wish in one request, gift QR, countdown. --}}
     <section class="tht20-response tht20-paper" id="rsvp" aria-labelledby="tht20-rsvp-title">
-        <span class="tht20-botanical tht20-botanical--right" aria-hidden="true"></span>
+        <img class="tht20-floral tht20-floral--right" src="{{ asset('images/templates/tht-e-wedding-20/bot-right.png') }}" alt="" aria-hidden="true" loading="lazy">
         <div class="tht20-response__inner"
              x-data="{
                  submitting: false,
