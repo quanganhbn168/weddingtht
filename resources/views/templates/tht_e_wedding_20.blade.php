@@ -236,7 +236,7 @@
                     <a class="tht20-album__photo glightbox"
                        href="{{ $image->getUrl() }}"
                        data-gallery="tht20-memories"
-                       data-aos="fade-up" data-aos-duration="1400" data-aos-delay="{{ ($loop->index % 3) * 100 }}" data-aos-once="true"
+                       data-aos="{{ $loop->first ? 'zoom-in' : 'fade-up' }}" data-aos-duration="1500" data-aos-delay="{{ $loop->first ? 0 : ($loop->index % 2) * 150 }}" data-aos-once="true"
                        aria-label="Xem ảnh cưới {{ $loop->iteration }}">
                         <img src="{{ $image->getUrl('gallery_web') ?: $image->getUrl() }}" alt="Ảnh cưới {{ $sideData->firstName }} và {{ $sideData->secondName }}" loading="lazy" decoding="async">
                     </a>
