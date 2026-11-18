@@ -202,6 +202,3 @@
     .tht20-polaroids { height: 330px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .tht20 *, .tht20 *::before { animation: none !important; transition: none !important; }
-}
