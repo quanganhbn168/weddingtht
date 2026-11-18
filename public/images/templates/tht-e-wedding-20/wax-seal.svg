@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Gold wax seal with an olive sprig. -->
+  <defs>
+    <radialGradient id="g" cx="38%" cy="32%" r="75%">
+      <stop offset="0" stop-color="#f4dc93"/>
+      <stop offset=".45" stop-color="#d1a944"/>
+      <stop offset="1" stop-color="#8e6a1d"/>
+    </radialGradient>
+    <radialGradient id="i" cx="60%" cy="65%" r="70%">
+      <stop offset="0" stop-color="#e2bf62"/>
+      <stop offset="1" stop-color="#a77f28"/>
+    </radialGradient>
+  </defs>
+  <path fill="url(#g)" d="M60 4c9 0 13 6 21 8s15 2 20 9 3 13 7 20 9 11 8 19-7 11-9 19-1 15-7 21-13 4-20 8-11 9-20 9-12-6-20-8-15-2-20-9-3-13-7-20-9-11-8-19 7-11 9-19 1-15 7-21 13-4 20-8S51 4 60 4z"/>
+  <circle cx="60" cy="60" r="37" fill="url(#i)" stroke="#8e6a1d" stroke-opacity=".55" stroke-width="2"/>
+  <circle cx="60" cy="60" r="31" fill="none" stroke="#f6e3a8" stroke-opacity=".5" stroke-width="1"/>
+  <g fill="#f3dc96" stroke="#8e6a1d" stroke-opacity=".45" stroke-width=".8">
+    <path d="M44 82C54 66 64 52 78 38" fill="none" stroke="#f3dc96" stroke-opacity="1" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M52 70c-9-2-14-8-14-15 8 1 13 7 14 15z"/>
+    <path d="M58 61c-8-3-12-10-11-17 8 2 12 9 11 17z"/>
+    <path d="M65 52c-6-4-9-11-7-17 7 3 9 10 7 17z"/>
+    <path d="M55 68c8 0 15 4 17 11-8 1-14-4-17-11z"/>
+    <path d="M62 58c8-1 15 3 18 9-8 2-15-2-18-9z"/>
+    <path d="M70 48c7-2 13 1 16 6-7 3-13 0-16-6z"/>
+  </g>
+</svg>

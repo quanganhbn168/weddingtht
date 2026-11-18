@@ -80,7 +80,34 @@ final readonly class WeddingEventData
 
     public function ceremonyLunarFullLabel(): ?string
     {
-        $value = trim((string) $this->ceremonyLunarInWords);
+        return self::lunarFullLabel($this->ceremonyLunarInWords);
+    }
+
+    public function receptionTimeLongLabel(): string
+    {
+        if (! $this->receptionTime) {
+            return '';
+        }
+
+        return (int) $this->receptionTime->format('H')
+            .' giờ '.$this->receptionTime->format('i').' phút';
+    }
+
+    public function receptionLunarFullLabel(): ?string
+    {
+        return self::lunarFullLabel($this->receptionLunarInWords);
+    }
+
+    /** True when reception and ceremony share one place, so a template can print the venue once. */
+    public function sharesVenue(): bool
+    {
+        return trim($this->receptionVenue) === trim($this->ceremonyVenue)
+            && trim((string) $this->receptionAddress) === trim((string) $this->ceremonyAddress);
+    }
+
+    private static function lunarFullLabel(?string $inWords): ?string
+    {
+        $value = trim((string) $inWords);
 
         if ($value === '') {
             return null;

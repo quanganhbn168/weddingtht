@@ -12,7 +12,114 @@ class TemplateSeeder extends Seeder
      */
     public function run(): void
     {
+        $positionOptions = [
+            'top' => 'Ưu tiên phần trên',
+            'bottom' => 'Ưu tiên phần dưới',
+            'center' => 'Căn giữa',
+        ];
+
         $templates = [
+            [
+                'name' => 'THT E-Wedding 20 (Emerald Envelope)',
+                'view_path' => 'templates.tht_e_wedding_20',
+                'type' => 'wedding',
+                'is_active' => true,
+                'content_schema' => [
+                    [
+                        'key' => 'envelope_image',
+                        'type' => 'image',
+                        'label' => 'Ảnh trong phong bì (màn hình đầu)',
+                        'section' => 'Ảnh riêng của THT20',
+                        'required' => false,
+                        'helper_text' => 'Ảnh ngang nằm trong phong bì xanh. Để trống sẽ hiện chữ cái đầu tên cô dâu chú rể; không lấy ảnh hero thay thế.',
+                        'aspect_ratio' => '4:3',
+                    ],
+                    [
+                        'key' => 'save_date_image',
+                        'type' => 'image',
+                        'label' => 'Ảnh dưới "Save the date"',
+                        'section' => 'Ảnh riêng của THT20',
+                        'required' => false,
+                        'helper_text' => 'Ảnh dọc dưới dòng "Quyết định bên nhau trọn đời". Để trống sẽ ẩn khối ảnh.',
+                        'aspect_ratio' => '4:5',
+                    ],
+                    [
+                        'key' => 'timeline_image',
+                        'type' => 'image',
+                        'label' => 'Ảnh đầu phần Timeline',
+                        'section' => 'Ảnh riêng của THT20',
+                        'required' => false,
+                        'helper_text' => 'Ảnh ngang phía trên lịch trình, chữ "Timeline" nằm đè ở dưới. Để trống chỉ hiện tiêu đề.',
+                        'aspect_ratio' => '5:4',
+                    ],
+                    [
+                        'key' => 'envelope_position',
+                        'type' => 'select',
+                        'label' => 'Vị trí lấy nét ảnh phong bì',
+                        'section' => 'Khung ảnh',
+                        'options' => $positionOptions,
+                    ],
+                    [
+                        'key' => 'hero_position',
+                        'type' => 'select',
+                        'label' => 'Vị trí lấy nét ảnh bìa',
+                        'section' => 'Khung ảnh',
+                        'options' => $positionOptions,
+                    ],
+                    [
+                        'key' => 'portrait_position',
+                        'type' => 'select',
+                        'label' => 'Vị trí lấy nét ảnh polaroid cô dâu/chú rể',
+                        'section' => 'Khung ảnh',
+                        'options' => $positionOptions,
+                    ],
+                    [
+                        'key' => 'bride_welcome_time',
+                        'type' => 'text',
+                        'label' => 'Giờ đón khách nhà gái',
+                        'section' => 'Timeline',
+                        'required' => false,
+                        'max_length' => 5,
+                        'helper_text' => 'Ví dụ 16:00. Để trống sẽ ẩn mục Đón khách.',
+                    ],
+                    [
+                        'key' => 'groom_welcome_time',
+                        'type' => 'text',
+                        'label' => 'Giờ đón khách nhà trai',
+                        'section' => 'Timeline',
+                        'required' => false,
+                        'max_length' => 5,
+                        'helper_text' => 'Ví dụ 16:00. Để trống sẽ ẩn mục Đón khách.',
+                    ],
+                    [
+                        'key' => 'dresscode',
+                        'type' => 'select',
+                        'label' => 'Hiển thị Dresscode',
+                        'section' => 'Dresscode',
+                        'options' => [
+                            'show' => 'Hiển thị',
+                            'hide' => 'Ẩn',
+                        ],
+                    ],
+                    [
+                        'key' => 'dresscode_note',
+                        'type' => 'text',
+                        'label' => 'Ghi chú dưới bảng màu',
+                        'section' => 'Dresscode',
+                        'required' => false,
+                        'max_length' => 150,
+                    ],
+                    [
+                        'key' => 'album_note',
+                        'rows' => 4,
+                        'type' => 'textarea',
+                        'label' => 'Lời dẫn cho Our memories',
+                        'section' => 'Album',
+                        'required' => false,
+                        'max_length' => 1000,
+                    ],
+                ],
+            ],
             [
                 'name' => 'THT E-Wedding 19 (Olive Memories)',
                 'view_path' => 'templates.tht_e_wedding_19',

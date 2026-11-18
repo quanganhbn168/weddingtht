@@ -52,4 +52,22 @@ final readonly class WeddingSideData
     {
         return mb_substr($this->secondName, 0, 1);
     }
+
+    /** Vietnamese given name = last word of the display name ("Khánh Ly" → "Ly"). */
+    public function firstGivenName(): string
+    {
+        return self::givenName($this->firstName);
+    }
+
+    public function secondGivenName(): string
+    {
+        return self::givenName($this->secondName);
+    }
+
+    private static function givenName(string $name): string
+    {
+        $parts = preg_split('/\s+/u', trim($name), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        return $parts === [] ? $name : end($parts);
+    }
 }

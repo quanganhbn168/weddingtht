@@ -302,6 +302,7 @@
                             </p>
                         </div>
                     </li>
+                @endif
 
                 {{-- LỄ THÀNH HÔN / VU QUY --}}
                 @if($event->ceremonyTime)
@@ -331,11 +332,6 @@
                         </div>
                     </li>
                 @endif
-
-
-
-                @endif
-
             </ol>
 
         </article>
@@ -361,47 +357,31 @@
                    data-aos-easing="ease-out-cubic"
                    data-aos-once="true">{{ data_get($templateContent, 'album_note') }}</p>
             @endif
-            @php
-    $albumImages = $galleryImages->values();
+            <div class="tht19-album__grid">
 
-    $coverImage = $albumImages->first();
-    $restImages = $albumImages->slice(1)->values();
-
-    $leftImages = $restImages->filter(
-        fn ($image, $index) => $index % 2 === 0
-    );
-
-    $rightImages = $restImages->filter(
-        fn ($image, $index) => $index % 2 === 1
-    );
-@endphp
-
-<div class="tht19-album__grid">
-
-    {{-- Ảnh cover full width --}}
-    @if($coverImage)
-        <a
-            class="tht19-album__photo tht19-album__photo--cover glightbox"
-            href="{{ $coverImage->getUrl() }}"
-            data-gallery="tht19-memories"
-            data-aos="zoom-in"
-            data-aos-duration="1600"
-            aria-label="Xem ảnh cưới của {{ $sideData->firstName }} và {{ $sideData->secondName }}"
+    {{-- Ảnh đầu tiên full width; $galleryImages chắc chắn không rỗng ở đây. --}}
+    <a
+        class="tht19-album__photo tht19-album__photo--cover glightbox"
+        href="{{ $galleryImages->first()->getUrl() }}"
+        data-gallery="tht19-memories"
+        data-aos="zoom-in"
+        data-aos-duration="1600"
+        aria-label="Xem ảnh cưới của {{ $sideData->firstName }} và {{ $sideData->secondName }}"
+    >
+        <img
+            src="{{ $galleryImages->first()->getUrl('gallery_web') ?: $galleryImages->first()->getUrl() }}"
+            alt="Ảnh cưới {{ $sideData->firstName }} và {{ $sideData->secondName }}"
+            loading="lazy"
+            decoding="async"
         >
-            <img
-                src="{{ $coverImage->getUrl('gallery_web') ?: $coverImage->getUrl() }}"
-                alt="Ảnh cưới {{ $sideData->firstName }} và {{ $sideData->secondName }}"
-                loading="lazy"
-                decoding="async"
-            >
-        </a>
-    @endif
+    </a>
 
     <div class="tht19-album__columns">
 
-        {{-- CỘT TRÁI --}}
+        {{-- CỘT TRÁI: ảnh thứ 2, 4, 6... (lượt lặp lẻ của phần còn lại) --}}
         <div class="tht19-album__column">
-            @foreach($leftImages as $image)
+            @foreach($galleryImages->skip(1) as $image)
+                @continue($loop->even)
                 <a
                     class="tht19-album__photo glightbox"
                     href="{{ $image->getUrl() }}"
@@ -420,9 +400,10 @@
             @endforeach
         </div>
 
-        {{-- CỘT PHẢI --}}
+        {{-- CỘT PHẢI: ảnh thứ 3, 5, 7... (lượt lặp chẵn của phần còn lại) --}}
         <div class="tht19-album__column">
-            @foreach($rightImages as $image)
+            @foreach($galleryImages->skip(1) as $image)
+                @continue($loop->odd)
                 <a
                     class="tht19-album__photo glightbox"
                     href="{{ $image->getUrl() }}"

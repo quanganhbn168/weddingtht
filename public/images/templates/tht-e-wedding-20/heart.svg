@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 90" fill="none" stroke="#dfe6d6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Hand-drawn style heart used around highlighted calendar dates. -->
+  <path d="M50 84C30 68 6 52 6 30C6 15 17 5 30 6C40 7 47 14 50 24C53 14 61 6 72 6C85 6 95 17 94 31C92 54 69 69 48 86"/>
+  <path d="M47 82C52 85 55 83 52 80" stroke-width="2"/>
+</svg>
