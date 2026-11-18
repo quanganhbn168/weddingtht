@@ -720,15 +720,15 @@
     .preload-emerald__guest strong { display: block; font: 400 20px/1.3 'THT20 Chu Cung', serif; }
 
     .preload-emerald__envelope {
-        position: relative; display: block; width: min(92vw, 400px, 52dvh); aspect-ratio: 400 / 360;
+        --env-w: min(92vw, 400px, 52dvh); position: relative; display: block; width: var(--env-w); aspect-ratio: 400 / 360;
         padding: 0; border: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
         animation: preload-emerald-in 1.2s ease-out .15s both;
     }
     .preload-emerald__back, .preload-emerald__pocket { position: absolute; left: 0; right: 0; top: 24%; bottom: 0; border-radius: 4px; }
     .preload-emerald__back { background: #0f5530; }
     .preload-emerald__flap { position: absolute; left: 0; right: 0; top: 0; height: 24.5%; background: #17683c; clip-path: polygon(0 100%, 50% 0, 100% 100%); }
-    .preload-emerald__card { position: absolute; left: 7%; right: 7%; top: 14%; height: 62%; padding: 9px; background: #fbfbf8; box-shadow: 0 6px 18px rgba(0,0,0,.2); transition: transform 1.2s cubic-bezier(.2,.8,.2,1) .25s; }
-    .preload-emerald__card img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+    .preload-emerald__card { position: absolute; left: 7%; right: 7%; top: 14%; height: auto; padding: 9px; background: #fbfbf8; box-shadow: 0 6px 18px rgba(0,0,0,.2); transition: transform 1.2s cubic-bezier(.2,.8,.2,1) .25s; }
+    .preload-emerald__card img { display: block; width: 100%; height: auto; max-height: calc(var(--env-w) * .5); object-fit: contain; }
     .preload-emerald__monogram { display: grid; place-items: start center; height: 100%; padding-top: 14%; border: 1px solid rgba(47,74,38,.6); font: 400 38px/1 'THT20 Chu Cung', serif; letter-spacing: .08em; color: #2f4a26; }
     .preload-emerald__pocket {
         background: linear-gradient(160deg, #1d7a47, #17683c 55%, #12603a);
