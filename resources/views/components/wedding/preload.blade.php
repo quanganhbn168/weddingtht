@@ -179,8 +179,7 @@
             </div>
 
             <button type="button" class="preload-emerald__envelope" aria-label="Mở thiệp cưới">
-                <span class="preload-emerald__back" aria-hidden="true"></span>
-                <span class="preload-emerald__flap" aria-hidden="true"></span>
+                <img class="preload-emerald__back" src="{{ asset('images/templates/tht-e-wedding-20/phongbifull.png') }}" alt="" aria-hidden="true">
                 <span class="preload-emerald__card">
                     @if(!empty($envelopeMedia))
                         <img src="{{ $envelopeMedia->getUrl() }}" alt="{{ $sideData->firstName }} và {{ $sideData->secondName }}" fetchpriority="high">
@@ -188,9 +187,9 @@
                         <span class="preload-emerald__monogram">{{ $sideData->firstInitial() }} &amp; {{ $sideData->secondInitial() }}</span>
                     @endif
                 </span>
-                <span class="preload-emerald__pocket" aria-hidden="true"></span>
+                <img class="preload-emerald__pocket" src="{{ asset('images/templates/tht-e-wedding-20/phongbiduoi.png') }}" alt="" aria-hidden="true">
                 <span class="preload-emerald__seal" aria-hidden="true">
-                    <img src="{{ asset('images/templates/tht-e-wedding-20/wax-seal.svg') }}" alt="">
+                    <img src="{{ asset('images/templates/tht-e-wedding-20/con-dau.png') }}" alt="">
                     <img class="preload-emerald__hand" src="{{ asset('images/templates/tht-e-wedding-19/hand.png') }}" alt="">
                 </span>
             </button>
@@ -720,29 +719,25 @@
     .preload-emerald__guest strong { display: block; font: 400 20px/1.3 'THT20 Chu Cung', serif; }
 
     .preload-emerald__envelope {
-        --env-w: min(92vw, 400px, 52dvh); position: relative; display: block; width: var(--env-w); aspect-ratio: 400 / 360;
+        --env-w: min(88vw, 400px, 43dvh); position: relative; display: block; width: var(--env-w); aspect-ratio: 650 / 779;
         padding: 0; border: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
         animation: preload-emerald-in 1.2s ease-out .15s both;
     }
-    .preload-emerald__back, .preload-emerald__pocket { position: absolute; left: 0; right: 0; top: 24%; bottom: 0; border-radius: 4px; }
-    .preload-emerald__back { background: #0f5530; }
-    .preload-emerald__flap { position: absolute; left: 0; right: 0; top: 0; height: 24.5%; background: #17683c; clip-path: polygon(0 100%, 50% 0, 100% 100%); }
-    .preload-emerald__card { position: absolute; left: 0; right: 0; margin: 0 auto; width: fit-content; max-width: 88%; top: 22%; height: 76%; padding: 9px; background: #fbfbf8; box-shadow: 0 6px 18px rgba(0,0,0,.2); animation: preload-emerald-rise 1.6s cubic-bezier(.2,.8,.2,1) 1.5s both; }
-    .preload-emerald__card img { display: block; width: auto; max-width: 100%; height: 100%; object-fit: contain; }
+    /* Layers, bottom to top: open envelope (back + flap) -> photo card -> front pocket -> wax seal. */
+    .preload-emerald__back, .preload-emerald__pocket { position: absolute; left: 0; width: 100%; height: auto; display: block; pointer-events: none; }
+    .preload-emerald__back { top: 0; }
+    .preload-emerald__pocket { bottom: 0; filter: drop-shadow(0 -2px 3px rgba(0,0,0,.18)); }
+    .preload-emerald__card { position: absolute; left: 12%; top: 10%; width: 76%; aspect-ratio: 1; box-sizing: border-box; padding: 2.2%; background: #fbfbf8; box-shadow: 0 6px 18px rgba(0,0,0,.2); animation: preload-emerald-rise 1.6s cubic-bezier(.2,.8,.2,1) 1.5s both; }
+    .preload-emerald__card img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
     .preload-emerald__monogram { display: grid; place-items: start center; height: 100%; padding-top: 14%; border: 1px solid rgba(47,74,38,.6); font: 400 38px/1 'THT20 Chu Cung', serif; letter-spacing: .08em; color: #2f4a26; }
-    .preload-emerald__pocket {
-        background: linear-gradient(160deg, #1d7a47, #17683c 55%, #12603a);
-        clip-path: polygon(0 0, 50% 52%, 100% 0, 100% 100%, 0 100%);
-        filter: drop-shadow(0 -2px 3px rgba(0,0,0,.18));
-    }
-    .preload-emerald__seal { position: absolute; left: 50%; top: 62%; width: 23%; aspect-ratio: 1; transform: translate(-50%, -50%); filter: drop-shadow(0 4px 6px rgba(0,0,0,.3)); transition: transform .45s ease, opacity .45s ease; }
+    .preload-emerald__seal { position: absolute; left: 50%; top: 69%; width: 26%; aspect-ratio: 1; transform: translate(-50%, -50%); filter: drop-shadow(0 4px 6px rgba(0,0,0,.3)); transition: transform .45s ease, opacity .45s ease; }
     .preload-emerald__seal > img:first-child { display: block; width: 100%; height: 100%; }
     .preload-emerald__hand { position: absolute; right: -42%; bottom: -46%; width: 70%; height: auto; filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); animation: preload-emerald-tap 1.6s ease-in-out infinite; }
 
     .preload-container.is-opening .preload-emerald__seal { transform: translate(-50%, -50%) scale(.5); opacity: 0; }
     .preload-container.is-opening .preload-emerald { opacity: 0; transform: scale(1.06); }
 
-    @keyframes preload-emerald-rise { 0% { opacity: 0; transform: translateY(0); } 15% { opacity: 1; } 100% { opacity: 1; transform: translateY(-34%); } }
+    @keyframes preload-emerald-rise { 0% { opacity: 0; transform: translateY(42%); } 15% { opacity: 1; } 100% { opacity: 1; transform: translateY(0); } }
     @keyframes preload-emerald-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
     @keyframes preload-emerald-tap { 0%, 100% { transform: translate(0, 0) scale(1); } 45% { transform: translate(-8%, -8%) scale(.9); } }
 
