@@ -91,7 +91,7 @@
 .tht20 .tht20-invitation__guest { display: inline-block; margin-top: 18px; padding: 0 12px 6px; border-bottom: 1px solid var(--tht20-line); font: italic 500 24px/1.3 var(--tht20-body); overflow-wrap: anywhere; }
 .tht20-invitation__names { position: relative; display: grid; margin-top: 26px; font: 400 clamp(38px, 11.5vw, 52px)/1.08 var(--tht20-serif); text-transform: uppercase; letter-spacing: .01em; overflow-wrap: anywhere; }
 .tht20-invitation__names > span:not(.tht20-invitation__amp) { position: relative; z-index: 1; }
-.tht20-invitation__amp { position: absolute; left: 50%; top: 50%; transform: translate(-30%, -55%); font: 400 1.9em/1 var(--tht20-script); color: rgba(47, 74, 38, .28); text-transform: none; pointer-events: none; }
+.tht20-invitation__amp { position: static; justify-self: center; margin: .06em 0 .02em; font: 400 1.25em/1 var(--tht20-script); color: rgba(47, 74, 38, .55); text-transform: none; pointer-events: none; }
 
 .tht20-polaroids { position: relative; height: 380px; margin: 36px -6px 20px; }
 .tht20-polaroid { position: absolute; width: 56%; padding: 10px 10px 50px; background: #fdfdfb; box-shadow: 0 10px 24px rgba(30, 40, 25, .16); }
