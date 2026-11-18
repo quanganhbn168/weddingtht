@@ -52,6 +52,8 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .44 0 0 0 0 .4 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 .tht20-paper > *:not(.tht20-floral) { position: relative; z-index: 1; }
+/* Real rough-paper photo behind the invitation and timeline sections. */
+.tht20-invitation.tht20-paper, .tht20-timeline.tht20-paper { background-color: #f6f6f3; background-image: var(--tht20-paper-photo, none); background-size: cover; background-position: center top; }
 .tht20-floral { position: absolute; z-index: 0; width: 82%; height: auto; pointer-events: none; }
 .tht20-floral--left { left: 0; top: 18%; }
 .tht20-floral--right { right: 0; top: 4%; opacity: .8; }
