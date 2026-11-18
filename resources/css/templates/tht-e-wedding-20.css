@@ -189,7 +189,7 @@
 /* 10 · Thank you */
 .tht20-thank-you { position: relative; overflow: hidden; text-align: center; }
 .tht20-thank-you--photo { min-height: 480px; display: flex; align-items: flex-end; color: #fff; background: #cfcfcb; }
-.tht20-thank-you--photo > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+.tht20-thank-you--photo > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
 .tht20-thank-you--photo::after { content: ''; position: absolute; inset: 30% 0 0; background: linear-gradient(transparent, rgba(20, 25, 15, .55)); }
 .tht20-thank-you__copy { position: relative; z-index: 1; padding: 46px 26px 30px; }
 .tht20-thank-you__copy p { font-size: 17px; line-height: 1.65; }
