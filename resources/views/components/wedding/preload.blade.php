@@ -732,7 +732,7 @@
     .preload-emerald__monogram { display: grid; place-items: start center; height: 100%; padding-top: 14%; border: 1px solid rgba(47,74,38,.6); font: 400 38px/1 'THT20 Chu Cung', serif; letter-spacing: .08em; color: #2f4a26; }
     .preload-emerald__seal { position: absolute; left: 50%; top: 69%; width: 26%; aspect-ratio: 1; transform: translate(-50%, -50%); filter: drop-shadow(0 4px 6px rgba(0,0,0,.3)); transition: transform .45s ease, opacity .45s ease; }
     .preload-emerald__seal > img:first-child { display: block; width: 100%; height: 100%; }
-    .preload-emerald__hand { position: absolute; right: -42%; bottom: -46%; width: 70%; height: auto; filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); animation: preload-emerald-tap 1.6s ease-in-out infinite; }
+    .preload-emerald__hand { position: absolute; right: -8%; bottom: -20%; width: 70%; height: auto; filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); animation: preload-emerald-tap 1.6s ease-in-out infinite; }
 
     .preload-container.is-opening .preload-emerald__seal { transform: translate(-50%, -50%) scale(.5); opacity: 0; }
     .preload-container.is-opening .preload-emerald { opacity: 0; transform: scale(1.06); }
