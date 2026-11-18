@@ -706,7 +706,7 @@
         padding: 28px 18px; color: #2f4a26; text-align: center;
         background-color: #f4f3ef;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .44 0 0 0 0 .4 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        transition: opacity .8s ease 1.3s, transform .8s ease 1.3s;
+        transition: opacity .8s ease .3s, transform .8s ease .3s;
     }
     .preload-emerald__floral { position: absolute; z-index: 0; width: min(90vw, 470px); height: auto; pointer-events: none; }
     .preload-emerald__floral--tl { top: 0; left: 0; }
@@ -727,7 +727,7 @@
     .preload-emerald__back, .preload-emerald__pocket { position: absolute; left: 0; right: 0; top: 24%; bottom: 0; border-radius: 4px; }
     .preload-emerald__back { background: #0f5530; }
     .preload-emerald__flap { position: absolute; left: 0; right: 0; top: 0; height: 24.5%; background: #17683c; clip-path: polygon(0 100%, 50% 0, 100% 100%); }
-    .preload-emerald__card { position: absolute; left: 0; right: 0; margin: 0 auto; width: fit-content; max-width: 88%; top: 22%; height: 76%; padding: 9px; background: #fbfbf8; box-shadow: 0 6px 18px rgba(0,0,0,.2); transition: transform 1.2s cubic-bezier(.2,.8,.2,1) .25s; }
+    .preload-emerald__card { position: absolute; left: 0; right: 0; margin: 0 auto; width: fit-content; max-width: 88%; top: 22%; height: 76%; padding: 9px; background: #fbfbf8; box-shadow: 0 6px 18px rgba(0,0,0,.2); animation: preload-emerald-rise 1.6s cubic-bezier(.2,.8,.2,1) 1.5s both; }
     .preload-emerald__card img { display: block; width: auto; max-width: 100%; height: 100%; object-fit: contain; }
     .preload-emerald__monogram { display: grid; place-items: start center; height: 100%; padding-top: 14%; border: 1px solid rgba(47,74,38,.6); font: 400 38px/1 'THT20 Chu Cung', serif; letter-spacing: .08em; color: #2f4a26; }
     .preload-emerald__pocket {
@@ -740,9 +740,9 @@
     .preload-emerald__hand { position: absolute; right: -42%; bottom: -46%; width: 70%; height: auto; filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); animation: preload-emerald-tap 1.6s ease-in-out infinite; }
 
     .preload-container.is-opening .preload-emerald__seal { transform: translate(-50%, -50%) scale(.5); opacity: 0; }
-    .preload-container.is-opening .preload-emerald__card { transform: translateY(-52%) scale(1.03); }
     .preload-container.is-opening .preload-emerald { opacity: 0; transform: scale(1.06); }
 
+    @keyframes preload-emerald-rise { 0% { opacity: 0; transform: translateY(0); } 15% { opacity: 1; } 100% { opacity: 1; transform: translateY(-34%); } }
     @keyframes preload-emerald-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
     @keyframes preload-emerald-tap { 0%, 100% { transform: translate(0, 0) scale(1); } 45% { transform: translate(-8%, -8%) scale(.9); } }
 
@@ -896,7 +896,7 @@
                 window.setTimeout(function () {
                     container.classList.add('hidden');
                     window.dispatchEvent(new CustomEvent('wedding-content-visible'));
-                }, 2300);
+                }, 1300);
             }, { once: true });
 
 
