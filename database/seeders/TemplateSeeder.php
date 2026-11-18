@@ -53,13 +53,6 @@ class TemplateSeeder extends Seeder
                         'aspect_ratio' => '5:4',
                     ],
                     [
-                        'key' => 'envelope_position',
-                        'type' => 'select',
-                        'label' => 'Vị trí lấy nét ảnh phong bì',
-                        'section' => 'Khung ảnh',
-                        'options' => $positionOptions,
-                    ],
-                    [
                         'key' => 'hero_position',
                         'type' => 'select',
                         'label' => 'Vị trí lấy nét ảnh bìa',
