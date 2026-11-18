@@ -40,8 +40,10 @@
         @endif
         <p class="tht20-hero__names" data-aos="fade-up" data-aos-duration="1600" data-aos-delay="250" data-aos-once="true">
             <span>{{ $sideData->firstGivenName() }}</span>
-            <span class="tht20-hero__amp" aria-hidden="true">&amp;</span>
-            <span>{{ $sideData->secondGivenName() }}</span>
+            <span class="tht20-hero__second">
+                <span class="tht20-hero__amp" aria-hidden="true">&amp;</span>
+                <span>{{ $sideData->secondGivenName() }}</span>
+            </span>
         </p>
     </section>
 

@@ -62,8 +62,8 @@
 .tht20-hero::after { content: ''; position: absolute; inset: 45% 0 0; background: linear-gradient(transparent, rgba(15, 20, 10, .6)); pointer-events: none; }
 .tht20-hero__names { position: relative; z-index: 1; width: 100%; display: grid; padding: 0 22px 34px; font: 400 clamp(58px, 21vw, 92px)/1.2 var(--tht20-serif); text-transform: uppercase; letter-spacing: .01em; text-shadow: 0 2px 6px rgba(0, 0, 0, .35), 0 4px 24px rgba(0, 0, 0, .35); overflow-wrap: anywhere; }
 .tht20-hero__names > span:first-child { justify-self: start; }
-.tht20-hero__names > span:last-child { justify-self: end; text-align: right; }
-.tht20-hero__amp { justify-self: start; margin: 4px 0 6px 14px; font: 400 .9em/1 var(--tht20-amp); text-transform: none; }
+.tht20-hero__second { justify-self: end; display: flex; align-items: center; gap: .18em; text-align: right; }
+.tht20-hero__amp { flex: none; margin: 0; font: 400 .75em/1 var(--tht20-amp); text-transform: none; }
 
 /* 03 · Promise */
 .tht20-promise { padding: 52px 24px 56px; text-align: center; }
