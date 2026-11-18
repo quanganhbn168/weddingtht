@@ -175,7 +175,7 @@
 
             <div class="preload-emerald__heading">
                 <p class="preload-emerald__script">Save the date</p>
-                <h1 class="preload-emerald__names">{{ $sideData->firstName }} &amp; {{ $sideData->secondName }}</h1>
+                <h1 class="preload-emerald__names">{{ $sideData->firstName }} <span class="preload-emerald__amp">&amp;</span> {{ $sideData->secondName }}</h1>
             </div>
 
             <button type="button" class="preload-emerald__envelope" aria-label="Mở thiệp cưới">
@@ -696,6 +696,7 @@
     /* =========================================================
        Emerald Envelope (THT20)
        ========================================================= */
+    @font-face { font-family: 'THT20 Chuva'; src: url('{{ asset('fonts/chuvafont.otf') }}') format('opentype'); font-display: swap; }
     @font-face { font-family: 'THT20 Chu Mem'; src: url('{{ asset('images/templates/tht-e-wedding-20/chu-mem.otf') }}') format('opentype'); font-display: swap; }
     @font-face { font-family: 'THT20 Chu Cung'; src: url('{{ asset('images/templates/tht-e-wedding-20/chu-cung.ttf') }}') format('truetype'); font-display: swap; }
 
@@ -713,6 +714,7 @@
     .preload-emerald > *:not(.preload-emerald__floral) { position: relative; z-index: 1; }
     .preload-emerald__heading { animation: preload-emerald-in 1.2s ease-out both; }
     .preload-emerald__script { margin: 0; font: 400 clamp(40px, 11.5vw, 54px)/1.1 'THT20 Chu Mem', 'Great Vibes', cursive; }
+    .preload-emerald__amp { font-family: 'THT20 Chuva', 'Great Vibes', cursive; font-size: 1.15em; text-transform: none; }
     .preload-emerald__names { margin: 6px 0 0; font: 400 clamp(22px, 6.6vw, 32px)/1.25 'THT20 Chu Cung', 'Cormorant Garamond', serif; text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
     .preload-emerald__date { font: 400 clamp(22px, 6.4vw, 28px)/1 'THT20 Chu Cung', 'EB Garamond', serif; letter-spacing: .14em; animation: preload-emerald-in 1.2s ease-out .35s both; }
     .preload-emerald__guest { margin: -6px 0 0; font: 400 15px/1.5 'EB Garamond', serif; animation: preload-emerald-in 1.2s ease-out .3s both; }

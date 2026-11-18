@@ -11,6 +11,8 @@
 @push('styles')
     @vite(['resources/css/templates/tht-e-wedding-20.css'])
     <style>
+        @font-face { font-family: 'THT20 Chuva'; src: url('{{ asset('fonts/chuvafont.otf') }}') format('opentype'); font-display: swap; }
+        @font-face { font-family: 'THT20 Tieude'; src: url('{{ asset('fonts/tieude.otf') }}') format('opentype'); font-display: swap; }
         .tht20 { --tht20-heart: url('{{ asset('images/templates/tht-e-wedding-20/heart.svg') }}'); }
     </style>
 @endpush
